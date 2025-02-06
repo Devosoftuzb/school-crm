@@ -103,7 +103,7 @@ const store = reactive({
   guard: localStorage.getItem("role") == "owner" ? "owner" : "administrator",
   data: "",
   image: "",
-  link: "https://dev.edu-devosoft.uz/",
+  link: "https://dev-sch.edu-devosoft.uz/",
 });
 
 const Logout = () => {

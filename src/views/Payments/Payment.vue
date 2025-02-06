@@ -1312,7 +1312,7 @@ const store = reactive({
   student_name: "",
   teacher_name: "",
   school_logo: "",
-  logo_link: "https://dev.edu-devosoft.uz/",
+  logo_link: "https://dev-sch.edu-devosoft.uz/",
   school_name: "",
   btn_lamp: true,
   statistic: false,
