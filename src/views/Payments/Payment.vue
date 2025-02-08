@@ -471,7 +471,23 @@
                   class="item flex justify-between border-b border-dashed border-black py-1 text-sm"
                 >
                   <span class="font-semibold">Kurs narxi:</span>
-                  <span id="coursePrice">{{ store.price }} so'm</span>
+
+                  <span class="flex flex-col items-end">
+                    <span
+                      v-if="form.discount !== 0 && form.discount !== ''"
+                      class="text-[10px] line-through"
+                      id="coursePrice"
+                      >{{ store.price }} so'm</span
+                    >
+                    <span id="coursePrice">{{ discountedPrice }} so'm</span>
+                  </span>
+                </div>
+                <div
+                  v-if="form.discount !== 0 && form.discount !== ''"
+                  class="item flex justify-between border-b border-dashed border-black py-1 text-sm"
+                >
+                  <span class="font-semibold">Chegirma:</span>
+                  <span id="teacher">{{ form.discount }}%</span>
                 </div>
                 <div
                   class="item flex justify-between border-b border-dashed border-black py-1 text-sm"
@@ -529,88 +545,110 @@
                 @submit.prevent="addPayment"
                 :class="{ darkForm: navbar.userNav }"
               >
-                <div class="grid font-medium gap-4 mb-4 sm:grid-cols-2">
-                  <div>
-                    <label for="year" class="block mb-2 text-sm"
-                      >Yilni tanlang</label
-                    >
-                    <select
-                      v-model="form.year"
-                      id="name"
-                      class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
-                      required
-                    >
-                      <option value="" disabled selected>Yilni tanlang</option>
-                      <option
-                        v-for="i in store.curentYil"
-                        :key="i.id"
-                        :value="i.name"
+                <div class="grid font-medium gap-4 mb-4 sm:grid-cols-1">
+                  <div class="grid gap-4 sm:grid-cols-2">
+                    <div>
+                      <label for="year" class="block mb-2 text-sm"
+                        >Yilni tanlang</label
                       >
-                        {{ i.name }}
-                      </option>
-                    </select>
-                  </div>
-                  <div>
-                    <label for="month" class="block mb-2 text-sm"
-                      >Oyni tanlang</label
-                    >
-                    <select
-                      v-model="form.month"
-                      id="month"
-                      class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
-                      required
-                    >
-                      <option value="" disabled selected>Oyni tanlang</option>
-                      <option value="01">Yanvar</option>
-                      <option value="02">Fevral</option>
-                      <option value="03">Mart</option>
-                      <option value="04">Aprel</option>
-                      <option value="05">May</option>
-                      <option value="06">Iyun</option>
-                      <option value="07">Iyul</option>
-                      <option value="08">Avgust</option>
-                      <option value="09">Sentabr</option>
-                      <option value="10">Oktabr</option>
-                      <option value="11">Noyabr</option>
-                      <option value="12">Dekabr</option>
-                    </select>
-                  </div>
-                  <div class="">
-                    <label for="price" class="block mb-2 text-sm">Price</label>
-                    <input
-                      v-model="form.price"
-                      type="number"
-                      name="price"
-                      id="price"
-                      class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full py-3 p-2.5"
-                      placeholder="To'lov sumani kiriting"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label
-                      for="name"
-                      class="block mb-2 text-sm"
-                      :class="navbar.userNav ? 'text-white' : 'text-black'"
-                      >To'lov turi tanlang</label
-                    >
-                    <select
-                      v-model="form.method"
-                      id="name"
-                      class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
-                      required
-                    >
-                      <option value="" disabled selected>
-                        To'lov turini tanlang
-                      </option>
-                      <option
-                        v-for="i in store.method"
-                        :key="i.id"
-                        :value="i.name"
+                      <select
+                        v-model="form.year"
+                        id="name"
+                        class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                        required
                       >
-                        {{ i.name }}
-                      </option>
-                    </select>
+                        <option value="" disabled selected>
+                          Yilni tanlang
+                        </option>
+                        <option
+                          v-for="i in store.curentYil"
+                          :key="i.id"
+                          :value="i.name"
+                        >
+                          {{ i.name }}
+                        </option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label for="month" class="block mb-2 text-sm"
+                        >Oyni tanlang</label
+                      >
+                      <select
+                        v-model="form.month"
+                        id="month"
+                        class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                        required
+                      >
+                        <option value="" disabled selected>Oyni tanlang</option>
+                        <option value="01">Yanvar</option>
+                        <option value="02">Fevral</option>
+                        <option value="03">Mart</option>
+                        <option value="04">Aprel</option>
+                        <option value="05">May</option>
+                        <option value="06">Iyun</option>
+                        <option value="07">Iyul</option>
+                        <option value="08">Avgust</option>
+                        <option value="09">Sentabr</option>
+                        <option value="10">Oktabr</option>
+                        <option value="11">Noyabr</option>
+                        <option value="12">Dekabr</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="grid gap-4 sm:grid-cols-3">
+                    <div class="">
+                      <label for="price" class="block mb-2 text-sm">Narx</label>
+                      <input
+                        v-model="form.price"
+                        type="number"
+                        name="price"
+                        id="price"
+                        class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full py-3 p-2.5"
+                        placeholder="To'lov sumani kiriting"
+                        required
+                      />
+                    </div>
+                    <div class="">
+                      <label for="price" class="block mb-2 text-sm"
+                        >Chegirma (%)</label
+                      >
+                      <input
+                        v-model="form.discount"
+                        type="number"
+                        name="price"
+                        id="price"
+                        class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full py-3 p-2.5"
+                        placeholder="Chegirma % kiriting"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label
+                        for="name"
+                        class="block mb-2 text-sm"
+                        :class="navbar.userNav ? 'text-white' : 'text-black'"
+                        >To'lov turi tanlang</label
+                      >
+                      <select
+                        v-model="form.method"
+                        id="name"
+                        class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                        required
+                      >
+                        <option value="" disabled selected>
+                          To'lov turini tanlang
+                        </option>
+                        <option
+                          v-for="i in store.method"
+                          :key="i.id"
+                          :value="i.name"
+                        >
+                          {{ i.name }}
+                        </option>
+                      </select>
+                    </div>
                   </div>
                 </div>
                 <div
@@ -1275,7 +1313,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref, reactive } from "vue";
+import { onMounted, ref, reactive, computed } from "vue";
 import { useNavStore } from "../../stores/toggle";
 import { Placeholder2 } from "../../components";
 import { useNotificationStore } from "../../stores/notification";
@@ -1312,7 +1350,7 @@ const store = reactive({
   student_name: "",
   teacher_name: "",
   school_logo: "",
-  logo_link: "https://dev-sch.edu-devosoft.uz/",
+  logo_link: import.meta.env.VITE_API + "/",
   school_name: "",
   btn_lamp: true,
   statistic: false,
@@ -1366,6 +1404,7 @@ const form = reactive({
   price: store.price,
   id: "",
   group_id: "",
+  discount: 0,
 });
 
 const edit = reactive({
@@ -1447,6 +1486,12 @@ const monthNames = (month) => {
 
 // ----------------------------------- axios --------------------------------
 
+const discountedPrice = computed(() => {
+  const discountAmount = (store.price * form.discount) / 100;
+  form.price = store.price - discountAmount;
+  return store.price - discountAmount;
+});
+
 const getAllProduct = () => {
   axios
     .get(`/group/${localStorage.getItem("school_id")}`, {
@@ -1489,6 +1534,9 @@ const calculatePaymentStatus = (paymentHistory, groupPrice) => {
     return `(${groupPrice}) so'm to'lanmagan`;
   }
 
+  const totalDiscount = paymentHistory[0]?.discount || 0;
+  const discountedPrice = Math.round(groupPrice * (1 - totalDiscount / 100));
+
   let currentMonthPaid = 0;
   paymentHistory.forEach((payment) => {
     if (
@@ -1499,10 +1547,10 @@ const calculatePaymentStatus = (paymentHistory, groupPrice) => {
     }
   });
 
-  if (currentMonthPaid >= groupPrice) {
+  if (currentMonthPaid >= discountedPrice) {
     return "To'langan";
   } else {
-    const amountDue = groupPrice - currentMonthPaid;
+    const amountDue = discountedPrice - currentMonthPaid;
     return `(${amountDue}) so'm to'lanmagan`;
   }
 };
@@ -1609,14 +1657,19 @@ const checkOldPayment = async (
         payment.month === month
     );
 
+    // Agar chegirma mavjud bo'lsa, uni hisoblash
+    const discount =
+      studentPayments.length > 0 ? studentPayments[0].discount || 0 : 0;
+    const discountedPrice = Math.round(store.price * (1 - discount / 100));
+
+    // To'langan umumiy summani hisoblash
     const totalPaid = studentPayments.reduce(
       (sum, payment) => sum + payment.price,
       0
     );
 
-    const hasOldPayment = totalPaid >= store.price;
-
-    return !hasOldPayment;
+    // To'langan summa chegirma qo'llangan narxdan kam bo'lsa, eski to'lov yo'q deb qaytarish
+    return totalPaid < discountedPrice;
   } catch (error) {
     return false;
   }
@@ -1630,7 +1683,7 @@ const addPayment = async () => {
     year: form.year,
     month: form.month,
     method: form.method,
-    discount: 0,
+    discount: form.discount,
     price: form.price,
   };
 
@@ -1741,6 +1794,7 @@ const getEditProduct = (id) => {
       form.year = res.data.year;
       form.month = res.data.month;
       form.price = res.data.price;
+      form.discount = res.discount;
       form.method = res.data.method;
       form.id = res.data.student.id;
       form.group_id = res.data.group.id;
@@ -1808,7 +1862,7 @@ const deleteProduct = () => {
     })
     .then((res) => {
       notification.success("To'lov o'chirildi");
-      getProduct(store.pagination);
+      getHistory(store.pagination);
       remove.toggle = false;
     })
     .catch((error) => {
@@ -1845,92 +1899,143 @@ const printReceipt = () => {
     <html>
       <head>
         <title>Chek</title>
-        <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+        <style>
+          body {
+            background-color: #f3f4f6;
+            font-family: Arial, sans-serif;
+          }
+          .container {
+            max-width: 320px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+          }
+          .title {
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+          }
+          .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+          }
+          .logo img {
+            width: 30px;
+            border-radius: 50%;
+          }
+          .row {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px dashed black;
+            padding: 8px 0;
+            font-size: 12px;
+          }
+          .bold {
+            font-weight: bold;
+          }
+          .strike {
+            text-decoration: line-through;
+            font-size: 10px;
+          }
+          .card {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+          }  
+          .footer {
+            text-align: center;
+            font-size: 10px;
+            margin-top: 15px;
+          }
+          .brand_box {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            font-size: 8px;
+            margin-top: 20px;
+          }
+          .brand_box h5 {
+            font-size: 10px;
+            font-weight: 600;
+            margin: 0;
+          }
+          .phone_number {
+            font-size: 7px;
+            font-weight: 600;
+            text-align: end;
+          }
+        </style>
       </head>
-      <body class="bg-gray-100">
-        <div class="max-w-md mx-auto bg-white rounded-lg pr-5 mb-10">
-          <div class="mb-10 mt-5 flex items-center justify-center gap-1">
-            <img class="w-8 rounded-full" src="${store.logo_link}${
-    store.school_logo
-  }" alt="">
-            <h2 class="text-xl font-bold uppercase">${store.school_name}</h2>
+      <body>
+        <div class="container">
+          <div class="logo">
+            <img src="${import.meta.env.VITE_API}/${store.school_logo}" alt="">
+            <h2 class="title">${store.school_name}</h2>
           </div>
-          <div class="item flex justify-between border-b border-dashed border-black py-2">
-            <span style="font-size: 12px;" class="font-semibold">To'lov turi:</span>
-            <span style="font-size: 12px;" id="paymentType">${
-              form.method
-            }</span>
+          <div class="row">
+            <span class="bold">To'lov turi:</span>
+            <span>${form.method}</span>
           </div>
-          <div class="item flex justify-between border-b border-dashed border-black py-2">
-            <span style="font-size: 12px;" class="font-semibold">Talaba:</span>
-            <span style="font-size: 12px;" id="studentName">${
-              store.student_name
-            }</span>
+          <div class="row">
+            <span class="bold">Talaba:</span>
+            <span>${store.student_name}</span>
           </div>
-          <div class="item flex justify-between gap-10 border-b border-dashed border-black py-2">
-            <span style="font-size: 12px;" class="font-semibold">Guruh nomi:</span>
-            <span style="font-size: 12px; text-align:end;" id="group">${
-              store.group_name
-            }</span>
+          <div class="row">
+            <span class="bold">Guruh nomi:</span>
+            <span>${store.group_name}</span>
           </div>
-          <div class="item flex justify-between border-b border-dashed border-black py-2">
-            <span style="font-size: 12px;" class="font-semibold">Kurs narxi:</span>
-            <span style="font-size: 12px;" id="coursePrice">${
-              store.price
-            } so'm</span>
-          </div>
-          <div class="item flex justify-between border-b border-dashed border-black py-2">
-            <span style="font-size: 12px;" class="font-semibold">Ustoz:</span>
-            <span style="font-size: 12px;" id="teacher">${
-              store.teacher_name
-            }</span>
-          </div>
-          <div class="item flex justify-between border-b border-dashed border-black py-2">
-            <span style="font-size: 12px;" class="font-semibold">Oy:</span>
-            <span style="font-size: 12px;" id="date" class="font-bold text-lg">${monthNames(
-              form.month
-            )}</span>
-          </div>
-          <div class="item flex justify-between border-b border-dashed border-black py-2">
-            <span style="font-size: 12px;" class="font-semibold">To'lov:</span>
-            <span style="font-size: 12px;" id="amount" class="font-bold text-lg">${
-              form.price
-            } so'm</span>
-          </div>
-          <div class="item flex justify-between border-b border-dashed border-black py-2">
-            <span style="font-size: 12px;" class="font-semibold">Sana:</span>
-            <span style="font-size: 12px;" id="date">${store.chekDate}</span>
-          </div>
-          <div class="item flex justify-center text-center border-b border-dashed border-black py-2">
-            <span style="font-size: 12px;">IT ni it deb o'qima, <br> Ingliz tili va AyTi ni <span class="font-bold uppercase">${
-              store.school_name
-            }</span> da o'rgan!</span>
-          </div>
-          <div style="font-size: 8px;" class="flex items-center justify-end gap-1 mt-10 mb-20">
-            <span class="brand_box">
-              <h5>Devosoft Group</h5>
-              <span style="font-size: 7px; font-weight: 600;" class:"phone_number">+998933279137</span>
+          <div class="row">
+            <span class="bold">Kurs narxi:</span>
+            <span class="card">
+              ${
+                form.discount !== 0 && form.discount !== ""
+                  ? `<span class="strike">${store.price} so'm</span>`
+                  : ""
+              }
+              ${discountedPrice.value} so'm
             </span>
           </div>
-        </div>
-        <style>
-        .brand_box {
-          display:flex;
-          flex-direction:column;
-          justify-content:center;
-          align-items:flex-end;
-
-        }
-          .brand_box h5 {
-            font-size:10px;
-            margin:0;
-            line:height:4px;
-            font-weight: 600;
+          ${
+            form.discount !== 0 && form.discount !== ""
+              ? `
+          <div class="row">
+            <span class="bold">Chegirma:</span>
+            <span>${form.discount}%</span>
+          </div>
+          `
+              : ""
           }
-            .phone_number {
-            text-align:end;
-            }
-        </style>
+          <div class="row">
+            <span class="bold">Ustoz:</span>
+            <span>${store.teacher_name}</span>
+          </div>
+          <div class="row">
+            <span class="bold">Oy:</span>
+            <span class="bold">${monthNames(form.month)}</span>
+          </div>
+          <div class="row">
+            <span class="bold">To'lov:</span>
+            <span class="bold">${form.price} so'm</span>
+          </div>
+          <div class="row">
+            <span class="bold">Sana:</span>
+            <span>${store.chekDate}</span>
+          </div>
+          <div class="footer">
+            <span>IT ni it deb o'qima, <br> Ingliz tili va AyTi ni <strong>${
+              store.school_name
+            }</strong> da o'rgan!</span>
+          </div>
+          <div class="brand_box">
+            <h5>Devosoft Group</h5>
+            <span class="phone_number">+998933279137</span>
+          </div>
+        </div>
       </body>
     </html>
   `);
@@ -1946,6 +2051,13 @@ const printReceipt = () => {
 
 const printChek = (id) => {
   const product = store.PageProduct.find((product) => product.id === id);
+  const priceDiscounted = product.discount
+    ? (
+        product.group_price -
+        (product.group_price * product.discount) / 100
+      ).toFixed(2)
+    : product.group_price;
+
   formatDateToNumeric(new Date(product.createdAt));
   axios
     .get(`/school/${localStorage.getItem("school_id")}`, {
@@ -1960,92 +2072,143 @@ const printChek = (id) => {
     <html>
       <head>
         <title>Chek</title>
-        <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+        <style>
+          body {
+            background-color: #f3f4f6;
+            font-family: Arial, sans-serif;
+          }
+          .container {
+            max-width: 320px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+          }
+          .title {
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+          }
+          .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+          }
+          .logo img {
+            width: 30px;
+            border-radius: 50%;
+          }
+          .row {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px dashed black;
+            padding: 8px 0;
+            font-size: 12px;
+          }
+          .bold {
+            font-weight: bold;
+          }
+          .strike {
+            text-decoration: line-through;
+            font-size: 10px;
+          }
+          .card {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+          }  
+          .footer {
+            text-align: center;
+            font-size: 10px;
+            margin-top: 15px;
+          }
+          .brand_box {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            font-size: 8px;
+            margin-top: 20px;
+          }
+          .brand_box h5 {
+            font-size: 10px;
+            font-weight: 600;
+            margin: 0;
+          }
+          .phone_number {
+            font-size: 7px;
+            font-weight: 600;
+            text-align: end;
+          }
+        </style>
       </head>
-      <body class="bg-gray-100">
-        <div class="max-w-md mx-auto bg-white rounded-lg pr-5 mb-10">
-          <div class="mb-10 mt-5 flex items-center justify-center gap-1">
-            <img class="w-8 rounded-full" src="${store.logo_link}${
-        res.data.image
-      }" alt="">
-            <h2 class="text-xl font-bold uppercase">${res.data.name}</h2>
+      <body>
+        <div class="container">
+          <div class="logo">
+            <img src="${import.meta.env.VITE_API}/${res.data.image}" alt="">
+            <h2 class="title">${res.data.name}</h2>
           </div>
-          <div class="item flex justify-between border-b border-dashed border-black py-2">
-            <span style="font-size: 12px;" class="font-semibold">To'lov turi:</span>
-            <span style="font-size: 12px;" id="paymentType">${
-              product.method
-            }</span>
+          <div class="row">
+            <span class="bold">To'lov turi:</span>
+            <span>${product.method}</span>
           </div>
-          <div class="item flex justify-between border-b border-dashed border-black py-2">
-            <span style="font-size: 12px;" class="font-semibold">Talaba:</span>
-            <span style="font-size: 12px;" id="studentName">${
-              product.student_name
-            }</span>
+          <div class="row">
+            <span class="bold">Talaba:</span>
+            <span>${product.student_name}</span>
           </div>
-          <div class="item flex justify-between gap-10 border-b border-dashed border-black py-2">
-            <span style="font-size: 12px;" class="font-semibold">Guruh nomi:</span>
-            <span style="font-size: 12px; text-align:end;" id="group">${
-              product.group_name
-            }</span>
+          <div class="row">
+            <span class="bold">Guruh nomi:</span>
+            <span>${product.group_name}</span>
           </div>
-          <div class="item flex justify-between border-b border-dashed border-black py-2">
-            <span style="font-size: 12px;" class="font-semibold">Kurs narxi:</span>
-            <span style="font-size: 12px;" id="coursePrice">${
-              product.group_price
-            } so'm</span>
-          </div>
-          <div class="item flex justify-between border-b border-dashed border-black py-2">
-            <span style="font-size: 12px;" class="font-semibold">Ustoz:</span>
-            <span style="font-size: 12px;" id="teacher">${
-              product.teacher_name
-            }</span>
-          </div>
-          <div class="item flex justify-between border-b border-dashed border-black py-2">
-            <span style="font-size: 12px;" class="font-semibold">Oy:</span>
-            <span style="font-size: 12px;" id="date" class="font-bold text-lg">${monthNames(
-              product.month
-            )}</span>
-          </div>
-          <div class="item flex justify-between border-b border-dashed border-black py-2">
-            <span style="font-size: 12px;" class="font-semibold">To'lov:</span>
-            <span style="font-size: 12px;" id="amount" class="font-bold text-lg">${
-              product.price
-            } so'm</span>
-          </div>
-          <div class="item flex justify-between border-b border-dashed border-black py-2">
-            <span style="font-size: 12px;" class="font-semibold">Sana:</span>
-            <span style="font-size: 12px;" id="date">${store.chekDate}</span>
-          </div>
-          <div class="item flex justify-center text-center border-b border-dashed border-black py-2">
-            <span style="font-size: 12px;">IT ni it deb o'qima, <br> Ingliz tili va AyTi ni <span class="font-bold uppercase">${
-              res.data.name
-            }</span> da o'rgan!</span>
-          </div>
-          <div style="font-size: 8px;" class="flex items-center justify-end gap-1 mt-10 mb-20">
-            <span class="brand_box">
-              <h5>Devosoft Group</h5>
-              <span style="font-size: 7px; font-weight: 600;" class:"phone_number">+998933279137</span>
+          <div class="row">
+            <span class="bold">Kurs narxi:</span>
+            <span class="card">
+              ${
+                product.discount !== 0 && product.discount !== ""
+                  ? `<span class="strike">${product.group_price} so'm</span>`
+                  : ""
+              }
+              ${priceDiscounted} so'm
             </span>
           </div>
-        </div>
-        <style>
-        .brand_box {
-          display:flex;
-          flex-direction:column;
-          justify-content:center;
-          align-items:flex-end;
-
-        }
-          .brand_box h5 {
-            font-size:10px;
-            margin:0;
-            line:height:4px;
-            font-weight: 600;
+          ${
+            product.discount !== 0 && product.discount !== ""
+              ? `
+          <div class="row">
+            <span class="bold">Chegirma:</span>
+            <span>${product.discount}%</span>
+          </div>
+          `
+              : ""
           }
-            .phone_number {
-            text-align:end;
-            }
-        </style>
+          <div class="row">
+            <span class="bold">Ustoz:</span>
+            <span>${product.teacher_name}</span>
+          </div>
+          <div class="row">
+            <span class="bold">Oy:</span>
+            <span class="bold">${monthNames(product.month)}</span>
+          </div>
+          <div class="row">
+            <span class="bold">To'lov:</span>
+            <span class="bold">${product.price} so'm</span>
+          </div>
+          <div class="row">
+            <span class="bold">Sana:</span>
+            <span>${store.chekDate}</span>
+          </div>
+          <div class="footer">
+            <span>IT ni it deb o'qima, <br> Ingliz tili va AyTi ni <strong>${
+              res.data.name
+            }</strong> da o'rgan!</span>
+          </div>
+          <div class="brand_box">
+            <h5>Devosoft Group</h5>
+            <span class="phone_number">+998933279137</span>
+          </div>
+        </div>
       </body>
     </html>
   `);

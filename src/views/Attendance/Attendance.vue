@@ -690,11 +690,14 @@ const searchFunc = () => {
 const calculatePaymentStatus = (paymentHistory, groupPrice) => {
   const currentDate = new Date();
   const currentYear = currentDate.getFullYear();
-  const currentMonth = String(currentDate.getMonth() + 1).padStart(2, '0');
+  const currentMonth = String(currentDate.getMonth() + 1).padStart(2, "0");
 
   if (!paymentHistory || paymentHistory.length === 0) {
     return `(${groupPrice}) so'm to'lanmagan`;
   }
+
+  const totalDiscount = paymentHistory[0]?.discount || 0;
+  const discountedPrice = Math.round(groupPrice * (1 - totalDiscount / 100));
 
   let currentMonthPaid = 0;
   paymentHistory.forEach((payment) => {
@@ -706,9 +709,12 @@ const calculatePaymentStatus = (paymentHistory, groupPrice) => {
     }
   });
 
-  return currentMonthPaid >= groupPrice
-    ? "To'langan"
-    : `(${groupPrice - currentMonthPaid}) so'm to'lanmagan`;
+  if (currentMonthPaid >= discountedPrice) {
+    return "To'langan";
+  } else {
+    const amountDue = discountedPrice - currentMonthPaid;
+    return `(${amountDue}) so'm to'lanmagan`;
+  }
 };
 
 const getUniqueDates = (records) => {
@@ -772,6 +778,7 @@ const getAllProduct = async () => {
 };
 
 const getOneProduct = async (id) => {
+  history.group_id = "";
   try {
     const groupResponse = await axios.get(
       `/group/${localStorage.getItem("school_id")}/${id}/student`,
@@ -862,6 +869,7 @@ const addAttendance = async () => {
 };
 
 const getHistory = async (page) => {
+  form.group_id = "";
   try {
     const res = await axios.get(
       `/attendance/${localStorage.getItem("school_id")}/${history.group_id}/${
@@ -925,38 +933,24 @@ const deleteStudentGroup = async () => {
       notification.success("O'quvchi guruhdan o'chirildi");
     }
 
-    const attendanceResponse = await axios.get(`/attendance/${schoolId}`, {
+    const IDgroup = form.group_id === "" ? history.group_id : form.group_id;
+
+    axios.delete(`/attendance/${schoolId}/${IDgroup}/${remove.id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
 
-    const attendances = attendanceResponse.data.filter(
-      (item) =>
-        item.student_id === remove.id &&
-        (item.group_id === form.group_id || item.group_id === history.group_id)
-    );
-
-    await Promise.all(
-      attendances.map((attendance) =>
-        axios.delete(`/attendance/${schoolId}/${attendance.id}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-      )
-    );
-
     if (form.group_id !== "") {
       getOneProduct(form.group_id);
     } else {
-      getHistory(1);
+      getHistory(store.pagination);
     }
 
     remove.toggle = false;
     notification.success("Davomat ma'lumotlari o'chirildi");
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     notification.warning(
       "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
     );

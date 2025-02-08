@@ -1,7 +1,7 @@
 import axios from 'axios';
 import router from '../router/index.js';
 
-axios.defaults.baseURL = 'https://dev-sch.edu-devosoft.uz/api';
+axios.defaults.baseURL = import.meta.env.VITE_API + '/api';
 axios.interceptors.response.use(
   response => response,
   error => {

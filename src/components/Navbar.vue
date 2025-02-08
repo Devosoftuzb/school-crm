@@ -103,7 +103,7 @@ const store = reactive({
   guard: localStorage.getItem("role") == "owner" ? "owner" : "administrator",
   data: "",
   image: "",
-  link: "https://dev-sch.edu-devosoft.uz/",
+  link: import.meta.env.VITE_API + '/',
 });
 
 const Logout = () => {
