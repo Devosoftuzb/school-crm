@@ -116,17 +116,75 @@
                   :class="navbar.userNav ? 'text-white' : 'text-black'"
                   >Guruhni tanlang</label
                 >
-                <select
-                  v-model="edit.name"
-                  id="name"
-                  class="bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-600 focus:border-green-600 block w-full p-2.5"
-                  required
-                >
-                  <option value="" disabled selected>Guruh tanlang</option>
-                  <option v-for="i in store.group" :key="i.id" :value="i.id">
-                    {{ i.name }}
-                  </option>
-                </select>
+                <div class="relative w-full">
+                  <div
+                    class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      class="w-5 h-5"
+                      fill="currentColor"
+                      viewbox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                        clip-rule="evenodd"
+                      />
+                    </svg>
+                  </div>
+                  <input
+                    v-model="groupSearch.filter"
+                    @focus="groupSearch.selectLamp = true"
+                    @blur="
+                      groupSearch.selectLamp = false;
+                      groupSearch.filter_show = false;
+                    "
+                    @input="
+                      groupSearch.filter_show = true;
+                      searchFuncGroup();
+                    "
+                    type="search"
+                    id="simple-search"
+                    class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2"
+                    placeholder="Guruhni tanlang yoki qidirish..."
+                  />
+                  <ul
+                    v-show="groupSearch.filter_show && groupSearch.searchList.length > 0"
+                    class="absolute z-10 max-h-80 overflow-y-auto overflow-hidden py-1 text-gray-600 rounded bg-white w-full"
+                  >
+                    <li
+                      class="hover:bg-blue-600 hover:text-white cursor-pointer pl-2"
+                      v-for="(i, index) in groupSearch.searchList"
+                      :key="index"
+                      @mousedown.prevent="
+                        edit.name = i.id;
+                        groupSearch.filter_show = false;
+                        groupSearch.filter = i.name;
+                      "
+                    >
+                      {{ i.name }}
+                    </li>
+                  </ul>
+                  <ul
+                    v-show="groupSearch.selectLamp && !groupSearch.filter"
+                    class="absolute z-10 max-h-80 overflow-y-auto overflow-hidden py-1 text-gray-600 rounded bg-white w-full"
+                  >
+                    <li
+                      class="hover:bg-blue-600 hover:text-white whitespace-nowrap cursor-pointer pl-2"
+                      v-for="(i, index) in store.group"
+                      :key="index"
+                      @mousedown.prevent="
+                        edit.name = i.id;
+                        groupSearch.selectLamp = false;
+                        groupSearch.filter = i.name;
+                      "
+                    >
+                      {{ i.name }}
+                    </li>
+                  </ul>
+                </div>
               </div>
             </div>
             <div
@@ -153,7 +211,6 @@
     <!-- ----------------------------------------- MODAL END ---------------------------------------------------- -->
 
     <!-- ----------------------------------------- GROUP MODAL -------------------------------------------------------- -->
-
 
     <!-- Main modal -->
     <div
@@ -835,6 +892,13 @@ const store = reactive({
   searchList: [],
 });
 
+const groupSearch = reactive({
+  filter_show: false,
+  filter: "",
+  searchList: [],
+  selectLamp: false,
+});
+
 const form = reactive({
   parents_full_name: "Hurmatli ota-ona",
   parents_phone_number: "+998",
@@ -866,6 +930,17 @@ const searchFunc = () => {
     store.searchList = [];
   }
 };
+
+function searchFuncGroup() {
+  groupSearch.searchList = [];
+  if (groupSearch.filter) {
+    for (let i of store.group) {
+      if (i.name.toLowerCase().includes(groupSearch.filter.toLowerCase())) {
+        groupSearch.searchList.push(i);
+      }
+    }
+  }
+}
 
 const enterSlug = (id, name) => {
   router.push(`./students/${id}/${name}`);
@@ -924,7 +999,7 @@ const getProduct = async (page) => {
     const data = await fetchData(
       `/student/${localStorage.getItem("school_id")}/page?page=${page}`
     );
-    
+
     store.PageProduct = data?.data?.records;
     const pagination = data?.data?.pagination;
     store.page = [pagination.currentPage, pagination.total_count];
@@ -937,9 +1012,7 @@ const getProduct = async (page) => {
 
 const getGroups = async () => {
   try {
-    const data = await fetchData(
-      `/group/${localStorage.getItem("school_id")}`
-    );
+    const data = await fetchData(`/group/${localStorage.getItem("school_id")}`);
 
     store.group = data;
   } catch {
@@ -952,7 +1025,7 @@ const getOneProduct = async (id, modalType) => {
     const data = await fetchData(
       `/student/${localStorage.getItem("school_id")}/${id}/studentGroup`
     );
-    
+
     Object.assign(edit, data, { id });
     form.group = data.group;
     if (modalType === "edit") {
