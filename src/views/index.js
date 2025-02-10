@@ -18,6 +18,7 @@ import Payment from './Payments/Payment.vue'
 import Attendance from './Attendance/Attendance.vue'
 import Customer from './Customers/Customer.vue'
 import Sms from './Sms/Sms.vue'
+import StudentsArchive from './Students/Archive.vue';
 
 export {
     HomeView,
@@ -39,5 +40,6 @@ export {
     Payment,
     Attendance,
     Customer,
-    Sms
+    Sms,
+    StudentsArchive
 }

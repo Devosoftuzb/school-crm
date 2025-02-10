@@ -20,6 +20,7 @@ import {
   Attendance,
   Customer,
   Sms,
+  StudentsArchive,
 } from "../views";
 
 const routes = [
@@ -66,6 +67,15 @@ const routes = [
         meta: {
           roles: ["_sp_am_", "_ad_sch_"],
           title: "O'quvchilar",
+        },
+      },
+      {
+        path: "/students/archive",
+        name: "studentsArchive",
+        component: StudentsArchive,
+        meta: {
+          roles: ["_sp_am_", "_ad_sch_"],
+          title: "Arxiv o'quvchilar",
         },
       },
       {

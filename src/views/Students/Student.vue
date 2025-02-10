@@ -151,7 +151,10 @@
                     placeholder="Guruhni tanlang yoki qidirish..."
                   />
                   <ul
-                    v-show="groupSearch.filter_show && groupSearch.searchList.length > 0"
+                    v-show="
+                      groupSearch.filter_show &&
+                      groupSearch.searchList.length > 0
+                    "
                     class="absolute z-10 max-h-80 overflow-y-auto overflow-hidden py-1 text-gray-600 rounded bg-white w-full"
                   >
                     <li
@@ -533,6 +536,87 @@
     </div>
     <!-- ----------------------------------------- delete modal end ---------------------------------------------------- -->
 
+    <!-- ----------------------------------------- Archive modal ---------------------------------------------------- -->
+    <div
+      :class="
+        archive.toggle
+          ? 'absolute overflow-y-auto flex bg-[rgba(0,0,0,0.5)] overflow-x-hidden z-50 justify-center items-center w-full inset-0 h-full'
+          : 'hidden'
+      "
+    >
+      <div class="relative p-4 max-w-5xl min-w-[30%] h-auto">
+        <!-- Modal content -->
+        <div
+          class="relative p-4 rounded-lg shadow sm:p-5"
+          :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
+        >
+          <!-- Modal header -->
+          <div
+            class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5"
+          >
+            <h3
+              class="text-lg"
+              :class="navbar.userNav ? 'text-white' : 'text-black'"
+            >
+              O'quvchini arxivlash
+            </h3>
+            <button
+              @click="archive.toggle = false"
+              type="button"
+              class="bg-transparent hover:bg-gray-200 hover rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+              :class="navbar.userNav ? 'text-white' : 'text-black'"
+            >
+              <svg
+                aria-hidden="true"
+                class="w-5 h-5"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                  clip-rule="evenodd"
+                ></path>
+              </svg>
+            </button>
+          </div>
+          <!-- Modal body -->
+          <div :class="{ darkForm: navbar.userNav }">
+            <div class="grid font-medium gap-4 mb-4 grid-cols-1">
+              <div>
+                <div></div>
+                <h1
+                  class="text-2xl"
+                  :class="navbar.userNav ? 'text-white' : 'text-black'"
+                >
+                  Siz o'quvchini arxivlashni xohlaysizmi?
+                </h1>
+              </div>
+              <div
+                class="w-full flex items-center justify-between border-t pt-5 mt-5"
+              >
+                <button
+                  @click="archive.toggle = false"
+                  type="button"
+                  class="border cursor-pointer inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                >
+                  Bekor qilish
+                </button>
+                <button
+                  @click="archiveProduct"
+                  class="btnAdd cursor-pointer text-white inline-flex items-center bg-[#4141eb] hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-500 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                >
+                  Arxivlash
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- ----------------------------------------- archive modal end ---------------------------------------------------- -->
+
     <!-- ----------------------------------------- EMPLYE TABLE  ------------------------------------------------- -->
 
     <section class="pt-4">
@@ -566,6 +650,16 @@
                 <span class="sm:block hidden">O'quvchi qo'shish</span>
                 <i class="sm:hidden block bx bxs-user-plus text-lg"></i>
               </button>
+              <router-link to="/students/archive">
+                <button
+                  id=""
+                  type="button"
+                  class="btnAdd2 flex items-center max-w-fit justify-center whitespace-nowrap text-white focus:ring-4 focus:ring-orange-300 font-medium rounded-lg text-sm px-4 sm:py-2"
+                >
+                  <span class="sm:block hidden">Arxiv o'quchilar</span>
+                  <i class="sm:hidden block bx bxs-user-plus text-lg"></i>
+                </button>
+              </router-link>
             </div>
           </div>
 
@@ -712,6 +806,11 @@
                     >
                     </i>
                     <i
+                      @click="archiveFunc(i.id)"
+                      class="bx bx-archive-in bg-orange-300 cursor-pointer text-orange-600 rounded-lg p-2 mr-3 focus:ring-2"
+                    >
+                    </i>
+                    <i
                       @click="deleteFunc(i.id)"
                       class="bx bxs-trash bg-red-300 cursor-pointer text-red-600 rounded-lg p-2 focus:ring-2"
                     >
@@ -784,6 +883,11 @@
                     <i
                       @click="getOneProduct(i.id, 'edit')"
                       class="bx bxs-pencil bg-blue-300 text-blue-600 rounded-lg p-2 mr-3 cursor-pointer focus:ring-2"
+                    >
+                    </i>
+                    <i
+                      @click="archiveFunc(i.id)"
+                      class="bx bx-archive-in bg-orange-300 cursor-pointer text-orange-600 rounded-lg p-2 mr-3 focus:ring-2"
                     >
                     </i>
                     <i
@@ -922,6 +1026,11 @@ const remove = reactive({
   toggle: false,
 });
 
+const archive = reactive({
+  id: "",
+  toggle: false,
+});
+
 const searchFunc = () => {
   store.searchList = store.allProducts.filter((item) =>
     item.full_name.toLowerCase().includes(store.filter.toLowerCase())
@@ -954,6 +1063,11 @@ const cancelFunc = () => {
 const deleteFunc = (id) => {
   remove.id = id;
   remove.toggle = true;
+};
+
+const archiveFunc = (id) => {
+  archive.id = id;
+  archive.toggle = true;
 };
 
 const resetForm = () => {
@@ -1081,6 +1195,23 @@ const editProduct = async () => {
   } catch {}
 };
 
+const archiveProduct = async () => {
+  const data = {
+    status: false,
+  };
+
+  try {
+    await fetchData(
+      `/student/archive/${localStorage.getItem("school_id")}/${archive.id}`,
+      "put",
+      data
+    );
+    notification.success("O'quvchi arxivlandi");
+    getProduct(store.pagination);
+    archive.toggle = false;
+  } catch {}
+};
+
 const deleteProduct = async () => {
   try {
     await fetchData(
@@ -1156,6 +1287,10 @@ onMounted(() => {
 <style lang="scss" scoped>
 .btnAdd {
   background-image: linear-gradient(to right, white -450%, #4141eb);
+}
+
+.btnAdd2 {
+  background-image: linear-gradient(to right, white -450%, #ff9800);
 }
 
 .btnKirish {
