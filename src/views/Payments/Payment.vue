@@ -725,19 +725,19 @@
                   </button>
                 </div>
                 <div
-                  class="flex items-center justify-between w-auto"
+                  class="flex w-full items-center justify-between sm:w-auto"
                   id="navbar-sticky"
                 >
-                  <ul class="font-medium flex items-center gap-5 text-white">
+                  <ul class="font-medium w-full flex flex-col sm:flex-row items-center gap-5 text-white">
                     <li
-                      class="cursor-pointer bg-gray-600 hover:bg-gray-500 p-2 px-5 sm:text-md text-sm rounded-lg"
+                      class="cursor-pointer w-full sm:max-w-fit text-center bg-gray-600 hover:bg-gray-500 p-2 px-5 sm:text-md text-sm rounded-lg"
                       :class="history.dayModal ? 'btnAdd' : 'bg-gray-600'"
                       @click="historyDayModal"
                     >
                       <span>Kun bo'yicha ko'rish</span>
                     </li>
                     <li
-                      class="cursor-pointer bg-gray-600 hover:bg-gray-500 p-2 px-5 sm:text-md text-sm rounded-lg"
+                      class="cursor-pointer w-full sm:max-w-fit text-center bg-gray-600 hover:bg-gray-500 p-2 px-5 sm:text-md text-sm rounded-lg"
                       :class="history.monthModal ? 'btnAdd' : 'bg-gray-600'"
                       @click="historyMonthModal"
                     >
@@ -891,21 +891,79 @@
                       :class="navbar.userNav ? 'text-white' : 'text-black'"
                       >Guruhni tanlang</label
                     >
-                    <select
-                      v-model="history.group_id"
-                      id="name"
-                      class="bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
-                      required
-                    >
-                      <option value="" disabled selected>Guruh tanlang</option>
-                      <option
-                        v-for="i in store.groupAllProducts"
-                        :key="i.id"
-                        :value="i.id"
+                    <div class="relative w-full">
+                      <div
+                        class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"
                       >
-                        {{ i.name }}
-                      </option>
-                    </select>
+                        <svg
+                          aria-hidden="true"
+                          class="w-5 h-5"
+                          fill="currentColor"
+                          viewbox="0 0 20 20"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            fill-rule="evenodd"
+                            d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                            clip-rule="evenodd"
+                          />
+                        </svg>
+                      </div>
+                      <input
+                        v-model="history.filter"
+                        @focus="history.selectLamp = true"
+                        @blur="
+                          history.selectLamp = false;
+                          history.filter_show = false;
+                        "
+                        @input="
+                          history.filter_show = true;
+                          searchHistoryFunc();
+                        "
+                        type="search"
+                        id="simple-search"
+                        class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2"
+                        placeholder="Guruhni tanlang yoki qidirish..."
+                      />
+                      <ul
+                        v-show="
+                          history.filter_show && history.searchList.length > 0
+                        "
+                        class="absolute z-10 max-h-80 overflow-y-auto overflow-hidden py-1 text-gray-600 rounded bg-white w-full bottom-full"
+                      >
+                        <li
+                          class="hover:bg-blue-600 hover:text-white cursor-pointer pl-2"
+                          v-for="(i, index) in history.searchList"
+                          :key="index"
+                          @mousedown.prevent="
+                            history.group_id = i.id;
+                            history.group_name = i.name;
+                            history.filter_show = false;
+                            history.filter = i.name;
+                          "
+                        >
+                          {{ i.name }}
+                        </li>
+                      </ul>
+                      <ul
+                        v-show="history.selectLamp && !history.filter"
+                        class="absolute z-10 max-h-80 overflow-y-auto overflow-hidden py-1 text-gray-600 rounded bg-white w-full bottom-full"
+                      >
+                        <li
+                          class="hover:bg-blue-600 hover:text-white whitespace-nowrap cursor-pointer pl-2"
+                          v-for="(i, index) in store.groupAllProducts"
+                          :key="index"
+                          @mousedown.prevent="
+                            history.group_id = i.id;
+                            history.group_name = i.name;
+                            history.selectLamp = false;
+                            history.filter = i.name;
+                          "
+                        >
+                          {{ i.name }}
+                        </li>
+                      </ul>
+                    </div>
                   </div>
                 </div>
                 <div
@@ -942,18 +1000,25 @@
           :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
         >
           <div
-            class="w-full flex items-center sm:justify-start lg:pb-0 pb-4 justify-between gap-5"
+            class="w-full flex flex-col sm:flex-row sm:items-center sm:justify-start lg:pb-0 pb-4 justify-between gap-5"
           >
             <h1 class="text-blue-700 font-bold text-lg">To'lov</h1>
             <div
-              class="lg:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3"
+              class="w-full lg:w-auto flex flex-row space-y-0 items-stretch md:items-center justify-end space-x-3"
             >
               <button
                 @click="history.modal = true"
                 type="button"
-                class="btnAdd flex items-center max-w-fit justify-center whitespace-nowrap text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2.5"
+                class="btnAdd flex items-center w-full sm:max-w-fit justify-center whitespace-nowrap text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2.5"
               >
                 <span class="">To'lov tarixi</span>
+              </button>
+              <button
+                
+                type="button"
+                class="btnAdd2 flex items-center w-full sm:max-w-fit justify-center whitespace-nowrap text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-4 py-2.5"
+              >
+                <span class="">Qarzdorlar tarixi</span>
               </button>
             </div>
           </div>
@@ -1393,6 +1458,17 @@ function searchFunc() {
     }
   }
 }
+
+function searchHistoryFunc() {
+  history.searchList = [];
+  if (history.filter) {
+    for (let i of store.groupAllProducts) {
+      if (i.name.toLowerCase().includes(history.filter.toLowerCase())) {
+        history.searchList.push(i);
+      }
+    }
+  }
+}
 // ---------------------------- search end ------------------------------------
 
 // ----------------------------------- forms -----------------------------------
@@ -1451,6 +1527,10 @@ const history = reactive({
   modal: false,
   dayModal: true,
   monthModal: false,
+  filter_show: false,
+  filter: "",
+  selectLamp: false,
+  searchList: []
 });
 
 const monthNames = (month) => {
@@ -2245,6 +2325,10 @@ onMounted(() => {
 <style lang="scss" scoped>
 .btnAdd {
   background-image: linear-gradient(to right, white -450%, #4141eb);
+}
+
+.btnAdd2 {
+  background-image: linear-gradient(to right, white -450%, red);
 }
 
 .btnKirish {

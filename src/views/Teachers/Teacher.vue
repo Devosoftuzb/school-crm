@@ -87,7 +87,7 @@
                   required
                 />
               </div>
-              <div class="w-[205%]">
+              <div class="sm:w-[205%]">
                 <label
                   for="name"
                   class="block mb-2 text-sm"
@@ -478,7 +478,7 @@
                   placeholder="*********"
                 />
               </div>
-              <div class="w-[205%]">
+              <div class="sm:w-[205%]">
                 <label
                   for="edit_name"
                   class="block mb-2 text-sm"

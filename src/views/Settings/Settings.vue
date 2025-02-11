@@ -15,7 +15,7 @@
         >
           <h1 class="text-blue-700 font-bold text-lg w-full">Sozlamalar</h1>
           <div
-            class="lg:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center md:space-x-4"
+            class="w-full lg:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center md:space-x-4"
             :class="navbar.userNav ? 'text-white' : 'text-black'"
           >
             <button
@@ -24,8 +24,8 @@
               type="button"
               :class="
                 generalSettings
-                  ? 'btnAdd flex items-center max-w-fit justify-center whitespace-nowrap border border-[#2f73f0] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5'
-                  : 'flex items-center max-w-fit justify-center whitespace-nowrap bg-transparent border border-[#2f73f0] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5'
+                  ? 'btnAdd flex items-center w-full sm:max-w-fit justify-center whitespace-nowrap border border-[#2f73f0] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5'
+                  : 'flex items-center w-full sm:max-w-fit justify-center whitespace-nowrap bg-transparent border border-[#2f73f0] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5'
               "
             >
               <span class="">Asosiy sozlama</span>
@@ -36,8 +36,8 @@
               type="button"
               :class="
                 passwordChange
-                  ? 'btnAdd flex items-center max-w-fit justify-center whitespace-nowrap border border-[#2f73f0] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5'
-                  : 'flex items-center max-w-fit justify-center whitespace-nowrap bg-transparent border border-[#2f73f0] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5'
+                  ? 'btnAdd flex items-center w-full sm:max-w-fit justify-center whitespace-nowrap border border-[#2f73f0] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5'
+                  : 'flex items-center w-full sm:max-w-fit justify-center whitespace-nowrap bg-transparent border border-[#2f73f0] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5'
               "
             >
               <span class="">Parolni yangilash</span>
@@ -48,8 +48,8 @@
               type="button"
               :class="
                 socialLink
-                  ? 'btnAdd flex items-center max-w-fit justify-center whitespace-nowrap border border-[#2f73f0] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5'
-                  : 'flex items-center max-w-fit justify-center whitespace-nowrap bg-transparent border border-[#2f73f0] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5'
+                  ? 'btnAdd flex items-center w-full sm:max-w-fit justify-center whitespace-nowrap border border-[#2f73f0] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5'
+                  : 'flex items-center w-full sm:max-w-fit justify-center whitespace-nowrap bg-transparent border border-[#2f73f0] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5'
               "
             >
               <span class="">Ijtimoiy tarmoqlar</span>
@@ -60,8 +60,8 @@
               type="button"
               :class="
                 paymentMethod
-                  ? 'btnAdd flex items-center max-w-fit justify-center whitespace-nowrap border border-[#2f73f0] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5'
-                  : 'flex items-center max-w-fit justify-center whitespace-nowrap bg-transparent border border-[#2f73f0] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5'
+                  ? 'btnAdd flex items-center w-full sm:max-w-fit justify-center whitespace-nowrap border border-[#2f73f0] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5'
+                  : 'flex items-center w-full sm:max-w-fit justify-center whitespace-nowrap bg-transparent border border-[#2f73f0] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5'
               "
             >
               <span class="">To'lov turlari</span>

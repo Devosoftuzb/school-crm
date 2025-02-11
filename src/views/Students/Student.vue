@@ -635,29 +635,28 @@
           :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
         >
           <div
-            class="w-full flex items-center lg:justify-start lg:pb-0 pb-4 justify-between gap-5"
+            class="w-full flex flex-col sm:flex-row sm:items-center lg:justify-start lg:pb-0 pb-4 justify-between gap-5"
           >
             <h1 class="text-blue-700 font-bold text-lg">O'quvchilar</h1>
             <div
-              class="lg:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3"
+              class="lg:w-auto flex md:space-y-0  items-center justify-end space-x-3"
             >
               <button
                 @click="toggleModal"
                 id=""
                 type="button"
-                class="btnAdd flex items-center max-w-fit justify-center whitespace-nowrap text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 sm:py-2"
+                class="btnAdd flex items-center max-w-fit justify-center whitespace-nowrap text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-1 sm:py-2"
               >
                 <span class="sm:block hidden">O'quvchi qo'shish</span>
                 <i class="sm:hidden block bx bxs-user-plus text-lg"></i>
               </button>
-              <router-link to="/students/archive">
+              <router-link class="w-full" to="/students/archive">
                 <button
                   id=""
                   type="button"
-                  class="btnAdd2 flex items-center max-w-fit justify-center whitespace-nowrap text-white focus:ring-4 focus:ring-orange-300 font-medium rounded-lg text-sm px-4 sm:py-2"
+                  class="btnAdd2 flex items-center w-full sm:max-w-fit justify-center whitespace-nowrap text-white focus:ring-4 focus:ring-orange-300 font-medium rounded-lg text-sm px-4 py-2"
                 >
-                  <span class="sm:block hidden">Arxiv o'quchilar</span>
-                  <i class="sm:hidden block bx bxs-user-plus text-lg"></i>
+                  <span class="">Arxiv o'quchilar</span>
                 </button>
               </router-link>
             </div>
