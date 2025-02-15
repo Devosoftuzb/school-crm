@@ -664,6 +664,7 @@
                   <button
                     type="submit"
                     class="btnAdd text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                    :disabled="store.isSubmitting"
                   >
                     To'lash
                   </button>
@@ -728,7 +729,9 @@
                   class="flex w-full items-center justify-between sm:w-auto"
                   id="navbar-sticky"
                 >
-                  <ul class="font-medium w-full flex flex-col sm:flex-row items-center gap-5 text-white">
+                  <ul
+                    class="font-medium w-full flex flex-col sm:flex-row items-center gap-5 text-white"
+                  >
                     <li
                       class="cursor-pointer w-full sm:max-w-fit text-center bg-gray-600 hover:bg-gray-500 p-2 px-5 sm:text-md text-sm rounded-lg"
                       :class="history.dayModal ? 'btnAdd' : 'bg-gray-600'"
@@ -990,6 +993,308 @@
       </div>
       <!-- ------------------------------------------- history modal end ------------------------------------------------- -->
 
+      <!-- ------------------------------------------- debtor modal ----------------------------------------------------- -->
+      <div
+        @click.self="debtorModal"
+        :class="
+          debtor.modal
+            ? 'fixed overflow-y-auto flex bg-[rgba(0,0,0,0.5)] overflow-x-hidden z-50 justify-center items-center w-full inset-0 h-full'
+            : 'hidden'
+        "
+      >
+        <transition name="modal-fade">
+          <div class="relative p-4 w-full max-w-xl h-auto">
+            <!-- Modal content -->
+            <div
+              class="relative p-4 rounded-lg shadow sm:p-5"
+              :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
+            >
+              <!-- Modal header -->
+              <div
+                class="flex flex-col items-center gap-5 pb-4 mb-4 rounded-t border-b sm:mb-5"
+              >
+                <div class="flex items-center justify-between w-full">
+                  <h3
+                    class="text-lg"
+                    :class="navbar.userNav ? 'text-white' : 'text-black'"
+                  >
+                    Qarzdorlar tarixini ko'rish
+                  </h3>
+                  <button
+                    @click="debtorModal"
+                    type="button"
+                    class="bg-transparent hover:bg-gray-200 hover rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+                    :class="{ 'text-white': navbar.userNav }"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      class="w-5 h-5"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                        clip-rule="evenodd"
+                      ></path>
+                    </svg>
+                    <span class="sr-only">Close modal</span>
+                  </button>
+                </div>
+                <div
+                  class="flex w-full items-center justify-between sm:w-auto"
+                  id="navbar-sticky"
+                >
+                  <ul
+                    class="font-medium w-full flex flex-col sm:flex-row items-center gap-5 text-white"
+                  >
+                    <li
+                      class="cursor-pointer w-full sm:max-w-fit text-center bg-gray-600 hover:bg-gray-500 p-2 px-5 sm:text-md text-sm rounded-lg"
+                      :class="debtor.dayModal ? 'btnAdd' : 'bg-gray-600'"
+                      @click="debtorDayModal"
+                    >
+                      <span>Oy bo'yicha ko'rish</span>
+                    </li>
+                    <li
+                      class="cursor-pointer w-full sm:max-w-fit text-center bg-gray-600 hover:bg-gray-500 p-2 px-5 sm:text-md text-sm rounded-lg"
+                      :class="debtor.monthModal ? 'btnAdd' : 'bg-gray-600'"
+                      @click="debtorMonthModal"
+                    >
+                      <span>Guruh bo'yicha ko'rish</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <!-- Modal body -->
+              <form
+                v-show="debtor.dayModal"
+                @submit.prevent="getDebtor(store.pagination)"
+                :class="{ darkForm: navbar.userNav }"
+              >
+                <div class="grid font-medium gap-4 mb-4">
+                  <div>
+                    <label for="year" class="block mb-2 text-sm"
+                      >Yilni tanlang</label
+                    >
+                    <select
+                      v-model="debtor.year"
+                      id="name"
+                      class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                      required
+                    >
+                      <option value="" disabled selected>Yilni tanlang</option>
+                      <option
+                        v-for="i in store.curentYil"
+                        :key="i.id"
+                        :value="i.name"
+                      >
+                        {{ i.name }}
+                      </option>
+                    </select>
+                  </div>
+                  <div>
+                    <label for="month" class="block mb-2 text-sm"
+                      >Oyni tanlang</label
+                    >
+                    <select
+                      v-model="debtor.month"
+                      id="month"
+                      class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                      required
+                    >
+                      <option value="" disabled selected>Oyni tanlang</option>
+                      <option value="01">Yanvar</option>
+                      <option value="02">Fevral</option>
+                      <option value="03">Mart</option>
+                      <option value="04">Aprel</option>
+                      <option value="05">May</option>
+                      <option value="06">Iyun</option>
+                      <option value="07">Iyul</option>
+                      <option value="08">Avgust</option>
+                      <option value="09">Sentabr</option>
+                      <option value="10">Oktabr</option>
+                      <option value="11">Noyabr</option>
+                      <option value="12">Dekabr</option>
+                    </select>
+                  </div>
+                </div>
+                <div
+                  class="w-full flex items-center justify-between border-t pt-5 mt-5"
+                >
+                  <button
+                    @click="debtorModal"
+                    type="button"
+                    class="border inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                  >
+                    Bekor qilish
+                  </button>
+                  <button
+                    type="submit"
+                    class="btnAdd text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                  >
+                    Ko'rish
+                  </button>
+                </div>
+              </form>
+              <form
+                v-show="debtor.monthModal"
+                @submit.prevent="getDebtor(store.pagination)"
+                :class="{ darkForm: navbar.userNav }"
+              >
+                <div class="grid font-medium gap-4 mb-4">
+                  <div>
+                    <label for="year" class="block mb-2 text-sm"
+                      >Yilni tanlang</label
+                    >
+                    <select
+                      v-model="debtor.year"
+                      id="name"
+                      class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                      required
+                    >
+                      <option value="" disabled selected>Yilni tanlang</option>
+                      <option
+                        v-for="i in store.curentYil"
+                        :key="i.id"
+                        :value="i.name"
+                      >
+                        {{ i.name }}
+                      </option>
+                    </select>
+                  </div>
+                  <div>
+                    <label for="month" class="block mb-2 text-sm"
+                      >Oyni tanlang</label
+                    >
+                    <select
+                      v-model="debtor.month"
+                      id="month"
+                      class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                      required
+                    >
+                      <option value="" disabled selected>Oyni tanlang</option>
+                      <option value="01">Yanvar</option>
+                      <option value="02">Fevral</option>
+                      <option value="03">Mart</option>
+                      <option value="04">Aprel</option>
+                      <option value="05">May</option>
+                      <option value="06">Iyun</option>
+                      <option value="07">Iyul</option>
+                      <option value="08">Avgust</option>
+                      <option value="09">Sentabr</option>
+                      <option value="10">Oktabr</option>
+                      <option value="11">Noyabr</option>
+                      <option value="12">Dekabr</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label
+                      for="name"
+                      class="block mb-2 text-sm"
+                      :class="navbar.userNav ? 'text-white' : 'text-black'"
+                      >Guruhni tanlang</label
+                    >
+                    <div class="relative w-full">
+                      <div
+                        class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"
+                      >
+                        <svg
+                          aria-hidden="true"
+                          class="w-5 h-5"
+                          fill="currentColor"
+                          viewbox="0 0 20 20"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            fill-rule="evenodd"
+                            d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                            clip-rule="evenodd"
+                          />
+                        </svg>
+                      </div>
+                      <input
+                        v-model="debtor.filter"
+                        @focus="debtor.selectLamp = true"
+                        @blur="
+                          debtor.selectLamp = false;
+                          debtor.filter_show = false;
+                        "
+                        @input="
+                          debtor.filter_show = true;
+                          searchDebtorFunc();
+                        "
+                        type="search"
+                        id="simple-search"
+                        class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2"
+                        placeholder="Guruhni tanlang yoki qidirish..."
+                      />
+                      <ul
+                        v-show="
+                          debtor.filter_show && debtor.searchList.length > 0
+                        "
+                        class="absolute z-10 max-h-80 overflow-y-auto overflow-hidden py-1 text-gray-600 rounded bg-white w-full bottom-full"
+                      >
+                        <li
+                          class="hover:bg-blue-600 hover:text-white cursor-pointer pl-2"
+                          v-for="(i, index) in debtor.searchList"
+                          :key="index"
+                          @mousedown.prevent="
+                            debtor.group_id = i.id;
+                            debtor.group_name = i.name;
+                            debtor.filter_show = false;
+                            debtor.filter = i.name;
+                          "
+                        >
+                          {{ i.name }}
+                        </li>
+                      </ul>
+                      <ul
+                        v-show="debtor.selectLamp && !debtor.filter"
+                        class="absolute z-10 max-h-80 overflow-y-auto overflow-hidden py-1 text-gray-600 rounded bg-white w-full bottom-full"
+                      >
+                        <li
+                          class="hover:bg-blue-600 hover:text-white whitespace-nowrap cursor-pointer pl-2"
+                          v-for="(i, index) in store.groupAllProducts"
+                          :key="index"
+                          @mousedown.prevent="
+                            debtor.group_id = i.id;
+                            debtor.group_name = i.name;
+                            debtor.selectLamp = false;
+                            debtor.filter = i.name;
+                          "
+                        >
+                          {{ i.name }}
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="w-full flex items-center justify-between border-t pt-5 mt-5"
+                >
+                  <button
+                    @click="debtorModal"
+                    type="button"
+                    class="border inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                  >
+                    Bekor qilish
+                  </button>
+                  <button
+                    type="submit"
+                    class="btnAdd text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                  >
+                    Ko'rish
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </transition>
+      </div>
+      <!-- ------------------------------------------- debtor modal end ------------------------------------------------- -->
+
       <div v-show="store.PageProduct" class="w-full max-w-screen">
         <!-- Start coding here -->
 
@@ -1014,7 +1319,7 @@
                 <span class="">To'lov tarixi</span>
               </button>
               <button
-                
+                @click="debtor.modal = true"
                 type="button"
                 class="btnAdd2 flex items-center w-full sm:max-w-fit justify-center whitespace-nowrap text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-4 py-2.5"
               >
@@ -1196,7 +1501,10 @@
             </div>
           </div>
 
-          <div v-show="!store.allProducts" class="overflow-x-auto">
+          <div
+            v-show="!store.allProducts && !debtor.isTable"
+            class="overflow-x-auto"
+          >
             <table class="w-full text-sm text-left">
               <thead class="btnAdd text-white text-xs rounded-lg uppercase">
                 <tr>
@@ -1320,8 +1628,108 @@
             </div>
           </div>
 
+          <div
+            v-show="!store.allProducts && debtor.isTable"
+            class="overflow-x-auto"
+          >
+            <table class="w-full text-sm text-left">
+              <thead class="btnAdd text-white text-xs rounded-lg uppercase">
+                <tr>
+                  <th scope="col" class="text-center py-3">
+                    O'quvchi (F . I . O)
+                  </th>
+                  <th scope="col" class="text-center py-3">
+                    O'qituvchi (F . I . O)
+                  </th>
+                  <th scope="col" class="text-center py-3">Guruh</th>
+                  <th scope="col" class="text-center py-3">Kurs narxi</th>
+                  <th scope="col" class="text-center py-3">Qarzdorlik</th>
+                  <th scope="col" class="text-center py-3"></th>
+                </tr>
+              </thead>
+              <tbody v-show="!store.error">
+                <tr
+                  v-for="i in store.PageProduct"
+                  :key="i"
+                  class="border-b"
+                  :class="
+                    navbar.userNav ? 'hover:bg-gray-700' : 'hover:bg-gray-50'
+                  "
+                >
+                  <th
+                    scope="row"
+                    class="text-center px-8 py-4 font-medium whitespace-nowrap"
+                  >
+                    <span>{{ i.student_name }}</span>
+                  </th>
+                  <td class="text-center font-medium text-red-800 px-8 py-4">
+                    <p
+                      class="bg-red-100 rounded-[5px] p-1 px-3 whitespace-nowrap"
+                    >
+                      {{ i.teacher_name }}
+                    </p>
+                  </td>
+
+                  <td class="text-center font-medium text-blue-800 px-8 py-4">
+                    <p
+                      class="bg-blue-100 rounded-[5px] p-1 px-3 whitespace-nowrap"
+                    >
+                      {{ i.group_name }}
+                    </p>
+                  </td>
+                  <td class="text-center font-medium text-green-800 px-8 py-4">
+                    <p
+                      class="bg-green-100 rounded-[5px] p-1 px-3 whitespace-nowrap"
+                    >
+                      {{ i.group_price }} so'm
+                    </p>
+                  </td>
+                  <td class="text-center font-medium text-red-800 px-8 py-4">
+                    <p
+                      class="bg-red-100 rounded-[5px] p-1 px-3 whitespace-nowrap"
+                    >
+                      {{ i.debt }} so'm
+                    </p>
+                  </td>
+                  <td
+                    v-show="store.btn_lamp"
+                    class="text-center font-medium px-8 py-4 whitespace-nowrap"
+                  >
+                    <button
+                      v-show="store.btn_lamp"
+                      @click="
+                        paymentDebtor(
+                          i.id,
+                          i.student_name,
+                          i.group_id,
+                          i.group_price,
+                          i.remaining_debt,
+                          i.teacher_name,
+                          i.group_name
+                        )
+                      "
+                      class="bg-green-600 rounded-lg py-2.5 px-5 text-white"
+                    >
+                      To'lov qilish
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div
+              v-show="
+                (store.PageProduct && store.error) ||
+                store.PageProduct.length == 0
+              "
+              class="w-full max-w-screen text-center p-20 text-2xl font-medium"
+            >
+              <h1>Qarzdorlar ro'yhati bo'sh</h1>
+            </div>
+          </div>
+
           <nav
-            v-show="!store.allProducts"
+            v-show="!store.allProducts && !debtor.isTable"
             class="flex flex-row justify-between items-center md:items-center space-y-3 md:space-y-0 p-4"
             aria-label="Table navigation"
           >
@@ -1361,6 +1769,56 @@
                 @click="
                   store.pagination += 1;
                   getHistory(store.pagination);
+                "
+                href="#"
+                class="flex font-bold text-black border-2 bg-white hover:bg-gray-300 items-center justify-center text-sm py-2 sm:mt-0 -mt-2 px-6 cursor-pointer rounded-lg leading-tight"
+              >
+                Keyingi
+              </li>
+            </ul>
+          </nav>
+
+          <nav
+            v-show="!store.allProducts && debtor.isTable"
+            class="flex flex-row justify-between items-center md:items-center space-y-3 md:space-y-0 p-4"
+            aria-label="Table navigation"
+          >
+            <ul class="inline-flex items-stretch -space-x-px">
+              <li
+                :class="{
+                  'pointer-events-none opacity-50': store.page[0] == 1,
+                }"
+                @click="
+                  store.pagination -= 1;
+                  getDebtor(store.pagination);
+                "
+                href="#"
+                class="flex font-bold text-black border-2 bg-white hover:bg-gray-300 cursor-pointer items-center justify-center text-sm py-2 sm:mt-0 -mt-2 px-6 rounded-lg leading-tight"
+              >
+                Oldingi
+              </li>
+            </ul>
+            <span class="text-sm font-normal">
+              Sahifa
+              <span class="font-semibold"
+                ><span>{{ store.page[0] * 15 - 14 }}</span> -
+                <span v-if="store.page[0] * 15 < store.page[1]">{{
+                  store.page[0] * 15
+                }}</span
+                ><span v-else>{{ store.page[1] }}</span></span
+              >
+              dan
+              <span class="font-semibold">{{ store.page[1] }}</span>
+            </span>
+            <ul class="inline-flex items-stretch -space-x-px">
+              <li
+                :class="{
+                  'pointer-events-none opacity-50':
+                    store.page[0] * 15 >= store.page[1],
+                }"
+                @click="
+                  store.pagination += 1;
+                  getDebtor(store.pagination);
                 "
                 href="#"
                 class="flex font-bold text-black border-2 bg-white hover:bg-gray-300 items-center justify-center text-sm py-2 sm:mt-0 -mt-2 px-6 cursor-pointer rounded-lg leading-tight"
@@ -1420,6 +1878,7 @@ const store = reactive({
   btn_lamp: true,
   statistic: false,
   selectLamp: false,
+  isSubmitting: false,
 });
 
 function toggleModal(id, name) {
@@ -1431,6 +1890,28 @@ function toggleModal(id, name) {
   form.id = id;
   store.student_name = name;
   formatDateToNumeric(new Date());
+}
+
+function paymentDebtor(
+  id,
+  name,
+  group_id,
+  group_price,
+  debtorPay,
+  teacher_name,
+  group_name
+) {
+  getSchool()
+  modal.value = !modal.value;
+  form.year = hozirgiYil;
+  form.month = hozirgiOy;
+  form.price = debtorPay;
+  store.price = group_price;
+  store.teacher_name = teacher_name;
+  store.group_name = group_name;
+  form.group_id = group_id;
+  form.id = id;
+  store.student_name = name;
 }
 
 const cenecleEdit = () => {
@@ -1465,6 +1946,17 @@ function searchHistoryFunc() {
     for (let i of store.groupAllProducts) {
       if (i.name.toLowerCase().includes(history.filter.toLowerCase())) {
         history.searchList.push(i);
+      }
+    }
+  }
+}
+
+function searchDebtorFunc() {
+  debtor.searchList = [];
+  if (debtor.filter) {
+    for (let i of store.groupAllProducts) {
+      if (i.name.toLowerCase().includes(debtor.filter.toLowerCase())) {
+        debtor.searchList.push(i);
       }
     }
   }
@@ -1530,7 +2022,43 @@ const history = reactive({
   filter_show: false,
   filter: "",
   selectLamp: false,
-  searchList: []
+  searchList: [],
+});
+
+const debtorDayModal = () => {
+  debtor.dayModal = true;
+  debtor.monthModal = false;
+};
+
+const debtorMonthModal = () => {
+  debtor.dayModal = false;
+  debtor.monthModal = true;
+};
+
+const debtorModal = () => {
+  debtor.modal = !debtor.modal;
+  debtor.year = hozirgiYil;
+  debtor.month = hozirgiOy;
+  debtor.day = hozirgiKun;
+  debtor.group_id = "";
+  debtorDayModal();
+  getHistory(store.pagination);
+};
+
+const debtor = reactive({
+  year: hozirgiYil,
+  month: hozirgiOy,
+  day: hozirgiKun,
+  group_id: "",
+  group_name: "",
+  modal: false,
+  dayModal: true,
+  monthModal: false,
+  filter_show: false,
+  filter: "",
+  selectLamp: false,
+  searchList: [],
+  isTable: false,
 });
 
 const monthNames = (month) => {
@@ -1571,6 +2099,21 @@ const discountedPrice = computed(() => {
   form.price = store.price - discountAmount;
   return store.price - discountAmount;
 });
+
+const getSchool = () => {
+  axios
+    .get(`/school/${localStorage.getItem("school_id")}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    })
+    .then((res) => {
+      store.school_name = res.data.name;
+      store.school_logo = res.data.image;
+    })
+    .catch((error) => {
+    });
+};
 
 const getAllProduct = () => {
   axios
@@ -1636,6 +2179,7 @@ const calculatePaymentStatus = (paymentHistory, groupPrice) => {
 };
 
 const getOneProduct = async (id) => {
+  debtor.isTable = false;
   try {
     const schoolId = localStorage.getItem("school_id");
     const token = localStorage.getItem("token");
@@ -1756,6 +2300,9 @@ const checkOldPayment = async (
 };
 
 const addPayment = async () => {
+  if (store.isSubmitting) return;
+  store.isSubmitting = true;
+
   const data = {
     school_id: Number(localStorage.getItem("school_id")),
     student_id: form.id,
@@ -1797,9 +2344,14 @@ const addPayment = async () => {
     });
 
     printReceipt();
-    cancelFunc();
+    cancelFunc(); 
     notification.success("To'lov qilindi!");
-    getOneProduct(form.group_id);
+    store.isSubmitting = false;
+    if (debtor.isTable) {
+      getDebtor(store.pagination);
+    } else {
+      getOneProduct(form.group_id);
+    }
   } catch (error) {
     notification.warning(
       "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
@@ -1808,6 +2360,7 @@ const addPayment = async () => {
 };
 
 const getHistory = (page) => {
+  debtor.isTable = false;
   store.allProducts = false;
   const schoolId = localStorage.getItem("school_id");
   const token = localStorage.getItem("token");
@@ -1840,6 +2393,45 @@ const getHistory = (page) => {
       store.page = [pagination.currentPage, pagination.total_count];
       store.error = false;
       history.modal = false;
+    })
+    .catch((error) => {
+      store.PageProduct = error.response?.data?.message;
+      store.error = true;
+    });
+};
+
+const getDebtor = (page) => {
+  store.allProducts = false;
+  const schoolId = localStorage.getItem("school_id");
+  const token = localStorage.getItem("token");
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  let url;
+  if (debtor.dayModal) {
+    url = `/payment/debtor/${schoolId}/${debtor.year}/${debtor.month}/page?page=${page}`;
+  } else if (debtor.monthModal) {
+    url = `/payment/debtor-group/${schoolId}/${debtor.group_id}/${debtor.year}/${debtor.month}/page?page=${page}`;
+  } else {
+    return;
+  }
+
+  axios
+    .get(url, config)
+    .then((res) => {
+      const records = res.data?.data?.records;
+      if (records.length !== 0) {
+        history.group_name = records[0].group_name;
+      }
+      store.PageProduct = records;
+      const pagination = res.data?.data?.pagination;
+      store.page = [pagination.currentPage, pagination.total_count];
+      store.error = false;
+      debtor.isTable = true;
+      debtor.modal = false;
     })
     .catch((error) => {
       store.PageProduct = error.response?.data?.message;
