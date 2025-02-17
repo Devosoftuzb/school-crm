@@ -845,9 +845,7 @@ import { useNavStore } from "../../stores/toggle";
 import { Placeholder2 } from "../../components";
 import { useNotificationStore } from "../../stores/notification";
 import axios from "@/services/axios";
-import { useInfoStore } from "../../stores/dashboard";
 
-const info = useInfoStore();
 const notification = useNotificationStore();
 const navbar = useNavStore();
 const router = useRouter();

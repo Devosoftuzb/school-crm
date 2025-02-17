@@ -1012,9 +1012,7 @@ import { useRouter } from "vue-router";
 import { useNavStore } from "../../stores/toggle";
 import { useNotificationStore } from "../../stores/notification";
 import axios from "@/services/axios";
-import { useInfoStore } from "../../stores/dashboard";
 
-const info = useInfoStore();
 const notification = useNotificationStore();
 const navbar = useNavStore();
 const router = useRouter();
@@ -1117,7 +1115,6 @@ const createProduct = async () => {
     modal.value = false;
     notification.success("Xodim yaratildi");
     await getProduct(store.pagination);
-    await info.getStaff();
     cancelFunc();
   } catch (error) {
     notification.warning(

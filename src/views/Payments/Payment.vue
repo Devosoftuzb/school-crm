@@ -31,12 +31,12 @@
                   :class="navbar.userNav ? 'text-white' : 'text-black'"
                 >
                   <h3
-                    class="font-sans font-semibold leading-normal sm:text-md text-sm"
+                    class="font-semibold leading-normal sm:text-md text-sm"
                   >
                     {{ j.method }} - {{ j.count }}
                   </h3>
                   <h5
-                    class="font-bold bg-green-100 text-green-700 p-1 px-3 rounded-lg sm:text-md text-sm"
+                    class="font-bold bg-blue-100 text-blue-700 p-1 px-3 rounded-lg sm:text-md text-sm"
                   >
                     {{ j.sum }} so'm
                   </h5>

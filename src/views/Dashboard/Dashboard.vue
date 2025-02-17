@@ -7,7 +7,7 @@
     <div v-show="store.PageProduct" class="rounded-lg pt-4">
       <!-- Cards -->
       <div
-        class="cards grid xl:grid-cols-4 lg:grid-cols-2 sm:grid-cols-1 grid-cols-1 xl:mb-0 mb-5 gap-5 px-2"
+        class="cards grid xl:grid-cols-4 lg:grid-cols-2 sm:grid-cols-1 grid-cols-1 xl:mb-0 mb-5 2xl:gap-5 gap-3 px-2"
       >
         <div class="card" v-for="(i, index) in 4" :key="index">
           <div
@@ -21,12 +21,10 @@
               <div class="flex flex-row -mx-3">
                 <div class="flex-none w-2/3 max-w-full px-3">
                   <div>
-                    <p
-                      class="mb-0 font-sans font-semibold leading-normal text-sm"
-                    >
+                    <p class="mb-0 font-semibold leading-normal 2xl:text-xl text-md">
                       {{ getCardTitle(index) }}
                     </p>
-                    <h5 class="mb-0 font-bold">{{ getCardValue(index) }}</h5>
+                    <h5 class="mb-0 2xl:text-md text-sm bg-blue-100 text-blue-700 rounded-lg 2xl:px-5 px-2 max-w-fit font-bold">{{ getCardValue(index) }} <span v-if="index == 3">so'm</span><span v-if="index != 3">ta</span></h5>
                   </div>
                 </div>
                 <div class="basis-1/3">
@@ -48,155 +46,94 @@
         </div>
       </div>
 
-      <!-- Charts -->
-      <div
-        v-if="store.data"
-        class="flex lg:flex-row flex-col gap-4 px-2 pb-4 items-center"
-      >
+      <!-- To'lov Statistikasi -->
+      <div class="w-full grid sm:grid-cols-2 2xl:gap-5 gap-3 px-2">
         <div
-          class="lg:w-1/2 w-full py-4 rounded-lg overflow-hidden"
+          class="chart-container mt-8 shadow-md rounded-lg p-6"
           :class="{
-            'bg-[#1e293b]': navbar.userNav,
-            'bg-white': !navbar.userNav,
+            'bg-[#1e293b] text-white': navbar.userNav,
+            'bg-white text-gray-700': !navbar.userNav,
           }"
         >
-          <ChartLine class="w-[90%] sm:h-[24rem] h-[16rem] mx-auto" />
-        </div>
-        <div
-          class="lg:w-1/2 w-full py-4 rounded-lg overflow-hidden"
-          :class="{
-            'bg-[#1e293b]': navbar.userNav,
-            'bg-white': !navbar.userNav,
-          }"
-        >
-          <UserChart class="w-[90%] sm:h-[24rem] h-[16rem] mx-auto" />
-        </div>
-      </div>
-
-      <!-- Table 1 -->
-      <div v-if="store.data" class="flex lg:flex-row flex-col gap-4 px-2">
-        <div
-          class="relative overflow-x-auto rounded-lg lg:w-1/2 w-full"
-          :class="{
-            'bg-[#1e293b]': navbar.userNav,
-            'bg-white': !navbar.userNav,
-          }"
-        >
-          <div class="flex justify-between items-center px-4 py-3">
-            <h1 class="text-lg font-medium">Star Students</h1>
-            <i
-              class="bx bx-dots-vertical-rounded py-1 cursor-pointer rounded"
-            ></i>
-          </div>
-          <table class="w-full text-sm text-left">
-            <thead
-              class="text-xs text-black uppercase"
-              :class="{
-                'bg-[#1e293b] text-white': navbar.userNav,
-                'bg-gray-50 text-gray-900': !navbar.userNav,
-              }"
+          <div class="w-full flex items-center justify-between">
+            <h2 class="2xl:text-xl text-md font-semibold">To'lov Statistikasi ({{ store.year }})</h2>
+            <form
+              @submit.prevent="getCurrentYearPayments"
+              :class="{ darkForm: navbar.userNav }"
             >
-              <tr>
-                <th scope="col" class="px-4 py-3">ID</th>
-                <th scope="col" class="px-6 py-3">Name</th>
-                <th scope="col" class="px-6 py-3">Marks</th>
-                <th scope="col" class="px-6 py-3">Percentage</th>
-                <th scope="col" class="px-6 py-3">Year</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr
-                v-for="i in 5"
-                :key="i"
-                class="hover:bg-gray-50"
-                :class="{
-                  'bg-[#1e293b] text-white hover:bg-gray-700': navbar.userNav,
-                  'bg-white': !navbar.userNav,
-                }"
-              >
-                <td class="w-4 p-4">1000</td>
-                <th
-                  scope="row"
-                  class="flex leading-6 items-center py-3 px-6 whitespace-nowrap"
+              <div>
+                <select
+                  v-model="store.year"
+                  id="year"
+                  class="border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-1.5"
+                  :class="{
+                    'bg-[#1e293b] text-white': navbar.userNav,
+                    'bg-white text-black': !navbar.userNav,
+                  }"
+                  required
+                  @change="getCurrentYearPayments"
                 >
-                  <img
-                    class="w-10 h-10 rounded-full object-center object-cover"
-                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIMnibg5Lm3vtp0ILawiFJmrVXHf8I6g1VYQ&usqp=CAU"
-                    alt="Neil Sims"
-                  />
-                  <div class="pl-3">
-                    <p class="font-semibold text-sm">Neil Sims</p>
-                    <p
-                      class="font-normal text-gray-500"
-                      :class="{ 'text-gray-200': navbar.userNav }"
-                    >
-                      neil.sims@flowbite.com
-                    </p>
-                  </div>
-                </th>
-                <td class="px-6 py-3">1185</td>
-                <td class="px-6 py-3">
-                  <p class="flex items-center">98%</p>
-                </td>
-                <td class="px-6 py-3">
-                  <p class="font-medium text-blue-600 hover:underline">1998</p>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+                  <option value="" disabled selected>Yilni tanlang</option>
+                  <option
+                    v-for="i in store.curentYil"
+                    :key="i.id"
+                    :value="i.name"
+                  >
+                    {{ i.name }}
+                  </option>
+                </select>
+              </div>
+            </form>
+          </div>
+          <canvas id="paymentChart"></canvas>
         </div>
 
-        <!-- Student Activity -->
+        <!-- O'quvchilar To'lov Statistikasi -->
         <div
-          class="relative overflow-x-auto rounded-lg lg:w-1/2 w-full"
+          class="chart-container2 mt-8 shadow-md rounded-lg p-6"
           :class="{
-            'bg-[#1e293b]': navbar.userNav,
-            'bg-white': !navbar.userNav,
+            'bg-[#1e293b] text-white': navbar.userNav,
+            'bg-white text-gray-700': !navbar.userNav,
           }"
         >
-          <div class="flex justify-between items-center px-4 py-3">
-            <h1 class="text-lg font-medium">Student Activity</h1>
-            <i
-              class="bx bx-dots-vertical-rounded py-1 cursor-pointer rounded"
-            ></i>
-          </div>
-          <table class="w-full text-sm text-left text-gray-500">
-            <tbody>
-              <tr
-                v-for="i in 6"
-                :key="i"
-                class="flex justify-between pb-2 pl-5 pr-1 hover:bg-gray-50"
-                :class="{
-                  'bg-[#1e293b] hover:bg-gray-700 text-white': navbar.userNav,
-                  'bg-white': !navbar.userNav,
-                }"
-              >
-                <th
-                  scope="row"
-                  class="flex leading-7 items-center whitespace-nowrap"
+          <div class="w-full flex items-center justify-between">
+            <h2 class="2xl:text-xl text-md  font-semibold">
+              O'quvchilar To'lov Statistikasi ({{ monthNames(store.month) }})
+            </h2>
+            <form
+              @submit.prevent="getStudentPayments"
+              :class="{ darkForm: navbar.userNav }"
+            >
+              <div>
+                <select
+                  v-model="store.month"
+                  id="month"
+                  class="border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-1.5"
+                  :class="{
+                    'bg-[#1e293b] text-white': navbar.userNav,
+                    'bg-white text-black': !navbar.userNav,
+                  }"
+                  required
+                  @change="getStudentPayments"
                 >
-                  <img
-                    class="w-10 h-9 bg-gray-100 rounded-md p-2 object-center object-cover"
-                    src="https://cdn3d.iconscout.com/3d/premium/thumb/trophy-cup-5254444-4391008.png"
-                    alt="Activity Image"
-                  />
-                  <div class="pl-3">
-                    <p>1st place in "Chess”</p>
-                    <p class="font-medium text-gray-500 text-xs">
-                      John Doe won 1st place in "Chess"
-                    </p>
-                  </div>
-                </th>
-                <td class="p-4 mn-w-fit">
-                  <div
-                    class="flex items-center whitespace-nowrap truncate min-w-fit text-gray-900 bg-red-200 rounded px-2 py-1 text-xs"
-                  >
-                    1 day ago
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+                  <option value="" disabled selected>Oyni tanlang</option>
+                  <option value="01">Yanvar</option>
+                  <option value="02">Fevral</option>
+                  <option value="03">Mart</option>
+                  <option value="04">Aprel</option>
+                  <option value="05">May</option>
+                  <option value="06">Iyun</option>
+                  <option value="07">Iyul</option>
+                  <option value="08">Avgust</option>
+                  <option value="09">Sentabr</option>
+                  <option value="10">Oktabr</option>
+                  <option value="11">Noyabr</option>
+                  <option value="12">Dekabr</option>
+                </select>
+              </div>
+            </form>
+          </div>
+          <canvas id="studentPaymentChart"></canvas>
         </div>
       </div>
     </div>
@@ -204,22 +141,119 @@
 </template>
 
 <script setup>
-import { onBeforeMount, reactive } from "vue";
+import { onMounted, onBeforeMount, reactive, watch, computed } from "vue";
 import { useNavStore } from "../../stores/toggle";
-import { useInfoStore } from "../../stores/dashboard";
+import axios from "../../services/axios";
 import { useRouter } from "vue-router";
-import UserChart from '@/components/UsersChart.vue';
-
+import Chart from "chart.js/auto";
 
 const router = useRouter();
 const navbar = useNavStore();
-const info = useInfoStore();
-
+const hozirgiSana = new Date();
+const orqaYil = hozirgiSana.getFullYear() - 2;
 const store = reactive({
   PageProduct: "",
   data: false,
   cards: ["Xodimlar", "O'quvchilar", "Guruhlar", "To'lovlar"],
+  curentYil: [],
+  year: hozirgiSana.getFullYear(),
+  month: (hozirgiSana.getMonth() + 1).toString().padStart(2, "0"),
 });
+
+const info = reactive({
+  staff: 0,
+  students: 0,
+  groups: 0,
+  payment: 0,
+  PaymentStats: [],
+  StudentPayments: [],
+});
+
+const monthNames = (month) => {
+  switch (month) {
+    case "01":
+      return "Yanvar";
+    case "02":
+      return "Fevral";
+    case "03":
+      return "Mart";
+    case "04":
+      return "Aprel";
+    case "05":
+      return "May";
+    case "06":
+      return "Iyun";
+    case "07":
+      return "Iyul";
+    case "08":
+      return "Avgust";
+    case "09":
+      return "Sentabr";
+    case "10":
+      return "Oktabr";
+    case "11":
+      return "Noyabr";
+    case "12":
+      return "Dekabr";
+    default:
+      return "Notog'ri oy";
+  }
+};
+
+const getStatistics = async () => {
+  try {
+    const res = await axios.get(
+      `/statistic/school/${localStorage.getItem("school_id")}`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    );
+    info.students = res.data.student_number;
+    info.staff = res.data.employee_number;
+    info.groups = res.data.group_number;
+    info.payment = res.data.payment_sum;
+  } catch (err) {
+    console.error("Statistikani olishda xato:", err);
+  }
+};
+
+const getCurrentYearPayments = async () => {
+  try {
+    const res = await axios.get(
+      `/statistic/school-payments/${localStorage.getItem("school_id")}/${
+        store.year
+      }`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    );
+    info.PaymentStats = res.data.PaymentStats;
+  } catch (err) {
+    console.error("Statistikani olishda xato:", err);
+  }
+};
+
+const getStudentPayments = async () => {
+  try {
+    const res = await axios.get(
+      `/statistic/school-studentPayments/${localStorage.getItem("school_id")}/${
+        store.month
+      }`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    );
+    info.StudentPayments = res.data.studentPayments;
+  } catch (err) {
+    console.error("Statistikani olishda xato:", err);
+  }
+};
 
 const getCardTitle = (index) => {
   const titles = ["O'quvchilar", "Xodimlar", "Guruhlar", "To'lovlar"];
@@ -227,12 +261,7 @@ const getCardTitle = (index) => {
 };
 
 const getCardValue = (index) => {
-  const values = [
-    info.Students,
-    info.Staff,
-    info.Groups,
-    info.Payment,
-  ];
+  const values = [info.students, info.staff, info.groups, info.payment];
   return values[index];
 };
 
@@ -246,18 +275,209 @@ const getCardImages = (index) => {
   return [images[index]];
 };
 
-const getGuard = async () => {
-  if (localStorage.getItem("role") == "_ow_sch_") {
-    store.data = true;
+let paymentChart = null;
+const createPaymentChart = () => {
+  const ctx = document.getElementById("paymentChart").getContext("2d");
+
+  const chartBackground = navbar.userNav ? "#1e293b" : "#ffffff";
+  const chartTextColor = navbar.userNav ? "#ffffff" : "#000000";
+  const gridColor = navbar.userNav
+    ? "rgba(255, 255, 255, 0.2)"
+    : "rgba(0, 0, 0, 0.1)";
+
+  if (paymentChart) {
+    paymentChart.destroy();
   }
+
+  paymentChart = new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels: [
+        "Yanvar",
+        "Fevral",
+        "Mart",
+        "Aprel",
+        "May",
+        "Iyun",
+        "Iyul",
+        "Avgust",
+        "Sentabr",
+        "Oktabr",
+        "Noyabr",
+        "Dekabr",
+      ],
+      datasets: [
+        {
+          label: "To'lovlar (so'm)",
+          data: info.PaymentStats,
+          backgroundColor: "#1a56db",
+          borderColor: "rgba(54, 162, 235, 1)",
+          borderWidth: 1,
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      scales: {
+        x: {
+          grid: { color: gridColor },
+          ticks: { color: chartTextColor },
+        },
+        y: {
+          beginAtZero: true,
+          grid: { color: gridColor },
+          ticks: { color: chartTextColor },
+        },
+      },
+      plugins: {
+        legend: {
+          labels: { color: chartTextColor },
+        },
+      },
+    },
+  });
 };
 
+let studentPaymentChart = null;
+const createStudentPaymentChart = () => {
+  const ctx = document.getElementById("studentPaymentChart").getContext("2d");
+
+  const chartBackground = navbar.userNav ? "#1e293b" : "#ffffff";
+  const chartTextColor = navbar.userNav ? "#ffffff" : "#000000";
+  const gridColor = navbar.userNav
+    ? "rgba(255, 255, 255, 0.2)"
+    : "rgba(0, 0, 0, 0.1)";
+
+  if (studentPaymentChart) {
+    studentPaymentChart.destroy();
+  }
+
+  studentPaymentChart = new Chart(ctx, {
+    type: "pie",
+    data: {
+      labels: ["To'liq To'lov", "Yarim To'lov", "To'lov Qilmaganlar"],
+      datasets: [
+        {
+          label: "O'quvchi",
+          data: [
+            info.StudentPayments.fullPayment,
+            info.StudentPayments.halfPayment,
+            info.StudentPayments.noPayment,
+          ],
+          backgroundColor: ["#1a56db", "#ff9800", "#e02424"],
+          borderColor: "#ffffff",
+          borderWidth: 0,
+          hoverOffset: 10,
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          labels: { color: chartTextColor },
+        },
+      },
+    },
+  });
+};
+
+watch(
+  () => navbar.userNav,
+  () => {
+    setTimeout(createPaymentChart, 300);
+    setTimeout(createStudentPaymentChart, 300);
+  }
+);
+
+watch(
+  () => info.PaymentStats, 
+  () => {
+    setTimeout(createPaymentChart, 300);
+  }
+);
+
+watch(
+  () => info.StudentPayments, 
+  () => {
+    setTimeout(createStudentPaymentChart, 300);
+  }
+);
+
 onBeforeMount(() => {
-  getGuard();
-  setTimeout(function () {
+  setTimeout(() => {
     store.PageProduct = true;
   }, 500);
 });
+
+onMounted(() => {
+  setTimeout(createPaymentChart, 300);
+  setTimeout(createStudentPaymentChart, 300);
+  getStatistics();
+  getCurrentYearPayments();
+  getStudentPayments();
+  createPaymentChart();
+  createStudentPaymentChart();
+  for (let i = 0; i < 5; i++) {
+    let list = {
+      id: i,
+      name: String(orqaYil + i),
+    };
+    store.curentYil.push(list);
+  }
+});
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.chart-container,
+.chart-container2 {
+  width: 100%;
+  margin: auto;
+  height: 500px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.chart-container2 canvas {
+  height: 400px !important;
+  width: 400px !important;
+}
+
+@media (max-width: 1024px) {
+  .chart-container,
+  .chart-container2 {
+    height: 400px; /* O'rta o'lchamli ekranlar uchun */
+  }
+
+  .chart-container2 canvas {
+    height: 350px !important;
+    width: 350px !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .chart-container,
+  .chart-container2 {
+    height: 300px; /* Kichik ekranlar uchun */
+  }
+
+  .chart-container2 canvas {
+    height: 250px !important;
+    width: 250px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .chart-container,
+  .chart-container2 {
+    height: 250px; /* Mobil ekranlar uchun */
+  }
+
+  .chart-container2 canvas {
+    height: 200px !important;
+    width: 200px !important;
+  }
+}
+
+</style>

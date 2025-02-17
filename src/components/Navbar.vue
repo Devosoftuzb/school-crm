@@ -56,7 +56,7 @@
             ></p>
           </div>
         </div>
-        <img
+        <!-- <img
           @click="toggleUserInfo"
           class="w-8 h-8 sm:w-12 sm:h-12 rounded-full bg-gray-800 cursor-pointer border-2 border-[#1e293b]"
           src="https://static.vecteezy.com/system/resources/thumbnails/005/129/844/small_2x/profile-user-icon-isolated-on-white-background-eps10-free-vector.jpg"
@@ -82,7 +82,7 @@
               <i class="bx bx-log-out"></i> Log out
             </li>
           </ul>
-        </div>
+        </div> -->
       </div>
     </div>
   </nav>
