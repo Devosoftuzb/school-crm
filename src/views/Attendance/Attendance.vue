@@ -199,21 +199,79 @@
                       :class="navbar.userNav ? 'text-white' : 'text-black'"
                       >Guruhni tanlang</label
                     >
-                    <select
-                      v-model="history.group_id"
-                      id="name"
-                      class="bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
-                      required
-                    >
-                      <option value="" disabled selected>Guruh tanlang</option>
-                      <option
-                        v-for="i in store.groupAllProducts"
-                        :key="i.id"
-                        :value="i.id"
+                    <div class="relative w-full">
+                      <div
+                        class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"
                       >
-                        {{ i.name }}
-                      </option>
-                    </select>
+                        <svg
+                          aria-hidden="true"
+                          class="w-5 h-5"
+                          fill="currentColor"
+                          viewbox="0 0 20 20"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            fill-rule="evenodd"
+                            d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                            clip-rule="evenodd"
+                          />
+                        </svg>
+                      </div>
+                      <input
+                        v-model="history.filter"
+                        @focus="history.selectLamp = true"
+                        @blur="
+                          history.selectLamp = false;
+                          history.filter_show = false;
+                        "
+                        @input="
+                          history.filter_show = true;
+                          searchHistoryFunc();
+                        "
+                        type="search"
+                        id="simple-search"
+                        class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2"
+                        placeholder="Guruhni tanlang yoki qidirish..."
+                      />
+                      <ul
+                        v-show="
+                          history.filter_show && history.searchList.length > 0
+                        "
+                        class="absolute z-10 max-h-80 overflow-y-auto overflow-hidden py-1 text-gray-600 rounded bg-white w-full bottom-full"
+                      >
+                        <li
+                          class="hover:bg-blue-600 hover:text-white cursor-pointer pl-2"
+                          v-for="(i, index) in history.searchList"
+                          :key="index"
+                          @mousedown.prevent="
+                            history.group_id = i.id;
+                            history.group_name = i.name;
+                            history.filter_show = false;
+                            history.filter = i.name;
+                          "
+                        >
+                          {{ i.name }}
+                        </li>
+                      </ul>
+                      <ul
+                        v-show="history.selectLamp && !history.filter"
+                        class="absolute z-10 max-h-80 overflow-y-auto overflow-hidden py-1 text-gray-600 rounded bg-white w-full bottom-full"
+                      >
+                        <li
+                          class="hover:bg-blue-600 hover:text-white whitespace-nowrap cursor-pointer pl-2"
+                          v-for="(i, index) in store.groupAllProducts"
+                          :key="index"
+                          @mousedown.prevent="
+                            history.group_id = i.id;
+                            history.group_name = i.name;
+                            history.selectLamp = false;
+                            history.filter = i.name;
+                          "
+                        >
+                          {{ i.name }}
+                        </li>
+                      </ul>
+                    </div>
                   </div>
                 </div>
                 <div
@@ -534,50 +592,66 @@
 
           <nav
             v-show="store.PageProduct"
-            class="flex flex-row justify-between items-center md:items-center space-y-3 md:space-y-0 p-4"
+            class="flex flex-row justify-between items-center space-y-0 p-4"
             aria-label="Table navigation"
           >
-            <ul class="inline-flex items-stretch -space-x-px">
+            <!-- Oldingi sahifa tugmasi -->
+            <ul class="flex items-center">
               <li
-                :class="{
-                  'pointer-events-none opacity-50': store.page[0] == 1,
-                }"
+                :class="[
+                  store.pagination === 1
+                    ? 'pointer-events-none opacity-50'
+                    : '',
+                  'flex font-bold text-black border-2 bg-white hover:bg-gray-300 items-center justify-center text-sm sm:py-2 sm:px-6 px-3 rounded-lg leading-tight cursor-pointer transition duration-200 ease-in-out',
+                ]"
                 @click="
-                  store.pagination -= 1;
-                  getHistory(store.pagination);
+                  if (store.pagination > 1) {
+                    store.pagination -= 1;
+                    getHistory(store.pagination);
+                  }
                 "
-                href="#"
-                class="flex font-bold text-black border-2 bg-white hover:bg-gray-300 cursor-pointer items-center justify-center text-sm py-2 sm:mt-0 -mt-2 px-6 rounded-lg leading-tight"
               >
-                Oldingi
+                <i
+                  class="md:hidden font-bold text-black text-2xl bx bx-chevron-left"
+                ></i>
+                <span class="hidden md:block">Oldingi</span>
               </li>
             </ul>
-            <span class="text-sm font-normal">
+
+            <!-- Sahifa raqami -->
+            <span class="text-sm font-normal text-center">
               Sahifa
-              <span class="font-semibold"
-                ><span>{{ store.page[0] * 15 - 14 }}</span> -
+              <span class="font-semibold">
+                <span>{{ store.page[0] * 15 - 14 }}</span> -
                 <span v-if="store.page[0] * 15 < store.page[1]">{{
                   store.page[0] * 15
                 }}</span
-                ><span v-else>{{ store.page[1] }}</span></span
-              >
+                ><span v-else>{{ store.page[1] }}</span>
+              </span>
               dan
               <span class="font-semibold">{{ store.page[1] }}</span>
             </span>
-            <ul class="inline-flex items-stretch -space-x-px">
+
+            <!-- Keyingi sahifa tugmasi -->
+            <ul class="flex items-center">
               <li
-                :class="{
-                  'pointer-events-none opacity-50':
-                    store.page[0] * 15 >= store.page[1],
-                }"
+                :class="[
+                  store.page[0] * 15 >= store.page[1]
+                    ? 'pointer-events-none opacity-50'
+                    : '',
+                  'flex font-bold text-black border-2 bg-white hover:bg-gray-300 items-center justify-center text-sm sm:py-2 sm:px-6 px-3 rounded-lg leading-tight cursor-pointer transition duration-200 ease-in-out',
+                ]"
                 @click="
-                  store.pagination += 1;
-                  getHistory(store.pagination);
+                  if (store.page[0] * 15 < store.page[1]) {
+                    store.pagination += 1;
+                    getHistory(store.pagination);
+                  }
                 "
-                href="#"
-                class="flex font-bold text-black border-2 bg-white hover:bg-gray-300 items-center justify-center text-sm py-2 sm:mt-0 -mt-2 px-6 cursor-pointer rounded-lg leading-tight"
               >
-                Keyingi
+                <span class="hidden md:block">Keyingi</span>
+                <i
+                  class="md:hidden font-bold text-black text-2xl bx bx-chevron-right"
+                ></i>
               </li>
             </ul>
           </nav>
@@ -646,6 +720,10 @@ const history = reactive({
   group_id: "",
   group_name: "",
   modal: false,
+  filter_show: false,
+  filter: "",
+  selectLamp: false,
+  searchList: [],
 });
 
 // Remove Reactive
@@ -686,6 +764,18 @@ const searchFunc = () => {
     );
   }
 };
+
+function searchHistoryFunc() {
+  history.searchList = [];
+  if (history.filter) {
+    for (let i of store.groupAllProducts) {
+      if (i.name.toLowerCase().includes(history.filter.toLowerCase())) {
+        history.searchList.push(i);
+      }
+    }
+  }
+}
+
 
 const calculatePaymentStatus = (paymentHistory, groupPrice) => {
   const currentDate = new Date();

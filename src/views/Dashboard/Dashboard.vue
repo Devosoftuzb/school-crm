@@ -47,7 +47,7 @@
       </div>
 
       <!-- To'lov Statistikasi -->
-      <div class="w-full grid sm:grid-cols-2 2xl:gap-5 gap-3 px-2">
+      <div class="w-full grid lg:grid-cols-2 2xl:gap-5 gap-3 px-2">
         <div
           class="chart-container mt-8 shadow-md rounded-lg p-6"
           :class="{
@@ -440,44 +440,39 @@ onMounted(() => {
 }
 
 .chart-container2 canvas {
-  height: 400px !important;
+  height: auto !important;
   width: 400px !important;
 }
 
 @media (max-width: 1024px) {
   .chart-container,
   .chart-container2 {
-    height: 400px; /* O'rta o'lchamli ekranlar uchun */
-  }
-
-  .chart-container2 canvas {
-    height: 350px !important;
-    width: 350px !important;
+    height: auto; /* O'rta o'lchamli ekranlar uchun */
   }
 }
 
-@media (max-width: 768px) {
-  .chart-container,
-  .chart-container2 {
-    height: 300px; /* Kichik ekranlar uchun */
-  }
+// @media (max-width: 768px) {
+//   .chart-container,
+//   .chart-container2 {
+//     height: 400px; /* Kichik ekranlar uchun */
+//   }
 
-  .chart-container2 canvas {
-    height: 250px !important;
-    width: 250px !important;
-  }
-}
+//   .chart-container2 canvas {
+//     height: 250px !important;
+//     width: 250px !important;
+//   }
+// }
 
-@media (max-width: 480px) {
-  .chart-container,
-  .chart-container2 {
-    height: 250px; /* Mobil ekranlar uchun */
-  }
+// @media (max-width: 480px) {
+//   .chart-container,
+//   .chart-container2 {
+//     height: 250px; /* Mobil ekranlar uchun */
+//   }
 
-  .chart-container2 canvas {
-    height: 200px !important;
-    width: 200px !important;
-  }
-}
+//   .chart-container2 canvas {
+//     height: 200px !important;
+//     width: 200px !important;
+//   }
+// }
 
 </style>

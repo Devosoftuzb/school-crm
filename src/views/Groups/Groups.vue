@@ -87,7 +87,7 @@
                   required
                 />
               </div>
-              <div class="w-[206%]">
+              <div class="sm:w-[206%]">
                 <label
                   for="date"
                   class="block mb-2 text-sm"
@@ -183,7 +183,7 @@
                 </select>
               </div>
               <div
-                class="w-[206%] flex items-center justify-between border-t pt-5 mt-5"
+                class="sm:w-[206%] flex items-center justify-between border-t pt-5 mt-5"
               >
                 <button
                   @click="cancelFunc"
@@ -737,50 +737,62 @@
           </div>
           <nav
             v-if="!store.searchList.length"
-            class="flex flex-row justify-between items-center md:items-center space-y-3 md:space-y-0 p-4"
+            class="flex flex-row justify-between items-center space-y-0 p-4"
             aria-label="Table navigation"
           >
-            <ul class="inline-flex items-stretch -space-x-px">
+            <!-- Oldingi sahifa tugmasi -->
+            <ul class="flex items-center">
               <li
-                :class="{
-                  'pointer-events-none opacity-50': store.page[0] == 1,
-                }"
+                :class="[
+                  store.pagination === 1
+                    ? 'pointer-events-none opacity-50'
+                    : '',
+                  'flex font-bold text-black border-2 bg-white hover:bg-gray-300 items-center justify-center text-sm sm:py-2 sm:px-6 px-3 rounded-lg leading-tight cursor-pointer transition duration-200 ease-in-out',
+                ]"
                 @click="
-                  store.pagination -= 1;
-                  getProduct(store.pagination);
+                  if (store.pagination > 1) {
+                    store.pagination -= 1;
+                    getProduct(store.pagination);
+                  }
                 "
-                href="#"
-                class="flex font-bold text-black border-2 bg-white hover:bg-gray-300 cursor-pointer items-center justify-center text-sm py-2 sm:mt-0 -mt-2 px-6 rounded-lg leading-tight"
               >
-                Oldingi
+                <i class="md:hidden font-bold text-black text-2xl bx bx-chevron-left"></i>
+                <span class="hidden md:block">Oldingi</span>
               </li>
             </ul>
-            <span class="text-sm font-normal">
+
+            <!-- Sahifa raqami -->
+            <span class="text-sm font-normal text-center">
               Sahifa
-              <span class="font-semibold"
-                ><span>{{ store.page[0] * 15 - 14 }}</span> -
+              <span class="font-semibold">
+                <span>{{ store.page[0] * 15 - 14 }}</span> -
                 <span v-if="store.page[0] * 15 < store.page[1]">{{
                   store.page[0] * 15
                 }}</span
-                ><span v-else>{{ store.page[1] }}</span></span
-              >
+                ><span v-else>{{ store.page[1] }}</span>
+              </span>
               dan
               <span class="font-semibold">{{ store.page[1] }}</span>
             </span>
-            <ul class="inline-flex items-stretch -space-x-px">
+
+            <!-- Keyingi sahifa tugmasi -->
+            <ul class="flex items-center">
               <li
-                :class="{
-                  'pointer-events-none opacity-50':
-                    store.page[0] * 15 >= store.page[1],
-                }"
+                :class="[
+                  store.page[0] * 15 >= store.page[1]
+                    ? 'pointer-events-none opacity-50'
+                    : '',
+                  'flex font-bold text-black border-2 bg-white hover:bg-gray-300 items-center justify-center text-sm sm:py-2 sm:px-6 px-3 rounded-lg leading-tight cursor-pointer transition duration-200 ease-in-out',
+                ]"
                 @click="
-                  store.pagination += 1;
-                  getProduct(store.pagination);
+                  if (store.page[0] * 15 < store.page[1]) {
+                    store.pagination += 1;
+                    getProduct(store.pagination);
+                  }
                 "
-                href="#"
-                class="flex font-bold text-black border-2 bg-white hover:bg-gray-300 items-center cursor-pointer justify-center text-sm py-2 sm:mt-0 -mt-2 px-6 rounded-lg leading-tight"
               >
-                Keyingi
+                <span class="hidden md:block">Keyingi</span>
+                <i class="md:hidden font-bold text-black text-2xl bx bx-chevron-right"></i>
               </li>
             </ul>
           </nav>
@@ -865,7 +877,6 @@ function searchFunc() {
 function enterSlug(id, name) {
   router.push(`./groups/${id}/${name}`);
 }
-
 
 const toggleModal = () => {
   modal.value = !modal.value;
@@ -1010,7 +1021,7 @@ const createProduct = async () => {
     await axios.post(`/employee-group`, employeeData, {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     });
-    
+
     await getProduct(store.pagination);
     cancelFunc();
   } catch (error) {

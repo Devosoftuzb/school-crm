@@ -1508,20 +1508,20 @@
             <table class="w-full text-sm text-left">
               <thead class="btnAdd text-white text-xs rounded-lg uppercase">
                 <tr>
-                  <th scope="col" class="text-center py-3">
+                  <th scope="col" class="text-center py-3 whitespace-nowrap">
                     O'quvchi (F . I . O)
                   </th>
-                  <th scope="col" class="text-center py-3">
+                  <th scope="col" class="text-center py-3 whitespace-nowrap">
                     O'qituvchi (F . I . O)
                   </th>
-                  <th scope="col" class="text-center py-3">Guruh</th>
-                  <th scope="col" class="text-center py-3">Kurs narxi</th>
-                  <th scope="col" class="text-center py-3">To'lov turi</th>
-                  <th scope="col" class="text-center py-3">To'lov narxi</th>
-                  <th scope="col" class="text-center py-3">Oy</th>
-                  <th scope="col" class="text-center py-3">To'lov sanasi</th>
-                  <th scope="col" class="text-center py-3">Chek</th>
-                  <th scope="col" class="text-center py-3"></th>
+                  <th scope="col" class="text-center py-3 whitespace-nowrap">Kurs narxi</th>
+                  <th scope="col" class="text-center py-3 whitespace-nowrap">Guruh</th>
+                  <th scope="col" class="text-center py-3 whitespace-nowrap">To'lov turi</th>
+                  <th scope="col" class="text-center py-3 whitespace-nowrap">To'lov narxi</th>
+                  <th scope="col" class="text-center py-3 whitespace-nowrap">Oy</th>
+                  <th scope="col" class="text-center py-3 whitespace-nowrap">To'lov sanasi</th>
+                  <th scope="col" class="text-center py-3 whitespace-nowrap">Chek</th>
+                  <th scope="col" class="text-center py-3 whitespace-nowrap"></th>
                 </tr>
               </thead>
               <tbody v-show="!store.error">
@@ -1633,18 +1633,18 @@
             class="overflow-x-auto"
           >
             <table class="w-full text-sm text-left">
-              <thead class="btnAdd text-white text-xs rounded-lg uppercase">
+              <thead class="btnAdd text-white text-xs rounded-lg uppercase whitespace-nowrap">
                 <tr>
-                  <th scope="col" class="text-center py-3">
+                  <th scope="col" class="text-center py-3 whitespace-nowrap">
                     O'quvchi (F . I . O)
                   </th>
-                  <th scope="col" class="text-center py-3">
+                  <th scope="col" class="text-center py-3 whitespace-nowrap">
                     O'qituvchi (F . I . O)
                   </th>
-                  <th scope="col" class="text-center py-3">Guruh</th>
-                  <th scope="col" class="text-center py-3">Kurs narxi</th>
-                  <th scope="col" class="text-center py-3">Qarzdorlik</th>
-                  <th scope="col" class="text-center py-3"></th>
+                  <th scope="col" class="text-center py-3 whitespace-nowrap">Guruh</th>
+                  <th scope="col" class="text-center py-3 whitespace-nowrap">Kurs narxi</th>
+                  <th scope="col" class="text-center py-3 whitespace-nowrap">Qarzdorlik</th>
+                  <th scope="col" class="text-center py-3 whitespace-nowrap"></th>
                 </tr>
               </thead>
               <tbody v-show="!store.error">
@@ -1730,100 +1730,132 @@
 
           <nav
             v-show="!store.allProducts && !debtor.isTable"
-            class="flex flex-row justify-between items-center md:items-center space-y-3 md:space-y-0 p-4"
+            class="flex flex-row justify-between items-center space-y-0 p-4"
             aria-label="Table navigation"
           >
-            <ul class="inline-flex items-stretch -space-x-px">
+            <!-- Oldingi sahifa tugmasi -->
+            <ul class="flex items-center">
               <li
-                :class="{
-                  'pointer-events-none opacity-50': store.page[0] == 1,
-                }"
+                :class="[
+                  store.pagination === 1
+                    ? 'pointer-events-none opacity-50'
+                    : '',
+                  'flex font-bold text-black border-2 bg-white hover:bg-gray-300 items-center justify-center text-sm sm:py-2 sm:px-6 px-3 rounded-lg leading-tight cursor-pointer transition duration-200 ease-in-out',
+                ]"
                 @click="
-                  store.pagination -= 1;
-                  getHistory(store.pagination);
+                  if (store.pagination > 1) {
+                    store.pagination -= 1;
+                    getHistory(store.pagination);
+                  }
                 "
-                href="#"
-                class="flex font-bold text-black border-2 bg-white hover:bg-gray-300 cursor-pointer items-center justify-center text-sm py-2 sm:mt-0 -mt-2 px-6 rounded-lg leading-tight"
               >
-                Oldingi
+                <i
+                  class="md:hidden font-bold text-black text-2xl bx bx-chevron-left"
+                ></i>
+                <span class="hidden md:block">Oldingi</span>
               </li>
             </ul>
-            <span class="text-sm font-normal">
+
+            <!-- Sahifa raqami -->
+            <span class="text-sm font-normal text-center">
               Sahifa
-              <span class="font-semibold"
-                ><span>{{ store.page[0] * 15 - 14 }}</span> -
+              <span class="font-semibold">
+                <span>{{ store.page[0] * 15 - 14 }}</span> -
                 <span v-if="store.page[0] * 15 < store.page[1]">{{
                   store.page[0] * 15
                 }}</span
-                ><span v-else>{{ store.page[1] }}</span></span
-              >
+                ><span v-else>{{ store.page[1] }}</span>
+              </span>
               dan
               <span class="font-semibold">{{ store.page[1] }}</span>
             </span>
-            <ul class="inline-flex items-stretch -space-x-px">
+
+            <!-- Keyingi sahifa tugmasi -->
+            <ul class="flex items-center">
               <li
-                :class="{
-                  'pointer-events-none opacity-50':
-                    store.page[0] * 15 >= store.page[1],
-                }"
+                :class="[
+                  store.page[0] * 15 >= store.page[1]
+                    ? 'pointer-events-none opacity-50'
+                    : '',
+                  'flex font-bold text-black border-2 bg-white hover:bg-gray-300 items-center justify-center text-sm sm:py-2 sm:px-6 px-3 rounded-lg leading-tight cursor-pointer transition duration-200 ease-in-out',
+                ]"
                 @click="
-                  store.pagination += 1;
-                  getHistory(store.pagination);
+                  if (store.page[0] * 15 < store.page[1]) {
+                    store.pagination += 1;
+                    getHistory(store.pagination);
+                  }
                 "
-                href="#"
-                class="flex font-bold text-black border-2 bg-white hover:bg-gray-300 items-center justify-center text-sm py-2 sm:mt-0 -mt-2 px-6 cursor-pointer rounded-lg leading-tight"
               >
-                Keyingi
+                <span class="hidden md:block">Keyingi</span>
+                <i
+                  class="md:hidden font-bold text-black text-2xl bx bx-chevron-right"
+                ></i>
               </li>
             </ul>
           </nav>
 
           <nav
             v-show="!store.allProducts && debtor.isTable"
-            class="flex flex-row justify-between items-center md:items-center space-y-3 md:space-y-0 p-4"
+            class="flex flex-row justify-between items-center space-y-0 p-4"
             aria-label="Table navigation"
           >
-            <ul class="inline-flex items-stretch -space-x-px">
+            <!-- Oldingi sahifa tugmasi -->
+            <ul class="flex items-center">
               <li
-                :class="{
-                  'pointer-events-none opacity-50': store.page[0] == 1,
-                }"
+                :class="[
+                  store.pagination === 1
+                    ? 'pointer-events-none opacity-50'
+                    : '',
+                  'flex font-bold text-black border-2 bg-white hover:bg-gray-300 items-center justify-center text-sm sm:py-2 sm:px-6 px-3 rounded-lg leading-tight cursor-pointer transition duration-200 ease-in-out',
+                ]"
                 @click="
-                  store.pagination -= 1;
-                  getDebtor(store.pagination);
+                  if (store.pagination > 1) {
+                    store.pagination -= 1;
+                    getDebtor(store.pagination);
+                  }
                 "
-                href="#"
-                class="flex font-bold text-black border-2 bg-white hover:bg-gray-300 cursor-pointer items-center justify-center text-sm py-2 sm:mt-0 -mt-2 px-6 rounded-lg leading-tight"
               >
-                Oldingi
+                <i
+                  class="md:hidden font-bold text-black text-2xl bx bx-chevron-left"
+                ></i>
+                <span class="hidden md:block">Oldingi</span>
               </li>
             </ul>
-            <span class="text-sm font-normal">
+
+            <!-- Sahifa raqami -->
+            <span class="text-sm font-normal text-center">
               Sahifa
-              <span class="font-semibold"
-                ><span>{{ store.page[0] * 15 - 14 }}</span> -
+              <span class="font-semibold">
+                <span>{{ store.page[0] * 15 - 14 }}</span> -
                 <span v-if="store.page[0] * 15 < store.page[1]">{{
                   store.page[0] * 15
                 }}</span
-                ><span v-else>{{ store.page[1] }}</span></span
-              >
+                ><span v-else>{{ store.page[1] }}</span>
+              </span>
               dan
               <span class="font-semibold">{{ store.page[1] }}</span>
             </span>
-            <ul class="inline-flex items-stretch -space-x-px">
+
+            <!-- Keyingi sahifa tugmasi -->
+            <ul class="flex items-center">
               <li
-                :class="{
-                  'pointer-events-none opacity-50':
-                    store.page[0] * 15 >= store.page[1],
-                }"
+                :class="[
+                  store.page[0] * 15 >= store.page[1]
+                    ? 'pointer-events-none opacity-50'
+                    : '',
+                  'flex font-bold text-black border-2 bg-white hover:bg-gray-300 items-center justify-center text-sm sm:py-2 sm:px-6 px-3 rounded-lg leading-tight cursor-pointer transition duration-200 ease-in-out',
+                ]"
                 @click="
-                  store.pagination += 1;
-                  getDebtor(store.pagination);
+                  if (store.page[0] * 15 < store.page[1]) {
+                    store.pagination += 1;
+                    getDebtor(store.pagination);
+                  }
                 "
-                href="#"
-                class="flex font-bold text-black border-2 bg-white hover:bg-gray-300 items-center justify-center text-sm py-2 sm:mt-0 -mt-2 px-6 cursor-pointer rounded-lg leading-tight"
               >
-                Keyingi
+                <span class="hidden md:block">Keyingi</span>
+                <i
+                  class="md:hidden font-bold text-black text-2xl bx bx-chevron-right"
+                ></i>
               </li>
             </ul>
           </nav>

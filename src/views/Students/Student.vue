@@ -281,24 +281,82 @@
             :class="{ darkForm: navbar.userNav }"
           >
             <div class="grid font-medium gap-4 mb-4 grid-cols-1">
-              <div>
-                <label
-                  for="name"
-                  class="block mb-2 text-sm"
-                  :class="navbar.userNav ? 'text-white' : 'text-black'"
-                  >Guruhni tanlang</label
+              <label
+                for="name"
+                class="block mb-2 text-sm"
+                :class="navbar.userNav ? 'text-white' : 'text-black'"
+                >Guruhni tanlang</label
+              >
+              <div class="relative w-full">
+                <div
+                  class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"
                 >
-                <select
-                  v-model="edit.name"
-                  id="name"
-                  class="bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-600 focus:border-green-600 block w-full p-2.5"
-                  required
+                  <svg
+                    aria-hidden="true"
+                    class="w-5 h-5"
+                    fill="currentColor"
+                    viewbox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                </div>
+                <input
+                  v-model="groupSearch.filter"
+                  @focus="groupSearch.selectLamp = true"
+                  @blur="
+                    groupSearch.selectLamp = false;
+                    groupSearch.filter_show = false;
+                  "
+                  @input="
+                    groupSearch.filter_show = true;
+                    searchFuncGroup();
+                  "
+                  type="search"
+                  id="simple-search"
+                  class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2"
+                  placeholder="Guruhni tanlang yoki qidirish..."
+                />
+                <ul
+                  v-show="
+                    groupSearch.filter_show && groupSearch.searchList.length > 0
+                  "
+                  class="absolute z-10 max-h-80 overflow-y-auto overflow-hidden py-1 text-gray-600 rounded bg-white w-full"
                 >
-                  <option value="" disabled selected>Guruh tanlang</option>
-                  <option v-for="i in store.group" :key="i.id" :value="i.id">
+                  <li
+                    class="hover:bg-blue-600 hover:text-white cursor-pointer pl-2"
+                    v-for="(i, index) in groupSearch.searchList"
+                    :key="index"
+                    @mousedown.prevent="
+                      edit.name = i.id;
+                      groupSearch.filter_show = false;
+                      groupSearch.filter = i.name;
+                    "
+                  >
                     {{ i.name }}
-                  </option>
-                </select>
+                  </li>
+                </ul>
+                <ul
+                  v-show="groupSearch.selectLamp && !groupSearch.filter"
+                  class="absolute z-10 max-h-80 overflow-y-auto overflow-hidden py-1 text-gray-600 rounded bg-white w-full"
+                >
+                  <li
+                    class="hover:bg-blue-600 hover:text-white whitespace-nowrap cursor-pointer pl-2"
+                    v-for="(i, index) in store.group"
+                    :key="index"
+                    @mousedown.prevent="
+                      edit.name = i.id;
+                      groupSearch.selectLamp = false;
+                      groupSearch.filter = i.name;
+                    "
+                  >
+                    {{ i.name }}
+                  </li>
+                </ul>
               </div>
             </div>
             <div
@@ -639,7 +697,7 @@
           >
             <h1 class="text-blue-700 font-bold text-lg">O'quvchilar</h1>
             <div
-              class="lg:w-auto flex md:space-y-0  items-center justify-end space-x-3"
+              class="lg:w-auto flex md:space-y-0 items-center justify-end space-x-3"
             >
               <button
                 @click="toggleModal"
@@ -907,50 +965,66 @@
           </div>
           <nav
             v-if="!store.searchList.length"
-            class="flex flex-row justify-between items-center md:items-center space-y-3 md:space-y-0 p-4"
+            class="flex flex-row justify-between items-center space-y-0 p-4"
             aria-label="Table navigation"
           >
-            <ul class="inline-flex items-stretch -space-x-px">
+            <!-- Oldingi sahifa tugmasi -->
+            <ul class="flex items-center">
               <li
-                :class="{
-                  'pointer-events-none opacity-50': store.page[0] == 1,
-                }"
+                :class="[
+                  store.pagination === 1
+                    ? 'pointer-events-none opacity-50'
+                    : '',
+                  'flex font-bold text-black border-2 bg-white hover:bg-gray-300 items-center justify-center text-sm sm:py-2 sm:px-6 px-3 rounded-lg leading-tight cursor-pointer transition duration-200 ease-in-out',
+                ]"
                 @click="
-                  store.pagination -= 1;
-                  getProduct(store.pagination);
+                  if (store.pagination > 1) {
+                    store.pagination -= 1;
+                    getProduct(store.pagination);
+                  }
                 "
-                href="#"
-                class="flex font-bold text-black border-2 bg-white hover:bg-gray-300 cursor-pointer items-center justify-center text-sm py-2 sm:mt-0 -mt-2 px-6 rounded-lg leading-tight"
               >
-                Oldingi
+                <i
+                  class="md:hidden font-bold text-black text-2xl bx bx-chevron-left"
+                ></i>
+                <span class="hidden md:block">Oldingi</span>
               </li>
             </ul>
-            <span class="text-sm font-normal">
+
+            <!-- Sahifa raqami -->
+            <span class="text-sm font-normal text-center">
               Sahifa
-              <span class="font-semibold"
-                ><span>{{ store.page[0] * 15 - 14 }}</span> -
+              <span class="font-semibold">
+                <span>{{ store.page[0] * 15 - 14 }}</span> -
                 <span v-if="store.page[0] * 15 < store.page[1]">{{
                   store.page[0] * 15
                 }}</span
-                ><span v-else>{{ store.page[1] }}</span></span
-              >
+                ><span v-else>{{ store.page[1] }}</span>
+              </span>
               dan
               <span class="font-semibold">{{ store.page[1] }}</span>
             </span>
-            <ul class="inline-flex items-stretch -space-x-px">
+
+            <!-- Keyingi sahifa tugmasi -->
+            <ul class="flex items-center">
               <li
-                :class="{
-                  'pointer-events-none opacity-50':
-                    store.page[0] * 15 >= store.page[1],
-                }"
+                :class="[
+                  store.page[0] * 15 >= store.page[1]
+                    ? 'pointer-events-none opacity-50'
+                    : '',
+                  'flex font-bold text-black border-2 bg-white hover:bg-gray-300 items-center justify-center text-sm sm:py-2 sm:px-6 px-3 rounded-lg leading-tight cursor-pointer transition duration-200 ease-in-out',
+                ]"
                 @click="
-                  store.pagination += 1;
-                  getProduct(store.pagination);
+                  if (store.page[0] * 15 < store.page[1]) {
+                    store.pagination += 1;
+                    getProduct(store.pagination);
+                  }
                 "
-                href="#"
-                class="flex font-bold text-black border-2 bg-white hover:bg-gray-300 items-center justify-center text-sm py-2 sm:mt-0 -mt-2 px-6 cursor-pointer rounded-lg leading-tight"
               >
-                Keyingi
+                <span class="hidden md:block">Keyingi</span>
+                <i
+                  class="md:hidden font-bold text-black text-2xl bx bx-chevron-right"
+                ></i>
               </li>
             </ul>
           </nav>
@@ -1243,6 +1317,7 @@ const addGroups = async () => {
   try {
     await fetchData(`/student-group`, "post", data);
     notification.success("Guruhga qo'shildi");
+    edit.name = ""
     getProduct(store.pagination);
     store.groupModal = false;
   } catch {}

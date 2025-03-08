@@ -670,15 +670,25 @@
                   </td>
                   <td class="text-center font-medium text-blue-800 px-8 py-2">
                     <p class="bg-blue-100 whitespace-nowrap rounded-[5px] p-1">
-                      {{ i.subject == null ? '...' : i.subject.name}}
+                      {{ i.subject == null ? "..." : i.subject.name }}
                     </p>
                   </td>
-                  <td class="text-center font-medium px-8 py-2">
-                    <p
-                      class="whitespace-nowrap rounded-[5px] p-1 truncate w-40 inline-flex justify-center"
-                    >
-                      {{ i.description === null ? "..." : i.description }}
-                    </p>
+                  <td class="text-center font-medium px-8 py-2 relative">
+                    <div class="group relative w-40 inline-block">
+                      <p class="truncate w-40 p-1 rounded-[5px]">
+                        {{
+                          i.description && i.description.split(" ").length > 3
+                            ? i.description.split(" ").slice(0, 3).join(" ") +
+                              "..."
+                            : i.description
+                        }}
+                      </p>
+                      <span
+                        class="absolute left-1/2 -translate-x-1/2 bottom-full mb-1 hidden w-max max-w-xs bg-blue-100 text-blue-800 text-sm p-2 rounded-md shadow-lg group-hover:block"
+                      >
+                        {{ i.description }}
+                      </span>
+                    </div>
                   </td>
 
                   <td class="text-center font-medium text-blue-800 px-8 py-2">
@@ -689,7 +699,7 @@
                   <td class="text-center font-medium px-8 py-3">
                     <button
                       @click="getOneProduct(i.id, 'student')"
-                      class="btnKirish bg-blue-600 rounded-lg px-5 py-2.5 text-white focus:ring-2"
+                      class="btnKirish bg-blue-600 rounded-lg px-5 py-2.5 text-white focus:ring-2 whitespace-nowrap"
                     >
                       O'quvchi qilish
                     </button>
@@ -732,7 +742,7 @@
                   </td>
                   <td class="text-center font-medium text-blue-800 px-8 py-2">
                     <p class="bg-blue-100 whitespace-nowrap rounded-[5px] p-1">
-                      {{ i.subject == null ? '...' : i.subject.name}}
+                      {{ i.subject == null ? "..." : i.subject.name }}
                     </p>
                   </td>
                   <td class="text-center font-medium px-8 py-2">
@@ -747,11 +757,11 @@
                       {{ i.social_media.name }}
                     </p>
                   </td>
-                  
+
                   <td class="text-center font-medium px-8 py-3">
                     <button
                       @click="getOneProduct(i.id, 'student')"
-                      class="btnKirish bg-blue-600 rounded-lg px-5 py-2.5 text-white focus:ring-2"
+                      class="btnKirish bg-blue-600 rounded-lg px-5 py-2.5 text-white focus:ring-2 whitespace-nowrap"
                     >
                       O'quvchi qilish
                     </button>
@@ -783,50 +793,66 @@
           </div>
           <nav
             v-if="!store.searchList.length"
-            class="flex flex-row justify-between items-center md:items-center space-y-3 md:space-y-0 p-4"
+            class="flex flex-row justify-between items-center space-y-0 p-4"
             aria-label="Table navigation"
           >
-            <ul class="inline-flex items-stretch -space-x-px">
+            <!-- Oldingi sahifa tugmasi -->
+            <ul class="flex items-center">
               <li
-                :class="{
-                  'pointer-events-none opacity-50': store.page[0] == 1,
-                }"
+                :class="[
+                  store.pagination === 1
+                    ? 'pointer-events-none opacity-50'
+                    : '',
+                  'flex font-bold text-black border-2 bg-white hover:bg-gray-300 items-center justify-center text-sm sm:py-2 sm:px-6 px-3 rounded-lg leading-tight cursor-pointer transition duration-200 ease-in-out',
+                ]"
                 @click="
-                  store.pagination -= 1;
-                  getProduct(store.pagination);
+                  if (store.pagination > 1) {
+                    store.pagination -= 1;
+                    getProduct(store.pagination);
+                  }
                 "
-                href="#"
-                class="flex font-bold text-black border-2 bg-white hover:bg-gray-300 items-center justify-center text-sm py-2 sm:mt-0 -mt-2 px-6 rounded-lg leading-tight"
               >
-                Oldingi
+                <i
+                  class="md:hidden font-bold text-black text-2xl bx bx-chevron-left"
+                ></i>
+                <span class="hidden md:block">Oldingi</span>
               </li>
             </ul>
-            <span class="text-sm font-normal">
+
+            <!-- Sahifa raqami -->
+            <span class="text-sm font-normal text-center">
               Sahifa
-              <span class="font-semibold"
-                ><span>{{ store.page[0] * 15 - 14 }}</span> -
+              <span class="font-semibold">
+                <span>{{ store.page[0] * 15 - 14 }}</span> -
                 <span v-if="store.page[0] * 15 < store.page[1]">{{
                   store.page[0] * 15
                 }}</span
-                ><span v-else>{{ store.page[1] }}</span></span
-              >
+                ><span v-else>{{ store.page[1] }}</span>
+              </span>
               dan
               <span class="font-semibold">{{ store.page[1] }}</span>
             </span>
-            <ul class="inline-flex items-stretch -space-x-px">
+
+            <!-- Keyingi sahifa tugmasi -->
+            <ul class="flex items-center">
               <li
-                :class="{
-                  'pointer-events-none opacity-50':
-                    store.page[0] * 15 >= store.page[1],
-                }"
+                :class="[
+                  store.page[0] * 15 >= store.page[1]
+                    ? 'pointer-events-none opacity-50'
+                    : '',
+                  'flex font-bold text-black border-2 bg-white hover:bg-gray-300 items-center justify-center text-sm sm:py-2 sm:px-6 px-3 rounded-lg leading-tight cursor-pointer transition duration-200 ease-in-out',
+                ]"
                 @click="
-                  store.pagination += 1;
-                  getProduct(store.pagination);
+                  if (store.page[0] * 15 < store.page[1]) {
+                    store.pagination += 1;
+                    getProduct(store.pagination);
+                  }
                 "
-                href="#"
-                class="flex font-bold text-black border-2 bg-white hover:bg-gray-300 items-center justify-center text-sm py-2 sm:mt-0 -mt-2 px-6 rounded-lg leading-tight"
               >
-                Keyingi
+                <span class="hidden md:block">Keyingi</span>
+                <i
+                  class="md:hidden font-bold text-black text-2xl bx bx-chevron-right"
+                ></i>
               </li>
             </ul>
           </nav>
@@ -903,7 +929,7 @@ const remove = reactive({
 
 // ---------------------------- qidiruv funksiyasi ------------------------------------
 function searchFunc() {
-  store.searchList = store.allProducts.filter(i =>
+  store.searchList = store.allProducts.filter((i) =>
     i.full_name.toLowerCase().includes(store.filter.toLowerCase())
   );
 
@@ -929,9 +955,12 @@ function deleteFunc(id) {
 // ----------------------------------- axios so'rovlari --------------------------------
 const getAllProduct = async () => {
   try {
-    const res = await axios.get(`/customer/${localStorage.getItem("school_id")}`, {
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-    });
+    const res = await axios.get(
+      `/customer/${localStorage.getItem("school_id")}`,
+      {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      }
+    );
     store.allProducts = res.data;
     store.error = false;
   } catch (error) {
@@ -942,10 +971,13 @@ const getAllProduct = async () => {
 
 const getProduct = async (page) => {
   try {
-    const res = await axios.get(`/customer/${localStorage.getItem("school_id")}/page?page=${page}`, {
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-    });
-    
+    const res = await axios.get(
+      `/customer/${localStorage.getItem("school_id")}/page?page=${page}`,
+      {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      }
+    );
+
     store.PageProduct = res.data?.data?.records;
     const pagination = res.data?.data?.pagination;
     store.page = [pagination.currentPage, pagination.total_count];
@@ -969,9 +1001,12 @@ const getGroups = async () => {
 
 const getSubject = async () => {
   try {
-    const res = await axios.get(`/subject/${localStorage.getItem("school_id")}`, {
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-    });
+    const res = await axios.get(
+      `/subject/${localStorage.getItem("school_id")}`,
+      {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      }
+    );
     store.subject = res.data || [{ name: "Fan yaratilmagan" }];
   } catch (error) {
     store.subject = [{ name: "Fan yaratilmagan" }];
@@ -980,9 +1015,12 @@ const getSubject = async () => {
 
 const getSocialLink = async () => {
   try {
-    const res = await axios.get(`/social-media/${localStorage.getItem("school_id")}`, {
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-    });
+    const res = await axios.get(
+      `/social-media/${localStorage.getItem("school_id")}`,
+      {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      }
+    );
     store.social_link = res.data;
   } catch (error) {
     store.social_link = "";
@@ -991,20 +1029,32 @@ const getSocialLink = async () => {
 
 const getOneProduct = async (id, modal) => {
   try {
-    const res = await axios.get(`/customer/${localStorage.getItem("school_id")}/${id}`, {
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-    });
+    const res = await axios.get(
+      `/customer/${localStorage.getItem("school_id")}/${id}`,
+      {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      }
+    );
     const data = res.data;
-    Object.assign(edit, data, { id, toggle: modal === "edit", modal: modal === "student" });
+    Object.assign(edit, data, {
+      id,
+      toggle: modal === "edit",
+      modal: modal === "student",
+    });
     if (modal === "student") remove.id = id;
   } catch (error) {
-    notification.warning("Xatolik! Internetni tekshirib qaytadan urinib ko‘ring!");
+    notification.warning(
+      "Xatolik! Internetni tekshirib qaytadan urinib ko‘ring!"
+    );
   }
 };
 
 const createProduct = async () => {
   try {
-    const data = { ...form, school_id: Number(localStorage.getItem("school_id")) };
+    const data = {
+      ...form,
+      school_id: Number(localStorage.getItem("school_id")),
+    };
     await axios.post("/customer", data, {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     });
@@ -1012,35 +1062,51 @@ const createProduct = async () => {
     getProduct(store.pagination);
     cancelFunc();
   } catch (error) {
-    console.log(error)
-    notification.warning("Xatolik! Internetni tekshirib qaytadan urinib ko‘ring!");
+    console.log(error);
+    notification.warning(
+      "Xatolik! Internetni tekshirib qaytadan urinib ko‘ring!"
+    );
   }
 };
 
 const editProduct = async () => {
   try {
-    const data = { ...edit, school_id: Number(localStorage.getItem("school_id")) };
-    await axios.put(`/customer/${localStorage.getItem("school_id")}/${edit.id}`, data, {
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-    });
+    const data = {
+      ...edit,
+      school_id: Number(localStorage.getItem("school_id")),
+    };
+    await axios.put(
+      `/customer/${localStorage.getItem("school_id")}/${edit.id}`,
+      data,
+      {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      }
+    );
     notification.success("Mijoz tahrirlandi");
     getProduct(store.pagination);
     edit.toggle = false;
   } catch (error) {
-    notification.warning("Xatolik! Internetni tekshirib qaytadan urinib ko‘ring!");
+    notification.warning(
+      "Xatolik! Internetni tekshirib qaytadan urinib ko‘ring!"
+    );
   }
 };
 
 const deleteProduct = async () => {
   try {
-    await axios.delete(`/customer/${localStorage.getItem("school_id")}/${remove.id}`, {
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-    });
+    await axios.delete(
+      `/customer/${localStorage.getItem("school_id")}/${remove.id}`,
+      {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      }
+    );
     if (remove.toggle) notification.success("Mijoz o'chirildi");
     remove.toggle = false;
     getProduct(store.pagination);
   } catch (error) {
-    notification.warning("Xatolik! Internetni tekshirib qaytadan urinib ko‘ring!");
+    notification.warning(
+      "Xatolik! Internetni tekshirib qaytadan urinib ko‘ring!"
+    );
   }
 };
 
@@ -1064,15 +1130,20 @@ const createStudent = async () => {
     edit.parents_phone_number = "+998";
     edit.modal = false;
   } catch (error) {
-    notification.warning("Xatolik! Internetni tekshirib qaytadan urinib ko‘ring!");
+    notification.warning(
+      "Xatolik! Internetni tekshirib qaytadan urinib ko‘ring!"
+    );
   }
 };
 
 const addGroupsModal = async (id) => {
   try {
-    const groupRes = await axios.get(`/group/${localStorage.getItem("school_id")}/${edit.group_id}/group`, {
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-    });
+    const groupRes = await axios.get(
+      `/group/${localStorage.getItem("school_id")}/${edit.group_id}/group`,
+      {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      }
+    );
     const data = {
       student_id: id,
       group_id: Number(edit.group_id),
@@ -1084,7 +1155,9 @@ const addGroupsModal = async (id) => {
     edit.group_id = "";
     getProduct(store.pagination);
   } catch (error) {
-    notification.warning("Xatolik! Internetni tekshirib qaytadan urinib ko‘ring!");
+    notification.warning(
+      "Xatolik! Internetni tekshirib qaytadan urinib ko‘ring!"
+    );
   }
 };
 
@@ -1096,7 +1169,6 @@ onMounted(() => {
   getSocialLink();
 });
 </script>
-
 
 <style lang="scss" scoped>
 .btnAdd {
