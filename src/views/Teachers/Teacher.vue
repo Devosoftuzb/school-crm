@@ -744,7 +744,7 @@
                   <th scope="col" class="text-center py-3">Telefon raqam</th>
                   <th scope="col" class="text-center py-3">Fanlar</th>
                   <th scope="col" class="text-center py-3">Guruhlar</th>
-                  <!-- <th scope="col" class="text-center py-3">To'liq ma'lumot</th> -->
+                  <th scope="col" class="text-center py-3">To'liq</th>
                   <th></th>
                 </tr>
               </thead>
@@ -824,14 +824,14 @@
                   >
                     ...
                   </td>
-                  <!-- <td class="text-center font-medium px-5 py-4">
+                  <td class="text-center font-medium px-5 py-4">
                     <button
                       @click="enterSlug(i.id)"
                       class="btnKirish bg-blue-600 rounded-lg px-5 py-2.5 text-white focus:ring-2"
                     >
-                      Batafsil
+                      Kirish
                     </button>
-                  </td> -->
+                  </td>
                   <td
                     v-if="i.role != 'superadmin'"
                     class="text-center whitespace-nowrap font-medium pr-5 py-4"
@@ -923,14 +923,14 @@
                   >
                     ...
                   </td>
-                  <!-- <td class="text-center font-medium px-5 py-4">
+                  <td class="text-center font-medium px-5 py-4">
                     <button
                       @click="enterSlug(i.id)"
                       class="btnKirish bg-blue-600 rounded-lg px-5 py-4 text-white focus:ring-2"
                     >
-                      Batafsil
+                      Kirish
                     </button>
-                  </td> -->
+                  </td>
                   <td
                     v-if="i.role != 'superadmin'"
                     class="text-center whitespace-nowrap font-medium pr-5 py-4"
@@ -1099,9 +1099,9 @@ const searchFunc = () => {
 };
 // ---------------------------- search end --------------------------------
 
-// const enterSlug = (id) => {
-//   router.push(`./employee/${localStorage.getItem("school_id")}/${id}`);
-// };
+const enterSlug = (id) => {
+  router.push(`./employee/${localStorage.getItem("school_id")}/${id}`);
+};
 
 const cancelFunc = () => {
   Object.keys(form).forEach((key) => (form[key] = ""));
@@ -1155,13 +1155,47 @@ const getAllProduct = async () => {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       }
     );
+    const groupIds = res.data.flatMap(
+      (record) => record.group?.map((group) => group.group_id) || []
+    );
+    const uniqueGroupIds = [...new Set(groupIds)];
+
+    const groupPromises = uniqueGroupIds.map((groupId) =>
+      axios.get(
+        `/group/${localStorage.getItem("school_id")}/${groupId}/group`,
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        }
+      )
+    );
+    const groupResponses = await Promise.all(groupPromises);
+    const groups = groupResponses.reduce((acc, response) => {
+      const groupData = response.data;
+
+      if (groupData) {
+        acc[groupData.id] = groupData.name;
+      }
+      return acc;
+    }, {});
+
     store.allProducts = res.data
-      .sort((a, b) => b.id - a.id)
       .filter(
         (record) =>
           localStorage.getItem("role") === "_ow_sch_" ||
-          record.role !== localStorage.getItem("role")
-      );
+          record.role !== "administrator"
+      )
+      .map((record) => {
+        if (record.group) {
+          record.group.forEach((group) => {
+            if (groups[group.group_id]) {
+              group.group_name = groups[group.group_id];
+            }
+          });
+        }
+        return record;
+      })
+      .sort((a, b) => b.id - a.id);
+
     store.error = false;
   } catch (error) {
     store.error = true;
@@ -1177,38 +1211,54 @@ const getProduct = async (page) => {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       }
     );
+
+    const groupIds = res.data?.data?.records.flatMap(
+      (record) => record.group?.map((group) => group.group_id) || []
+    );
+    const uniqueGroupIds = [...new Set(groupIds)];
+
+    const groupPromises = uniqueGroupIds.map((groupId) =>
+      axios.get(
+        `/group/${localStorage.getItem("school_id")}/${groupId}/group`,
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        }
+      )
+    );
+    const groupResponses = await Promise.all(groupPromises);
+    const groups = groupResponses.reduce((acc, response) => {
+      const groupData = response.data;
+
+      if (groupData) {
+        acc[groupData.id] = groupData.name;
+      }
+      return acc;
+    }, {});
+
     store.PageProduct = res.data?.data?.records
       .filter(
         (record) =>
           localStorage.getItem("role") === "_ow_sch_" ||
           record.role !== "administrator"
       )
+      .map((record) => {
+        if (record.group) {
+          record.group.forEach((group) => {
+            if (groups[group.group_id]) {
+              group.group_name = groups[group.group_id];
+            }
+          });
+        }
+        return record;
+      })
       .sort((a, b) => b.id - a.id);
 
     const pagination = res.data?.data?.pagination;
     store.page = [pagination.currentPage, pagination.total_count];
     store.error = false;
   } catch (error) {
-    store.PageProduct = error.response.data.message;
+    store.PageProduct = error.response?.data?.message || "Xatolik yuz berdi";
     store.error = true;
-  }
-};
-
-const getOneProduct = async (id, modalType) => {
-  try {
-    const res = await axios.get(
-      `/employee/${localStorage.getItem("school_id")}/${id}`,
-      {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      }
-    );
-    Object.assign(edit, res.data, { password: "", id: res.data.id });
-    store.hashed_password = res.data.hashed_password;
-    if (modalType) store[`${modalType}Modal`] = true;
-  } catch (error) {
-    notification.warning(
-      "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
-    );
   }
 };
 

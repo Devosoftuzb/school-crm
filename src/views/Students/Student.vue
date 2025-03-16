@@ -1171,8 +1171,42 @@ const getAllProduct = async () => {
     const data = await fetchData(
       `/student/${localStorage.getItem("school_id")}/find`
     );
-    store.allProducts = data.sort((a, b) => b.id - a.id);
-    store.error = false;
+    const groupIds = data.flatMap(
+      (record) => record.group?.map((group) => group.group_id) || []
+    );
+    const uniqueGroupIds = [...new Set(groupIds)];
+
+    const groupPromises = uniqueGroupIds.map((groupId) =>
+      axios.get(
+        `/group/${localStorage.getItem("school_id")}/${groupId}/group`,
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        }
+      )
+    );
+
+    const groupResponses = await Promise.all(groupPromises);
+
+    const groups = groupResponses.reduce((acc, response) => {
+      const groupData = response.data;
+      if (groupData) {
+        acc[groupData.id] = groupData.name;
+      }
+      return acc;
+    }, {});
+
+    store.allProducts = data.map((record) => {
+      if (record.group) {
+        record.group.forEach((group) => {
+          if (groups[group.group_id] !== undefined) {
+            group.group_name = groups[group.group_id];
+          } else {
+            console.log(`Guruh topilmadi, group_id: ${group.group_id}`);
+          }
+        });
+      }
+      return record;
+    });
   } catch {
     store.allProducts = [];
     store.error = true;
@@ -1185,7 +1219,43 @@ const getProduct = async (page) => {
       `/student/${localStorage.getItem("school_id")}/page?page=${page}`
     );
 
-    store.PageProduct = data?.data?.records;
+    const groupIds = data?.data?.records.flatMap(
+      (record) => record.group?.map((group) => group.group_id) || []
+    );
+    const uniqueGroupIds = [...new Set(groupIds)];
+
+    const groupPromises = uniqueGroupIds.map((groupId) =>
+      axios.get(
+        `/group/${localStorage.getItem("school_id")}/${groupId}/group`,
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        }
+      )
+    );
+
+    const groupResponses = await Promise.all(groupPromises);
+
+    const groups = groupResponses.reduce((acc, response) => {
+      const groupData = response.data;
+      if (groupData) {
+        acc[groupData.id] = groupData.name;
+      }
+      return acc;
+    }, {});
+
+    store.PageProduct = data?.data?.records.map((record) => {
+      if (record.group) {
+        record.group.forEach((group) => {
+          if (groups[group.group_id] !== undefined) {
+            group.group_name = groups[group.group_id];
+          } else {
+            console.log(`Guruh topilmadi, group_id: ${group.group_id}`);
+          }
+        });
+      }
+      return record;
+    });
+
     const pagination = data?.data?.pagination;
     store.page = [pagination.currentPage, pagination.total_count];
     store.error = false;
@@ -1317,7 +1387,7 @@ const addGroups = async () => {
   try {
     await fetchData(`/student-group`, "post", data);
     notification.success("Guruhga qo'shildi");
-    edit.name = ""
+    edit.name = "";
     getProduct(store.pagination);
     store.groupModal = false;
   } catch {}

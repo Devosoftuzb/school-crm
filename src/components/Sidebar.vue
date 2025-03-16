@@ -20,7 +20,7 @@
         </li>
       </ul>
       <button @click="Logout" title="Chiqish"
-        class="bottom-5 w-full flex items-center justify-between border-b border-blue-700 p-2 rounded-lg text-blue-700"
+        class="bottom-5 w-full sm:mb-0 mb-20 flex items-center justify-between border-b border-blue-700 p-2 rounded-lg text-blue-700"
       >
         <div class="flex items-center gap-3">
           <img

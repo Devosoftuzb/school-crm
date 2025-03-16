@@ -1,229 +1,305 @@
 <template>
   <section class="px-2">
     <!-- Slug start  -->
+
     <div>
+      <div class="mt-10" v-show="!store.loading">
+        <Placeholder2 />
+      </div>
       <div
-        class="mt-[30px] rounded-[6px] p-[15px]"
+        v-show="store.loading"
+        class="mt-10 rounded-lg p-[15px] mb-32"
         :class="navbar.userNav ? 'bg-[#1e293b] text-white' : 'bg-white'"
       >
-        <div class="flex justify-between items-center font-bold mb-10">
-          <h1>
-            <span>{{ store.data.full_name }}</span>
+        <div class="flex justify-between items-center font-bold mb-5">
+          <h1 class="sm:text-lg text-sm text-blue-700">
+            <span v-show="store.modalInfo">Xodimning ma'lumotlari</span>
+            <span v-show="store.modalGroup">Xodimning guruhlari</span>
+            <span v-show="store.modalPayment">Xodimning oylik hisoboti</span>
           </h1>
           <button
             @click="router.back(-1)"
-            class="btn shadow-lg rounded-lg px-5 py-2.5 text-white focus:ring-2"
+            class="btn shadow-lg rounded-lg px-5 py-2.5 text-white focus:ring-2 text-sm"
           >
             Orqaga qaytish
           </button>
         </div>
 
-        <div class="w-full bg-white border rounded-lg border-[#4141eb]">
+        <div class="w-full bg-transparent rounded-lg">
           <ul
-            class="btn flex flex-wrap text-sm font-medium p-3 text-center text-[16px] rounded-t-lg"
+            class="bg-[rgba(213,219,242,0.5)] flex flex-wrap sm:justify-end justify-center font-medium p-3 gap-2 text-center text-sm rounded-t-lg"
             id="defaultTab"
             data-tabs-toggle="#defaultTabContent"
             role="tablist"
           >
-            <li class="mr-2">
+            <li>
               <button
-                @click="store.toggle = true"
-                id="about-tab"
-                data-tabs-target="#about"
-                type="button"
-                role="tab"
-                aria-controls="about"
-                aria-selected="true"
-                class="inline-block px-3 py-1 hover:text-[#1e293b]"
+                @click="infoModal"
+                class="shadow-lg rounded-lg px-5 py-2.5 focus:ring-2 text-sm"
                 :class="
-                  store.toggle
-                    ? 'text-white font-semibold border-b border-white '
-                    : 'text-white'
+                  navbar.userNav
+                    ? 'bg-[#1e293b] text-white hover:bg-white hover:text-black'
+                    : 'bg-white hover:bg-[#1e293b] hover:text-white'
                 "
               >
                 Ma'lumot
               </button>
             </li>
-            <li v-show="store.guard != 'teacher'" class="mr-2">
+            <li>
               <button
-                @click="store.toggle = false"
-                id="services-tab"
-                data-tabs-target="#services"
-                type="button"
-                role="tab"
-                aria-controls="services"
-                aria-selected="false"
-                class="inline-block px-3 py-1 hover:text-[#1e293b]"
+                @click="groupModal"
+                class="shadow-lg rounded-lg px-5 py-2.5 focus:ring-2 text-sm"
                 :class="
-                  !store.toggle
-                    ? 'text-white font-semibold border-b border-white '
-                    : 'text-white'
+                  navbar.userNav
+                    ? 'bg-[#1e293b] text-white hover:bg-white hover:text-black'
+                    : 'bg-white hover:bg-[#1e293b] hover:text-white'
                 "
               >
-                Guruh
+                Guruhlar
+              </button>
+            </li>
+            <li>
+              <button
+                @click="paymentModal"
+                class="shadow-lg rounded-lg px-5 py-2.5 focus:ring-2 text-sm"
+                :class="
+                  navbar.userNav
+                    ? 'bg-[#1e293b] text-white hover:bg-white hover:text-black'
+                    : 'bg-white hover:bg-[#1e293b] hover:text-white'
+                "
+              >
+                Oylik hisobot
               </button>
             </li>
           </ul>
           <div
+            v-show="store.modalInfo"
             id="defaultTabContent"
             :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
           >
             <div
-              :class="
-                store.toggle
-                  ? 'p-4 rounded-lg md:p-8'
-                  : 'hidden p-4 rounded-lg md:p-8'
-              "
+              class="p-4 rounded-lg md:p-8"
               id="about"
               role="tabpanel"
               aria-labelledby="about-tab"
             >
               <div class="flex flex-col lg:flex-row gap-10">
                 <img
-                  :src="
-                    store.image
-                      ? store.image
-                      : 'https://cdn-icons-png.flaticon.com/512/149/149071.png'
-                  "
+                  src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
                   alt=""
                   class="w-56 h-56 2xl:w-80 2xl:h-80 rounded-full object-cover mx-auto"
                 />
                 <div
-                  class="w-full lg:border-l border-[#4141eb] p-5 flex flex-col gap-10 justify-between"
+                  class="w-full lg:border-l border-[#4141eb] p-5 flex flex-col gap-3"
                 >
                   <h2
-                    class="w-full flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between border-b border-[#4141eb]"
+                    class="w-full flex sm:flex-row flex-col items-center justify-between pb-3 border-b border-[#4141eb] sm:text-lg text-sm"
                     :class="navbar.userNav ? 'text-white' : 'text-[#1e293b]'"
                   >
-                    <span class="flex items-center gap-3 text-[24px]">
-                      <span class="text-[24px] font-bold">{{
-                        store.data.full_name
-                      }}</span
-                      ><span class="text-[16px] uppercase">{{
-                        store.data.role
-                      }}</span>
-                    </span>
+                    <span class="w-full font-bold">Ism-familya :</span>
+                    <span class="w-full">{{ store.data.full_name }}</span>
+
+                    <!-- <span
+                      class="w-full text-[16px] text-red-600"
+                      v-show="!store.data.status"
+                      >Faol emas</span
+                    >
+                    <span
+                      class="w-full text-[16px] text-green-400"
+                      v-show="store.data.status"
+                      >Faol</span
+                    > -->
                   </h2>
 
                   <h2
-                  v-show="store.guard"
-                    class="w-full flex items-center justify-between border-b border-[#4141eb]"
+                    class="w-full flex sm:flex-row flex-col items-center justify-between pb-3 border-b border-[#4141eb] sm:text-lg text-sm"
                     :class="navbar.userNav ? 'text-white' : 'text-[#1e293b]'"
                   >
-                    <span class="text-[24px]">
-                      <span>Fanlar :</span>
-                      <span
-                        class="flex gap-5 flex-wrap lg:flex-row lg:items-center pb-2"
-                      >
-                        <span
-                          v-for="el in store.data.subjects"
-                          :key="el.id"
-                          class="text-[16px] font-bold py-1"
-                          >{{ el.title }}</span
-                        >
-                      </span>
-                    </span>
+                    <span class="w-full font-bold">Telefon raqam :</span>
+                    <span class="w-full">{{ store.data.phone_number }}</span>
                   </h2>
 
                   <h2
-                    class="w-full flex items-center justify-between sm:border-b border-[#4141eb]"
+                    class="w-full flex sm:flex-row flex-col items-center justify-between pb-3 border-b border-[#4141eb] sm:text-lg text-sm"
                     :class="navbar.userNav ? 'text-white' : 'text-[#1e293b]'"
                   >
-                    <span class="w-full flex flex-col gap-3 text-[24px]">
-                      <span class="text-[24px]">Bog'lanish :</span>
-                      <span
-                        class="w-full flex flex-col gap-3 xl:flex-row xl:items-center xl:gap-10 2xl:gap-20 text-[24px] pl-5"
-                      >
-                        <span
-                          :class="
-                            store.data.phone_number
-                              ? 'flex items-center gap-3'
-                              : 'hidden'
-                          "
-                        >
-                          <i class="bx bxs-phone" style="color: #16f500"></i>|
-                          <span class="text-[16px] font-bold">{{
-                            store.data.phone_number
-                          }}</span>
-                        </span>
-                      </span>
-                    </span>
+                    <span class="w-full font-bold">Lavozim :</span>
+                    <span class="w-full">{{
+                      store.data.role
+                    }}</span>
+                  </h2>
+
+                  <h2
+                    class="w-full flex sm:flex-row flex-col items-center justify-between border-b pb-3 border-[#4141eb] sm:text-lg text-sm"
+                    :class="navbar.userNav ? 'text-white' : 'text-[#1e293b]'"
+                  >
+                    <span class="w-full font-bold">Qo'shilgan vaqti :</span>
+                    <span class="w-full">{{ date }}</span>
                   </h2>
                 </div>
               </div>
             </div>
-            <div
-              :class="
-                !store.toggle
-                  ? 'p-4 rounded-lg md:p-8 dark:bg-gray-800'
-                  : 'hidden p-4 rounded-lg md:p-8 dark:bg-gray-800'
-              "
-              id="services"
-              role="tabpanel"
-              aria-labelledby="services-tab"
-            >
+          </div>
+          <div
+            v-show="store.modalGroup"
+            class="relative shadow-md rounded-lg overflow-hidden m-5"
+            :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
+          >
+            <div class="overflow-x-auto">
+              <table class="w-full text-sm text-left">
+                <thead class="btn text-white text-xs rounded-lg uppercase">
+                  <tr>
+                    <th scope="col" class="text-center py-3">Nomi</th>
+                    <th scope="col" class="text-center py-3">Fani</th>
+                    <th scope="col" class="text-center py-3">Narxi</th>
+                    <th scope="col" class="text-center py-3">
+                      Boshlanish sanasi
+                    </th>
+                    <th scope="col" class="text-center py-3">
+                      Qo'shilgan sanasi
+                    </th>
+                    <th scope="col" class="text-center py-3">To'liq</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                    class="border-b"
+                    :class="
+                      navbar.userNav ? 'hover:bg-gray-700' : 'hover:bg-gray-50'
+                    "
+                    v-for="i in store.group"
+                    :key="i.id"
+                  >
+                    <td
+                      scope="row"
+                      class="text-center px-8 py-4 font-medium whitespace-nowrap"
+                    >
+                      {{ i.name }}
+                    </td>
+                    <td
+                      class="text-center font-medium whitespace-nowrap text-blue-800 px-8 py-4"
+                    >
+                      <p class="bg-blue-100 rounded-[5px] p-1">
+                        <span v-for="fan in i.subject" :key="fan.id"
+                          >{{ fan.subject_name }}
+                        </span>
+                      </p>
+                    </td>
+                    <td
+                      class="text-center font-medium whitespace-nowrap text-red-800 px-8 py-4"
+                    >
+                      <p class="bg-red-100 rounded-[5px] p-1">
+                        {{ i.price }} so'm
+                      </p>
+                    </td>
+                    <td
+                      class="text-center font-medium whitespace-nowrap text-blue-800 px-8 py-4"
+                    >
+                      <p class="bg-blue-100 rounded-[5px] p-1">
+                        {{ i.start_date }}
+                      </p>
+                    </td>
+                    <td
+                      class="text-center font-medium whitespace-nowrap text-blue-800 px-8 py-4"
+                    >
+                      <p class="bg-blue-100 rounded-[5px] p-1">
+                        {{ i.student_date }}
+                      </p>
+                    </td>
+                    <td class="text-center font-medium px-8 py-4">
+                      <button
+                        @click="enterSlug(i.id, i.name.toLowerCase())"
+                        class="btn bg-blue-600 rounded-lg px-5 py-2.5 text-white focus:ring-2"
+                      >
+                        Kirish
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
               <div
-                class="relative shadow-md rounded-lg overflow-hidden"
-                :class="navbar.userNav ? 'bg-[#1e293b] text-white' : 'bg-white'"
+                v-show="store.group.length == 0"
+                class="w-full max-w-screen text-center p-20 text-2xl font-medium"
               >
-                <div class="overflow-x-auto">
-                  <table class="w-full text-sm text-left">
-                    <thead class="bg-[#4141eb] text-xs rounded-lg uppercase">
-                      <tr class="text-white">
-                        <th scope="col" class="text-center py-3">Nomi</th>
-                        <th scope="col" class="text-center py-3">
-                          Boshlangan sana
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr
-                        v-for="el in store.data.groups"
-                        :key="el.id"
-                        class="border-b"
-                        :class="
-                          navbar.userNav
-                            ? 'hover:bg-gray-700'
-                            : 'hover:bg-gray-50'
-                        "
-                      >
-                        <th
-                          scope="row"
-                          class="text-center px-8 py-3 font-medium whitespace-nowrap"
-                        >
-                          {{ el.name }}
-                        </th>
-                        <td
-                          class="text-center font-medium text-green-800 px-8 py-2"
-                        >
-                          <p class="bg-green-100 rounded-[5px] p-1">
-                            {{ el.start_date?.slice(0, 10) }}
-                          </p>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-                <nav
-                  class="flex flex-row justify-between items-center md:items-center space-y-3 md:space-y-0 p-4"
-                  aria-label="Table navigation"
-                >
-                  <span class="text-sm font-normal">
-                    Sahifa
-                    <span class="font-semibold">1 - 10</span>
-                    dan
-                    <span class="font-semibold">10</span>
-                  </span>
-                  <ul class="inline-flex items-stretch -space-x-px">
-                    <li>
-                      <a
-                        href="#"
-                        class="flex font-bold text-black border-2 bg-white hover:bg-gray-300 items-center justify-center text-sm py-2 sm:mt-0 -mt-2 px-6 rounded-lg leading-tight"
-                        >Next</a
-                      >
-                    </li>
-                  </ul>
-                </nav>
+                <h1>Guruhlar ro'yhati bo'sh</h1>
+              </div>
+            </div>
+          </div>
+          <div
+            v-show="store.modalPayment"
+            class="relative shadow-md rounded-lg overflow-hidden m-5"
+            :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
+          >
+            <div class="overflow-x-auto">
+              <table class="w-full text-sm text-left">
+                <thead class="btn text-white text-xs rounded-lg uppercase">
+                  <tr>
+                    <th scope="col" class="text-center py-3">Guruh</th>
+                    <th scope="col" class="text-center py-3">Kurs narxi</th>
+                    <th scope="col" class="text-center py-3">To'lov turi</th>
+                    <th scope="col" class="text-center py-3">To'lov</th>
+                    <th scope="col" class="text-center py-3">Oy</th>
+                    <th scope="col" class="text-center py-3">To'lov sanasi</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                    class="border-b"
+                    :class="
+                      navbar.userNav ? 'hover:bg-gray-700' : 'hover:bg-gray-50'
+                    "
+                    v-for="i in store.payment"
+                    :key="i.id"
+                  >
+                    <td
+                      scope="row"
+                      class="text-center px-8 py-4 font-medium whitespace-nowrap"
+                    >
+                      {{ i.group_name }}
+                    </td>
+                    <td
+                      class="text-center font-medium whitespace-nowrap text-red-800 px-8 py-4"
+                    >
+                      <p class="bg-red-100 rounded-[5px] p-1">
+                        {{ i.group_price }} so'm
+                      </p>
+                    </td>
+                    <td
+                      class="text-center font-medium whitespace-nowrap text-blue-800 px-8 py-4"
+                    >
+                      <p class="bg-blue-100 rounded-[5px] p-1">
+                        {{ i.method }}
+                      </p>
+                    </td>
+                    <td
+                      class="text-center font-medium whitespace-nowrap text-green-700 px-8 py-4"
+                    >
+                      <p class="bg-green-100 rounded-[5px] p-1">
+                        {{ i.price }} so'm
+                      </p>
+                    </td>
+                    <td
+                      class="text-center font-medium whitespace-nowrap text-blue-800 px-8 py-4"
+                    >
+                      <p class="bg-blue-100 rounded-[5px] p-1">
+                        {{ monthNames(i.month) }}
+                      </p>
+                    </td>
+                    <td
+                      class="text-center font-medium whitespace-nowrap text-red-800 px-8 py-4"
+                    >
+                      <p class="bg-red-100 rounded-[5px] p-1">
+                        {{ formatDateToNumeric(new Date(i.createdAt)) }}
+                      </p>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <div
+                v-show="store.payment.length == 0"
+                class="w-full max-w-screen text-center p-20 text-2xl font-medium"
+              >
+                <h1>To'lov tarixi ro'yhati bo'sh</h1>
               </div>
             </div>
           </div>
@@ -238,44 +314,149 @@
 import { onMounted, reactive, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useNavStore } from "../../stores/toggle";
-import axios from "@/services/axios";
+import axios from "../../services/axios";
+import { Placeholder2 } from "../../components";
 
 const navbar = useNavStore();
 const router = useRouter();
 
 const store = reactive({
   data: "",
-  toggle: true,
-  guard: "",
+  group: [],
+  payment: [],
+  modalInfo: true,
+  modalGroup: false,
+  modalPayment: false,
+  chekDate: false,
+  paymentGroup: false,
+  loading: false,
 });
 
-const getStaff = () => {
-  const id = router.currentRoute.value.params.id;
-  axios
-    .get(`/employee/${localStorage.getItem("school_id")}/${id}`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    })
-    .then((res) => {
-      store.data = res.data;
-      store.guard = res.data[0].role
-      console.log(res.data);
-    })
-    .catch((error) => {
-      notification.warning(error.response.data.message);
-    });
+const date = ref("");
+
+const infoModal = () => {
+  store.modalInfo = true;
+  store.modalGroup = false;
+  store.modalPayment = false;
 };
 
-const checkGuard = () => {
-  if (localStorage.getItem("role") !== "teacher") {
-    store.guard = false;
+const groupModal = () => {
+  store.modalGroup = true;
+  store.modalInfo = false;
+  store.modalPayment = false;
+};
+
+const paymentModal = () => {
+  store.modalPayment = true;
+  store.modalInfo = false;
+  store.modalGroup = false;
+};
+
+function enterSlug(id, name) {
+  router.push(`/groups/${id}/${name}`);
+}
+
+const formatDateToNumeric = (date) => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  const hour = String(date.getHours()).padStart(2, "0");
+  const minute = String(date.getMinutes()).padStart(2, "0");
+
+  return `${day}-${month}-${year}, ${hour}:${minute}`;
+};
+
+const monthNames = (month) => {
+  const months = [
+    "Yanvar",
+    "Fevral",
+    "Mart",
+    "Aprel",
+    "May",
+    "Iyun",
+    "Iyul",
+    "Avgust",
+    "Sentabr",
+    "Oktabr",
+    "Noyabr",
+    "Dekabr",
+  ];
+  return months[parseInt(month) - 1] || "Notog'ri oy";
+};
+
+// API chaqiruvlarini umumiy qilish uchun yordamchi funksiya
+const fetchData = async (url, params = {}) => {
+  const schoolId = localStorage.getItem("school_id");
+  const token = localStorage.getItem("token");
+
+  try {
+    const response = await axios.get(url, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      params: params,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("API xatosi:", error);
+    throw error;
+  }
+};
+
+const getEmployee = async () => {
+  const schoolId = localStorage.getItem("school_id");
+  const id = router.currentRoute.value.params.id;
+
+  try {
+    const employeeData = await fetchData(`/employee/${schoolId}/${id}`);
+    console.log(employeeData);
+    
+    store.data = employeeData;
+    date.value = store.data.createdAt.split("T")[0];
+
+    // Use a single promise array for both groups and payments
+    const promises = [
+      ...employeeData.group.map((group) =>
+        getGroup(group.group_id, group.createdAt)
+      ),
+    ];
+
+    // Await all promises concurrently
+    await Promise.all(promises);
+    store.loading = true;
+  } catch (error) {
+    console.error("Xodim ma'lumotlarini olishda xato:", error);
+  }
+};
+
+const getGroup = async (id, date) => {
+  try {
+    const groupData = await fetchData(
+      `/group/${localStorage.getItem("school_id")}/${id}/not`
+    );
+    groupData.student_date = date.split("T")[0];
+    store.group.push(groupData);
+    return groupData;
+  } catch (error) {
+    console.error("Guruh ma'lumotlarini olishda xato:", error);
+  }
+};
+
+const getPaymentGroup = async (id, payment) => {
+  try {
+    const groupData = await fetchData(
+      `/group/${localStorage.getItem("school_id")}/${id}/group`
+    );
+    payment.group_name = groupData.name;
+    payment.group_price = groupData.price;
+    store.payment.push(payment);
+  } catch (error) {
+    console.error("To'lov guruhi ma'lumotlarini olishda xato:", error);
   }
 };
 
 onMounted(() => {
-  getStaff();
-  checkGuard()
+  getEmployee();
 });
 </script>
 
