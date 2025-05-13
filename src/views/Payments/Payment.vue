@@ -2285,6 +2285,7 @@ const exportToExcel = async () => {
   });
   saveAs(blob, fileName);
   notification.success("Excel fayl yuklab olindi!");
+  history.modal = !history.modal
 };
 
 const getSchool = () => {

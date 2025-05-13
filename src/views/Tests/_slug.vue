@@ -87,7 +87,7 @@
               :class="[
                 'gap-x-5',
                 form.variants.length > 1
-                  ? 'grid sm:grid-cols-2'
+                  ? 'grid grid-cols-2'
                   : 'flex flex-col',
               ]"
             >
@@ -265,7 +265,7 @@
               :class="[
                 'gap-x-5',
                 edit.variants.length > 1
-                  ? 'grid sm:grid-cols-2'
+                  ? 'grid grid-cols-2'
                   : 'flex flex-col',
               ]"
             >
@@ -476,14 +476,12 @@
             </div>
           </div>
 
-          <div class="whitespace-nowrap">
-            <button
-              @click="router.back(-1)"
-              class="btn shadow-lg rounded-lg px-5 py-2.5 text-white focus:ring-2"
-            >
-              Orqaga qaytish
-            </button>
-          </div>
+          <button
+            @click="router.back(-1)"
+            class="btn sm:w-auto w-full shadow-lg rounded-lg whitespace-nowrap px-5 py-2.5 text-white focus:ring-2 text-sm"
+          >
+            Orqaga qaytish
+          </button>
         </div>
         <!------------------------------------------- Search ------------------------------------------->
 
@@ -497,7 +495,9 @@
             :key="i.id"
           >
             <div>
-              <div class="flex w-full gap-5">
+              <div
+                class="flex justify-between items-center w-full sm:gap-5 gap-2"
+              >
                 <div
                   @click="accordion(i.id)"
                   class="w-full mb-5"
@@ -505,11 +505,11 @@
                 >
                   <button
                     type="button"
-                    class="flex items-center justify-between w-full text-left rounded-lg bg-[rgba(213,219,242,0.5)] py-[24px] px-[32px]"
+                    class="flex items-center justify-between w-full text-left rounded-lg bg-[rgba(213,219,242,0.5)] sm:py-[18px] sm:px-[20px] py-[14px] px-[14px]"
                   >
-                    <div class="flex items-center gap-5">
+                    <div class="flex items-center sm:gap-5 gap-3">
                       <p
-                        class="btn min-w-[50px] min-h-[50px] sm:h-[35px] 2xl:w-[55px] 2xl:h-[50px] flex items-center font-bold justify-center text-[16px] 2xl:text-[20px] text-white rounded-full"
+                        class="btn sm:min-w-[50px] sm:min-h-[50px] min-w-[30px] min-h-[30px] sm:h-[35px] 2xl:w-[55px] 2xl:h-[50px] flex items-center font-bold justify-center text-[14px] sm:text-[16px] 2xl:text-[20px] text-white rounded-full"
                       >
                         {{ index + 1 }}
                       </p>
@@ -521,22 +521,22 @@
                       <i
                         :class="
                           store.plus == i.id
-                            ? 'bx bx-minus bg-white p-2 text-[#4141eb] text-[30px] rounded-full'
-                            : 'bx bx-plus bg-white p-2 text-[#4141eb] text-[30px] rounded-full'
+                            ? 'bx bx-minus bg-white sm:p-2 p-1 text-[#4141eb] sm:text-[30px] text-[20px] rounded-full'
+                            : 'bx bx-plus bg-white sm:p-2 p-1 text-[#4141eb] sm:text-[30px] text-[20px] rounded-full'
                         "
                       ></i>
                     </div>
                   </button>
                 </div>
-                <div class="my-auto">
+                <div class="flex flex-col gap-2 mb-5">
                   <i
                     @click="getOneProduct(i.id)"
-                    class="bx bxs-pencil bg-blue-300 mb-5 text-blue-600 rounded-lg p-2 cursor-pointer focus:ring-2"
+                    class="bx bxs-pencil bg-blue-300 text-blue-600 rounded-lg sm:p-2 p-1.5 cursor-pointer focus:ring-2"
                   >
                   </i>
                   <i
                     @click="deleteFunc(i.id)"
-                    class="bx bxs-trash bg-red-300 cursor-pointer text-red-600 rounded-lg p-2 focus:ring-2"
+                    class="bx bxs-trash bg-red-300 cursor-pointer text-red-600 rounded-lg sm:p-2 p-1.5 focus:ring-2"
                   >
                   </i>
                 </div>
@@ -564,11 +564,11 @@
                         height="240"
                       />
                     </div>
-                    <div v-else>
+                    <!-- <div v-else>
                       <a :href="getFileUrl(i.file)" target="_blank"
                         >Faylni yuklab olish</a
                       >
-                    </div>
+                    </div> -->
                   </div>
                   <h3 class="text-justify flex px-5">{{ i.question }}</h3>
                 </div>
@@ -576,7 +576,7 @@
                   <div
                     v-for="(ans, ansIndex) in i.answers"
                     :key="ansIndex"
-                    class="w-full text-justify text-black p-2.5 pl-10 rounded-lg"
+                    class="w-full text-justify text-black p-2.5 sm:pl-10 pl-5 text-sm rounded-lg"
                     :class="
                       ans.is_correct
                         ? 'bg-blue-300 text-blue-600'
@@ -760,6 +760,9 @@ const getProduct = async () => {
       ...res.data,
       questions: fullQuestions,
     };
+
+    console.log(store.allProducts);
+    
 
     store.error = false;
   } catch (error) {

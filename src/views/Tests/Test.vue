@@ -106,7 +106,7 @@
                       required
                     />
                   </div>
-                  <span class="text-xl text-bold mt-5">daqiqa</span>
+                  <span :class="navbar.userNav ? 'text-white' : 'text-black'" class="text-xl text-bold mt-5">daqiqa</span>
                 </div>
               </div>
               <div class="flex items-center justify-between border-t pt-5 mt-5">
@@ -238,7 +238,7 @@
                       required
                     />
                   </div>
-                  <span class="text-xl text-bold mt-5">daqiqa</span>
+                  <span :class="navbar.userNav ? 'text-white' : 'text-black'" class="text-xl text-bold mt-5">daqiqa</span>
                 </div>
               </div>
               <div class="flex items-center justify-between border-t pt-5 mt-5">
@@ -833,7 +833,7 @@ const getOneProduct = (id) => {
 
 const getSubject = () => {
   axios
-    .get("/subject", {
+    .get( `/subject/${localStorage.getItem("school_id")}`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },

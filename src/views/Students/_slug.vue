@@ -19,7 +19,7 @@
           </h1>
           <button
             @click="router.back(-1)"
-            class="btn shadow-lg rounded-lg px-5 py-2.5 text-white focus:ring-2 text-sm"
+            class="btn shadow-lg rounded-lg whitespace-nowrap px-5 py-2.5 text-white focus:ring-2 text-sm"
           >
             Orqaga qaytish
           </button>

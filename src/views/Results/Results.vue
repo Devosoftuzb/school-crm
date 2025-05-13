@@ -8,86 +8,86 @@
       </div>
       <!------------------------------------------- Placeholder ------------------------------------------->
 
-       <!-- ----------------------------------------- Delete modal ---------------------------------------------------- -->
-    <div
-      :class="
-        remove.toggle
-          ? 'absolute overflow-y-auto flex bg-[rgba(0,0,0,0.5)] overflow-x-hidden z-50 justify-center items-center w-full inset-0 h-full'
-          : 'hidden'
-      "
-    >
-      <div class="relative p-4 max-w-5xl min-w-[30%] h-auto">
-        <!-- Modal content -->
-        <div
-          class="relative p-4 rounded-lg shadow sm:p-5"
-          :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
-        >
-          <!-- Modal header -->
+      <!-- ----------------------------------------- Delete modal ---------------------------------------------------- -->
+      <div
+        :class="
+          remove.toggle
+            ? 'absolute overflow-y-auto flex bg-[rgba(0,0,0,0.5)] overflow-x-hidden z-50 justify-center items-center w-full inset-0 h-full'
+            : 'hidden'
+        "
+      >
+        <div class="relative p-4 max-w-5xl min-w-[30%] h-auto">
+          <!-- Modal content -->
           <div
-            class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5"
+            class="relative p-4 rounded-lg shadow sm:p-5"
+            :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
           >
-            <h3
-              class="text-lg"
-              :class="navbar.userNav ? 'text-white' : 'text-black'"
+            <!-- Modal header -->
+            <div
+              class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5"
             >
-              Test natijasini o'chirib tashlash
-            </h3>
-            <button
-              @click="remove.toggle = false"
-              type="button"
-              class="bg-transparent hover:bg-gray-200 hover rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
-              :class="navbar.userNav ? 'text-white' : 'text-black'"
-            >
-              <svg
-                aria-hidden="true"
-                class="w-5 h-5"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
+              <h3
+                class="text-lg"
+                :class="navbar.userNav ? 'text-white' : 'text-black'"
               >
-                <path
-                  fill-rule="evenodd"
-                  d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                  clip-rule="evenodd"
-                ></path>
-              </svg>
-            </button>
-          </div>
-          <!-- Modal body -->
-          <div :class="{ darkForm: navbar.userNav }">
-            <div class="grid font-medium gap-4 mb-4 grid-cols-1">
-              <div>
-                <div></div>
-                <h1
-                  class="text-2xl"
-                  :class="navbar.userNav ? 'text-white' : 'text-black'"
-                >
-                  Siz test natijasini o'chirishni xohlaysizmi?
-                </h1>
-              </div>
-              <div
-                class="w-full flex items-center justify-between border-t pt-5 mt-5"
+                Test natijasini o'chirib tashlash
+              </h3>
+              <button
+                @click="remove.toggle = false"
+                type="button"
+                class="bg-transparent hover:bg-gray-200 hover rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+                :class="navbar.userNav ? 'text-white' : 'text-black'"
               >
-                <button
-                  @click="remove.toggle = false"
-                  type="button"
-                  class="border cursor-pointer inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                <svg
+                  aria-hidden="true"
+                  class="w-5 h-5"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
                 >
-                  Bekor qilish
-                </button>
-                <button
-                  @click="deleteProduct"
-                  class="btnAdd cursor-pointer text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                  <path
+                    fill-rule="evenodd"
+                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                    clip-rule="evenodd"
+                  ></path>
+                </svg>
+              </button>
+            </div>
+            <!-- Modal body -->
+            <div :class="{ darkForm: navbar.userNav }">
+              <div class="grid font-medium gap-4 mb-4 grid-cols-1">
+                <div>
+                  <div></div>
+                  <h1
+                    class="text-2xl"
+                    :class="navbar.userNav ? 'text-white' : 'text-black'"
+                  >
+                    Siz test natijasini o'chirishni xohlaysizmi?
+                  </h1>
+                </div>
+                <div
+                  class="w-full flex items-center justify-between border-t pt-5 mt-5"
                 >
-                  O'chirish
-                </button>
+                  <button
+                    @click="remove.toggle = false"
+                    type="button"
+                    class="border cursor-pointer inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                  >
+                    Bekor qilish
+                  </button>
+                  <button
+                    @click="deleteProduct"
+                    class="btnAdd cursor-pointer text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                  >
+                    O'chirish
+                  </button>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-    <!-- ----------------------------------------- delete modal end ---------------------------------------------------- -->
+      <!-- ----------------------------------------- delete modal end ---------------------------------------------------- -->
 
       <!------------------------------------------- Search ------------------------------------------->
 
@@ -289,7 +289,7 @@
                     class="text-center font-medium whitespace-nowrap text-blue-800 px-8 py-4"
                   >
                     <p class="bg-blue-100 rounded-[5px] p-1">
-                      {{ i.test.subject_name }}
+                      {{ i.subject_name }}
                     </p>
                   </td>
                   <td
@@ -504,13 +504,13 @@ const getAllProduct = () => {
 
 const getSubject = () => {
   axios
-    .get("/subject", {
+    .get(`/subject/${localStorage.getItem("school_id")}`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
     })
     .then((res) => {
-      store.subjects = res.data || [{ title: "Fan yaratilmagan" }];
+      store.subjects = res.data;
     })
     .catch((error) => {
       notification.warning(
@@ -529,7 +529,6 @@ const getProduct = (page) => {
     .then((res) => {
       const records = res.data?.data?.records || [];
 
-      // Har bir record uchun subject_name qo‘shish
       const enrichedRecords = records.map((record) => {
         const subjectId = record.customer?.subject_id;
         const subject = store.subjects.find((s) => s.id === subjectId);
@@ -540,7 +539,6 @@ const getProduct = (page) => {
       });
 
       store.PageProduct = enrichedRecords;
-
       const pagination = res.data?.data?.pagination || {};
       store.page = [pagination.currentPage || 1, pagination.total_count || 0];
       store.error = false;
