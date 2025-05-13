@@ -9,21 +9,27 @@
           : 'hidden'
       "
     >
-      <div class="relative p-4 w-full max-w-5xl h-auto">
+      <div class="relative p-4 max-w-xl min-w-[30%] h-auto">
         <!-- Modal content -->
         <div
           class="relative p-4 rounded-lg shadow sm:p-5"
-          :class="navbar.userNav ? 'bg-[#1e293b] text-white' : 'bg-white'"
+          :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
         >
           <!-- Modal header -->
           <div
             class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5"
           >
-            <h3 class="text-lg">Yangi savolni qo'shish</h3>
+            <h3
+              class="text-lg"
+              :class="navbar.userNav ? 'text-white' : 'text-black'"
+            >
+              Savol qo'shish
+            </h3>
             <button
-              @click="modal = false"
+              @click="cancelFunc1"
               type="button"
-              class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+              class="bg-transparent hover:bg-gray-200 hover rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+              :class="navbar.userNav ? 'text-white' : 'text-black'"
             >
               <svg
                 aria-hidden="true"
@@ -38,167 +44,128 @@
                   clip-rule="evenodd"
                 ></path>
               </svg>
-              <span class="sr-only">Close modal</span>
             </button>
           </div>
           <!-- Modal body -->
           <form @submit.prevent="createProduct">
-            <div class="grid sm:flex sm:flex-col gap-4 mb-4 sm:grid-cols-2">
+            <div class="grid gap-5 mb-5">
               <div>
                 <label
-                  for="phone"
-                  class="block mb-2 text-sm text-amber-900 bg-amber-200 px-3 font-medium py-1 rounded-[5px] uppercase"
-                  ><span></span>Savol</label
+                  class="block text-sm mb-2"
+                  :class="navbar.userNav ? 'text-white' : 'text-black'"
+                  for="file_input"
+                  >File</label
+                >
+                <input
+                  class="block w-full cursor-pointer bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600"
+                  id="file_input"
+                  @change="(e) => setImg(e)"
+                  type="file"
+                />
+              </div>
+
+              <div class="">
+                <label
+                  for="question"
+                  class="block mb-2 text-sm"
+                  :class="navbar.userNav ? 'text-white' : 'text-black'"
+                  >Savol</label
                 >
                 <textarea
+                  id="question"
                   v-model="form.question"
-                  cols="30"
-                  rows="10"
-                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  rows="5"
+                  class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                   placeholder="Savolni yozing.."
                   required
                 ></textarea>
               </div>
+            </div>
 
-              <div class="flex flex-col justify-between gap-8">
-                <div class="w-full flex gap-5">
-                  <div class="w-1/2">
-                    <label
-                      for="a"
-                      class="block mb-2 text-sm text-amber-900 bg-amber-200 text-center font-medium py-0.5 rounded-[5px] uppercase"
-                      >Variant: A</label
-                    >
-                    <input
-                      v-model="form.a"
-                      type="text"
-                      name="a"
-                      id="a"
-                      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                      placeholder="A variantni kiriting"
-                      required
-                    />
-                  </div>
-
-                  <div class="w-1/2">
-                    <label
-                      for="b"
-                      class="block mb-2 text-sm text-amber-900 bg-amber-200 text-center font-medium py-0.5 rounded-[5px] uppercase"
-                      >Variant: B</label
-                    >
-                    <input
-                      v-model="form.b"
-                      type="text"
-                      name="b"
-                      id="b"
-                      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                      placeholder="B variantni kiriting"
-                      required
-                    />
-                  </div>
-                </div>
-
-                <div class="w-full flex gap-5">
-                  <div class="w-1/2">
-                    <label
-                      for="c"
-                      class="block mb-2 text-sm text-amber-900 bg-amber-200 text-center font-medium py-0.5 rounded-[5px] uppercase"
-                      >Variant: C</label
-                    >
-                    <input
-                      v-model="form.c"
-                      type="text"
-                      name="c"
-                      id="c"
-                      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                      placeholder="C variantni kiriting"
-                      required
-                    />
-                  </div>
-
-                  <div class="w-1/2">
-                    <label
-                      for="d"
-                      class="block mb-2 text-sm text-amber-900 bg-amber-200 text-center font-medium py-0.5 rounded-[5px] uppercase"
-                      >Variant: D</label
-                    >
-                    <input
-                      v-model="form.d"
-                      type="text"
-                      name="d"
-                      id="d"
-                      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                      placeholder="D variantni kiriting"
-                      required
-                    />
-                  </div>
-                </div>
-
-                <div class="w-1/2 mx-auto">
-                  <label
-                    for="category"
-                    class="block mb-2 max-w-fit mx-auto px-5 text-sm font-medium text-center text-amber-900 bg-amber-200 py-1 rounded-[5px]"
-                    >Tog'ri javobni belgilang</label
-                  >
-                  <div
-                    class="flex justify-center items-center gap-5 font-bold pt-2"
-                  >
-                    <p
-                      @click="form.true_answer = 'a'"
-                      :class="{
-                        'ring-4 ring-blue-500 bg-amber-300':
-                          form.true_answer == 'a',
-                      }"
-                      class="bg-gray-100 text-black w-7 h-7 text-center cursor-pointer hover:bg-amber-300 rounded-full"
-                    >
-                      A
-                    </p>
-                    <p
-                      @click="form.true_answer = 'b'"
-                      :class="{
-                        'ring-4 ring-blue-500 bg-amber-300':
-                          form.true_answer == 'b',
-                      }"
-                      class="bg-gray-100 text-black w-7 h-7 text-center cursor-pointer hover:bg-amber-300 rounded-full"
-                    >
-                      B
-                    </p>
-                    <p
-                      @click="form.true_answer = 'c'"
-                      :class="{
-                        'ring-4 ring-blue-500 bg-amber-300':
-                          form.true_answer == 'c',
-                      }"
-                      class="bg-gray-100 text-black w-7 h-7 text-center cursor-pointer hover:bg-amber-300 rounded-full"
-                    >
-                      C
-                    </p>
-                    <p
-                      @click="form.true_answer = 'd'"
-                      :class="{
-                        'ring-4 ring-blue-500 bg-amber-300':
-                          form.true_answer == 'd',
-                      }"
-                      class="bg-gray-100 text-black w-7 h-7 text-center cursor-pointer hover:bg-amber-300 rounded-full"
-                    >
-                      D
-                    </p>
-                  </div>
-                </div>
+            <!-- Dynamic Variants -->
+            <div
+              :class="[
+                'gap-x-5',
+                form.variants.length > 1
+                  ? 'grid sm:grid-cols-2'
+                  : 'flex flex-col',
+              ]"
+            >
+              <div
+                v-for="(variant, index) in form.variants"
+                :key="index"
+                :class="[
+                  'mb-3',
+                  // Agar oxirgi item bo‘lsa va toq bo‘lsa => w-full
+                  form.variants.length % 2 === 1 &&
+                  index === form.variants.length - 1
+                    ? 'w-full col-span-2'
+                    : '',
+                ]"
+              >
+                <label
+                  :for="'variant-' + index"
+                  class="block text-sm mb-2"
+                  :class="navbar.userNav ? 'text-white' : 'text-black'"
+                >
+                  Variant {{ String.fromCharCode(65 + index) }}
+                </label>
+                <input
+                  v-model="form.variants[index]"
+                  :id="'variant-' + index"
+                  type="text"
+                  class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                  :placeholder="`Variant ${String.fromCharCode(
+                    65 + index
+                  )} ni kiriting`"
+                  required
+                />
               </div>
             </div>
-            <div
-              class="w-full flex items-center justify-between border-t pt-5 mt-5"
+
+            <!-- Add Variant Button -->
+            <button
+              type="button"
+              @click="addVariant"
+              class="mb-5 cursor-pointer text-blue-700 text-end w-full underline"
             >
+              Variant qo‘shish
+            </button>
+
+            <!-- Correct Answer Selector -->
+            <div class="mb-4">
+              <label
+                class="block text-sm font-medium text-center text-white bg-blue-700 py-1 rounded-[5px]"
+                >To‘g‘ri javobni tanlang</label
+              >
+              <div class="flex justify-center gap-4 pt-2">
+                <span
+                  v-for="(variant, index) in form.variants"
+                  :key="'select-' + index"
+                  @click="form.true_answer = index"
+                  :class="{
+                    'ring-4 ring-blue-500 bg-blue-700 text-white':
+                      form.true_answer === index,
+                    'bg-gray-100': form.true_answer !== index,
+                  }"
+                  class="cursor-pointer w-8 h-8 flex items-center justify-center rounded-full hover:bg-blue-300"
+                >
+                  {{ String.fromCharCode(65 + index) }}
+                </span>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between border-t pt-5 mt-5">
               <button
-                @click="modal = false"
+                @click="cancelFunc1"
                 type="button"
-                class="text-gray-500 border inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                class="border cursor-pointer inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
               >
                 Bekor qilish
               </button>
               <button
                 type="submit"
-                class="btnAdd text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                class="btnAdd cursor-pointer text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
               >
                 Qo'shish
               </button>
@@ -220,21 +187,27 @@
           : 'hidden'
       "
     >
-      <div class="relative p-4 w-full max-w-5xl h-auto">
+      <div class="relative p-4 max-w-xl min-w-[30%] h-auto">
         <!-- Modal content -->
         <div
           class="relative p-4 rounded-lg shadow sm:p-5"
-          :class="navbar.userNav ? 'bg-[#1e293b] text-white' : 'bg-white'"
+          :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
         >
           <!-- Modal header -->
           <div
             class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5"
           >
-            <h3 class="text-lg">Yangi savolni qo'shish</h3>
+            <h3
+              class="text-lg"
+              :class="navbar.userNav ? 'text-white' : 'text-black'"
+            >
+              Savolni tahrirlash qo'shish
+            </h3>
             <button
               @click="edit.toggle = false"
               type="button"
-              class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+              class="bg-transparent hover:bg-gray-200 hover rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+              :class="navbar.userNav ? 'text-white' : 'text-black'"
             >
               <svg
                 aria-hidden="true"
@@ -249,169 +222,136 @@
                   clip-rule="evenodd"
                 ></path>
               </svg>
-              <span class="sr-only">Close modal</span>
             </button>
           </div>
           <!-- Modal body -->
           <form @submit.prevent="editProduct">
-            <div class="grid sm:flex sm:flex-col gap-4 mb-4 sm:grid-cols-2">
+            <div class="grid gap-5 mb-5">
               <div>
                 <label
-                  for="phone"
-                  class="block mb-2 text-sm text-amber-900 bg-amber-200 px-3 font-medium py-1 rounded-[5px] uppercase"
-                  ><span></span>Savol</label
+                  class="block text-sm mb-2"
+                  :class="navbar.userNav ? 'text-white' : 'text-black'"
+                  for="file_input"
+                  >File</label
+                >
+                <input
+                  class="block w-full cursor-pointer bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600"
+                  id="file_input"
+                  @change="(e) => setImg(e)"
+                  type="file"
+                />
+              </div>
+
+              <div class="">
+                <label
+                  for="question"
+                  class="block mb-2 text-sm"
+                  :class="navbar.userNav ? 'text-white' : 'text-black'"
+                  >Savol</label
                 >
                 <textarea
+                  id="question"
                   v-model="edit.question"
-                  cols="30"
-                  rows="10"
-                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  rows="5"
+                  class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                   placeholder="Savolni yozing.."
                   required
                 ></textarea>
               </div>
+            </div>
 
-              <div class="flex flex-col justify-between gap-8">
-                <div class="w-full flex gap-5">
-                  <div class="w-1/2">
-                    <label
-                      for="a"
-                      class="block mb-2 text-sm text-amber-900 bg-amber-200 text-center font-medium py-0.5 rounded-[5px] uppercase"
-                      >Variant: A</label
-                    >
-                    <input
-                      v-model="edit.a"
-                      type="text"
-                      name="a"
-                      id="a"
-                      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                      placeholder="A variantni kiriting"
-                      required
-                    />
-                  </div>
-
-                  <div class="w-1/2">
-                    <label
-                      for="b"
-                      class="block mb-2 text-sm text-amber-900 bg-amber-200 text-center font-medium py-0.5 rounded-[5px] uppercase"
-                      >Variant: B</label
-                    >
-                    <input
-                      v-model="edit.b"
-                      type="text"
-                      name="b"
-                      id="b"
-                      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                      placeholder="B variantni kiriting"
-                      required
-                    />
-                  </div>
-                </div>
-
-                <div class="w-full flex gap-5">
-                  <div class="w-1/2">
-                    <label
-                      for="c"
-                      class="block mb-2 text-sm text-amber-900 bg-amber-200 text-center font-medium py-0.5 rounded-[5px] uppercase"
-                      >Variant: C</label
-                    >
-                    <input
-                      v-model="edit.c"
-                      type="text"
-                      name="c"
-                      id="c"
-                      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                      placeholder="C variantni kiriting"
-                      required
-                    />
-                  </div>
-
-                  <div class="w-1/2">
-                    <label
-                      for="d"
-                      class="block mb-2 text-sm text-amber-900 bg-amber-200 text-center font-medium py-0.5 rounded-[5px] uppercase"
-                      >Variant: D</label
-                    >
-                    <input
-                      v-model="edit.d"
-                      type="text"
-                      name="d"
-                      id="d"
-                      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                      placeholder="D variantni kiriting"
-                      required
-                    />
-                  </div>
-                </div>
-
-                <div class="w-1/2 mx-auto">
+            <!-- Dynamic Variants -->
+            <div
+              :class="[
+                'gap-x-5',
+                edit.variants.length > 1
+                  ? 'grid sm:grid-cols-2'
+                  : 'flex flex-col',
+              ]"
+            >
+              <div
+                v-for="(variant, index) in edit.variants"
+                :key="index"
+                :class="[
+                  'mb-3 flex items-center gap-3',
+                  edit.variants.length % 2 === 1 &&
+                  index === edit.variants.length - 1
+                    ? 'w-full col-span-2'
+                    : '',
+                ]"
+              >
+                <div>
                   <label
-                    for="category"
-                    class="block mb-2 max-w-fit mx-auto px-5 text-sm font-medium text-center text-amber-900 bg-amber-200 py-1 rounded-[5px]"
-                    >Tog'ri javobni belgilang</label
+                    :for="'variant-' + index"
+                    class="block text-sm mb-2"
+                    :class="navbar.userNav ? 'text-white' : 'text-black'"
                   >
-                  <div
-                    class="flex justify-center items-center gap-5 font-bold pt-2"
-                  >
-                    <p
-                      @click="edit.true_answer = 'a'"
-                      :class="{
-                        'ring-4 ring-blue-500 bg-amber-300':
-                          edit.true_answer == 'a',
-                      }"
-                      class="bg-gray-100 text-black w-7 h-7 text-center cursor-pointer hover:bg-amber-300 rounded-full"
-                    >
-                      A
-                    </p>
-                    <p
-                      @click="edit.true_answer = 'b'"
-                      :class="{
-                        'ring-4 ring-blue-500 bg-amber-300':
-                          edit.true_answer == 'b',
-                      }"
-                      class="bg-gray-100 text-black w-7 h-7 text-center cursor-pointer hover:bg-amber-300 rounded-full"
-                    >
-                      B
-                    </p>
-                    <p
-                      @click="edit.true_answer = 'c'"
-                      :class="{
-                        'ring-4 ring-blue-500 bg-amber-300':
-                          edit.true_answer == 'c',
-                      }"
-                      class="bg-gray-100 text-black w-7 h-7 text-center cursor-pointer hover:bg-amber-300 rounded-full"
-                    >
-                      C
-                    </p>
-                    <p
-                      @click="edit.true_answer = 'd'"
-                      :class="{
-                        'ring-4 ring-blue-500 bg-amber-300':
-                          edit.true_answer == 'd',
-                      }"
-                      class="bg-gray-100 text-black w-7 h-7 text-center cursor-pointer hover:bg-amber-300 rounded-full"
-                    >
-                      D
-                    </p>
-                  </div>
+                    Variant {{ String.fromCharCode(65 + index) }}
+                  </label>
+                  <input
+                    v-model="edit.variants[index].text"
+                    :id="'variant-' + index"
+                    type="text"
+                    class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                    :placeholder="`Variant ${String.fromCharCode(
+                      65 + index
+                    )} ni kiriting`"
+                    required
+                  />
                 </div>
+                <i
+                  @click="deleteOption(variant.id)"
+                  class="bx bxs-trash mt-7 bg-red-300 cursor-pointer text-red-600 rounded-lg p-2 focus:ring-2"
+                >
+                </i>
               </div>
             </div>
-            <div
-              class="w-full flex items-center justify-between border-t pt-5 mt-5"
+
+            <!-- Add Variant Button -->
+            <button
+              type="button"
+              @click="addVariant2"
+              class="mb-5 cursor-pointer text-blue-700 text-end w-full underline"
             >
+              Variant qo‘shish
+            </button>
+
+            <!-- Correct Answer Selector -->
+            <div class="mb-4">
+              <label
+                class="block text-sm font-medium text-center text-white bg-blue-700 py-1 rounded-[5px]"
+                >To‘g‘ri javobni tanlang</label
+              >
+              <div class="flex justify-center gap-4 pt-2">
+                <span
+                  v-for="(variant, index) in edit.variants"
+                  :key="'select-' + index"
+                  @click="edit.true_answer = index"
+                  :class="{
+                    'ring-4 ring-blue-500 bg-blue-700 text-white':
+                      edit.true_answer === index,
+                    'bg-gray-100': edit.true_answer !== index,
+                  }"
+                  class="cursor-pointer w-8 h-8 flex items-center justify-center rounded-full hover:bg-blue-300"
+                >
+                  {{ String.fromCharCode(65 + index) }}
+                </span>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between border-t pt-5 mt-5">
               <button
                 @click="edit.toggle = false"
                 type="button"
-                class="text-gray-500 border inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                class="border cursor-pointer inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
               >
                 Bekor qilish
               </button>
               <button
                 type="submit"
-                class="btnAdd text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                class="btnAdd cursor-pointer text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
               >
-                O'zgartirish
+                Qo'shish
               </button>
             </div>
           </form>
@@ -502,7 +442,7 @@
     </div>
     <!-- ----------------------------------------- delete modal end ---------------------------------------------------- -->
 
-    <section class="md:py-4" :class="{ 'text-white': navbar.userNav }">
+    <section class="py-4 pb-20" :class="{ 'text-white': navbar.userNav }">
       <!------------------------------------------- Placeholder ------------------------------------------->
       <div v-show="!store.allProducts">
         <Placeholder2 />
@@ -525,7 +465,6 @@
               class="lg:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3"
             >
               <button
-                v-show="!store.guard"
                 @click="modal = true"
                 id=""
                 type="button"
@@ -549,19 +488,19 @@
         <!------------------------------------------- Search ------------------------------------------->
 
         <div
-          class="relative shadow-md rounded-lg overflow-hidden"
+          class="relative shadow-md rounded-lg overflow-hidden p-5"
           :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
         >
           <div
-            class="overflow-x-auto px-5"
+            class="overflow-x-auto"
             v-for="(i, index) in store.allProducts.questions"
             :key="i.id"
           >
-            <div v-show="!store.error && !(store.guard == 'o\'quvchi')">
-              <div class="flex w-full">
+            <div>
+              <div class="flex w-full gap-5">
                 <div
                   @click="accordion(i.id)"
-                  class="my-5 w-[150%]"
+                  class="w-full mb-5"
                   id="accordion-collapse-heading-1"
                 >
                   <button
@@ -589,10 +528,10 @@
                     </div>
                   </button>
                 </div>
-                <div v-show="!store.guard" class="mx-5 my-auto">
+                <div class="my-auto">
                   <i
-                    @click="getOneProduct(i.id, 'edit')"
-                    class="bx bxs-pencil bg-blue-300 mb-5 text-blue-600 rounded-lg p-2 mr-3 cursor-pointer focus:ring-2"
+                    @click="getOneProduct(i.id)"
+                    class="bx bxs-pencil bg-blue-300 mb-5 text-blue-600 rounded-lg p-2 cursor-pointer focus:ring-2"
                   >
                   </i>
                   <i
@@ -602,58 +541,51 @@
                   </i>
                 </div>
               </div>
-              <div :id="`answers${i.id}`" class="hidden w-[93%]">
-                <div
-                  class="flex flex-col gap-y-5 border p-5 border-t-0 border-[#4141eb] rounded-b-lg"
-                  :class="
-                    navbar.userNav ? 'bg-[#1e293b] text-white' : 'bg-white'
-                  "
-                  v-if="i.answers"
-                >
-                  <p
-                    class="w-full text-justify text-black flex gap-3 p-5 rounded-lg"
+              <!-- acardion main -->
+              <div :id="'answers' + i.id" class="hidden mb-5">
+                <div class="mb-5">
+                  <div v-if="i.file !== 'null'" class="mb-3">
+                    <div v-if="isImage(i.file)">
+                      <img
+                        :src="getFileUrl(i.file)"
+                        alt="Image"
+                        loading="lazy"
+                        class="w-full max-w-[320px] h-auto object-cove"
+                      />
+                    </div>
+                    <div v-else-if="isAudio(i.file)">
+                      <audio :src="getFileUrl(i.file)" controls />
+                    </div>
+                    <div v-else-if="isVideo(i.file)">
+                      <video
+                        :src="getFileUrl(i.file)"
+                        controls
+                        width="320"
+                        height="240"
+                      />
+                    </div>
+                    <div v-else>
+                      <a :href="getFileUrl(i.file)" target="_blank"
+                        >Faylni yuklab olish</a
+                      >
+                    </div>
+                  </div>
+                  <h3 class="text-justify flex px-5">{{ i.question }}</h3>
+                </div>
+                <div class="grid sm:grid-cols-2 gap-5">
+                  <div
+                    v-for="(ans, ansIndex) in i.answers"
+                    :key="ansIndex"
+                    class="w-full text-justify text-black p-2.5 pl-10 rounded-lg"
                     :class="
-                      store.trueAnswers[index] == 'a'
-                        ? 'bg-blue-400'
-                        : 'bg-red-400'
+                      ans.is_correct
+                        ? 'bg-blue-300 text-blue-600'
+                        : 'bg-red-300 text-red-600'
                     "
                   >
-                    <strong>A:</strong>
-                    <span>{{ i.answers[0]?.a }}</span>
-                  </p>
-                  <p
-                    :class="
-                      store.trueAnswers[index] == 'b'
-                        ? 'bg-blue-400'
-                        : 'bg-red-400'
-                    "
-                    class="w-full text-justify text-black flex gap-3 p-5 rounded-lg"
-                  >
-                    <strong>B:</strong>
-                    <span>{{ i.answers[0]?.b }}</span>
-                  </p>
-                  <p
-                    :class="
-                      store.trueAnswers[index] == 'c'
-                        ? 'bg-blue-400'
-                        : 'bg-red-400'
-                    "
-                    class="w-full text-justify text-black flex gap-3 p-5 rounded-lg"
-                  >
-                    <strong>C:</strong>
-                    <span>{{ i.answers[0]?.c }}</span>
-                  </p>
-                  <p
-                    :class="
-                      store.trueAnswers[index] == 'd'
-                        ? 'bg-blue-400'
-                        : 'bg-red-400'
-                    "
-                    class="w-full text-justify text-black flex gap-3 p-5 rounded-lg"
-                  >
-                    <strong>D:</strong>
-                    <span>{{ i.answers[0]?.d }}</span>
-                  </p>
+                    <strong>{{ String.fromCharCode(65 + ansIndex) }}: </strong>
+                    <span>{{ ans.option }}</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -665,31 +597,11 @@
             <h1>{{ store.allProducts }}</h1>
           </div>
           <div
-          v-show="store.guard == 'o\'quvchi'"
+            v-show="store.guard == 'o\'quvchi'"
             class="w-full max-w-screen text-center p-20 text-2xl font-medium"
           >
             <h1>Siz savollarni ko'rish huququga ega emassiz!</h1>
           </div>
-          <nav
-            class="flex flex-row justify-between items-center md:items-center space-y-3 md:space-y-0 p-4"
-            aria-label="Table navigation"
-          >
-            <span class="text-sm font-normal">
-              Sahifa
-              <span class="font-semibold">1 - 10</span>
-              dan
-              <span class="font-semibold">10</span>
-            </span>
-            <ul class="inline-flex items-stretch -space-x-px">
-              <li>
-                <a
-                  href="#"
-                  class="flex font-bold text-black border-2 bg-white hover:bg-gray-300 items-center justify-center text-sm py-2 sm:mt-0 -mt-2 px-6 rounded-lg leading-tight"
-                  >Next</a
-                >
-              </li>
-            </ul>
-          </nav>
         </div>
       </div>
     </section>
@@ -711,6 +623,17 @@ const navbar = useNavStore();
 const router = useRouter();
 
 const modal = ref(false);
+
+const getFileUrl = (file) => import.meta.env.VITE_API + "/" + file;
+
+const isImage = (filename) => /\.(jpe?g|png|gif|bmp|webp|svg)$/i.test(filename);
+const isAudio = (filename) => /\.(mp3|wav|ogg|m4a)$/i.test(filename);
+const isVideo = (filename) => /\.(mp4|webm|ogg|mov)$/i.test(filename);
+
+const getImg = ref(null);
+const setImg = (e) => {
+  getImg.value = e.target.files[0];
+};
 
 const store = reactive({
   allProducts: false,
@@ -734,39 +657,50 @@ function deleteFunc(id) {
 function accordion(id) {
   for (let i of store.accordion) {
     if (i != id) {
-      document.querySelector(`#answers${i}`).classList.add("hidden");
+      const el = document.querySelector(`#answers${i}`);
+      if (el) el.classList.add("hidden");
     }
   }
-  let show = document.querySelector(`#answers${id}`);
-  show.classList.toggle("hidden");
-  store.accordion.push(id);
-  if (store.plus == id) {
-    store.plus = "";
-  } else {
-    store.plus = id;
+
+  const show = document.querySelector(`#answers${id}`);
+  if (show) show.classList.toggle("hidden");
+
+  if (!store.accordion.includes(id)) {
+    store.accordion.push(id);
   }
+
+  store.plus = store.plus === id ? "" : id;
 }
 
 // ----------------------------------- forms -----------------------------------
 const form = reactive({
   question: "",
-  a: "",
-  b: "",
-  c: "",
-  d: "",
-  true_answer: "",
-  test_group_id: "",
+  variants: [""],
+  true_answer: null,
+  test_id: "",
   question_id: "",
 });
 
+function addVariant() {
+  form.variants.push("");
+}
+
+const addVariant2 = () => {
+  // Yangi variant yaratamiz
+  const newVariant = {
+    option: "",
+    is_correct: false,
+  };
+
+  // Ro'yxatga qo‘shamiz
+  edit.variants.push(newVariant);
+};
+
 const edit = reactive({
   question: "",
-  a: "",
-  b: "",
-  c: "",
-  d: "",
+  variants: [""],
   true_answer: "",
-  test_group_id: "",
+  test_id: "",
   question_id: "",
   id: "",
   toggle: false,
@@ -777,53 +711,86 @@ const remove = reactive({
   toggle: false,
 });
 
+function cancelFunc1() {
+  modal.value = false;
+  getImg.value = "";
+  form.question = "";
+  form.variants = [""];
+  form.true_answer = null;
+  form.test_id = "";
+  form.question_id = "";
+}
+
 // ----------------------------------- axios --------------------------------
-const getProduct = () => {
-  axios
-    .get(`/test-group/${+router.currentRoute?.value?.params?.name}`, {
+const getProduct = async () => {
+  try {
+    const testId = router.currentRoute?.value?.params?.name;
+    const res = await axios.get(`/test/${testId}`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
-    })
-    .then((res) => {
-      console.log(res.data);
-      store.trueAnswers = [];
-      for (let i of res.data.questions) {
-        store.trueAnswers.push(i.answers[0].true_answer);
-      }
-      store.allProducts = res.data;
-      if (store.allProducts.questions.length != 0) {
-        store.error = false;
-      } else {
-        store.allProducts = "Savollar topilmadi";
-        store.error = true;
-      }
-    })
-    .catch((error) => {
-      notification.warning(error.response.data.message);
-      store.allProducts = error.response.data.message;
-      store.error = true;
-      console.log("error", error);
     });
+
+    const questions = res.data.questions;
+
+    if (!questions.length) {
+      store.allProducts = "Savollar topilmadi";
+      store.error = true;
+      return;
+    }
+
+    const fullQuestions = [];
+
+    for (let q of questions) {
+      const val = await axios.get(`/questions/${q.id}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+
+      const options = val.data.option;
+
+      fullQuestions.push({
+        ...q,
+        answers: options,
+      });
+    }
+
+    store.allProducts = {
+      ...res.data,
+      questions: fullQuestions,
+    };
+
+    store.error = false;
+  } catch (error) {
+    notification.warning(
+      "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
+    );
+    store.allProducts = error.response?.data?.message || "Xatolik yuz berdi";
+    store.error = true;
+    console.log("error", error);
+  }
 };
 
 const getOneProduct = (id) => {
   axios
-    .get(`/question/${id}`, {
+    .get(`/questions/${id}`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
     })
     .then((res) => {
-      console.log(res.data);
-      edit.question = res.data.question;
-      edit.a = res.data.answers[0]?.a;
-      edit.b = res.data.answers[0]?.b;
-      edit.c = res.data.answers[0]?.c;
-      edit.d = res.data.answers[0]?.d;
-      edit.true_answer = res.data.answers[0]?.true_answer;
-      edit.question_id = res.data.id;
       edit.id = id;
+      edit.question = res.data.question;
+      edit.variants =
+        res.data.option.map((opt) => ({
+          text: opt.option,
+          is_correct: opt.is_correct,
+          id: opt.id,
+        })) || [];
+
+      edit.true_answer = res.data.option.findIndex((opt) => opt.is_correct);
+
       edit.toggle = true;
     })
     .catch((error) => {
@@ -832,205 +799,200 @@ const getOneProduct = (id) => {
 };
 
 const createProduct = () => {
-  axios
-    .post(
-      "/question",
-      {
-        question: form.question,
-        test_group_id: +router.currentRoute?.value?.params?.name,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      }
-    )
-    .then((res) => {
-      if (!form.true_answer) {
-        axios.delete(`/question/${res.data.id}`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        });
-        notification.warning("To'g'ri javobni belgilang!");
-        return;
-      }
-      getProduct();
-      let data = {
-        a: form.a,
-        b: form.b,
-        c: form.c,
-        d: form.d,
-        true_answer: form.true_answer,
-        question_id: res.data.id,
-      };
-      axios
-        .post("/answer", data, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        })
-        .then((res) => {
-          notification.success("Muvaffaqiyatli qo'shildi");
-          modal.value = false;
-          getProduct();
-        })
-        .catch((error) => {
-          notification.warning(error.response.data.message);
-          console.log("error", error);
-        });
-    })
-    .catch((error) => {
-      notification.warning(error.response.data.message);
-      console.log("error", error);
-    });
-};
+  if (!form.true_answer) {
+    if (form.true_answer !== 0) {
+      notification.warning("To'g'ri javobni belgilang!");
+      return;
+    }
+  }
 
-const getSubject = () => {
+  const data = {
+    test_id: Number(router.currentRoute?.value?.params?.name),
+    file: getImg.value,
+    question: form.question,
+  };
+
+  const formData = new FormData();
+  for (let i of Object.keys(data)) {
+    formData.append(i, data[i]);
+  }
+
   axios
-    .get("/subject", {
+    .post("/questions", formData, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
     })
     .then((res) => {
-      console.log(res.data);
-      store.subjects = res.data || [{ title: "Fan yaratilmagan" }];
+      form.variants.forEach((val, idx) => {
+        const obj = {
+          question_id: res.data.question.id,
+          option: val,
+          is_correct: form.true_answer === idx,
+        };
+
+        axios
+          .post("/option", obj, {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          })
+          .then(() => {
+            console.log("Option posted");
+          })
+          .catch((err) => {
+            console.error("Option post error:", err.response?.data || err);
+          });
+      });
+
+      notification.success("Savol qo'shildi");
+      getProduct();
+      cancelFunc1();
     })
     .catch((error) => {
+      notification.warning(
+        "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
+      );
       console.log("error", error);
     });
 };
 
 const editProduct = () => {
+  if (!edit.true_answer) {
+    if (edit.true_answer !== 0) {
+      notification.warning("To'g'ri javobni belgilang!");
+      return;
+    }
+  }
+
+  const data = {
+    test_id: +router.currentRoute?.value?.params?.name,
+    file: getImg.value,
+    question: edit.question,
+  };
+  const formData = new FormData();
+  for (let i of Object.keys(data)) {
+    formData.append(i, data[i]);
+  }
+
   axios
-    .patch(
-      `/question/${edit.id}`,
-      {
-        question: edit.question,
-        test_group_id: +router.currentRoute?.value?.params?.name,
+    .put(`/questions/${edit.id}`, formData, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      }
-    )
+    })
     .then((res) => {
-      let data = {
-        a: edit.a,
-        b: edit.b,
-        c: edit.c,
-        d: edit.d,
-        true_answer: edit.true_answer,
-        question_id: res.data.question.id,
-      };
-      axios
-        .patch(`/answer/${res.data.question?.answers[0]?.id}`, data, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        })
-        .then((res) => {
-          getProduct();
-          notification.success("Muvaffaqiyatli o'zgartirildi");
-          edit.toggle = false;
-        })
-        .catch((error) => {
-          notification.warning(error.response.data.message);
-          console.log("error", error);
-        });
+      edit.variants.forEach((val, idx) => {
+        const optionData = {
+          option: val.text,
+          is_correct: edit.true_answer === idx ? true : false,
+        };
+
+        if (val.id) {
+          axios
+            .put(`/option/${val.id}`, optionData, {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+              },
+            })
+            .then(() => {
+              console.log("Option updated");
+            })
+            .catch((err) => {
+              console.error("Option update error:", err.response?.data || err);
+            });
+        } else {
+          axios
+            .post(
+              "/option",
+              {
+                question_id: res.data.question.id,
+                ...optionData,
+              },
+              {
+                headers: {
+                  Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+              }
+            )
+            .then(() => {
+              console.log("Option added");
+            })
+            .catch((err) => {
+              console.error("Option add error:", err.response?.data || err);
+            });
+        }
+      });
+      notification.success("Muvaffaqiyatli o'zgartirildi");
+      getProduct();
+      edit.toggle = false;
     })
     .catch((error) => {
-      notification.warning(error.response.data.message);
+      notification.warning(
+        "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
+      );
       console.log("error", error);
     });
 };
 
 const deleteProduct = () => {
   axios
-    .delete(`/question/${remove.id}`, {
+    .delete(`/questions/${remove.id}`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
     })
     .then((res) => {
-      notification.success(res.data.message);
+      notification.success("Savol o'chirildi");
       getProduct();
       remove.toggle = false;
     })
     .catch((error) => {
-      notification.warning(error.response.data.message);
+      notification.warning(
+        "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
+      );
       console.log("error", error);
     });
 };
 
-const getGuard = () => {
+const deleteOption = (id) => {
   axios
-    .get("/staff", {
+    .delete(`/option/${id}`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
     })
     .then((res) => {
-      axios
-        .delete("/staff/1", {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        })
-        .then((res) => {})
-        .catch((error) => {
-          if (error.response.data.message == "Admin huquqi sizda yo'q!") {
-            store.guard = "o'qituvchi";
-          }
-        });
+      notification.success("Variant o'chirildi");
+      getOneProduct(edit.id);
+      remove.toggle = false;
     })
     .catch((error) => {
-      if (error.response.data.message == "Admin huquqi sizda yo'q!") {
-        store.guard = "o'quvchi";
-      }
-      store.error = true;
-      store.allProducts = error.response.data.message;
+      notification.warning(
+        "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
+      );
+      console.log("error", error);
     });
 };
 
 onMounted(() => {
-  getGuard();
   getProduct();
-  getSubject();
 });
 </script>
 
 <style lang="scss" scoped>
 .btn {
-  background-image: linear-gradient(
-    to right,
-    white -450%,
-    #4141eb
-  );
+  background-image: linear-gradient(to right, white -450%, #4141eb);
 }
 .btnAdd {
-  background-image: linear-gradient(
-    to right,
-    white -450%,
-    #4141eb
-  );
+  background-image: linear-gradient(to right, white -450%, #4141eb);
 }
 
 .btnKirish {
-  background-image: linear-gradient(
-    to right,
-    white -450%,
-    #4141eb
-  );
+  background-image: linear-gradient(to right, white -450%, #4141eb);
 }
 
 .btnOrqaga {
-  background-image: linear-gradient(
-    to right,
-    white -450%,
-    #4141eb
-  );
+  background-image: linear-gradient(to right, white -450%, #4141eb);
 }
 </style>

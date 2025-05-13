@@ -30,9 +30,7 @@
                   class="flex items-center justify-between w-full px-3"
                   :class="navbar.userNav ? 'text-white' : 'text-black'"
                 >
-                  <h3
-                    class="font-semibold leading-normal sm:text-md text-sm"
-                  >
+                  <h3 class="font-semibold leading-normal sm:text-md text-sm">
                     {{ j.method }} - {{ j.count }}
                   </h3>
                   <h5
@@ -819,9 +817,17 @@
                   </div>
                 </div>
                 <div
-                  class="w-full flex items-center justify-between border-t pt-5 mt-5"
+                  class="w-full flex flex-col gap-5 justify-center border-t pt-5 mt-5"
                 >
                   <button
+                    @click="exportToExcel"
+                    type="button"
+                    class="btnAdd3 text-white inline-flex items-center justify-center bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                  >
+                    Excelga yuklab olish
+                  </button>
+                  <div class="w-full flex items-center justify-between">
+                    <button
                     @click="historyModal"
                     type="button"
                     class="border inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
@@ -834,6 +840,7 @@
                   >
                     Ko'rish
                   </button>
+                  </div>
                 </div>
               </form>
               <form
@@ -970,9 +977,17 @@
                   </div>
                 </div>
                 <div
-                  class="w-full flex items-center justify-between border-t pt-5 mt-5"
+                  class="w-full flex flex-col gap-5 justify-center border-t pt-5 mt-5"
                 >
                   <button
+                    @click="exportToExcel"
+                    type="button"
+                    class="btnAdd3 text-white inline-flex items-center justify-center bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                  >
+                    Excelga yuklab olish
+                  </button>
+                  <div class="w-full flex items-center justify-between">
+                    <button
                     @click="historyModal"
                     type="button"
                     class="border inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
@@ -985,6 +1000,7 @@
                   >
                     Ko'rish
                   </button>
+                  </div>
                 </div>
               </form>
             </div>
@@ -1514,14 +1530,31 @@
                   <th scope="col" class="text-center py-3 whitespace-nowrap">
                     O'qituvchi (F . I . O)
                   </th>
-                  <th scope="col" class="text-center py-3 whitespace-nowrap">Kurs narxi</th>
-                  <th scope="col" class="text-center py-3 whitespace-nowrap">Guruh</th>
-                  <th scope="col" class="text-center py-3 whitespace-nowrap">To'lov turi</th>
-                  <th scope="col" class="text-center py-3 whitespace-nowrap">To'lov narxi</th>
-                  <th scope="col" class="text-center py-3 whitespace-nowrap">Oy</th>
-                  <th scope="col" class="text-center py-3 whitespace-nowrap">To'lov sanasi</th>
-                  <th scope="col" class="text-center py-3 whitespace-nowrap">Chek</th>
-                  <th scope="col" class="text-center py-3 whitespace-nowrap"></th>
+                  <th scope="col" class="text-center py-3 whitespace-nowrap">
+                    Kurs narxi
+                  </th>
+                  <th scope="col" class="text-center py-3 whitespace-nowrap">
+                    Guruh
+                  </th>
+                  <th scope="col" class="text-center py-3 whitespace-nowrap">
+                    To'lov turi
+                  </th>
+                  <th scope="col" class="text-center py-3 whitespace-nowrap">
+                    To'lov narxi
+                  </th>
+                  <th scope="col" class="text-center py-3 whitespace-nowrap">
+                    Oy
+                  </th>
+                  <th scope="col" class="text-center py-3 whitespace-nowrap">
+                    To'lov sanasi
+                  </th>
+                  <th scope="col" class="text-center py-3 whitespace-nowrap">
+                    Chek
+                  </th>
+                  <th
+                    scope="col"
+                    class="text-center py-3 whitespace-nowrap"
+                  ></th>
                 </tr>
               </thead>
               <tbody v-show="!store.error">
@@ -1633,7 +1666,9 @@
             class="overflow-x-auto"
           >
             <table class="w-full text-sm text-left">
-              <thead class="btnAdd text-white text-xs rounded-lg uppercase whitespace-nowrap">
+              <thead
+                class="btnAdd text-white text-xs rounded-lg uppercase whitespace-nowrap"
+              >
                 <tr>
                   <th scope="col" class="text-center py-3 whitespace-nowrap">
                     O'quvchi (F . I . O)
@@ -1641,10 +1676,19 @@
                   <th scope="col" class="text-center py-3 whitespace-nowrap">
                     O'qituvchi (F . I . O)
                   </th>
-                  <th scope="col" class="text-center py-3 whitespace-nowrap">Guruh</th>
-                  <th scope="col" class="text-center py-3 whitespace-nowrap">Kurs narxi</th>
-                  <th scope="col" class="text-center py-3 whitespace-nowrap">Qarzdorlik</th>
-                  <th scope="col" class="text-center py-3 whitespace-nowrap"></th>
+                  <th scope="col" class="text-center py-3 whitespace-nowrap">
+                    Guruh
+                  </th>
+                  <th scope="col" class="text-center py-3 whitespace-nowrap">
+                    Kurs narxi
+                  </th>
+                  <th scope="col" class="text-center py-3 whitespace-nowrap">
+                    Qarzdorlik
+                  </th>
+                  <th
+                    scope="col"
+                    class="text-center py-3 whitespace-nowrap"
+                  ></th>
                 </tr>
               </thead>
               <tbody v-show="!store.error">
@@ -1873,6 +1917,8 @@ import { useNavStore } from "../../stores/toggle";
 import { Placeholder2 } from "../../components";
 import { useNotificationStore } from "../../stores/notification";
 import axios from "@/services/axios";
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
 
 const notification = useNotificationStore();
 const navbar = useNavStore();
@@ -1933,7 +1979,7 @@ function paymentDebtor(
   teacher_name,
   group_name
 ) {
-  getSchool()
+  getSchool();
   modal.value = !modal.value;
   form.year = hozirgiYil;
   form.month = hozirgiOy;
@@ -2055,6 +2101,8 @@ const history = reactive({
   filter: "",
   selectLamp: false,
   searchList: [],
+  dayList: [],
+  monthList: [],
 });
 
 const debtorDayModal = () => {
@@ -2132,6 +2180,113 @@ const discountedPrice = computed(() => {
   return store.price - discountAmount;
 });
 
+const chekDateFormat = (date) => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  const hour = String(date.getHours()).padStart(2, "0");
+  const minute = String(date.getMinutes()).padStart(2, "0");
+
+  return `${year}-${month}-${day}, ${hour}:${minute}`;
+};
+
+const getAllHistoryForExport = async () => {
+  const schoolId = localStorage.getItem("school_id");
+  const token = localStorage.getItem("token");
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  let urlBase;
+  if (history.dayModal) {
+    urlBase = `/payment/day/${schoolId}/${history.year}/${history.month}/${history.day}/page`;
+  } else if (history.monthModal) {
+    urlBase = `/payment/month/${schoolId}/${history.group_id}/${history.year}/${history.month}/page`;
+  } else {
+    return;
+  }
+
+  let allData = [];
+  let page = 1;
+  let hasMore = true;
+
+  while (hasMore) {
+    try {
+      const res = await axios.get(`${urlBase}?page=${page}`, config);
+      const records = res.data?.data?.records || [];
+      if (records.length > 0) {
+        allData = allData.concat(records);
+        page++;
+        hasMore = records.length === 15;
+      } else {
+        hasMore = false;
+      }
+    } catch (err) {
+      console.error("Export uchun malumotlarni olishda xatolik:", err);
+      hasMore = false;
+    }
+  }
+
+  if (history.dayModal) {
+    history.dayList = allData;
+  } else if (history.monthModal) {
+    history.monthList = allData;
+  }
+};
+
+const exportToExcel = async () => {
+  await getAllHistoryForExport();
+
+  const rawData = history.dayModal ? history.dayList : history.monthList;
+
+  if (!rawData || rawData.length === 0) {
+    notification.warning("Yuklash uchun ma'lumot topilmadi");
+    return;
+  }
+
+  const dataToExport = rawData.map((item) => ({
+    "O'quvchi (F . I . O)": item.student_name,
+    "O'qituvchi (F . I . O)": item.teacher_name,
+    "Guruh nomi": item.group_name,
+    "Guruh narxi": item.group_price + " so'm",
+    "To'lov turi": item.method,
+    "To'langan summa": item.price + " so'm",
+    "Chegirma (%)": item.discount + " %",
+    Oy: monthNames(item.month),
+    "To'lov sanasi": chekDateFormat(new Date(item.createdAt)),
+  }));
+
+  const ws = XLSX.utils.json_to_sheet(dataToExport, { origin: "A1" });
+
+  ws["!cols"] = [
+    { wpx: 180 },
+    { wpx: 180 },
+    { wpx: 150 },
+    { wpx: 120 },
+    { wpx: 120 },
+    { wpx: 130 },
+    { wpx: 110 },
+    { wpx: 90 },
+    { wpx: 160 },
+  ];
+
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, "To'lov Tarixi");
+
+  const fileName = history.dayModal
+    ? `kunlik_tolov_tarixi_${history.year}-${history.month}-${history.day}.xlsx`
+    : `oylik_tolov_tarixi_${history.year}-${history.month}-${history.group_name}.xlsx`;
+
+  const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+  const blob = new Blob([excelBuffer], {
+    type: "application/octet-stream",
+  });
+  saveAs(blob, fileName);
+  notification.success("Excel fayl yuklab olindi!");
+};
+
 const getSchool = () => {
   axios
     .get(`/school/${localStorage.getItem("school_id")}`, {
@@ -2143,8 +2298,7 @@ const getSchool = () => {
       store.school_name = res.data.name;
       store.school_logo = res.data.image;
     })
-    .catch((error) => {
-    });
+    .catch((error) => {});
 };
 
 const getAllProduct = () => {
@@ -2376,7 +2530,7 @@ const addPayment = async () => {
     });
 
     printReceipt();
-    cancelFunc(); 
+    cancelFunc();
     notification.success("To'lov qilindi!");
     store.isSubmitting = false;
     if (debtor.isTable) {
@@ -2584,16 +2738,6 @@ const formatDateToNumeric = (date) => {
   const minute = String(date.getMinutes()).padStart(2, "0");
 
   store.chekDate = `${year}-${month}-${day}, ${hour}:${minute}`;
-};
-
-const chekDateFormat = (date) => {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate()).padStart(2, "0");
-  const hour = String(date.getHours()).padStart(2, "0");
-  const minute = String(date.getMinutes()).padStart(2, "0");
-
-  return `${year}-${month}-${day}, ${hour}:${minute}`;
 };
 
 const printReceipt = () => {
@@ -2953,6 +3097,10 @@ onMounted(() => {
 
 .btnAdd2 {
   background-image: linear-gradient(to right, white -450%, red);
+}
+
+.btnAdd3 {
+  background-image: linear-gradient(to right, white -450%, #ff9800);
 }
 
 .btnKirish {

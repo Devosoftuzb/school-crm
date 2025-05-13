@@ -8,21 +8,27 @@
           : 'hidden'
       "
     >
-      <div class="relative p-4 w-full max-w-xl h-auto">
+      <div class="relative p-4 max-w-xl min-w-[30%] h-auto">
         <!-- Modal content -->
         <div
-          class="relative p-10 rounded-lg shadow"
-          :class="navbar.userNav ? 'bg-[#1e293b] text-white' : 'bg-white'"
+          class="relative p-4 rounded-lg shadow sm:p-5"
+          :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
         >
           <!-- Modal header -->
           <div
             class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5"
           >
-            <h3 class="text-lg">Test qo'shish</h3>
+            <h3
+              class="text-lg"
+              :class="navbar.userNav ? 'text-white' : 'text-black'"
+            >
+              Test qo'shish
+            </h3>
             <button
-              @click="modal = false"
+              @click="cancelFunc2"
               type="button"
-              class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+              class="bg-transparent hover:bg-gray-200 hover rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+              :class="navbar.userNav ? 'text-white' : 'text-black'"
             >
               <svg
                 aria-hidden="true"
@@ -40,87 +46,84 @@
             </button>
           </div>
           <!-- Modal body -->
-          <form @submit.prevent="createProduct">
-            <div class="grid mb-4 grid-cols-1">
-              <div class="w-full flex justify-between gap-8">
-                <div class="flex w-full flex-col gap-5">
-                  <div class="">
+          <form
+            @submit.prevent="createProduct"
+            :class="{ darkForm: navbar.userNav }"
+          >
+            <div class="grid font-medium gap-4 mb-4">
+              <div class="">
+                <label
+                  for="subject"
+                  class="block text-sm mb-2"
+                  :class="navbar.userNav ? 'text-white' : 'text-black'"
+                  >Fan tanlang</label
+                >
+                <select
+                  v-model="form.subject_id"
+                  id="subject"
+                  class="bg-gray-50 border border-gray-300 text-md z-10 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2"
+                  required
+                >
+                  <option value="" disabled selected>Fan tanlang</option>
+                  <option v-for="i in store.subjects" :key="i.id" :value="i.id">
+                    {{ i.name }}
+                  </option>
+                </select>
+              </div>
+              <div class="grid sm:grid-cols-2 gap-4">
+                <div>
+                  <label
+                    for="count"
+                    class="block mb-2 text-sm"
+                    :class="navbar.userNav ? 'text-white' : 'text-black'"
+                    >Savollar soni</label
+                  >
+                  <input
+                    v-model="form.count"
+                    type="number"
+                    name="count"
+                    id="count"
+                    class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                    placeholder="10"
+                    required
+                  />
+                </div>
+                <div class="flex justify-between items-center gap-3">
+                  <div>
                     <label
-                      for="name"
-                      class="block mb-2 text-sm text-center text-amber-900 font-medium bg-amber-200 rounded-[5px] py-1"
-                      >Fanni tanlang</label
+                      for="time"
+                      class="block mb-2 text-sm"
+                      :class="navbar.userNav ? 'text-white' : 'text-black'"
+                      >Test topshirish vaqti</label
                     >
-                    <select
-                      v-model="form.subject_id"
-                      id="name"
-                      class="bg-gray-50 text-black cursor-pointer border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                    <input
+                      v-model="form.time"
+                      type="number"
+                      name="time"
+                      id="time"
+                      class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                      placeholder="60"
                       required
-                    >
-                      <option
-                        v-for="i in store.subjects"
-                        :key="i.id"
-                        :value="i.id"
-                      >
-                        {{ i.title }}
-                      </option>
-                    </select>
+                    />
                   </div>
-                  <div class="flex gap-5">
-                    <div class="w-1/2">
-                      <label
-                        for="time"
-                        class="block mb-2 text-sm text-amber-900 text-center font-medium bg-amber-200 py-1 rounded-[5px]"
-                        >Savollarning umumiy soni</label
-                      >
-                      <input
-                        type="number"
-                        name="time"
-                        max="600"
-                        min="1"
-                        v-model="form.test_time"
-                        class="bg-gray-50 border float-left w-full border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block p-2.5"
-                        placeholder="60"
-                        required
-                      />
-                    </div>
-                    <div class="w-1/2">
-                      <label
-                        for="time"
-                        class="block mb-2 text-sm text-amber-900 text-center font-medium bg-amber-200 py-1 rounded-[5px]"
-                        >Savollarning umumiy vaqti</label
-                      >
-                      <input
-                        v-model="form.test_count"
-                        type="number"
-                        name="time"
-                        max="600"
-                        min="1"
-                        class="bg-gray-50 border float-left w-1/2 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block p-2.5"
-                        placeholder="60"
-                        required
-                      />
-                      <span class="float-left pt-1 pl-5 text-xl">daqiqa</span>
-                    </div>
-                  </div>
+                  <span class="text-xl text-bold mt-5">daqiqa</span>
                 </div>
               </div>
-            </div>
-            <div
-              class="w-full flex items-center justify-between border-t pt-5 mt-5"
-            >
-              <button
-                type="button"
-                @click="modal = false"
-                class="text-gray-500 border inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-              >
-                Bekor qilish
-              </button>
-              <button
-                type="submit"
-                class="btnAdd text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-              >
-                Qo'shish
-              </button>
+              <div class="flex items-center justify-between border-t pt-5 mt-5">
+                <button
+                  @click="cancelFunc2"
+                  type="button"
+                  class="border cursor-pointer inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                >
+                  Bekor qilish
+                </button>
+                <button
+                  type="submit"
+                  class="btnAdd cursor-pointer text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                >
+                  Qo'shish
+                </button>
+              </div>
             </div>
           </form>
         </div>
@@ -137,21 +140,27 @@
           : 'hidden'
       "
     >
-      <div class="relative p-4 w-full max-w-xl h-auto">
+      <div class="relative p-4 max-w-xl min-w-[30%] h-auto">
         <!-- Modal content -->
         <div
-          class="relative p-10 rounded-lg shadow"
-          :class="navbar.userNav ? 'bg-[#1e293b] text-white' : 'bg-white'"
+          class="relative p-4 rounded-lg shadow sm:p-5"
+          :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
         >
           <!-- Modal header -->
           <div
             class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5"
           >
-            <h3 class="text-lg">Test ma'lumotlarini o'zgartirish</h3>
+            <h3
+              class="text-lg"
+              :class="navbar.userNav ? 'text-white' : 'text-black'"
+            >
+              Testni tahrirlash
+            </h3>
             <button
-              @click="edit.toggle = false"
+              @click="cancelFunc1"
               type="button"
-              class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+              class="bg-transparent hover:bg-gray-200 hover rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+              :class="navbar.userNav ? 'text-white' : 'text-black'"
             >
               <svg
                 aria-hidden="true"
@@ -169,87 +178,84 @@
             </button>
           </div>
           <!-- Modal body -->
-          <form @submit.prevent="editProduct">
-            <div class="grid mb-4 grid-cols-1">
-              <div class="w-full flex justify-between gap-8">
-                <div class="flex w-full flex-col gap-5">
-                  <div class="">
+          <form
+            @submit.prevent="editProduct"
+            :class="{ darkForm: navbar.userNav }"
+          >
+            <div class="grid font-medium gap-4 mb-4">
+              <div class="">
+                <label
+                  for="subject"
+                  class="block text-sm mb-2"
+                  :class="navbar.userNav ? 'text-white' : 'text-black'"
+                  >Fan tanlang</label
+                >
+                <select
+                  v-model="edit.subject_id"
+                  id="subject"
+                  class="bg-gray-50 border border-gray-300 text-md z-10 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2"
+                  required
+                >
+                  <option value="" disabled selected>Fan tanlang</option>
+                  <option v-for="i in store.subjects" :key="i.id" :value="i.id">
+                    {{ i.name }}
+                  </option>
+                </select>
+              </div>
+              <div class="grid sm:grid-cols-2 gap-4">
+                <div>
+                  <label
+                    for="count"
+                    class="block mb-2 text-sm"
+                    :class="navbar.userNav ? 'text-white' : 'text-black'"
+                    >Savollar soni</label
+                  >
+                  <input
+                    v-model="edit.count"
+                    type="number"
+                    name="count"
+                    id="count"
+                    class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                    placeholder="10"
+                    required
+                  />
+                </div>
+                <div class="flex justify-between items-center gap-3">
+                  <div>
                     <label
-                      for="name"
-                      class="block mb-2 text-sm text-center text-amber-900 font-medium bg-amber-200 rounded-[5px] py-1"
-                      >Fanni tanlang</label
+                      for="time"
+                      class="block mb-2 text-sm"
+                      :class="navbar.userNav ? 'text-white' : 'text-black'"
+                      >Test topshirish vaqti</label
                     >
-                    <select
-                      v-model="edit.subject_id"
-                      id="name"
-                      class="bg-gray-50 text-black cursor-pointer border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                    <input
+                      v-model="edit.time"
+                      type="number"
+                      name="time"
+                      id="time"
+                      class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                      placeholder="60"
                       required
-                    >
-                      <option
-                        v-for="i in store.subjects"
-                        :key="i.id"
-                        :value="i.id"
-                      >
-                        {{ i.title }}
-                      </option>
-                    </select>
+                    />
                   </div>
-                  <div class="flex gap-5">
-                    <div class="w-1/2">
-                      <label
-                        for="time"
-                        class="block mb-2 text-sm text-amber-900 text-center font-medium bg-amber-200 py-1 rounded-[5px]"
-                        >Savollarning umumiy soni</label
-                      >
-                      <input
-                        type="number"
-                        name="time"
-                        max="600"
-                        min="1"
-                        v-model="edit.test_time"
-                        class="bg-gray-50 border float-left w-full border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block p-2.5"
-                        placeholder="60"
-                        required
-                      />
-                    </div>
-                    <div class="w-1/2">
-                      <label
-                        for="time"
-                        class="block mb-2 text-sm text-amber-900 text-center font-medium bg-amber-200 py-1 rounded-[5px]"
-                        >Savollarning umumiy vaqti</label
-                      >
-                      <input
-                        v-model="edit.test_count"
-                        type="number"
-                        name="time"
-                        max="600"
-                        min="1"
-                        class="bg-gray-50 border float-left w-1/2 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block p-2.5"
-                        placeholder="60"
-                        required
-                      />
-                      <span class="float-left pt-1 pl-5 text-xl">daqiqa</span>
-                    </div>
-                  </div>
+                  <span class="text-xl text-bold mt-5">daqiqa</span>
                 </div>
               </div>
-            </div>
-            <div
-              class="w-full flex items-center justify-between border-t pt-5 mt-5"
-            >
-              <button
-                type="button"
-                @click="edit.toggle = false"
-                class="text-gray-500 border inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-              >
-                Bekor qilish
-              </button>
-              <button
-                type="submit"
-                class="btnAdd text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-              >
-                O'zgartirish
-              </button>
+              <div class="flex items-center justify-between border-t pt-5 mt-5">
+                <button
+                  @click="cancelFunc1"
+                  type="button"
+                  class="border cursor-pointer inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                >
+                  Bekor qilish
+                </button>
+                <button
+                  type="submit"
+                  class="btnAdd cursor-pointer text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                >
+                  Qo'shish
+                </button>
+              </div>
             </div>
           </form>
         </div>
@@ -341,7 +347,7 @@
 
     <!-- ----------------------------------------- EMPLYE TABLE ------------------------------------------------- -->
 
-    <section class="md:py-4" :class="{ 'text-white': navbar.userNav }">
+    <section class="py-4" :class="{ 'text-white': navbar.userNav }">
       <!------------------------------------------- Placeholder ------------------------------------------->
       <div v-show="!store.PageProduct">
         <Placeholder2 />
@@ -364,9 +370,6 @@
               class="lg:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3"
             >
               <button
-                v-show="
-                  !(store.guard == 'o\'quvchi' || store.guard == 'o\'qituvchi')
-                "
                 @click="modal = true"
                 id=""
                 type="button"
@@ -420,11 +423,11 @@
                     v-for="(i, index) in store.searchList"
                     :key="index"
                     @click="
-                      store.filter = i.subject?.title;
+                      store.filter = i.subject?.name;
                       searchFunc();
                     "
                   >
-                    {{ i.subject?.title }}
+                    {{ i.subject?.name }}
                   </li>
                 </ul>
               </div>
@@ -440,18 +443,29 @@
           <div class="overflow-x-auto">
             <table class="w-full text-sm text-left">
               <thead
-                class="text-xs rounded-lg uppercase"
+                class="btnAdd text-xs rounded-lg uppercase text-white"
                 :class="navbar.userNav ? 'bg-gray-700' : 'bg-gray-50'"
               >
                 <tr>
-                  <th scope="col" class="py-3 pl-8">Fan nomi</th>
-                  <th scope="col" class="text-center py-3">Savollar soni</th>
-                  <th scope="col" class="text-center py-3">Test vaqti</th>
-                  <th scope="col" class="text-center py-3">Savollar</th>
+                  <th
+                    scope="col"
+                    class="text-center py-3 pl-8 whitespace-nowrap"
+                  >
+                    Fan nomi
+                  </th>
+                  <th scope="col" class="text-center py-3 whitespace-nowrap">
+                    Savollar soni
+                  </th>
+                  <th scope="col" class="text-center py-3 whitespace-nowrap">
+                    Test vaqti
+                  </th>
+                  <th scope="col" class="text-center py-3 whitespace-nowrap">
+                    Savollar
+                  </th>
                   <th scope="col"></th>
                 </tr>
               </thead>
-              <tbody v-if="!(store.guard == 'o\'quvchi')" v-show="!store.error">
+              <tbody>
                 <tr
                   class="border-b"
                   :class="
@@ -463,15 +477,23 @@
                 >
                   <th
                     scope="row"
-                    class="px-8 py-3 font-medium whitespace-nowrap"
+                    class="text-center px-8 py-3 font-medium whitespace-nowrap"
                   >
-                    {{ i.subject?.title }}
+                    {{ i.subject?.name }}
                   </th>
-                  <td class="text-center font-medium px-8 py-2">
-                    {{ i.test_time }}
+                  <td
+                    class="text-center font-medium whitespace-nowrap text-blue-800 px-8 py-4"
+                  >
+                    <p class="bg-blue-100 rounded-[5px] p-1">
+                      {{ i.count }}
+                    </p>
                   </td>
-                  <td class="text-center font-medium px-6 py-2">
-                    {{ i.test_count }}
+                  <td
+                    class="text-center font-medium whitespace-nowrap text-red-800 px-8 py-4"
+                  >
+                    <p class="bg-red-100 rounded-[5px] p-1">
+                      {{ i.time }} daqiqa
+                    </p>
                   </td>
                   <td class="text-center font-medium px-8 py-3">
                     <button
@@ -481,12 +503,9 @@
                       Qo'shish
                     </button>
                   </td>
-                  <td
-                    v-show="!(store.guard == 'o\'qituvchi')"
-                    class="text-center whitespace-nowrap font-medium pr-5"
-                  >
+                  <td class="text-center whitespace-nowrap font-medium pr-5">
                     <i
-                      @click="getOneProduct(i.id, 'edit')"
+                      @click="getOneProduct(i.id)"
                       class="bx bxs-pencil bg-blue-300 text-blue-600 rounded-lg p-2 mr-3 cursor-pointer focus:ring-2"
                     >
                     </i>
@@ -508,15 +527,23 @@
                 >
                   <th
                     scope="row"
-                    class="px-8 py-3 font-medium whitespace-nowrap"
+                    class="text-center px-8 py-3 font-medium whitespace-nowrap"
                   >
-                    {{ i.subject?.title }}
+                    {{ i.subject?.name }}
                   </th>
-                  <td class="text-center font-medium px-8 py-2">
-                    {{ i.test_count }}
+                  <td
+                    class="text-center font-medium whitespace-nowrap text-blue-800 px-8 py-4"
+                  >
+                    <p class="bg-blue-100 rounded-[5px] p-1">
+                      {{ i.count }}
+                    </p>
                   </td>
-                  <td class="text-center font-medium px-6 py-2">
-                    {{ i.test_time }}
+                  <td
+                    class="text-center font-medium whitespace-nowrap text-red-800 px-8 py-4"
+                  >
+                    <p class="bg-red-100 rounded-[5px] p-1">
+                      {{ i.time }} daqiqa
+                    </p>
                   </td>
                   <td class="text-center font-medium px-8 py-3">
                     <button
@@ -526,12 +553,9 @@
                       Qo'shish
                     </button>
                   </td>
-                  <td
-                    v-show="!(store.guard == 'o\'qituvchi')"
-                    class="text-center whitespace-nowrap font-medium pr-5"
-                  >
+                  <td class="text-center whitespace-nowrap font-medium pr-5">
                     <i
-                      @click="getOneProduct(i.id, 'edit')"
+                      @click="getOneProduct(i.id)"
                       class="bx bxs-pencil bg-blue-300 text-blue-600 rounded-lg p-2 mr-3 cursor-pointer focus:ring-2"
                     >
                     </i>
@@ -545,65 +569,74 @@
               </tbody>
             </table>
             <div
-              v-if="!(store.guard == 'o\'quvchi')"
               v-show="store.PageProduct && store.error"
               class="w-full max-w-screen text-center p-20 text-2xl font-medium"
             >
               <h1>Testlar ro'yhati bo'sh</h1>
             </div>
-            <div
-              v-show="store.guard == 'o\'quvchi'"
-              class="w-full max-w-screen text-center p-20 text-2xl font-medium"
-            >
-              <h1>Siz testlarni ko'rish huququga ega emassiz!</h1>
-            </div>
           </div>
           <nav
             v-if="!store.searchList.length"
-            class="flex flex-row justify-between items-center md:items-center space-y-3 md:space-y-0 p-4"
+            class="flex flex-row justify-between items-center space-y-0 p-4"
             aria-label="Table navigation"
           >
-            <ul class="inline-flex items-stretch -space-x-px">
+            <!-- Oldingi sahifa tugmasi -->
+            <ul class="flex items-center">
               <li
-                :class="{
-                  'pointer-events-none opacity-50': store.page[0] == 1,
-                }"
+                :class="[
+                  store.pagination === 1
+                    ? 'pointer-events-none opacity-50'
+                    : '',
+                  'flex font-bold text-black border-2 bg-white hover:bg-gray-300 items-center justify-center text-sm sm:py-2 sm:px-6 px-3 rounded-lg leading-tight cursor-pointer transition duration-200 ease-in-out',
+                ]"
                 @click="
-                  store.pagination -= 1;
-                  getProduct(store.pagination);
+                  if (store.pagination > 1) {
+                    store.pagination -= 1;
+                    getProduct(store.pagination);
+                  }
                 "
-                href="#"
-                class="flex font-bold text-black border-2 bg-white hover:bg-gray-300 items-center justify-center text-sm py-2 sm:mt-0 -mt-2 px-6 rounded-lg leading-tight"
               >
-                Oldingi
+                <i
+                  class="md:hidden font-bold text-black text-2xl bx bx-chevron-left"
+                ></i>
+                <span class="hidden md:block">Oldingi</span>
               </li>
             </ul>
-            <span class="text-sm font-normal">
+
+            <!-- Sahifa raqami -->
+            <span class="text-sm font-normal text-center">
               Sahifa
-              <span class="font-semibold"
-                ><span>{{ store.page[0] * 10 - 9 }}</span> -
-                <span v-if="store.page[0] * 10 < store.page[1]">{{
-                  store.page[0] * 10
+              <span class="font-semibold">
+                <span>{{ store.page[0] * 15 - 14 }}</span> -
+                <span v-if="store.page[0] * 15 < store.page[1]">{{
+                  store.page[0] * 15
                 }}</span
-                ><span v-else>{{ store.page[1] }}</span></span
-              >
+                ><span v-else>{{ store.page[1] }}</span>
+              </span>
               dan
               <span class="font-semibold">{{ store.page[1] }}</span>
             </span>
-            <ul class="inline-flex items-stretch -space-x-px">
+
+            <!-- Keyingi sahifa tugmasi -->
+            <ul class="flex items-center">
               <li
-                :class="{
-                  'pointer-events-none opacity-50':
-                    store.page[0] * 10 >= store.page[1],
-                }"
+                :class="[
+                  store.page[0] * 15 >= store.page[1]
+                    ? 'pointer-events-none opacity-50'
+                    : '',
+                  'flex font-bold text-black border-2 bg-white hover:bg-gray-300 items-center justify-center text-sm sm:py-2 sm:px-6 px-3 rounded-lg leading-tight cursor-pointer transition duration-200 ease-in-out',
+                ]"
                 @click="
-                  store.pagination += 1;
-                  getProduct(store.pagination);
+                  if (store.page[0] * 15 < store.page[1]) {
+                    store.pagination += 1;
+                    getProduct(store.pagination);
+                  }
                 "
-                href="#"
-                class="flex font-bold text-black border-2 bg-white hover:bg-gray-300 items-center justify-center text-sm py-2 sm:mt-0 -mt-2 px-6 rounded-lg leading-tight"
               >
-                Keyingi
+                <span class="hidden md:block">Keyingi</span>
+                <i
+                  class="md:hidden font-bold text-black text-2xl bx bx-chevron-right"
+                ></i>
               </li>
             </ul>
           </nav>
@@ -646,7 +679,7 @@ const store = reactive({
 function searchFunc() {
   store.searchList = [];
   for (let i of store.allProducts) {
-    if (i.subject?.title.toLowerCase().includes(store.filter.toLowerCase())) {
+    if (i.subject?.name.toLowerCase().includes(store.filter.toLowerCase())) {
       store.searchList.push(i);
     }
   }
@@ -662,9 +695,18 @@ function enterSlug(id) {
 }
 
 function cancelFunc1() {
-  edit.name = "";
-  edit.description = "";
   edit.toggle = false;
+  edit.subject_id = "";
+  edit.count = "";
+  edit.time = "";
+  edit.id = "";
+}
+
+function cancelFunc2() {
+  modal.value = false;
+  form.subject_id = "";
+  form.count = "";
+  form.time = "";
 }
 
 function deleteFunc(id) {
@@ -674,8 +716,8 @@ function deleteFunc(id) {
 
 // ----------------------------------- forms -----------------------------------
 const form = reactive({
-  test_count: "",
-  test_time: "",
+  count: "",
+  time: "",
   subject_id: "",
   question: "",
   a: "",
@@ -688,8 +730,9 @@ const form = reactive({
 });
 
 const edit = reactive({
-  name: "",
-  description: "",
+  subject_id: "",
+  count: "",
+  time: "",
   id: "",
   toggle: false,
 });
@@ -702,31 +745,32 @@ const remove = reactive({
 // ----------------------------------- axios --------------------------------
 const getAllProduct = () => {
   axios
-    .get("/test-group", {
+    .get("/test", {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
     })
     .then((res) => {
-      console.log(res.data);
       store.allProducts = res.data;
       store.error = false;
     })
     .catch((error) => {
       store.error = true;
       store.allProducts = error.response.data.message;
+      notification.warning(
+        "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
+      );
     });
 };
 
 const getProduct = (page) => {
   axios
-    .get(`/test-group/page?page=${page}`, {
+    .get(`/test/page?page=${page}`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
     })
     .then((res) => {
-      console.log(res.data);
       store.PageProduct = res.data?.data?.records;
       const pagination = res.data?.data?.pagination;
       store.page = [];
@@ -734,53 +778,56 @@ const getProduct = (page) => {
       store.error = false;
     })
     .catch((error) => {
-      store.PageProduct = error.response.data.message;
-      store.error = true;
+      notification.warning(
+        "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
+      );
     });
 };
 
 function createProduct() {
   const data = {
-    test_count: form.test_count,
-    test_time: form.test_time,
     subject_id: form.subject_id,
+    count: form.count,
+    time: form.time,
   };
 
   axios
-    .post("/test-group", data, {
+    .post("/test", data, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
     })
     .then((res) => {
-      notification.success(res.data.message);
+      notification.success("Test yaratildi");
       form.test_group_id = res.data.id;
-      modal.value = false;
-      getProduct();
-      location.reload()
+      cancelFunc2();
+      getProduct(1);
     })
     .catch((error) => {
-      notification.warning(error.response.data.message);
+      notification.warning(
+        "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
+      );
     });
 }
 
 const getOneProduct = (id) => {
   axios
-    .get(`/test-group/${id}`, {
+    .get(`/test/${id}`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
     })
     .then((res) => {
-      edit.test_count = res.data.test_count;
-      edit.test_time = res.data.test_time;
+      edit.count = res.data.count;
+      edit.time = res.data.time;
       edit.subject_id = res.data.subject_id;
       edit.id = id;
       edit.toggle = true;
     })
     .catch((error) => {
-      notification.warning(error.response.data.message);
-      console.log("error", error);
+      notification.warning(
+        "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
+      );
     });
 };
 
@@ -795,80 +842,52 @@ const getSubject = () => {
       store.subjects = res.data || [{ title: "Fan yaratilmagan" }];
     })
     .catch((error) => {
-      console.log("error", error);
+      notification.warning(
+        "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
+      );
     });
 };
 
 const editProduct = () => {
   const data = {
-    test_count: edit.test_count,
-    test_time: edit.test_time,
+    count: edit.count,
+    time: edit.time,
     subject_id: edit.subject_id,
   };
   axios
-    .patch(`/test-group/${edit.id}`, data, {
+    .put(`/test/${edit.id}`, data, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
     })
     .then((res) => {
-      notification.success(res.data.message);
-      getProduct();
-      edit.toggle = false;
+      notification.success("Test tahrirlandi");
+      getProduct(store.pagination);
+      cancelFunc1();
     })
     .catch((error) => {
-      notification.warning(error.response.data.message);
-      console.log("error", error);
+      notification.warning(
+        "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
+      );
     });
 };
 
 const deleteProduct = () => {
   axios
-    .delete(`/test-group/${remove.id}`, {
+    .delete(`/test/${remove.id}`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
     })
     .then((res) => {
-      notification.success(res.data.message);
-      getProduct();
+      notification.success("Test o'chirildi");
+      getProduct(store.pagination);
       remove.toggle = false;
-      location.reload()
     })
     .catch((error) => {
-      notification.warning(error.response.data.message);
-      console.log(error.response.data.message);
-      console.log("error", error);
-    });
-};
-
-const getGuard = () => {
-  axios
-    .get("/staff", {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    })
-    .then((res) => {
-      axios
-        .delete("/staff/1", {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        })
-        .then((res) => {})
-        .catch((error) => {
-          if (error.response.data.message == "Admin huquqi sizda yo'q!") {
-            store.guard = "o'qituvchi";
-          }
-        });
-    })
-    .catch((error) => {
-      if (error.response.data.message == "Admin huquqi sizda yo'q!") {
-        store.guard = "o'quvchi";
-      }
-      store.error = true;
-      store.allProducts = error.response.data.message;
+      notification.warning(
+        "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
+      );
     });
 };
 
@@ -876,32 +895,19 @@ onMounted(() => {
   getProduct(1);
   getAllProduct();
   getSubject();
-  getGuard();
 });
 </script>
 
 <style lang="scss" scoped>
 .btnAdd {
-  background-image: linear-gradient(
-    to right,
-    white -450%,
-    #4141eb
-  );
+  background-image: linear-gradient(to right, white -450%, #4141eb);
 }
 
 .btnKirish {
-  background-image: linear-gradient(
-    to right,
-    white -450%,
-    #4141eb
-  );
+  background-image: linear-gradient(to right, white -450%, #4141eb);
 }
 
 .btnOrqaga {
-  background-image: linear-gradient(
-    to right,
-    white -450%,
-    #4141eb
-  );
+  background-image: linear-gradient(to right, white -450%, #4141eb);
 }
 </style>

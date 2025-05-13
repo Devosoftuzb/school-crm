@@ -27,9 +27,8 @@ const navbar = useNavStore();
 
 <style lang="scss">
 body {
-    font-family: 'Poppins', sans-serif !important;
+  font-family: "Poppins", sans-serif !important;
 }
-
 
 ::-webkit-scrollbar {
   width: 10px;

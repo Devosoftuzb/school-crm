@@ -3,7 +3,7 @@ import { defineStore } from 'pinia'
 import { h } from "vue";
 import { ElNotification } from "element-plus";
 
-export const useNotificationStore = defineStore('nptification', () => {
+export const useNotificationStore = defineStore('notification', () => {
     const success = (message) => {
         if (typeof (message) === 'string') {
             message = [message]
@@ -29,6 +29,7 @@ export const useNotificationStore = defineStore('nptification', () => {
                 ElNotification({
                     title: "Warning",
                     message: h("b", { style: "color: #e6a23c;" }, i),
+                    customClass: "background: black;",
                     type: "warning",
                 });
             }, 1)

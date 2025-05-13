@@ -683,9 +683,12 @@ const editProduct = async () => {
 
 const deleteProduct = async () => {
   try {
-    await axios.delete(`/subject/${remove.id}`, {
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-    });
+    await axios.delete(
+      `/subject/${localStorage.getItem("school_id")}/${remove.id}`,
+      {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      }
+    );
     notification.success("Fan o'chirildi");
     getProduct(store.pagination);
     getAllProduct();

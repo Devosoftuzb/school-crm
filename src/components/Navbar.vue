@@ -6,7 +6,7 @@
       'bg-white text-black': !navbar.userNav,
     }"
   >
-    <!-- <marquee class="text-white py-1 font-bold btnAdd"
+    <!-- <marquee class="text-white py-1 font-bold btnAdd absolute"
       >Saytda texnik ishlar olib borilmoqda</marquee
     > -->
     <div class="flex items-center justify-between px-3 py-3 lg:px-5 lg:pl-3">
