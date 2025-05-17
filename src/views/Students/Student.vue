@@ -266,11 +266,11 @@
               v-for="i in form.group"
               :key="i.id"
               @click="
-                remove.name = i.group_name;
+                remove.name = i.group.name;
                 removeGroups(i.id);
               "
               class="bg-gray-300 rounded px-3 py-1"
-              >{{ i.group_name }}
+              >{{ i.group.name }}
               <i
                 class="bx bx-x cursor-pointer hover:bg-gray-500 rounded font-bold p-1"
               ></i
@@ -895,7 +895,7 @@
                     >
                       <p>
                         <span v-for="id in i.group" :key="id.id"
-                          >{{ id.group_name }},
+                          >{{ id.group.name }},
                         </span>
                       </p>
                       <i
@@ -1171,38 +1171,11 @@ const getAllProduct = async () => {
     const data = await fetchData(
       `/student/${localStorage.getItem("school_id")}/find`
     );
-    const groupIds = data.flatMap(
-      (record) => record.group?.map((group) => group.group_id) || []
-    );
-    const uniqueGroupIds = [...new Set(groupIds)];
-
-    const groupPromises = uniqueGroupIds.map((groupId) =>
-      axios.get(
-        `/group/${localStorage.getItem("school_id")}/${groupId}/group`,
-        {
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-        }
-      )
-    );
-
-    const groupResponses = await Promise.all(groupPromises);
-
-    const groups = groupResponses.reduce((acc, response) => {
-      const groupData = response.data;
-      if (groupData) {
-        acc[groupData.id] = groupData.name;
-      }
-      return acc;
-    }, {});
 
     store.allProducts = data.map((record) => {
       if (record.group) {
         record.group.forEach((group) => {
-          if (groups[group.group_id] !== undefined) {
-            group.group_name = groups[group.group_id];
-          } else {
-            console.log(`Guruh topilmadi, group_id: ${group.group_id}`);
-          }
+          group.group_name = group.Group?.name || "Noma'lum";
         });
       }
       return record;
@@ -1219,38 +1192,10 @@ const getProduct = async (page) => {
       `/student/${localStorage.getItem("school_id")}/page?page=${page}`
     );
 
-    const groupIds = data?.data?.records.flatMap(
-      (record) => record.group?.map((group) => group.group_id) || []
-    );
-    const uniqueGroupIds = [...new Set(groupIds)];
-
-    const groupPromises = uniqueGroupIds.map((groupId) =>
-      axios.get(
-        `/group/${localStorage.getItem("school_id")}/${groupId}/group`,
-        {
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-        }
-      )
-    );
-
-    const groupResponses = await Promise.all(groupPromises);
-
-    const groups = groupResponses.reduce((acc, response) => {
-      const groupData = response.data;
-      if (groupData) {
-        acc[groupData.id] = groupData.name;
-      }
-      return acc;
-    }, {});
-
     store.PageProduct = data?.data?.records.map((record) => {
       if (record.group) {
         record.group.forEach((group) => {
-          if (groups[group.group_id] !== undefined) {
-            group.group_name = groups[group.group_id];
-          } else {
-            console.log(`Guruh topilmadi, group_id: ${group.group_id}`);
-          }
+          group.group_name = group.group?.name || "Noma'lum";
         });
       }
       return record;
@@ -1283,6 +1228,8 @@ const getOneProduct = async (id, modalType) => {
 
     Object.assign(edit, data, { id });
     form.group = data.group;
+    console.log(form.group);
+
     if (modalType === "edit") {
       edit.toggle = true;
     } else if (modalType === "group") {

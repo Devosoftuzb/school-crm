@@ -244,7 +244,7 @@
                   >Fanni tanlang</label
                 >
                 <select
-                  v-model="edit.name"
+                  v-model="edit.subjectName"
                   id="subject_name"
                   class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                   required
@@ -335,11 +335,11 @@
               v-for="i in edit.group"
               :key="i.id"
               @click="
-                remove.name = i.group_name;
+                remove.name = i.group.name;
                 removeGroups(i.id);
               "
               class="bg-gray-300 rounded px-3 py-1"
-              >{{ i.group_name }}
+              >{{ i.group.name }}
               <i
                 class="bx bx-x cursor-pointer hover:bg-white0 rounded font-bold p-1"
               ></i
@@ -358,7 +358,7 @@
                   >Guruhni tanlang</label
                 >
                 <select
-                  v-model="edit.name"
+                  v-model="edit.groupName"
                   id="group_name"
                   class="bg-white border border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                   required
@@ -462,7 +462,7 @@
                   required
                 />
               </div>
-              <div>
+              <!-- <div>
                 <label
                   for="edit_password"
                   class="block mb-2 text-sm"
@@ -477,8 +477,8 @@
                   class="bg-white placeholder-black border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                   placeholder="*********"
                 />
-              </div>
-              <div class="sm:w-[205%]">
+              </div> -->
+              <div class="">
                 <label
                   for="edit_name"
                   class="block mb-2 text-sm"
@@ -495,7 +495,6 @@
                   required
                 />
               </div>
-              <div></div>
               <div>
                 <label
                   for="edit_phone"
@@ -1084,6 +1083,8 @@ const edit = reactive({
   subject: "",
   group: "",
   id: "",
+  subjectName: "",
+  groupName: "",
 });
 
 const remove = reactive({
@@ -1203,6 +1204,36 @@ const getAllProduct = async () => {
   }
 };
 
+const getOneProduct = async (id, modalType) => {
+  try {
+    const res = await axios.get(
+      `/employee/${localStorage.getItem("school_id")}/${id}`,
+      {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      }
+    );
+
+    edit.id = res.data.id;
+    if (modalType === "edit") {
+      edit.full_name = res.data.full_name;
+      edit.phone_number = res.data.phone_number;
+      edit.login = res.data.login;
+      edit.role = res.data.role;
+      store.editModal = true;
+    } else if (modalType === "group") {
+      edit.group = res.data.group;
+      store.groupModal = true;
+    } else if (modalType === "subject") {
+      edit.subject = res.data.subject;
+      store.subjectModal = true;
+    }
+  } catch {
+    notification.warning(
+      "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
+    );
+  }
+};
+
 const getProduct = async (page) => {
   try {
     const res = await axios.get(
@@ -1212,46 +1243,28 @@ const getProduct = async (page) => {
       }
     );
 
-    const groupIds = res.data?.data?.records.flatMap(
-      (record) => record.group?.map((group) => group.group_id) || []
-    );
-    const uniqueGroupIds = [...new Set(groupIds)];
+    // Ma'lumotlar
+    const records = res.data?.data?.records || [];
 
-    const groupPromises = uniqueGroupIds.map((groupId) =>
-      axios.get(
-        `/group/${localStorage.getItem("school_id")}/${groupId}/group`,
-        {
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-        }
-      )
-    );
-    const groupResponses = await Promise.all(groupPromises);
-    const groups = groupResponses.reduce((acc, response) => {
-      const groupData = response.data;
-
-      if (groupData) {
-        acc[groupData.id] = groupData.name;
-      }
-      return acc;
-    }, {});
-
-    store.PageProduct = res.data?.data?.records
+    // Guruh nomini to'g'ridan-to'g'ri olish
+    const processedRecords = records
       .filter(
         (record) =>
           localStorage.getItem("role") === "_ow_sch_" ||
           record.role !== "administrator"
       )
       .map((record) => {
-        if (record.group) {
+        if (record.group && Array.isArray(record.group)) {
           record.group.forEach((group) => {
-            if (groups[group.group_id]) {
-              group.group_name = groups[group.group_id];
-            }
+            group.group_name = group.group?.name || "Noma'lum guruh";
           });
         }
+
         return record;
       })
       .sort((a, b) => b.id - a.id);
+
+    store.PageProduct = processedRecords;
 
     const pagination = res.data?.data?.pagination;
     store.page = [pagination.currentPage, pagination.total_count];
@@ -1276,6 +1289,8 @@ const editProduct = async () => {
     await getProduct(store.pagination);
     cancelFunc1();
   } catch (error) {
+    console.log(error);
+    
     notification.warning(
       "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
     );

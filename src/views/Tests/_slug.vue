@@ -86,9 +86,7 @@
             <div
               :class="[
                 'gap-x-5',
-                form.variants.length > 1
-                  ? 'grid grid-cols-2'
-                  : 'flex flex-col',
+                form.variants.length > 1 ? 'grid grid-cols-2' : 'flex flex-col',
               ]"
             >
               <div
@@ -264,9 +262,7 @@
             <div
               :class="[
                 'gap-x-5',
-                edit.variants.length > 1
-                  ? 'grid grid-cols-2'
-                  : 'flex flex-col',
+                edit.variants.length > 1 ? 'grid grid-cols-2' : 'flex flex-col',
               ]"
             >
               <div
@@ -574,7 +570,7 @@
                 </div>
                 <div class="grid sm:grid-cols-2 gap-5">
                   <div
-                    v-for="(ans, ansIndex) in i.answers"
+                    v-for="(ans, ansIndex) in i.option"
                     :key="ansIndex"
                     class="w-full text-justify text-black p-2.5 sm:pl-10 pl-5 text-sm rounded-lg"
                     :class="
@@ -731,45 +727,18 @@ const getProduct = async () => {
       },
     });
 
-    const questions = res.data.questions;
-
-    if (!questions.length) {
+    if (!res.data.questions.length) {
       store.allProducts = "Savollar topilmadi";
       store.error = true;
       return;
     }
 
-    const fullQuestions = [];
-
-    for (let q of questions) {
-      const val = await axios.get(`/questions/${q.id}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-
-      const options = val.data.option;
-
-      fullQuestions.push({
-        ...q,
-        answers: options,
-      });
-    }
-
-    store.allProducts = {
-      ...res.data,
-      questions: fullQuestions,
-    };
-
-    console.log(store.allProducts);
-    
-
+    store.allProducts = res.data;
     store.error = false;
   } catch (error) {
     notification.warning(
       "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
     );
-    store.allProducts = error.response?.data?.message || "Xatolik yuz berdi";
     store.error = true;
     console.log("error", error);
   }
