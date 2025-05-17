@@ -66,6 +66,30 @@
 
               <div class="">
                 <label
+                  for="subject"
+                  class="block text-sm mb-2"
+                  :class="navbar.userNav ? 'text-white' : 'text-black'"
+                  >Matn tanlang</label
+                >
+                <select
+                  v-model="form.text_id"
+                  id="subject"
+                  class="bg-gray-50 border border-gray-300 text-sm z-10 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2"
+                >
+                  <option value="" disabled selected>Matn tanlang</option>
+                  <option
+                    v-for="i in store.textData"
+                    :key="i.id"
+                    :value="i.id"
+                    :title="i.text"
+                  >
+                    {{ i.title }}
+                  </option>
+                </select>
+              </div>
+
+              <div class="">
+                <label
                   for="question"
                   class="block mb-2 text-sm"
                   :class="navbar.userNav ? 'text-white' : 'text-black'"
@@ -174,6 +198,114 @@
     </div>
 
     <!-- ----------------------------------------- EMPLYE TABLE ------------------------------------------------- -->
+
+    <!-- ----------------------------------------- Text Modal --------------------------------------------------- -->
+
+    <div
+      v-show="store.textModal"
+      :class="
+        store.textModal
+          ? 'absolute overflow-y-auto flex bg-[rgba(0,0,0,0.5)] overflow-x-hidden z-50 justify-center items-center w-full inset-0 h-full'
+          : 'hidden'
+      "
+    >
+      <div class="relative p-4 w-full max-w-lg h-auto">
+        <!-- Modal content -->
+        <div
+          class="relative p-4 rounded-lg shadow sm:p-5"
+          :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
+        >
+          <!-- Modal header -->
+          <div
+            class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5"
+          >
+            <h3
+              class="text-lg"
+              :class="navbar.userNav ? 'text-white' : 'text-black'"
+            >
+              Yangi matn qo'shish
+            </h3>
+            <button
+              @click="store.textModal = false"
+              type="button"
+              class="bg-transparent hover:bg-gray-200 hover rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+              :class="{ 'text-white': navbar.userNav }"
+            >
+              <svg
+                aria-hidden="true"
+                class="w-5 h-5"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                  clip-rule="evenodd"
+                ></path>
+              </svg>
+            </button>
+          </div>
+          <!-- Modal body -->
+          <form
+            @submit.prevent="createText"
+            :class="{ darkForm: navbar.userNav }"
+          >
+            <div class="grid font-medium gap-4 mb-4 grid-cols-1">
+              <div class="">
+                <label for="title" class="block mb-2 text-sm"
+                  >Matn mavzusiz</label
+                >
+                <input
+                  v-model="store.textTitle"
+                  type="text"
+                  name="title"
+                  id="title"
+                  class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                  placeholder="Matn mavzusini kiriting.."
+                  required
+                />
+              </div>
+              <div class="">
+                <label
+                  for="question"
+                  class="block mb-2 text-sm"
+                  :class="navbar.userNav ? 'text-white' : 'text-black'"
+                  >Matn</label
+                >
+                <textarea
+                  id="question"
+                  v-model="store.text"
+                  rows="5"
+                  class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                  placeholder="Matnni yozing.."
+                  required
+                ></textarea>
+              </div>
+            </div>
+            <div
+              class="w-full flex items-center justify-between border-t pt-5 mt-5"
+            >
+              <button
+                @click="store.textModal"
+                type="button"
+                class="border inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+              >
+                Bekor qilish
+              </button>
+              <button
+                type="submit"
+                class="btnAdd text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+              >
+                Qo'shish
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- ----------------------------------------- Text Modal end ----------------------------------------------- -->
 
     <!-- ----------------------------------------- Edit MODAL -------------------------------------------------------- -->
 
@@ -469,6 +601,16 @@
                 <span class="sm:block hidden">Savol qo'shish</span>
                 <i class="sm:hidden block bx bxs-user-plus text-lg"></i>
               </button>
+
+              <button
+                @click="store.textModal = true"
+                id=""
+                type="button"
+                class="btnAdd flex items-center max-w-fit justify-center whitespace-nowrap text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 sm:py-2"
+              >
+                <span class="sm:block hidden">Matn qo'shish</span>
+                <i class="sm:hidden block bx bxs-user-plus text-lg"></i>
+              </button>
             </div>
           </div>
 
@@ -566,6 +708,10 @@
                       >
                     </div> -->
                   </div>
+                  <div v-if="i.text" class="text-justify flex flex-col px-5 mb-10">
+                    <h3 class="font-bold mb-2">{{ i.text.title }}</h3>
+                    <p class="whitespace-pre-line">{{ i.text.text }}</p>
+                  </div>
                   <h3 class="text-justify flex px-5">{{ i.question }}</h3>
                 </div>
                 <div class="grid sm:grid-cols-2 gap-5">
@@ -639,6 +785,10 @@ const store = reactive({
   plus: "",
   guard: "",
   trueAnswers: [],
+  textModal: false,
+  textData: "",
+  text: "",
+  textTitle: "",
 });
 
 function enterSlug(name) {
@@ -675,6 +825,7 @@ const form = reactive({
   true_answer: null,
   test_id: "",
   question_id: "",
+  text_id: "",
 });
 
 function addVariant() {
@@ -732,7 +883,6 @@ const getProduct = async () => {
       store.error = true;
       return;
     }
-
     store.allProducts = res.data;
     store.error = false;
   } catch (error) {
@@ -770,6 +920,23 @@ const getOneProduct = (id) => {
     });
 };
 
+const getText = () => {
+  axios
+    .get("/question-text", {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    })
+    .then((res) => {
+      store.textData = res.data;
+    })
+    .catch((error) => {
+      notification.warning(
+        "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
+      );
+    });
+};
+
 const createProduct = () => {
   if (!form.true_answer) {
     if (form.true_answer !== 0) {
@@ -778,8 +945,11 @@ const createProduct = () => {
     }
   }
 
+  console.log(form.text_id);
+
   const data = {
     test_id: Number(router.currentRoute?.value?.params?.name),
+    text_id: form.text_id,
     file: getImg.value,
     question: form.question,
   };
@@ -827,6 +997,24 @@ const createProduct = () => {
       );
       console.log("error", error);
     });
+};
+
+const createText = async () => {
+  try {
+    const data = {
+      title: store.textTitle,
+      text: store.text,
+    };
+    await axios.post("/question-text", data, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    });
+    notification.success("Text qo'shildi");
+    getText();
+    store.text = "";
+    store.textModal = false;
+  } catch (error) {
+    notification.warning("Error creating product.");
+  }
 };
 
 const editProduct = () => {
@@ -949,6 +1137,7 @@ const deleteOption = (id) => {
 
 onMounted(() => {
   getProduct();
+  getText();
 });
 </script>
 

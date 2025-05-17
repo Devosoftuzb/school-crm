@@ -907,7 +907,7 @@
                     >
                       <p>
                         <span v-for="id in i.group" :key="id.id"
-                          >{{ id.group_name }},
+                          >{{ id.group.name }},
                         </span>
                       </p>
                       <i
@@ -1153,31 +1153,11 @@ const getAllProduct = async () => {
     const res = await axios.get(
       `/employee/${localStorage.getItem("school_id")}/find`,
       {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
       }
     );
-    const groupIds = res.data.flatMap(
-      (record) => record.group?.map((group) => group.group_id) || []
-    );
-    const uniqueGroupIds = [...new Set(groupIds)];
-
-    const groupPromises = uniqueGroupIds.map((groupId) =>
-      axios.get(
-        `/group/${localStorage.getItem("school_id")}/${groupId}/group`,
-        {
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-        }
-      )
-    );
-    const groupResponses = await Promise.all(groupPromises);
-    const groups = groupResponses.reduce((acc, response) => {
-      const groupData = response.data;
-
-      if (groupData) {
-        acc[groupData.id] = groupData.name;
-      }
-      return acc;
-    }, {});
 
     store.allProducts = res.data
       .filter(
@@ -1188,9 +1168,7 @@ const getAllProduct = async () => {
       .map((record) => {
         if (record.group) {
           record.group.forEach((group) => {
-            if (groups[group.group_id]) {
-              group.group_name = groups[group.group_id];
-            }
+            group.group_name = group.group?.name || "Noma'lum";
           });
         }
         return record;
@@ -1200,7 +1178,7 @@ const getAllProduct = async () => {
     store.error = false;
   } catch (error) {
     store.error = true;
-    store.allProducts = error.response.data.message;
+    store.allProducts = error.response?.data?.message || "Xatolik yuz berdi";
   }
 };
 
@@ -1290,7 +1268,7 @@ const editProduct = async () => {
     cancelFunc1();
   } catch (error) {
     console.log(error);
-    
+
     notification.warning(
       "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
     );

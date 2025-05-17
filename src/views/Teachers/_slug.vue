@@ -124,9 +124,7 @@
                     :class="navbar.userNav ? 'text-white' : 'text-[#1e293b]'"
                   >
                     <span class="w-full font-bold">Lavozim :</span>
-                    <span class="w-full">{{
-                      store.data.role
-                    }}</span>
+                    <span class="w-full">{{ store.data.role }}</span>
                   </h2>
 
                   <h2
@@ -409,8 +407,6 @@ const getEmployee = async () => {
 
   try {
     const employeeData = await fetchData(`/employee/${schoolId}/${id}`);
-    console.log(employeeData);
-    
     store.data = employeeData;
     date.value = store.data.createdAt.split("T")[0];
 
