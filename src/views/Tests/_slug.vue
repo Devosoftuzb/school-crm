@@ -1008,7 +1008,7 @@ const createText = async () => {
     await axios.post("/question-text", data, {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     });
-    notification.success("Text qo'shildi");
+    notification.success("Matn qo'shildi");
     getText();
     store.text = "";
     store.textModal = false;
