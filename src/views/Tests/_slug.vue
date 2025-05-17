@@ -374,6 +374,30 @@
 
               <div class="">
                 <label
+                  for="subject"
+                  class="block text-sm mb-2"
+                  :class="navbar.userNav ? 'text-white' : 'text-black'"
+                  >Matn tanlang</label
+                >
+                <select
+                  v-model="edit.text_id"
+                  id="subject"
+                  class="bg-gray-50 border border-gray-300 text-sm z-10 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2"
+                >
+                  <option value="" disabled selected>Matn tanlang</option>
+                  <option
+                    v-for="i in store.textData"
+                    :key="i.id"
+                    :value="i.id"
+                    :title="i.text"
+                  >
+                    {{ i.title }}
+                  </option>
+                </select>
+              </div>
+
+              <div class="">
+                <label
                   for="question"
                   class="block mb-2 text-sm"
                   :class="navbar.userNav ? 'text-white' : 'text-black'"
@@ -708,7 +732,10 @@
                       >
                     </div> -->
                   </div>
-                  <div v-if="i.text" class="text-justify flex flex-col px-5 mb-10">
+                  <div
+                    v-if="i.text"
+                    class="text-justify flex flex-col px-5 mb-10"
+                  >
                     <h3 class="font-bold mb-2">{{ i.text.title }}</h3>
                     <p class="whitespace-pre-line">{{ i.text.text }}</p>
                   </div>
@@ -851,6 +878,7 @@ const edit = reactive({
   question_id: "",
   id: "",
   toggle: false,
+  text_id: "",
 });
 
 const remove = reactive({
@@ -904,7 +932,7 @@ const getOneProduct = (id) => {
     .then((res) => {
       edit.id = id;
       edit.question = res.data.question;
-      edit.variants =
+      edit.variants = 
         res.data.option.map((opt) => ({
           text: opt.option,
           is_correct: opt.is_correct,
@@ -912,7 +940,7 @@ const getOneProduct = (id) => {
         })) || [];
 
       edit.true_answer = res.data.option.findIndex((opt) => opt.is_correct);
-
+      edit.text_id = res.data.text_id
       edit.toggle = true;
     })
     .catch((error) => {
@@ -1026,6 +1054,7 @@ const editProduct = () => {
   }
 
   const data = {
+    text_id: edit.text_id,
     test_id: +router.currentRoute?.value?.params?.name,
     file: getImg.value,
     question: edit.question,
