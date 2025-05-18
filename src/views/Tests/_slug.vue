@@ -48,7 +48,7 @@
           </div>
           <!-- Modal body -->
           <form @submit.prevent="createProduct">
-            <div class="grid gap-5 mb-5">
+            <div class="grid grid-cols-1 gap-5 mb-5">
               <div>
                 <label
                   class="block text-sm mb-2"
@@ -610,30 +610,28 @@
           :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
         >
           <div
-            class="w-full flex items-center lg:justify-start lg:pb-0 pb-4 justify-between gap-5"
+            class="w-full flex sm:flex-row flex-col items-center lg:justify-start lg:pb-0 pb-4 justify-between gap-5"
           >
             <h1 class="text-blue-700 font-bold text-lg">Savollar</h1>
             <div
-              class="lg:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3"
+              class="lg:w-auto w-full flex flex-row items-center justify-between gap-5 md:space-x-3"
             >
               <button
                 @click="modal = true"
                 id=""
                 type="button"
-                class="btnAdd flex items-center max-w-fit justify-center whitespace-nowrap text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 sm:py-2"
+                class="btnAdd flex items-center w-full justify-center whitespace-nowrap text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2"
               >
-                <span class="sm:block hidden">Savol qo'shish</span>
-                <i class="sm:hidden block bx bxs-user-plus text-lg"></i>
+                <span>Savol qo'shish</span>
               </button>
 
               <button
                 @click="store.textModal = true"
                 id=""
                 type="button"
-                class="btnAdd flex items-center max-w-fit justify-center whitespace-nowrap text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 sm:py-2"
+                class="btnAdd flex items-center w-full justify-center whitespace-nowrap text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2"
               >
-                <span class="sm:block hidden">Matn qo'shish</span>
-                <i class="sm:hidden block bx bxs-user-plus text-lg"></i>
+                <span>Matn qo'shish</span>
               </button>
             </div>
           </div>

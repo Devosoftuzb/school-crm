@@ -1276,7 +1276,7 @@ const editProduct = async () => {
 };
 
 const addSubjects = async () => {
-  const data = { employee_id: edit.id, subject_name: edit.name };
+  const data = { employee_id: edit.id, subject_name: edit.subjectName };
   try {
     const info = await axios.get(
       `/employee/${localStorage.getItem("school_id")}/${edit.id}/subject`,
@@ -1304,7 +1304,7 @@ const addSubjects = async () => {
 };
 
 const addGroups = async () => {
-  const data = { employee_id: edit.id, group_id: Number(edit.name) };
+  const data = { employee_id: edit.id, group_id: Number(edit.groupName) };
   try {
     const info = await axios.get(
       `/employee/${localStorage.getItem("school_id")}/${edit.id}/group`,

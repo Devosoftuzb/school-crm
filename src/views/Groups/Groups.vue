@@ -52,7 +52,7 @@
             @submit.prevent="createProduct"
             :class="{ darkForm: navbar.userNav }"
           >
-            <div class="grid sm:grid-cols-2 font-medium gap-4 mb-4">
+            <div class="grid grid-cols-2 font-medium gap-4 mb-4">
               <div>
                 <label
                   for="name"
@@ -87,7 +87,7 @@
                   required
                 />
               </div>
-              <div class="sm:w-[206%]">
+              <div class="w-[206%]">
                 <label
                   for="date"
                   class="block mb-2 text-sm"
@@ -140,7 +140,7 @@
                   required
                 />
               </div>
-              <div>
+              <div class="w-[206%]">
                 <label
                   for="subject"
                   class="block mb-2 text-sm"
@@ -163,10 +163,11 @@
                   </option>
                 </select>
               </div>
-              <div>
+              <div></div>
+              <div class="w-[206%]">
                 <label
                   for="teacher"
-                  class="block mb-2 text-sm"
+                  class="w-[206%] block mb-2 text-sm"
                   :class="navbar.userNav ? 'text-white' : 'text-black'"
                   >O'qituvchi tanlang</label
                 >
@@ -182,8 +183,9 @@
                   </option>
                 </select>
               </div>
+              <div></div>
               <div
-                class="sm:w-[206%] flex items-center justify-between border-t pt-5 mt-5"
+                class="w-[206%] flex items-center justify-between border-t pt-5 mt-5"
               >
                 <button
                   @click="cancelFunc"
@@ -261,7 +263,7 @@
             @submit.prevent="editProduct"
             :class="{ darkForm: navbar.userNav }"
           >
-            <div class="grid font-medium gap-4 mb-4 sm:grid-cols-2">
+            <div class="grid font-medium gap-4 mb-4 grid-cols-2">
               <div>
                 <label
                   for="name"
@@ -349,7 +351,7 @@
                   required
                 />
               </div>
-              <div>
+              <div class="w-[206%]">
                 <label
                   for="subject"
                   class="block mb-2 text-sm"
@@ -372,7 +374,8 @@
                   </option>
                 </select>
               </div>
-              <div>
+              <div></div>
+              <div class="w-[206%]">
                 <label
                   for="teacher"
                   class="block mb-2 text-sm"
@@ -391,6 +394,7 @@
                   </option>
                 </select>
               </div>
+              <div></div>
               <div
                 class="w-[206%] flex items-center justify-between border-t pt-5 mt-5"
               >
@@ -519,16 +523,15 @@
           >
             <h1 class="text-blue-700 font-bold text-lg">Guruhlar</h1>
             <div
-              class="lg:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3"
+              class="lg:w-auto flex flex-row items-center justify-end space-x-3"
             >
               <button
                 @click="toggleModal"
                 id=""
                 type="button"
-                class="btnAdd flex items-center max-w-fit justify-center whitespace-nowrap text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 sm:py-2"
+                class="btnAdd flex items-center max-w-fit justify-center whitespace-nowrap text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2"
               >
-                <span class="sm:block hidden">Guruh qo'shish</span>
-                <i class="sm:hidden block bx bxs-user-plus text-lg"></i>
+                <span>Guruh qo'shish</span>
               </button>
             </div>
           </div>

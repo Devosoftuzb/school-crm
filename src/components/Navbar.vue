@@ -17,7 +17,7 @@
         <router-link to="/" class="flex items-center ml-2">
           <img
             :src="store.image ? store.link + store.image : '../favicon.ico'"
-            class="h-10 w-12 sm:h-12 mr-2 rounded-full"
+            class="w-12 h-12 mr-2 rounded-full"
             alt="Logo"
           />
           <span
@@ -34,21 +34,21 @@
             @click="navbar.setMode()"
           >
             <b
-              class="flex items-center justify-between w-[3rem] sm:w-[4.5rem] h-6 sm:h-9 border-2 rounded-full"
+              class="flex items-center justify-between w-[3.8rem] sm:w-[4.5rem] h-8 sm:h-9 border-2 rounded-full"
             >
               <span
                 ><i
-                  class="bx bxs-moon ml-1 text-yellow-300 rounded-full sm:text-2xl"
+                  class="bx bxs-moon ml-1 text-yellow-300 rounded-full text-xl sm:text-2xl"
                 ></i
               ></span>
               <span
                 ><i
-                  class="bx bxs-sun mr-1 text-yellow-300 rounded-full mt-1 sm:mt-0 sm:text-2xl"
+                  class="bx bxs-sun mr-1 text-yellow-300 rounded-full mt-1 sm:mt-0 text-xl sm:text-2xl"
                 ></i
               ></span>
             </b>
             <p
-              class="absolute top-[1px] left-0 w-[1.4rem] h-[1.4rem] sm:w-9 sm:h-[2.1rem] -z-10 rounded-full duration-1000"
+              class="absolute top-[1px] left-0 w-[1.8rem] h-[1.8rem] sm:w-9 sm:h-[2.1rem] -z-10 rounded-full duration-1000"
               :class="{
                 'translate-x-full bg-black': !navbar.userNav,
                 'bg-white': navbar.userNav,

@@ -283,10 +283,10 @@
                 @click="toggleModal"
                 id=""
                 type="button"
-                class="btnAdd flex items-center max-w-fit justify-center whitespace-nowrap text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 sm:py-2"
+                class="btnAdd flex items-center max-w-fit justify-center whitespace-nowrap text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2"
               >
-                <span class="sm:block hidden">Fan qo'shish</span>
-                <i class="sm:hidden block bx bxs-user-plus text-lg"></i>
+                <span>Fan qo'shish</span>
+                
               </button>
             </div>
           </div>
