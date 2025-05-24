@@ -346,7 +346,7 @@
               </tbody>
             </table>
             <div
-              v-show="store.PageProduct"
+              v-show="!store.PageProduct"
               class="w-full max-w-screen text-center p-20 text-2xl font-medium"
             >
               <h1>Natijalar ro'yhati bo'sh</h1>
