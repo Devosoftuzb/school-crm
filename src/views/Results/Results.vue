@@ -190,9 +190,9 @@
                   <th scope="col" class="text-center py-3 whitespace-nowrap">
                     Tugatgan vaqti
                   </th>
-                  <!-- <th scope="col" class="text-center py-3 whitespace-nowrap">
+                  <th scope="col" class="text-center py-3 whitespace-nowrap">
                     Javoblar
-                  </th> -->
+                  </th>
                   <th scope="col"></th>
                 </tr>
               </thead>
@@ -254,14 +254,14 @@
                       {{ chekDateFormat(new Date(i.finished_at)) }}
                     </p>
                   </td>
-                  <!-- <td class="text-center font-medium px-8 py-3">
+                  <td class="text-center font-medium px-8 py-3">
                     <button
                       @click="enterSlug(i.id)"
                       class="btnKirish bg-blue-600 rounded-lg px-5 py-2.5 text-white focus:ring-2"
                     >
                       Kirish
                     </button>
-                  </td> -->
+                  </td>
                   <td class="text-center whitespace-nowrap font-medium pr-5">
                     <i
                       @click="deleteFunc(i.id)"
@@ -327,14 +327,14 @@
                       {{ chekDateFormat(new Date(i.finished_at)) }}
                     </p>
                   </td>
-                  <!-- <td class="text-center font-medium px-8 py-3">
+                  <td class="text-center font-medium px-8 py-3">
                     <button
                       @click="enterSlug(i.id)"
                       class="btnKirish bg-blue-600 rounded-lg px-5 py-2.5 text-white focus:ring-2"
                     >
                       Kirish
                     </button>
-                  </td> -->
+                  </td>
                   <td class="text-center whitespace-nowrap font-medium pr-5">
                     <i
                       @click="deleteFunc(i.id)"
@@ -346,7 +346,7 @@
               </tbody>
             </table>
             <div
-              v-show="!store.PageProduct"
+              v-show="store.PageProduct"
               class="w-full max-w-screen text-center p-20 text-2xl font-medium"
             >
               <h1>Natijalar ro'yhati bo'sh</h1>
@@ -436,7 +436,7 @@ const navbar = useNavStore();
 const router = useRouter();
 
 const store = reactive({
-  PageProduct: [],
+  PageProduct: "",
   page: [1, 0],
   pagination: 1,
   allProducts: [],

@@ -828,18 +828,18 @@
                   </button>
                   <div class="w-full flex items-center justify-between">
                     <button
-                    @click="historyModal"
-                    type="button"
-                    class="border inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-                  >
-                    Bekor qilish
-                  </button>
-                  <button
-                    type="submit"
-                    class="btnAdd text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-                  >
-                    Ko'rish
-                  </button>
+                      @click="historyModal"
+                      type="button"
+                      class="border inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                    >
+                      Bekor qilish
+                    </button>
+                    <button
+                      type="submit"
+                      class="btnAdd text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                    >
+                      Ko'rish
+                    </button>
                   </div>
                 </div>
               </form>
@@ -988,18 +988,18 @@
                   </button>
                   <div class="w-full flex items-center justify-between">
                     <button
-                    @click="historyModal"
-                    type="button"
-                    class="border inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-                  >
-                    Bekor qilish
-                  </button>
-                  <button
-                    type="submit"
-                    class="btnAdd text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-                  >
-                    Ko'rish
-                  </button>
+                      @click="historyModal"
+                      type="button"
+                      class="border inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                    >
+                      Bekor qilish
+                    </button>
+                    <button
+                      type="submit"
+                      class="btnAdd text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                    >
+                      Ko'rish
+                    </button>
                   </div>
                 </div>
               </form>
@@ -2285,7 +2285,7 @@ const exportToExcel = async () => {
   });
   saveAs(blob, fileName);
   notification.success("Excel fayl yuklab olindi!");
-  history.modal = !history.modal
+  history.modal = !history.modal;
 };
 
 const getSchool = () => {
@@ -2567,7 +2567,7 @@ const getHistory = (page) => {
   } else {
     return;
   }
-
+  
   axios
     .get(url, config)
     .then((res) => {

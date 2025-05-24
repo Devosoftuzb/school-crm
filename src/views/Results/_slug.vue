@@ -1,124 +1,270 @@
 <template>
-  <div class="py-4 px-2">
+  <div class="py-8 px-2">
     <!-- Placeholder -->
     <div v-if="!store.product">
       <Placeholder2 />
     </div>
 
-    <!-- Search -->
-    <div v-if="store.product"
-      class="shadow rounded-xl flex flex-col lg:flex-row items-center justify-between lg:space-x-4 p-4 mb-4"
-      :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'">
-      <div class="w-full flex items-center lg:justify-start lg:pb-0 pb-4 justify-between gap-5">
-        <h1 class="text-blue-700 font-bold text-lg">O'quvchilar</h1>
+    <div
+      class="rounded-lg p-8 mb-32"
+      :class="navbar.userNav ? 'bg-[#1e293b] text-white' : 'bg-white'"
+    >
+      <div
+        class="flex flex-col sm:flex-row justify-between items-center gap-3 font-bold mb-8 sm:mb-0 w-full"
+      >
+        <h1 class="text-lg text-start w-full text-blue-700">
+          Mijozning test natijalari
+        </h1>
+        <button
+          @click="router.back(-1)"
+          class="btn shadow-lg w-full sm:w-auto rounded-lg whitespace-nowrap px-5 py-2.5 text-white focus:ring-2 text-sm"
+        >
+          Orqaga qaytish
+        </button>
       </div>
 
-      <div class="w-full lg:w-80">
-        <form class="flex items-center text-gray-900 font-medium">
-          <label for="simple-search" class="sr-only">Qidiruv</label>
-          <div class="relative w-full">
-            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-              <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg">
-                <path fill-rule="evenodd"
-                  d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                  clip-rule="evenodd" />
-              </svg>
+      <div class="w-full bg-transparent rounded-lg">
+        <div
+          id="defaultTabContent"
+          :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
+        >
+          <div
+            class="rounded-lg lg:p-8"
+            id="about"
+            role="tabpanel"
+            aria-labelledby="about-tab"
+          >
+            <div class="w-full grid lg:grid-cols-2 gap-3 sm:gap-0">
+              <div
+                class="w-full lg:border-l border-[#4141eb] sm:p-5 flex flex-col gap-3"
+              >
+                <h2
+                  class="w-full flex flex-col items-center justify-between pb-3 border-b border-[#4141eb] sm:text-lg text-sm"
+                  :class="navbar.userNav ? 'text-white' : 'text-[#1e293b]'"
+                >
+                  <span class="w-full font-bold">Ism-familya :</span>
+                  <span class="w-full py-0.5">{{
+                    store.product.customer?.full_name
+                  }}</span>
+                </h2>
+
+                <h2
+                  class="w-full flex flex-col items-center justify-between pb-3 border-b border-[#4141eb] sm:text-lg text-sm"
+                  :class="navbar.userNav ? 'text-white' : 'text-[#1e293b]'"
+                >
+                  <span class="w-full font-bold">Telefon raqam :</span>
+                  <span class="w-full py-0.5">{{
+                    store.product.customer?.phone_number
+                  }}</span>
+                </h2>
+
+                <h2
+                  class="w-full flex flex-col items-center justify-between pb-3 border-b border-[#4141eb] sm:text-lg text-sm"
+                  :class="navbar.userNav ? 'text-white' : 'text-[#1e293b]'"
+                >
+                  <span class="w-full font-bold">Tanlagan fani :</span>
+                  <span class="w-full py-0.5">{{
+                    store.product.subject_name
+                  }}</span>
+                </h2>
+
+                <h2
+                  class="w-full flex flex-col items-center justify-between border-b pb-3 border-[#4141eb] sm:text-lg text-sm"
+                  :class="navbar.userNav ? 'text-white' : 'text-[#1e293b]'"
+                >
+                  <span class="w-full font-bold">Tanlagan o'qituvchisi :</span>
+                  <span class="w-full py-0.5">{{ store.product.teacher }}</span>
+                </h2>
+
+                <h2
+                  class="w-full flex flex-col items-center justify-between border-b pb-3 border-[#4141eb] sm:text-lg text-sm"
+                  :class="navbar.userNav ? 'text-white' : 'text-[#1e293b]'"
+                >
+                  <span class="w-full font-bold"
+                    >Maqul bo'lgan dars vaqti :</span
+                  >
+                  <span class="w-full py-0.5">{{ store.product.time }}</span>
+                </h2>
+
+                <h2
+                  class="w-full flex flex-col items-start justify-center border-b pb-3 border-[#4141eb] sm:text-lg text-sm"
+                  :class="navbar.userNav ? 'text-white' : 'text-[#1e293b]'"
+                >
+                  <span class="w-full font-bold">Darajasi :</span>
+                  <span
+                    class="w-auto rounded-lg bg-blue-100 py-0.5 px-4 text-blue-800"
+                    >{{ store.product.result }}</span
+                  >
+                </h2>
+              </div>
+              <div
+                class="w-full lg:border-l border-[#4141eb] sm:p-5 flex flex-col gap-3"
+              >
+                <h2
+                  class="w-full flex flex-col items-start justify-between border-b pb-3 border-[#4141eb] sm:text-lg text-sm"
+                  :class="navbar.userNav ? 'text-white' : 'text-[#1e293b]'"
+                >
+                  <span class="w-full font-bold">Testni boshlagan vaqti :</span>
+                  <span
+                    class="w-auto rounded-lg py-0.5 px-4 bg-blue-100 text-blue-800"
+                    >{{ chekDateFormat(store.product.started_at) }}</span
+                  >
+                </h2>
+
+                <h2
+                  class="w-full flex flex-col items-start justify-between border-b pb-3 border-[#4141eb] sm:text-lg text-sm"
+                  :class="navbar.userNav ? 'text-white' : 'text-[#1e293b]'"
+                >
+                  <span class="w-full font-bold">Testni tugatgan vaqti :</span>
+                  <span
+                    class="w-auto rounded-lg py-0.5 px-4 bg-red-100 text-red-800"
+                    >{{ chekDateFormat(store.product.finished_at) }}</span
+                  >
+                </h2>
+
+                <h2
+                  class="w-full flex flex-col items-center justify-between border-b pb-3 border-[#4141eb] sm:text-lg text-sm"
+                  :class="navbar.userNav ? 'text-white' : 'text-[#1e293b]'"
+                >
+                  <span class="w-full font-bold"
+                    >Test bajarishga berilgan vaqt :</span
+                  >
+                  <span class="w-full py-0.5"
+                    >{{ store.product.test?.time }} daqiqa</span
+                  >
+                </h2>
+
+                <h2
+                  class="w-full flex flex-col items-center justify-between border-b pb-3 border-[#4141eb] sm:text-lg text-sm"
+                  :class="navbar.userNav ? 'text-white' : 'text-[#1e293b]'"
+                >
+                  <span class="w-full font-bold">Savolar soni :</span>
+                  <span class="w-full py-0.5"
+                    >{{ store.product.test?.count }} ta</span
+                  >
+                </h2>
+
+                <h2
+                  class="w-full flex flex-col items-start justify-between border-b pb-3 border-[#4141eb] sm:text-lg text-sm"
+                  :class="navbar.userNav ? 'text-white' : 'text-[#1e293b]'"
+                >
+                  <span class="w-full font-bold">Togri javoblar :</span>
+                  <span
+                    class="w-auto rounded-lg py-0.5 px-4 bg-blue-100 text-blue-800"
+                    >{{ store.product.correct }} ta</span
+                  >
+                </h2>
+
+                <h2
+                  class="w-full flex flex-col items-start justify-between border-b pb-3 border-[#4141eb] sm:text-lg text-sm"
+                  :class="navbar.userNav ? 'text-white' : 'text-[#1e293b]'"
+                >
+                  <span class="w-full font-bold">Notogri javoblar :</span>
+                  <span
+                    class="w-auto rounded-lg py-0.5 px-4 bg-red-100 text-red-800"
+                    >{{ store.product.incorrect }} ta</span
+                  >
+                </h2>
+              </div>
             </div>
-            <input type="text" id="simple-search"
-              class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2"
-              placeholder="Izlash uchun yozing..." />
           </div>
-        </form>
-      </div>
-
-      <button @click="router.back()" class="btn w-60 shadow-lg rounded-lg px-5 py-2.5 text-white focus:ring-2">
-        Orqaga qaytish
-      </button>
-    </div>
-
-    <!-- Table -->
-    <div class="relative shadow-md rounded-lg overflow-hidden"
-      :class="navbar.userNav ? 'bg-[#1e293b] text-white' : 'bg-white'">
-      <div class="overflow-x-auto">
-        <table class="min-w-full divide-y divide-gray-200">
-          <thead class="text-xs rounded-lg uppercase" :class="navbar.userNav ? 'bg-gray-700' : 'bg-gray-50'">
-            <tr>
-              <th class="py-3 px-8 text-center">F. I. O.</th>
-              <th class="py-3 px-8 text-center">To'g'ri javoblar</th>
-              <th class="py-3 px-6 text-center">Noto'g'ri javoblar</th>
-            </tr>
-          </thead>
-          <tbody v-if="!store.error">
-            <tr v-for="i in store.product?.test_submits" :key="i.id" class="border-b cursor-pointer"
-              :class="navbar.userNav ? 'hover:bg-gray-700' : 'hover:bg-gray-50'">
-              <td class="py-3 px-6 whitespace-nowrap text-center">
-                {{ i.student.full_name }}
-              </td>
-              <td class="py-3 px-6 font-bold text-[#4141eb] text-center">
-                {{ i.correct_answers }}
-              </td>
-              <td class="py-3 px-6 font-bold text-[red] text-center">
-                {{ store.product?.test_count - i.correct_answers }}
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <div v-if="store.error" class="flex w-full justify-center">
-          <h1 class="p-20 text-2xl font-medium">{{ store.error }}</h1>
         </div>
       </div>
-      <nav class="flex flex-row justify-between items-center md:items-center space-y-3 md:space-y-0 p-4"
-        aria-label="Table navigation">
-        <span class="text-sm font-normal">
-          Sahifa
-          <span class="font-semibold">1 - 10</span>
-          dan
-          <span class="font-semibold">10</span>
-        </span>
-        <ul class="inline-flex items-stretch -space-x-px">
-          <li>
-            <a href="#"
-              class="flex font-bold text-black border-2 bg-white hover:bg-gray-300 items-center justify-center text-sm py-2 sm:mt-0 -mt-2 px-6 rounded-lg leading-tight">Next</a>
-          </li>
-        </ul>
-      </nav>
     </div>
   </div>
 </template>
 
 <script setup>
-import { onMounted, reactive } from 'vue';
-import { useRouter } from 'vue-router';
-import { useNavStore } from '../../stores/toggle';
-import { Placeholder2 } from '../../components';
-import axios from '@/services/axios';
+import { onMounted, reactive } from "vue";
+import { useRouter } from "vue-router";
+import { useNavStore } from "../../stores/toggle";
+import { Placeholder2 } from "../../components";
+import axios from "@/services/axios";
 
 const navbar = useNavStore();
 const router = useRouter();
 
 const store = reactive({
-  product: {},
+  product: "",
+  subjects: [],
   error: null,
 });
+
+const chekDateFormat = (date) => {
+  if (!date) return "Sana mavjud emas";
+
+  const d = new Date(date);
+  if (isNaN(d.getTime())) return "Noto‘g‘ri sana";
+
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  const hour = String(d.getHours()).padStart(2, "0");
+  const minute = String(d.getMinutes()).padStart(2, "0");
+
+  return `${year}-${month}-${day}, ${hour}:${minute}`;
+};
+
+const getSubject = () => {
+  axios
+    .get(`/subject/${localStorage.getItem("school_id")}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    })
+    .then((res) => {
+      store.subjects = res.data;
+    })
+    .catch((error) => {
+      notification.warning(
+        "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
+      );
+    });
+};
 
 const getProduct = async () => {
   const id = router.currentRoute.value.params.id;
   try {
-    const response = await axios.get(`/test-group/${id}`, {
+    const response = await axios.get(`/customer-test/${id}`, {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
     });
-    store.product = response.data;
+
+    const record = response.data;
+
+    const subjectId = record.customer.subject_id;
+    const subject = store.subjects.find((s) => s.id === subjectId);
+
+    const correctAnswers = record.customer_answer.filter(
+      (ans) => ans.is_correct === true
+    ).length;
+    const incorrectAnswers = record.customer_answer.filter(
+      (ans) => ans.is_correct === false
+    ).length;
+
+    const [time, ...teacherParts] = record.customer.description.split(" ");
+    const teacher = teacherParts.join(" ");
+
+    const enrichedRecord = {
+      ...record,
+      subject_name: subject ? subject.name : "Noma'lum",
+      correct: correctAnswers,
+      incorrect: incorrectAnswers,
+      time,
+      teacher,
+    };
+
+    store.product = enrichedRecord;
     store.error = null;
   } catch (error) {
     store.product = {};
-    store.error = error.response?.data?.message || 'Xatolik yuz berdi!';
+    store.error = error.response?.data?.message || "Xatolik yuz berdi!";
   }
 };
 
 onMounted(() => {
+  getSubject();
   getProduct();
 });
 </script>

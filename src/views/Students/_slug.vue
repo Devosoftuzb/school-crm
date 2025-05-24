@@ -97,18 +97,20 @@
                     :class="navbar.userNav ? 'text-white' : 'text-[#1e293b]'"
                   >
                     <span class="w-full font-bold">Ism-familya :</span>
-                    <span class="w-full">{{ store.data.full_name }}</span>
+                    <div class="w-full">
+                      <span class="w-full">{{ store.data.full_name }}</span>
 
-                    <!-- <span
-                      class="w-full text-[16px] text-red-600"
-                      v-show="!store.data.status"
-                      >Faol emas</span
-                    >
-                    <span
-                      class="w-full text-[16px] text-green-400"
-                      v-show="store.data.status"
-                      >Faol</span
-                    > -->
+                      <sup
+                        class="w-full text-[16px] text-red-600"
+                        v-show="!store.data.status"
+                        >Arxivlangan</sup
+                      >
+                      <sup
+                        class="w-full text-[16px] text-green-400"
+                        v-show="store.data.status"
+                        >Faol</sup
+                      >
+                    </div>
                   </h2>
 
                   <h2
