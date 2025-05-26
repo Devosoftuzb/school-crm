@@ -233,6 +233,9 @@ const getProduct = async () => {
 
     const record = response.data;
 
+    console.log(record);
+    
+
     const subjectId = record.customer.subject_id;
     const subject = store.subjects.find((s) => s.id === subjectId);
 
@@ -251,8 +254,8 @@ const getProduct = async () => {
       subject_name: subject ? subject.name : "Noma'lum",
       correct: correctAnswers,
       incorrect: incorrectAnswers,
-      time,
-      teacher,
+      time: time ? time : "Noma'lum",
+      teacher: teacher ? teacher : "Noma'lum",
     };
 
     store.product = enrichedRecord;

@@ -173,25 +173,22 @@
                     Mijoz ismi
                   </th>
                   <th scope="col" class="text-center py-3 whitespace-nowrap">
+                    Telefon raqami
+                  </th>
+                  <th scope="col" class="text-center py-3 whitespace-nowrap">
                     Fan nomi
                   </th>
                   <th scope="col" class="text-center py-3 whitespace-nowrap">
-                    Savollar soni
+                    O'qituvchi ismi
                   </th>
                   <th scope="col" class="text-center py-3 whitespace-nowrap">
-                    Test vaqti
+                    Vaqti
                   </th>
                   <th scope="col" class="text-center py-3 whitespace-nowrap">
                     Mijoz natijasi
                   </th>
                   <th scope="col" class="text-center py-3 whitespace-nowrap">
-                    Boshlagan vaqti
-                  </th>
-                  <th scope="col" class="text-center py-3 whitespace-nowrap">
-                    Tugatgan vaqti
-                  </th>
-                  <th scope="col" class="text-center py-3 whitespace-nowrap">
-                    Javoblar
+                    To'liq
                   </th>
                   <th scope="col"></th>
                 </tr>
@@ -216,21 +213,28 @@
                     class="text-center font-medium whitespace-nowrap text-red-800 px-8 py-4"
                   >
                     <p class="bg-red-100 rounded-[5px] p-1">
-                      {{ i.subject_name }}
+                      {{ i.customer.phone_number }}
                     </p>
                   </td>
                   <td
                     class="text-center font-medium whitespace-nowrap text-blue-800 px-8 py-4"
                   >
                     <p class="bg-blue-100 rounded-[5px] p-1">
-                      {{ i.test.count }}
+                      {{ i.subject_name }}
                     </p>
                   </td>
                   <td
                     class="text-center font-medium whitespace-nowrap text-red-800 px-8 py-4"
                   >
                     <p class="bg-red-100 rounded-[5px] p-1">
-                      {{ i.test.time }} daqiqa
+                      {{ i.teacher_name }}
+                    </p>
+                  </td>
+                  <td
+                    class="text-center font-medium whitespace-nowrap text-blue-800 px-8 py-4"
+                  >
+                    <p class="bg-blue-100 rounded-[5px] p-1">
+                      {{ i.time }}
                     </p>
                   </td>
                   <td
@@ -238,20 +242,6 @@
                   >
                     <p class="bg-blue-100 rounded-[5px] p-1">
                       {{ i.result }}
-                    </p>
-                  </td>
-                  <td
-                    class="text-center font-medium whitespace-nowrap text-blue-800 px-8 py-4"
-                  >
-                    <p class="bg-blue-100 rounded-[5px] p-1">
-                      {{ chekDateFormat(new Date(i.started_at)) }}
-                    </p>
-                  </td>
-                  <td
-                    class="text-center font-medium whitespace-nowrap text-blue-800 px-8 py-4"
-                  >
-                    <p class="bg-blue-100 rounded-[5px] p-1">
-                      {{ chekDateFormat(new Date(i.finished_at)) }}
                     </p>
                   </td>
                   <td class="text-center font-medium px-8 py-3">
@@ -289,21 +279,28 @@
                     class="text-center font-medium whitespace-nowrap text-blue-800 px-8 py-4"
                   >
                     <p class="bg-blue-100 rounded-[5px] p-1">
-                      {{ i.subject_name }}
+                      {{ i.customer.phone_number }}
                     </p>
                   </td>
                   <td
                     class="text-center font-medium whitespace-nowrap text-blue-800 px-8 py-4"
                   >
                     <p class="bg-blue-100 rounded-[5px] p-1">
-                      {{ i.test.count }}
+                      {{ i.subject_name }}
                     </p>
                   </td>
                   <td
                     class="text-center font-medium whitespace-nowrap text-red-800 px-8 py-4"
                   >
                     <p class="bg-red-100 rounded-[5px] p-1">
-                      {{ i.test.time }} daqiqa
+                      {{ i.teacher_name }}
+                    </p>
+                  </td>
+                  <td
+                    class="text-center font-medium whitespace-nowrap text-blue-800 px-8 py-4"
+                  >
+                    <p class="bg-blue-100 rounded-[5px] p-1">
+                      {{ i.time }}
                     </p>
                   </td>
                   <td
@@ -311,20 +308,6 @@
                   >
                     <p class="bg-blue-100 rounded-[5px] p-1">
                       {{ i.result }}
-                    </p>
-                  </td>
-                  <td
-                    class="text-center font-medium whitespace-nowrap text-blue-800 px-8 py-4"
-                  >
-                    <p class="bg-blue-100 rounded-[5px] p-1">
-                      {{ chekDateFormat(new Date(i.started_at)) }}
-                    </p>
-                  </td>
-                  <td
-                    class="text-center font-medium whitespace-nowrap text-blue-800 px-8 py-4"
-                  >
-                    <p class="bg-blue-100 rounded-[5px] p-1">
-                      {{ chekDateFormat(new Date(i.finished_at)) }}
                     </p>
                   </td>
                   <td class="text-center font-medium px-8 py-3">
@@ -493,7 +476,24 @@ const getAllProduct = () => {
       },
     })
     .then((res) => {
-      store.allProducts = res.data;
+      const records = res.data;
+
+      const enrichedRecords = records.map((record) => {
+        const [time, ...teacherParts] = record.customer.description.split(" ");
+        const teacher_name = teacherParts.join(" ");
+
+        const subjectId = record.customer?.subject_id;
+        const subject = store.subjects.find((s) => s.id === subjectId);
+        return {
+          ...record,
+          subject_name: subject ? subject.name : "Noma'lum",
+          time: time ? time : "Noma'lum",
+          teacher_name: teacher_name ? teacher_name : "Noma'lum",
+        };
+      });
+
+      // store.PageProduct = enrichedRecords;
+      store.allProducts = enrichedRecords;
       store.error = false;
     })
     .catch((error) => {
@@ -530,11 +530,16 @@ const getProduct = (page) => {
       const records = res.data?.data?.records || [];
 
       const enrichedRecords = records.map((record) => {
+        const [time, ...teacherParts] = record.customer.description.split(" ");
+        const teacher_name = teacherParts.join(" ");
+
         const subjectId = record.customer?.subject_id;
         const subject = store.subjects.find((s) => s.id === subjectId);
         return {
           ...record,
           subject_name: subject ? subject.name : "Noma'lum",
+          time: time ? time : "Noma'lum",
+          teacher_name: teacher_name ? teacher_name : "Noma'lum",
         };
       });
 
