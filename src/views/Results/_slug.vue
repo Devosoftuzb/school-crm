@@ -1,11 +1,12 @@
 <template>
   <div class="py-8 px-2">
     <!-- Placeholder -->
-    <div v-if="!store.product && !store.questions">
+    <div v-show="!store.product && !store.questions">
       <Placeholder2 />
     </div>
 
     <div
+      v-show="store.product && store.questions"
       class="rounded-lg p-8 mb-32"
       :class="navbar.userNav ? 'bg-[#1e293b] text-white' : 'bg-white'"
     >
