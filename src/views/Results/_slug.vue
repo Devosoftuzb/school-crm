@@ -168,6 +168,106 @@
               </div>
             </div>
           </div>
+
+          <h1 class="text-lg text-start font-bold w-full text-blue-700 py-5">
+            Mijozning bajargan testlari
+          </h1>
+          <div
+            class="overflow-x-auto"
+            v-for="(i, index) in store.questions"
+            :key="i.id"
+          >
+            <div>
+              <div
+                class="flex justify-between items-center w-full sm:gap-5 gap-2"
+              >
+                <div
+                  @click="accordion(i.id)"
+                  class="w-full mb-5"
+                  id="accordion-collapse-heading-1"
+                >
+                  <button
+                    type="button"
+                    class="flex items-center justify-between w-full text-left rounded-lg bg-[rgba(213,219,242,0.5)] sm:py-[18px] sm:px-[20px] py-[14px] px-[14px]"
+                  >
+                    <div class="flex items-center sm:gap-5 gap-3">
+                      <p
+                        class="btn sm:min-w-[50px] sm:min-h-[50px] min-w-[30px] min-h-[30px] sm:h-[35px] 2xl:w-[55px] 2xl:h-[50px] flex items-center font-bold justify-center text-[14px] sm:text-[16px] 2xl:text-[20px] text-white rounded-full"
+                      >
+                        {{ index + 1 }}
+                      </p>
+                      <h2 class="w-full text-[14px] sm:text-[16px]">
+                        {{ i.question }}
+                      </h2>
+                    </div>
+                    <div>
+                      <i
+                        :class="
+                          store.plus == i.id
+                            ? 'bx bx-minus bg-white sm:p-2 p-1 text-[#4141eb] sm:text-[30px] text-[20px] rounded-full'
+                            : 'bx bx-plus bg-white sm:p-2 p-1 text-[#4141eb] sm:text-[30px] text-[20px] rounded-full'
+                        "
+                      ></i>
+                    </div>
+                  </button>
+                </div>
+              </div>
+              <!-- acardion main -->
+              <div :id="'answers' + i.id" class="hidden mb-5">
+                <div class="mb-5">
+                  <div v-if="i.file !== 'null' || i.file !== ''" class="mb-3">
+                    <div v-if="isImage(i.file)">
+                      <img
+                        :src="getFileUrl(i.file)"
+                        alt="Image"
+                        loading="lazy"
+                        class="w-full max-w-[320px] h-auto object-cove"
+                      />
+                    </div>
+                    <div v-else-if="isAudio(i.file)">
+                      <audio :src="getFileUrl(i.file)" controls />
+                    </div>
+                    <div v-else-if="isVideo(i.file)">
+                      <video
+                        :src="getFileUrl(i.file)"
+                        controls
+                        width="320"
+                        height="240"
+                      />
+                    </div>
+                    <!-- <div v-else>
+                      <a :href="getFileUrl(i.file)" target="_blank"
+                        >Faylni yuklab olish</a
+                      >
+                    </div> -->
+                  </div>
+                  <div
+                    v-if="i.text"
+                    class="text-justify flex flex-col px-5 mb-10"
+                  >
+                    <h3 class="font-bold mb-2">{{ i.text.title }}</h3>
+                    <p class="whitespace-pre-line">{{ i.text.text }}</p>
+                  </div>
+                  <h3 class="text-justify flex px-5">{{ i.question }}</h3>
+                </div>
+                <div class="grid sm:grid-cols-2 gap-5">
+                  <div
+                    v-for="(ans, ansIndex) in i.option"
+                    :key="ansIndex"
+                    class="w-full text-justify text-black p-2.5 sm:pl-10 pl-5 text-sm rounded-lg"
+                    :class="
+                      ans.is_correct
+                        ? 'bg-blue-300 text-blue-600'
+                        : 'bg-red-300 text-red-600'
+                    "
+                  >
+                    <strong>{{ String.fromCharCode(65 + ansIndex) }}: </strong>
+                    <span>{{ ans.option }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -188,7 +288,34 @@ const store = reactive({
   product: "",
   subjects: [],
   error: null,
+  questions: "",
+  plus: "",
+  accordion: [],
 });
+
+const getFileUrl = (file) => import.meta.env.VITE_API + "/" + file;
+
+const isImage = (filename) => /\.(jpe?g|png|gif|bmp|webp|svg)$/i.test(filename);
+const isAudio = (filename) => /\.(mp3|wav|ogg|m4a)$/i.test(filename);
+const isVideo = (filename) => /\.(mp4|webm|ogg|mov)$/i.test(filename);
+
+function accordion(id) {
+  for (let i of store.accordion) {
+    if (i != id) {
+      const el = document.querySelector(`#answers${i}`);
+      if (el) el.classList.add("hidden");
+    }
+  }
+
+  const show = document.querySelector(`#answers${id}`);
+  if (show) show.classList.toggle("hidden");
+
+  if (!store.accordion.includes(id)) {
+    store.accordion.push(id);
+  }
+
+  store.plus = store.plus === id ? "" : id;
+}
 
 const chekDateFormat = (date) => {
   if (!date) return "Sana mavjud emas";
@@ -233,8 +360,26 @@ const getProduct = async () => {
 
     const record = response.data;
 
-    console.log(record);
-    
+    const questionsMap = new Map();
+
+    for (const answer of record.customer_answer) {
+      const q = answer.question;
+
+      if (!questionsMap.has(q.id)) {
+        questionsMap.set(q.id, {
+          id: q.id,
+          question: q.question,
+          file: q.file,
+          option: [],
+          text: q.text,
+        });
+      }
+
+      const qItem = questionsMap.get(q.id);
+      qItem.option.push(answer.option);
+    }
+
+    store.questions = Array.from(questionsMap.values());
 
     const subjectId = record.customer.subject_id;
     const subject = store.subjects.find((s) => s.id === subjectId);
