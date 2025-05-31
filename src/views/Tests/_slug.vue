@@ -282,6 +282,17 @@
                   required
                 ></textarea>
               </div>
+              <h2 class="text-sm text-blue-700">Qo'shilgan matnlar</h2>
+              <div v-for="i in store.textData" :key="i.id">
+                <div class="flex items-center justify-between gap-3">
+                  <h2 class="bg-gray-50 border border-gray-300 text-sm w-full p-2.5 rounded-lg" :title="i.text">{{ i.title }}</h2>
+                   <i
+                    @click="deleteText(i.id)"
+                    class="bx bxs-trash bg-red-300 cursor-pointer text-red-600 rounded-lg sm:p-2 p-1.5 focus:ring-2"
+                  >
+                  </i>
+                </div>
+              </div>
             </div>
             <div
               class="w-full flex items-center justify-between border-t pt-5 mt-5"
@@ -1159,6 +1170,24 @@ const deleteOption = (id) => {
         "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
       );
       console.log("error", error);
+    });
+};
+
+const deleteText = (id) => {
+  axios
+    .delete(`/question-text/${id}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    })
+    .then((res) => {
+      notification.success("Matn o'chirildi");
+      getText()
+    })
+    .catch((error) => {
+      notification.warning(
+        "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
+      );
     });
 };
 

@@ -139,7 +139,7 @@
                   <option v-show="store.owner" value="administrator">
                     administrator
                   </option>
-                  <option v-show="!store.owner" value="teacher">teacher</option>
+                  <option value="teacher">teacher</option>
                 </select>
               </div>
             </div>
@@ -530,7 +530,7 @@
                   <option v-show="store.owner" value="administrator">
                     administrator
                   </option>
-                  <option v-show="!store.owner" value="teacher">teacher</option>
+                  <option value="teacher">teacher</option>
                 </select>
               </div>
             </div>
@@ -1058,7 +1058,7 @@ const store = reactive({
   addSubject: "",
   hashed_password: "",
   guard: true,
-  owner: localStorage.getItem("role") == "owner" ? true : false,
+  owner: localStorage.getItem("role") == "_ow_sch_" ? true : false,
   filter: "",
   filter_show: false,
   searchList: [],
@@ -1075,6 +1075,7 @@ const form = reactive({
 });
 
 const edit = reactive({
+  school_id: "",
   full_name: "",
   phone_number: "",
   login: "",
@@ -1193,6 +1194,7 @@ const getOneProduct = async (id, modalType) => {
 
     edit.id = res.data.id;
     if (modalType === "edit") {
+      edit.school_id = res.data.school_id
       edit.full_name = res.data.full_name;
       edit.phone_number = res.data.phone_number;
       edit.login = res.data.login;
@@ -1254,7 +1256,7 @@ const getProduct = async (page) => {
 };
 
 const editProduct = async () => {
-  const data = { ...edit, password: edit.password || store.hashed_password };
+  const data = { ...edit,};
   try {
     await axios.put(
       `/employee/${localStorage.getItem("school_id")}/${edit.id}`,
