@@ -1,7 +1,7 @@
 <template>
   <div class="py-8 px-2">
     <!-- Placeholder -->
-    <div v-if="!store.product">
+    <div v-if="!store.product && store.questions">
       <Placeholder2 />
     </div>
 
