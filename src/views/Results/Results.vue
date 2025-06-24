@@ -329,7 +329,7 @@
               </tbody>
             </table>
             <div
-              v-show="!store.PageProduct"
+              v-show="store.PageProduct.length === 0"
               class="w-full max-w-screen text-center p-20 text-2xl font-medium"
             >
               <h1>Natijalar ro'yhati bo'sh</h1>
@@ -477,20 +477,24 @@ const getAllProduct = () => {
     })
     .then((res) => {
       const records = res.data;
+      const localSchoolId = Number(localStorage.getItem("school_id"));
 
-      const enrichedRecords = records.map((record) => {
-        const [time, ...teacherParts] = record.customer.description.split(" ");
-        const teacher_name = teacherParts.join(" ");
+      const enrichedRecords = records
+        .filter((record) => record.customer?.school_id === localSchoolId)
+        .map((record) => {
+          const [time, ...teacherParts] =
+            record.customer.description.split(" ");
+          const teacher_name = teacherParts.join(" ");
 
-        const subjectId = record.customer?.subject_id;
-        const subject = store.subjects.find((s) => s.id === subjectId);
-        return {
-          ...record,
-          subject_name: subject ? subject.name : "Noma'lum",
-          time: time ? time : "Noma'lum",
-          teacher_name: teacher_name ? teacher_name : "Noma'lum",
-        };
-      });
+          const subjectId = record.customer?.subject_id;
+          const subject = store.subjects.find((s) => s.id === subjectId);
+          return {
+            ...record,
+            subject_name: subject ? subject.name : "Noma'lum",
+            time: time ? time : "Noma'lum",
+            teacher_name: teacher_name ? teacher_name : "Noma'lum",
+          };
+        });
 
       // store.PageProduct = enrichedRecords;
       store.allProducts = enrichedRecords;
@@ -528,24 +532,29 @@ const getProduct = (page) => {
     })
     .then((res) => {
       const records = res.data?.data?.records || [];
+      const localSchoolId = Number(localStorage.getItem("school_id"));
 
-      const enrichedRecords = records.map((record) => {
-        const [time, ...teacherParts] = record.customer.description.split(" ");
-        const teacher_name = teacherParts.join(" ");
+      const enrichedRecords = records
+        .filter((record) => record.customer?.school_id === localSchoolId)
+        .map((record) => {
+          const [time, ...teacherParts] =
+            record.customer.description.split(" ");
+          const teacher_name = teacherParts.join(" ");
 
-        const subjectId = record.customer?.subject_id;
-        const subject = store.subjects.find((s) => s.id === subjectId);
-        return {
-          ...record,
-          subject_name: subject ? subject.name : "Noma'lum",
-          time: time ? time : "Noma'lum",
-          teacher_name: teacher_name ? teacher_name : "Noma'lum",
-        };
-      });
+          const subjectId = record.customer?.subject_id;
+          const subject = store.subjects.find((s) => s.id === subjectId);
+
+          return {
+            ...record,
+            subject_name: subject ? subject.name : "Noma'lum",
+            time: time || "Noma'lum",
+            teacher_name: teacher_name || "Noma'lum",
+          };
+        });
 
       store.PageProduct = enrichedRecords;
-      const pagination = res.data?.data?.pagination || {};
-      store.page = [pagination.currentPage || 1, pagination.total_count || 0];
+
+      store.page = [page, enrichedRecords.length];
       store.error = false;
     })
     .catch((error) => {

@@ -106,7 +106,11 @@
                       required
                     />
                   </div>
-                  <span :class="navbar.userNav ? 'text-white' : 'text-black'" class="text-xl text-bold mt-5">daqiqa</span>
+                  <span
+                    :class="navbar.userNav ? 'text-white' : 'text-black'"
+                    class="text-xl text-bold mt-5"
+                    >daqiqa</span
+                  >
                 </div>
               </div>
               <div class="flex items-center justify-between border-t pt-5 mt-5">
@@ -238,7 +242,11 @@
                       required
                     />
                   </div>
-                  <span :class="navbar.userNav ? 'text-white' : 'text-black'" class="text-xl text-bold mt-5">daqiqa</span>
+                  <span
+                    :class="navbar.userNav ? 'text-white' : 'text-black'"
+                    class="text-xl text-bold mt-5"
+                    >daqiqa</span
+                  >
                 </div>
               </div>
               <div class="flex items-center justify-between border-t pt-5 mt-5">
@@ -568,7 +576,7 @@
               </tbody>
             </table>
             <div
-              v-show="store.PageProduct && store.error"
+              v-show="store.PageProduct.length === 0"
               class="w-full max-w-screen text-center p-20 text-2xl font-medium"
             >
               <h1>Testlar ro'yhati bo'sh</h1>
@@ -750,7 +758,13 @@ const getAllProduct = () => {
       },
     })
     .then((res) => {
-      store.allProducts = res.data;
+      const localSchoolId = Number(localStorage.getItem("school_id"));
+
+      const filteredProducts = res.data.filter(
+        (item) => item.subject?.school_id === localSchoolId
+      );
+
+      store.allProducts = filteredProducts;
       store.error = false;
     })
     .catch((error) => {
@@ -770,10 +784,18 @@ const getProduct = (page) => {
       },
     })
     .then((res) => {
-      store.PageProduct = res.data?.data?.records;
-      const pagination = res.data?.data?.pagination;
+      const localSchoolId = Number(localStorage.getItem("school_id"));
+
+      const allRecords = res.data?.data?.records || [];
+
+      const filteredProducts = allRecords.filter(
+        (item) => item.subject?.school_id === localSchoolId
+      );
+
+      store.PageProduct = filteredProducts;
       store.page = [];
-      store.page.push(pagination.currentPage, pagination.total_count);
+      store.page.push(page, filteredProducts.length);
+
       store.error = false;
     })
     .catch((error) => {
@@ -832,7 +854,7 @@ const getOneProduct = (id) => {
 
 const getSubject = () => {
   axios
-    .get( `/subject/${localStorage.getItem("school_id")}`, {
+    .get(`/subject/${localStorage.getItem("school_id")}`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
