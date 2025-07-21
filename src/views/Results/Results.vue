@@ -187,6 +187,9 @@
                   <th scope="col" class="text-center py-3 whitespace-nowrap">
                     Mijoz natijasi
                   </th>
+                   <th scope="col" class="text-center py-3 whitespace-nowrap">
+                    Holati
+                  </th>
                   <th scope="col" class="text-center py-3 whitespace-nowrap">
                     To'liq
                   </th>
@@ -243,6 +246,18 @@
                     <p class="bg-blue-100 rounded-[5px] p-1">
                       {{ i.result }}
                     </p>
+                  </td>
+                  <td
+                    v-show="!i.customer.is_student"
+                    class="text-center font-medium text-red-800 px-8 py-4"
+                  >
+                    <p class="bg-red-100 rounded-[5px] p-1">O'quvchi bo'lmagan</p>
+                  </td>
+                  <td
+                    v-show="i.customer.is_student"
+                    class="text-center font-medium text-green-700 px-8 py-4"
+                  >
+                    <p class="bg-green-100 rounded-[5px] p-1">O'quvchi bo'lgan</p>
                   </td>
                   <td class="text-center font-medium px-8 py-3">
                     <button
@@ -309,6 +324,18 @@
                     <p class="bg-blue-100 rounded-[5px] p-1">
                       {{ i.result }}
                     </p>
+                  </td>
+                  <td
+                    v-show="!i.customer.is_student"
+                    class="text-center font-medium text-red-800 px-8 py-4"
+                  >
+                    <p class="bg-red-100 rounded-[5px] p-1">O'quvchi bo'lmagan</p>
+                  </td>
+                  <td
+                    v-show="i.customer.is_student"
+                    class="text-center font-medium text-green-700 px-8 py-4"
+                  >
+                    <p class="bg-green-100 rounded-[5px] p-1">O'quvchi bo'lgan</p>
                   </td>
                   <td class="text-center font-medium px-8 py-3">
                     <button
@@ -553,7 +580,7 @@ const getProduct = (page) => {
         });
 
       store.PageProduct = enrichedRecords;
-
+      console.log(store.PageProduct)
       store.page = [page, enrichedRecords.length];
       store.error = false;
     })

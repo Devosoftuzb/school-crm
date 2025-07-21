@@ -920,6 +920,7 @@ const edit = reactive({
   id: "",
   toggle: false,
   modal: false,
+  is_student: false,
 });
 
 const remove = reactive({
@@ -1124,7 +1125,8 @@ const createStudent = async () => {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     });
     notification.success("Mijoz o'quvchiga qo'shildi");
-    deleteProduct();
+    edit.is_student = true;
+    editProduct();
     addGroupsModal(res.data.student.id);
     edit.parents_full_name = "Hurmatli ota-ona";
     edit.parents_phone_number = "+998";
