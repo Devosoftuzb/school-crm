@@ -1,5 +1,167 @@
 <template>
   <div @click="store.filter_show = false" class="py-4 px-2">
+    <!-- ----------------------------------------- Delete modal ---------------------------------------------------- -->
+    <div
+      :class="
+        remove.toggle
+          ? 'absolute overflow-y-auto flex bg-[rgba(0,0,0,0.5)] overflow-x-hidden z-50 justify-center items-center w-full inset-0 h-full'
+          : 'hidden'
+      "
+    >
+      <div class="relative p-4 max-w-5xl min-w-[30%] h-auto">
+        <!-- Modal content -->
+        <div
+          class="relative p-4 rounded-lg shadow sm:p-5"
+          :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
+        >
+          <!-- Modal header -->
+          <div
+            class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5"
+          >
+            <h3
+              class="text-lg"
+              :class="navbar.userNav ? 'text-white' : 'text-black'"
+            >
+              Test natijasini o'chirib tashlash
+            </h3>
+            <button
+              @click="remove.toggle = false"
+              type="button"
+              class="bg-transparent hover:bg-gray-200 hover rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+              :class="navbar.userNav ? 'text-white' : 'text-black'"
+            >
+              <svg
+                aria-hidden="true"
+                class="w-5 h-5"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                  clip-rule="evenodd"
+                ></path>
+              </svg>
+            </button>
+          </div>
+          <!-- Modal body -->
+          <div :class="{ darkForm: navbar.userNav }">
+            <div class="grid font-medium gap-4 mb-4 grid-cols-1">
+              <div>
+                <div></div>
+                <h1
+                  class="text-2xl"
+                  :class="navbar.userNav ? 'text-white' : 'text-black'"
+                >
+                  Siz test natijasini o'chirishni xohlaysizmi?
+                </h1>
+              </div>
+              <div
+                class="w-full flex items-center justify-between border-t pt-5 mt-5"
+              >
+                <button
+                  @click="remove.toggle = false"
+                  type="button"
+                  class="border cursor-pointer inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                >
+                  Bekor qilish
+                </button>
+                <button
+                  @click="deleteProduct"
+                  class="btnAdd cursor-pointer text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                >
+                  O'chirish
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- ----------------------------------------- delete modal end ---------------------------------------------------- -->
+
+    <!-- -----------------------------------------  MODAL ---------------------------------------------------- -->
+    <div
+      :class="
+        edit.toggle
+          ? 'absolute overflow-y-auto flex bg-[rgba(0,0,0,0.5)] overflow-x-hidden z-50 justify-center items-center w-full inset-0 h-full'
+          : 'hidden'
+      "
+    >
+      <div class="relative p-4 max-w-xl min-w-[30%] h-auto">
+        <!-- Modal content -->
+        <div
+          class="relative p-4 rounded-lg shadow sm:p-5"
+          :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
+        >
+          <!-- Modal header -->
+          <div
+            class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5"
+          >
+            <h3
+              class="text-lg"
+              :class="navbar.userNav ? 'text-white' : 'text-black'"
+            >
+              Mijoh haqida izoh
+            </h3>
+            <button
+              @click="edit.toggle = false"
+              type="button"
+              class="bg-transparent hover:bg-gray-200 hover rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+              :class="navbar.userNav ? 'text-white' : 'text-black'"
+            >
+              <svg
+                aria-hidden="true"
+                class="w-5 h-5"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                  clip-rule="evenodd"
+                ></path>
+              </svg>
+            </button>
+          </div>
+          <!-- Modal body -->
+          <form
+            @submit.prevent="editProduct"
+            :class="{ darkForm: navbar.userNav }"
+          >
+            <div class="grid font-medium gap-4 mb-4">
+              <div>
+                <textarea
+                  v-model="edit.description"
+                  name="description"
+                  id="description"
+                  class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full h-[150px] p-2.5"
+                  placeholder="Mijoz haqida ma'lumot"
+                ></textarea>
+              </div>
+              <div class="flex items-center justify-between border-t pt-5 mt-5">
+                <button
+                  @click="edit.toggle = false"
+                  type="button"
+                  class="border cursor-pointer inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                >
+                  Bekor qilish
+                </button>
+                <button
+                  type="submit"
+                  class="btnAdd cursor-pointer text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                >
+                  Qo'shish
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <!-- ----------------------------------------- MODAL END ---------------------------------------------------- -->
     <!-- Placeholder -->
     <section :class="{ 'text-white': navbar.userNav }">
       <!------------------------------------------- Placeholder ------------------------------------------->
@@ -7,87 +169,6 @@
         <Placeholder2 />
       </div>
       <!------------------------------------------- Placeholder ------------------------------------------->
-
-      <!-- ----------------------------------------- Delete modal ---------------------------------------------------- -->
-      <div
-        :class="
-          remove.toggle
-            ? 'absolute overflow-y-auto flex bg-[rgba(0,0,0,0.5)] overflow-x-hidden z-50 justify-center items-center w-full inset-0 h-full'
-            : 'hidden'
-        "
-      >
-        <div class="relative p-4 max-w-5xl min-w-[30%] h-auto">
-          <!-- Modal content -->
-          <div
-            class="relative p-4 rounded-lg shadow sm:p-5"
-            :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
-          >
-            <!-- Modal header -->
-            <div
-              class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5"
-            >
-              <h3
-                class="text-lg"
-                :class="navbar.userNav ? 'text-white' : 'text-black'"
-              >
-                Test natijasini o'chirib tashlash
-              </h3>
-              <button
-                @click="remove.toggle = false"
-                type="button"
-                class="bg-transparent hover:bg-gray-200 hover rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
-                :class="navbar.userNav ? 'text-white' : 'text-black'"
-              >
-                <svg
-                  aria-hidden="true"
-                  class="w-5 h-5"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
-              </button>
-            </div>
-            <!-- Modal body -->
-            <div :class="{ darkForm: navbar.userNav }">
-              <div class="grid font-medium gap-4 mb-4 grid-cols-1">
-                <div>
-                  <div></div>
-                  <h1
-                    class="text-2xl"
-                    :class="navbar.userNav ? 'text-white' : 'text-black'"
-                  >
-                    Siz test natijasini o'chirishni xohlaysizmi?
-                  </h1>
-                </div>
-                <div
-                  class="w-full flex items-center justify-between border-t pt-5 mt-5"
-                >
-                  <button
-                    @click="remove.toggle = false"
-                    type="button"
-                    class="border cursor-pointer inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-                  >
-                    Bekor qilish
-                  </button>
-                  <button
-                    @click="deleteProduct"
-                    class="btnAdd cursor-pointer text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-                  >
-                    O'chirish
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- ----------------------------------------- delete modal end ---------------------------------------------------- -->
 
       <!------------------------------------------- Search ------------------------------------------->
 
@@ -187,8 +268,11 @@
                   <th scope="col" class="text-center py-3 whitespace-nowrap">
                     Mijoz natijasi
                   </th>
-                   <th scope="col" class="text-center py-3 whitespace-nowrap">
+                  <th scope="col" class="text-center py-3 whitespace-nowrap">
                     Holati
+                  </th>
+                  <th scope="col" class="text-center py-3 whitespace-nowrap">
+                    Mijoz haqida
                   </th>
                   <th scope="col" class="text-center py-3 whitespace-nowrap">
                     To'liq
@@ -249,16 +333,42 @@
                   </td>
                   <td
                     v-show="!i.customer.is_student"
-                    class="text-center font-medium text-red-800 px-8 py-4"
+                    class="text-center whitespace-nowrap font-medium text-red-800 px-8 py-4"
                   >
-                    <p class="bg-red-100 rounded-[5px] p-1">O'quvchi bo'lmagan</p>
+                    <p class="bg-red-100 rounded-[5px] p-1">
+                      O'quvchi bo'lmagan
+                    </p>
                   </td>
                   <td
                     v-show="i.customer.is_student"
-                    class="text-center font-medium text-green-700 px-8 py-4"
+                    class="text-center whitespace-nowrap font-medium text-green-700 px-8 py-4"
                   >
-                    <p class="bg-green-100 rounded-[5px] p-1">O'quvchi bo'lgan</p>
+                    <p class="bg-green-100 rounded-[5px] p-1">
+                      O'quvchi bo'lgan
+                    </p>
                   </td>
+                  <td class="text-center font-medium text-blue-800 px-5 py-2">
+                    <div
+                      @click="getOneProduct(i.id)"
+                      class="relative group flex gap-2 cursor-pointer justify-between bg-blue-100 min-w-fit rounded-[5px] px-2 py-1 whitespace-nowrap"
+                    >
+                      <p>
+                        <span>
+                          {{
+                            i.description && i.description.split(" ").length > 3
+                              ? i.description.split(" ").slice(0, 3).join(" ") +
+                                "..."
+                              : i.description
+                          }}
+                        </span>
+                      </p>
+
+                      <i
+                        class="bx bxs-pencil cursor-pointer bg-blue-800 ml-2 font-extrabold text-white p-1 rounded-md"
+                      ></i>
+                    </div>
+                  </td>
+
                   <td class="text-center font-medium px-8 py-3">
                     <button
                       @click="enterSlug(i.id)"
@@ -327,15 +437,40 @@
                   </td>
                   <td
                     v-show="!i.customer.is_student"
-                    class="text-center font-medium text-red-800 px-8 py-4"
+                    class="text-center whitespace-nowrap font-medium text-red-800 px-8 py-4"
                   >
-                    <p class="bg-red-100 rounded-[5px] p-1">O'quvchi bo'lmagan</p>
+                    <p class="bg-red-100 rounded-[5px] p-1">
+                      O'quvchi bo'lmagan
+                    </p>
                   </td>
                   <td
                     v-show="i.customer.is_student"
-                    class="text-center font-medium text-green-700 px-8 py-4"
+                    class="text-center whitespace-nowrap font-medium text-green-700 px-8 py-4"
                   >
-                    <p class="bg-green-100 rounded-[5px] p-1">O'quvchi bo'lgan</p>
+                    <p class="bg-green-100 rounded-[5px] p-1">
+                      O'quvchi bo'lgan
+                    </p>
+                  </td>
+                  <td class="text-center font-medium text-blue-800 px-5 py-2">
+                    <div
+                      @click="getOneProduct(i.id)"
+                      class="relative group flex gap-2 cursor-pointer justify-between bg-blue-100 min-w-fit rounded-[5px] px-2 py-1 whitespace-nowrap"
+                    >
+                      <p>
+                        <span>
+                          {{
+                            i.description && i.description.split(" ").length > 3
+                              ? i.description.split(" ").slice(0, 3).join(" ") +
+                                "..."
+                              : i.description
+                          }}
+                        </span>
+                      </p>
+
+                      <i
+                        class="bx bxs-pencil cursor-pointer bg-blue-800 ml-2 font-extrabold text-white p-1 rounded-md"
+                      ></i>
+                    </div>
                   </td>
                   <td class="text-center font-medium px-8 py-3">
                     <button
@@ -457,6 +592,12 @@ const store = reactive({
   subjects: [],
 });
 
+const edit = reactive({
+  toggle: false,
+  id: "",
+  description: "",
+});
+
 const remove = reactive({
   id: "",
   toggle: false,
@@ -497,7 +638,7 @@ const chekDateFormat = (date) => {
 // ----------------------------------- axios --------------------------------
 const getAllProduct = () => {
   axios
-    .get("/customer-test", {
+    .get(`/customer-test/getSchoolId/${localStorage.getItem("school_id")}`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
@@ -550,13 +691,35 @@ const getSubject = () => {
     });
 };
 
-const getProduct = (page) => {
+const getOneProduct = (id) => {
   axios
-    .get(`/customer-test/page?page=${page}`, {
+    .get(`/customer-test/${id}`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
     })
+    .then((res) => {
+      edit.id = id;
+      edit.description = res.data.description;
+      edit.toggle = true;
+    })
+    .catch((error) => {
+      notification.warning(
+        "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
+      );
+    });
+};
+
+const getProduct = (page) => {
+  axios
+    .get(
+      `/customer-test/${localStorage.getItem("school_id")}/page?page=${page}`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    )
     .then((res) => {
       const records = res.data?.data?.records || [];
       const localSchoolId = Number(localStorage.getItem("school_id"));
@@ -580,13 +743,34 @@ const getProduct = (page) => {
         });
 
       store.PageProduct = enrichedRecords;
-      console.log(store.PageProduct)
       store.page = [page, enrichedRecords.length];
       store.error = false;
     })
     .catch((error) => {
       console.error(error);
       store.error = true;
+    });
+};
+
+const editProduct = () => {
+  const data = {
+    description: edit.description,
+  };
+  axios
+    .put(`/customer-test/${edit.id}`, data, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    })
+    .then((res) => {
+      edit.toggle = false;
+      notification.success("Mijoz haqida izoh qo'shildi");
+      getProduct(store.pagination);
+    })
+    .catch((error) => {
+      notification.warning(
+        "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
+      );
     });
 };
 

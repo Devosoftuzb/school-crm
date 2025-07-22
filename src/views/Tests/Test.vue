@@ -752,7 +752,7 @@ const remove = reactive({
 // ----------------------------------- axios --------------------------------
 const getAllProduct = () => {
   axios
-    .get("/test", {
+    .get(`/test/getSchoolId/${localStorage.getItem("school_id")}`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
@@ -778,7 +778,7 @@ const getAllProduct = () => {
 
 const getProduct = (page) => {
   axios
-    .get(`/test/page?page=${page}`, {
+    .get(`/test/${localStorage.getItem("school_id")}/page?page=${page}`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
@@ -807,6 +807,7 @@ const getProduct = (page) => {
 
 function createProduct() {
   const data = {
+    school_id: Number(localStorage.getItem("school_id")),
     subject_id: form.subject_id,
     count: form.count,
     time: form.time,
@@ -871,6 +872,7 @@ const getSubject = () => {
 
 const editProduct = () => {
   const data = {
+    school_id: Number(localStorage.getItem("school_id")),
     count: edit.count,
     time: edit.time,
     subject_id: edit.subject_id,

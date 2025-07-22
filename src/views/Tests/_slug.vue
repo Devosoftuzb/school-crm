@@ -285,8 +285,13 @@
               <h2 class="text-sm text-blue-700">Qo'shilgan matnlar</h2>
               <div v-for="i in store.textData" :key="i.id">
                 <div class="flex items-center justify-between gap-3">
-                  <h2 class="bg-gray-50 border border-gray-300 text-sm w-full p-2.5 rounded-lg" :title="i.text">{{ i.title }}</h2>
-                   <i
+                  <h2
+                    class="bg-gray-50 border border-gray-300 text-sm w-full p-2.5 rounded-lg"
+                    :title="i.text"
+                  >
+                    {{ i.title }}
+                  </h2>
+                  <i
                     @click="deleteText(i.id)"
                     class="bx bxs-trash bg-red-300 cursor-pointer text-red-600 rounded-lg sm:p-2 p-1.5 focus:ring-2"
                   >
@@ -895,6 +900,8 @@ const remove = reactive({
   toggle: false,
 });
 
+const testId = router.currentRoute?.value?.params?.name;
+
 function cancelFunc1() {
   modal.value = false;
   getImg.value = "";
@@ -908,7 +915,7 @@ function cancelFunc1() {
 // ----------------------------------- axios --------------------------------
 const getProduct = async () => {
   try {
-    const testId = router.currentRoute?.value?.params?.name;
+    // const testId = router.currentRoute?.value?.params?.name;
     const res = await axios.get(`/test/${testId}`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -941,7 +948,7 @@ const getOneProduct = (id) => {
     .then((res) => {
       edit.id = id;
       edit.question = res.data.question;
-      edit.variants = 
+      edit.variants =
         res.data.option.map((opt) => ({
           text: opt.option,
           is_correct: opt.is_correct,
@@ -949,7 +956,7 @@ const getOneProduct = (id) => {
         })) || [];
 
       edit.true_answer = res.data.option.findIndex((opt) => opt.is_correct);
-      edit.text_id = res.data.text_id
+      edit.text_id = res.data.text_id;
       edit.toggle = true;
     })
     .catch((error) => {
@@ -959,7 +966,7 @@ const getOneProduct = (id) => {
 
 const getText = () => {
   axios
-    .get("/question-text", {
+    .get(`/question-text/getTestId/${testId}`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
@@ -982,18 +989,19 @@ const createProduct = () => {
     }
   }
 
-  console.log(form.text_id);
-
   const data = {
-    test_id: Number(router.currentRoute?.value?.params?.name),
-    text_id: form.text_id,
+    test_id: Number(testId),
+    text_id: form.text_id === "" ? null : form.text_id,
     file: getImg.value,
     question: form.question,
   };
 
   const formData = new FormData();
-  for (let i of Object.keys(data)) {
-    formData.append(i, data[i]);
+  for (let key of Object.keys(data)) {
+    const value = data[key];
+    if (value !== null && value !== undefined) {
+      formData.append(key, value);
+    }
   }
 
   axios
@@ -1039,6 +1047,7 @@ const createProduct = () => {
 const createText = async () => {
   try {
     const data = {
+      test_id: Number(testId),
       title: store.textTitle,
       text: store.text,
     };
@@ -1182,7 +1191,7 @@ const deleteText = (id) => {
     })
     .then((res) => {
       notification.success("Matn o'chirildi");
-      getText()
+      getText();
     })
     .catch((error) => {
       notification.warning(
