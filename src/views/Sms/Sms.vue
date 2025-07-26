@@ -133,7 +133,7 @@
               Assalomu alaykum {studentName} ning ota-onasi! Farzandingiz {studentName} ning JORIY
               OY uchun TO'LOV larini amalga oshirishingiz kerak! Unutmang,
               FARZANDINGIZNING O'QITUVCHISI o'z vaqtida MAOSH olishi sizning o'z
-              vaqtida to'lov qilishingizga bog'liq! Hurmat bilan CAMELOT o'quv
+              vaqtida to'lov qilishingizga bog'liq! Hurmat bilan {{store.schoolName}} o'quv
               markazi.
             </span>
           </div>
@@ -166,6 +166,7 @@ const store = reactive({
   filter: "",
   filter_show: false,
   searchList: [],
+  schoolName: ""
 });
 
 // ---------------------------- search ------------------------------------
@@ -187,6 +188,21 @@ const form = reactive({
 });
 
 // ----------------------------------- axios --------------------------------
+const getOneProduct = () => {
+  axios
+    .get(`/school/${localStorage.getItem("school_id")}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    })
+    .then((res) => {
+      store.schoolName = res.data.name;
+    })
+    .catch((error) => {
+      console.log("error", error);
+    });
+};
+
 const getAllProduct = () => {
   axios
     .get(`/group/${localStorage.getItem("school_id")}`, {
@@ -226,6 +242,7 @@ const sendSMS = () => {
 };
 
 onMounted(() => {
+  getOneProduct()
   getAllProduct();
 });
 </script>
