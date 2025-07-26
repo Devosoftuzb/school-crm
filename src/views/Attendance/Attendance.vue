@@ -559,15 +559,15 @@
                   >
                     <p
                       v-if="getAttendanceStatus(i.attendance, date)"
-                      class="bg-green-100 text-green-800 rounded-[5px] p-1 px-3 whitespace-nowrap"
+                      class="bg-green-100 text-green-800 text-lg rounded-[5px] p-1 px-3 whitespace-nowrap"
                     >
-                      Kelgan
+                      <i class="bx bx-check"></i>
                     </p>
                     <p
                       v-else
-                      class="bg-red-100 text-red-800 rounded-[5px] p-1 px-3 whitespace-nowrap"
+                      class="bg-red-100 text-red-800 text-lg rounded-[5px] p-1 px-3 whitespace-nowrap"
                     >
-                      Kelmagan
+                      <i class="bx bx-x"></i>
                     </p>
                   </td>
                   <td
@@ -775,7 +775,6 @@ function searchHistoryFunc() {
     }
   }
 }
-
 
 const calculatePaymentStatus = (paymentHistory, groupPrice) => {
   const currentDate = new Date();

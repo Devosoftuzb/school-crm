@@ -43,6 +43,7 @@
               <span class="">Parolni yangilash</span>
             </button>
             <button
+              v-show="userRole == '_ad_sch_' || userRole == '_ow_sch_'"
               @click="toggleSocialLink()"
               id=""
               type="button"
@@ -55,6 +56,7 @@
               <span class="">Ijtimoiy tarmoqlar</span>
             </button>
             <button
+              v-show="userRole == '_ad_sch_' || userRole == '_ow_sch_'"
               @click="togglePaymentMethod()"
               id=""
               type="button"
@@ -832,6 +834,8 @@ const payModal = () => {
   (pay.id = ""), (pay.name = "");
 };
 
+const userRole = localStorage.getItem("role");
+
 // ----------------------------------- forms -----------------------------------
 
 const edit = reactive({
@@ -1017,16 +1021,21 @@ const changePassword = (id) => {
 };
 
 const getSocialLink = () => {
-  axios
-    .get(`/social-media/${localStorage.getItem("school_id")}`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    })
-    .then((res) => {
-      store.social_link = res.data;
-    })
-    .catch((error) => {});
+  if (
+    localStorage.getItem("role") == "_ad_sch_" ||
+    localStorage.getItem("role") == "_ow_sch_"
+  ) {
+    axios
+      .get(`/social-media/${localStorage.getItem("school_id")}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
+      .then((res) => {
+        store.social_link = res.data;
+      })
+      .catch((error) => {});
+  }
 };
 
 const addSocialLink = () => {
@@ -1072,16 +1081,21 @@ const deleteSocialLink = () => {
 };
 
 const getPaymentMethod = () => {
-  axios
-    .get(`/payment-method/${localStorage.getItem("school_id")}`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    })
-    .then((res) => {
-      store.payment_method = res.data;
-    })
-    .catch((error) => {});
+  if (
+    localStorage.getItem("role") == "_ad_sch_" ||
+    localStorage.getItem("role") == "_ow_sch_"
+  ) {
+    axios
+      .get(`/payment-method/${localStorage.getItem("school_id")}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
+      .then((res) => {
+        store.payment_method = res.data;
+      })
+      .catch((error) => {});
+  }
 };
 
 const addPaymentMethod = () => {

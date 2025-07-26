@@ -11,20 +11,28 @@
       >
         <div class="card" v-for="(i, index) in 4" :key="index">
           <div
-            class="relative xl:mb-4 flex flex-col min-w-0 break-words shadow-soft-xl rounded-xl bg-clip-border"
+            class="relative xl:mb-4 flex flex-col min-w-0 break-words shadow-soft-xl h-28 rounded-xl bg-clip-border"
             :class="{
               'bg-[#1e293b]': navbar.userNav,
               'bg-white': !navbar.userNav,
             }"
           >
-            <div class="flex-auto p-4">
+            <!-- <div class="flex-auto p-4">
               <div class="flex flex-row -mx-3">
                 <div class="flex-none w-2/3 max-w-full px-3">
                   <div>
-                    <p class="mb-0 font-semibold leading-normal 2xl:text-xl text-md">
+                    <p
+                      class="mb-0 font-semibold leading-normal 2xl:text-xl text-md"
+                    >
                       {{ getCardTitle(index) }}
                     </p>
-                    <h5 class="mb-0 2xl:text-md text-sm bg-blue-100 text-blue-700 rounded-lg 2xl:px-5 px-2 max-w-fit font-bold">{{ getCardValue(index) }} <span v-if="index == 3">so'm</span><span v-if="index != 3">ta</span></h5>
+                    <h5
+                      class="mb-0 2xl:text-md text-sm bg-blue-100 text-blue-700 rounded-lg 2xl:px-5 px-2 max-w-fit font-bold"
+                    >
+                      {{ getCardValue(index) }}
+                      <span v-if="index == 3">so'm</span
+                      ><span v-if="index != 3">ta</span>
+                    </h5>
                   </div>
                 </div>
                 <div class="basis-1/3">
@@ -41,13 +49,29 @@
                   </div>
                 </div>
               </div>
+            </div> -->
+
+            <div class="p-5">
+              <p class="mb-0 font-semibold leading-normal 2xl:text-xl text-md">
+                {{ getCardTitle(index) }}
+              </p>
+              <h5
+                class="mb-0 2xl:text-[16px] absolute bottom-5 right-5 bg-blue-100 text-blue-700 text-sm rounded-lg 2xl:px-5 py-2 px-3 max-w-fit font-bold"
+              >
+                {{ getCardValue(index) }}
+                <span v-if="index == 3">so'm</span
+                ><span v-if="index != 3">ta</span>
+              </h5>
             </div>
           </div>
         </div>
       </div>
 
       <!-- To'lov Statistikasi -->
-      <div class="w-full grid lg:grid-cols-2 2xl:gap-5 gap-3 px-2">
+      <div
+        v-show="store.guard"
+        class="w-full grid lg:grid-cols-2 2xl:gap-5 gap-3 px-2"
+      >
         <div
           class="chart-container mt-8 shadow-md rounded-lg p-6"
           :class="{
@@ -56,7 +80,9 @@
           }"
         >
           <div class="w-full flex items-center justify-between">
-            <h2 class="2xl:text-xl text-md font-semibold">To'lov Statistikasi ({{ store.year }})</h2>
+            <h2 class="2xl:text-xl text-md font-semibold">
+              To'lov Statistikasi ({{ store.year }})
+            </h2>
             <form
               @submit.prevent="getCurrentYearPayments"
               :class="{ darkForm: navbar.userNav }"
@@ -97,7 +123,7 @@
           }"
         >
           <div class="w-full flex items-center justify-between">
-            <h2 class="2xl:text-xl text-md  font-semibold">
+            <h2 class="2xl:text-xl text-md font-semibold">
               O'quvchilar To'lov Statistikasi ({{ monthNames(store.month) }})
             </h2>
             <form
@@ -147,6 +173,7 @@ import axios from "../../services/axios";
 import { useRouter } from "vue-router";
 import Chart from "chart.js/auto";
 
+const userRole = localStorage.getItem("role");
 const router = useRouter();
 const navbar = useNavStore();
 const hozirgiSana = new Date();
@@ -158,6 +185,7 @@ const store = reactive({
   curentYil: [],
   year: hozirgiSana.getFullYear(),
   month: (hozirgiSana.getMonth() + 1).toString().padStart(2, "0"),
+  guard: userRole == "_ow_sch_" || userRole == "_ad_sch_",
 });
 
 const info = reactive({
@@ -201,57 +229,63 @@ const monthNames = (month) => {
 };
 
 const getStatistics = async () => {
-  try {
-    const res = await axios.get(
-      `/statistic/school/${localStorage.getItem("school_id")}`,
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      }
-    );
-    info.students = res.data.student_number;
-    info.staff = res.data.employee_number;
-    info.groups = res.data.group_number;
-    info.payment = res.data.payment_sum;
-  } catch (err) {
-    console.error("Statistikani olishda xato:", err);
+  if (store.guard) {
+    try {
+      const res = await axios.get(
+        `/statistic/school/${localStorage.getItem("school_id")}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      info.students = res.data.student_number;
+      info.staff = res.data.employee_number;
+      info.groups = res.data.group_number;
+      info.payment = res.data.payment_sum;
+    } catch (err) {
+      console.error("Statistikani olishda xato:", err);
+    }
   }
 };
 
 const getCurrentYearPayments = async () => {
-  try {
-    const res = await axios.get(
-      `/statistic/school-payments/${localStorage.getItem("school_id")}/${
-        store.year
-      }`,
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      }
-    );
-    info.PaymentStats = res.data.PaymentStats;
-  } catch (err) {
-    console.error("Statistikani olishda xato:", err);
+  if (store.guard) {
+    try {
+      const res = await axios.get(
+        `/statistic/school-payments/${localStorage.getItem("school_id")}/${
+          store.year
+        }`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      info.PaymentStats = res.data.PaymentStats;
+    } catch (err) {
+      console.error("Statistikani olishda xato:", err);
+    }
   }
 };
 
 const getStudentPayments = async () => {
-  try {
-    const res = await axios.get(
-      `/statistic/school-studentPayments/${localStorage.getItem("school_id")}/${
-        store.month
-      }`,
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      }
-    );
-    info.StudentPayments = res.data.studentPayments;
-  } catch (err) {
-    console.error("Statistikani olishda xato:", err);
+  if (store.guard) {
+    try {
+      const res = await axios.get(
+        `/statistic/school-studentPayments/${localStorage.getItem(
+          "school_id"
+        )}/${store.month}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      info.StudentPayments = res.data.studentPayments;
+    } catch (err) {
+      console.error("Statistikani olishda xato:", err);
+    }
   }
 };
 
@@ -391,14 +425,14 @@ watch(
 );
 
 watch(
-  () => info.PaymentStats, 
+  () => info.PaymentStats,
   () => {
     setTimeout(createPaymentChart, 300);
   }
 );
 
 watch(
-  () => info.StudentPayments, 
+  () => info.StudentPayments,
   () => {
     setTimeout(createStudentPaymentChart, 300);
   }
@@ -474,5 +508,4 @@ onMounted(() => {
     width: 200px !important;
   }
 }
-
 </style>

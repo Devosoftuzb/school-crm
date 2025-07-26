@@ -47,7 +47,7 @@ const routes = [
         name: "employees",
         component: Teachers,
         meta: {
-          roles: ["_sp_am_", "_ow_sch_", "_ad_sch_"],
+          roles: ["_ow_sch_", "_ad_sch_"],
           title: "Xodimlar",
         },
       },
@@ -56,7 +56,7 @@ const routes = [
         name: "slug_teachers",
         component: SlugTeachers,
         meta: {
-          roles: ["_sp_am_", "_ow_sch_", "_ad_sch_"],
+          roles: ["_ow_sch_", "_ad_sch_"],
           title: "Xodim Sahifasi",
         },
       },
@@ -65,7 +65,7 @@ const routes = [
         name: "students",
         component: Students,
         meta: {
-          roles: ["_sp_am_", "_ad_sch_"],
+          roles: ["_ad_sch_"],
           title: "O'quvchilar",
         },
       },
@@ -74,7 +74,7 @@ const routes = [
         name: "studentsArchive",
         component: StudentsArchive,
         meta: {
-          roles: ["_sp_am_", "_ad_sch_"],
+          roles: ["_ad_sch_"],
           title: "Arxiv o'quvchilar",
         },
       },
@@ -83,7 +83,7 @@ const routes = [
         name: "slug_students",
         component: SlugStudent,
         meta: {
-          roles: ["_sp_am_", "_ad_sch_"],
+          roles: ["_ad_sch_"],
           title: "O'quvchi Sahifasi",
         },
       },
@@ -92,7 +92,7 @@ const routes = [
         name: "customers",
         component: Customer,
         meta: {
-          roles: ["_sp_am_", "_ad_sch_"],
+          roles: ["_ad_sch_"],
           title: "Mijozlar",
         },
       },
@@ -101,7 +101,7 @@ const routes = [
         name: "tests",
         component: Tests,
         meta: {
-          roles: ["_sp_am_", "_ad_sch_"],
+          roles: ["_ad_sch_"],
           title: "Testlar",
         },
       },
@@ -110,7 +110,7 @@ const routes = [
         name: "subjects",
         component: Subjects,
         meta: {
-          roles: ["_sp_am_", "_ad_sch_"],
+          roles: ["_ad_sch_"],
           title: "Fanlar",
         },
       },
@@ -119,7 +119,7 @@ const routes = [
         name: "payment",
         component: Payment,
         meta: {
-          roles: ["_sp_am_", "_ad_sch_"],
+          roles: ["_ad_sch_"],
           title: "To'lovlar",
         },
       },
@@ -128,7 +128,7 @@ const routes = [
         name: "attendance",
         component: Attendance,
         meta: {
-          roles: ["_sp_am_", "_ad_sch_"],
+          roles: ["_ad_sch_"],
           title: "Davomat",
         },
       },
@@ -137,7 +137,7 @@ const routes = [
         name: "sms",
         component: Sms,
         meta: {
-          roles: ["_sp_am_", "_ad_sch_"],
+          roles: ["_ad_sch_"],
           title: "SMS",
         },
       },
@@ -146,7 +146,7 @@ const routes = [
         name: "results",
         component: Results,
         meta: {
-          roles: ["_sp_am_", "_ad_sch_"],
+          roles: ["_ad_sch_"],
           title: "Natijalar",
         },
       },
@@ -155,7 +155,7 @@ const routes = [
         name: "slug_results",
         component: SlugResults,
         meta: {
-          roles: ["_sp_am_", "_ad_sch_"],
+          roles: ["_ad_sch_"],
           title: "Natijalar Sahifasi",
         },
       },
@@ -164,7 +164,7 @@ const routes = [
         name: "groups",
         component: Groups,
         meta: {
-          roles: ["_sp_am_", "_ad_sch_"],
+          roles: ["_ad_sch_"],
           title: "Guruhlar",
         },
       },
@@ -173,7 +173,7 @@ const routes = [
         name: "slug_groups",
         component: SlugGroups,
         meta: {
-          roles: ["_sp_am_", "_ad_sch_"],
+          roles: ["_ad_sch_"],
           title: "Guruh Sahifasi",
         },
       },
@@ -182,7 +182,7 @@ const routes = [
         name: "slug_questions",
         component: SlugTests,
         meta: {
-          roles: ["_sp_am_", "_ad_sch_"],
+          roles: ["_ad_sch_"],
           title: "Savollar Sahifasi",
         },
       },

@@ -103,7 +103,7 @@ const store = reactive({
   guard: localStorage.getItem("role") == "owner" ? "owner" : "administrator",
   data: "",
   image: "",
-  link: import.meta.env.VITE_API + '/',
+  link: import.meta.env.VITE_API + "/",
 });
 
 const Logout = () => {
@@ -123,19 +123,24 @@ const toggleUserInfo = () => {
 };
 
 const getOneProduct = () => {
-  axios
-    .get(`/school/${localStorage.getItem("school_id")}`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    })
-    .then((res) => {
-      store.data = res.data.name;
-      store.image = res.data.image;
-    })
-    .catch((error) => {
-      console.log("error", error);
-    });
+  if (
+    localStorage.getItem("role") == "_ad_sch_" ||
+    localStorage.getItem("role") == "_ow_sch_"
+  ) {
+    axios
+      .get(`/school/${localStorage.getItem("school_id")}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
+      .then((res) => {
+        store.data = res.data.name;
+        store.image = res.data.image;
+      })
+      .catch((error) => {
+        console.log("error", error);
+      });
+  }
 };
 onMounted(() => {
   getOneProduct();

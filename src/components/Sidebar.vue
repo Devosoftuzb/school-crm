@@ -19,7 +19,9 @@
           </router-link>
         </li>
       </ul>
-      <button @click="Logout" title="Chiqish"
+      <button
+        @click="Logout"
+        title="Chiqish"
         class="bottom-5 w-full sm:mb-0 mb-20 flex items-center justify-between border-b border-blue-700 p-2 rounded-lg text-blue-700"
       >
         <div class="flex items-center gap-3">
@@ -30,7 +32,7 @@
           />
           <span class="text-md font-bold">{{ store.name }}</span>
         </div>
-       <i class="bx bx-log-in text-[30px] mr-1 font-medium"></i>
+        <i class="bx bx-log-in text-[30px] mr-1 font-medium"></i>
       </button>
     </div>
   </aside>
@@ -47,7 +49,14 @@ const navbar = useNavStore();
 
 const store = reactive({
   guard: localStorage.getItem("role"),
-  name: localStorage.getItem("role") == "owner" ? "owner" : "administrator"
+  name:
+    localStorage.getItem("role") == "_ow_sch_"
+      ? "owner"
+      : localStorage.getItem("role") == "_ad_sch_"
+      ? "administrator"
+      : localStorage.getItem("role") == "_sp_am_"
+      ? "superadmin"
+      : "admin",
 });
 
 const Logout = () => {
@@ -55,7 +64,7 @@ const Logout = () => {
   localStorage.removeItem("role");
   localStorage.removeItem("token");
   localStorage.removeItem("school_id");
-  location.reload()
+  location.reload();
   router.push("/login");
 };
 
