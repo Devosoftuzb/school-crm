@@ -451,6 +451,14 @@
                   </h2>
 
                   <h2
+                    class="w-full flex sm:flex-row flex-col items-center justify-between pb-3 border-b border-[#4141eb] sm:text-lg text-sm"
+                    :class="navbar.userNav ? 'text-white' : 'text-[#1e293b]'"
+                  >
+                    <span class="w-full font-bold">Maoshi % da :</span>
+                    <span class="w-full">{{ store.data.salary }} %</span>
+                  </h2>
+
+                  <h2
                     class="w-full flex sm:flex-row flex-col items-center justify-between border-b pb-3 border-[#4141eb] sm:text-lg text-sm"
                     :class="navbar.userNav ? 'text-white' : 'text-[#1e293b]'"
                   >
