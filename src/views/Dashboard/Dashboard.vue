@@ -11,7 +11,7 @@
       >
         <div class="card" v-for="(i, index) in 4" :key="index">
           <div
-            class="relative xl:mb-4 flex flex-col min-w-0 break-words shadow-soft-xl h-28 rounded-xl bg-clip-border"
+            class="relative xl:mb-4 flex flex-col min-w-0 break-words shadow-soft-xl sm:h-28 rounded-xl bg-clip-border"
             :class="{
               'bg-[#1e293b]': navbar.userNav,
               'bg-white': !navbar.userNav,
@@ -51,12 +51,12 @@
               </div>
             </div> -->
 
-            <div class="p-5">
+            <div class="p-5 flex items-center justify-between">
               <p class="mb-0 font-semibold leading-normal 2xl:text-xl text-md">
                 {{ getCardTitle(index) }}
               </p>
               <h5
-                class="mb-0 2xl:text-[16px] absolute bottom-5 right-5 bg-blue-100 text-blue-700 text-sm rounded-lg 2xl:px-5 py-2 px-3 max-w-fit font-bold"
+                class="mb-0 2xl:text-[16px] sm:absolute bottom-5 right-5 bg-blue-100 text-blue-700 text-sm rounded-lg 2xl:px-5 py-2 px-3 max-w-fit font-bold"
               >
                 {{ getCardValue(index) }}
                 <span v-if="index == 3">so'm</span
@@ -124,7 +124,7 @@
         >
           <div class="w-full flex items-center justify-between">
             <h2 class="2xl:text-xl text-md font-semibold">
-              O'quvchilar To'lov Statistikasi ({{ monthNames(store.month) }})
+              O'quvchilar Statistikasi ({{ monthNames(store.month) }})
             </h2>
             <form
               @submit.prevent="getStudentPayments"
@@ -467,15 +467,15 @@ onMounted(() => {
 .chart-container2 {
   width: 100%;
   margin: auto;
-  height: 500px;
+  height: 450px;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
 .chart-container2 canvas {
-  height: auto !important;
-  width: 400px !important;
+  height: 320px !important;
+  width: 320px !important;
 }
 
 @media (max-width: 1024px) {
@@ -492,20 +492,25 @@ onMounted(() => {
   }
 
   .chart-container2 canvas {
-    height: 250px !important;
-    width: 250px !important;
+    height: 300px !important;
+    width: 300px !important;
   }
 }
 
 @media (max-width: 480px) {
-  .chart-container,
   .chart-container2 {
-    height: 250px; /* Mobil ekranlar uchun */
+    height: 300px; /* Mobil ekranlar uchun */
   }
 
   .chart-container2 canvas {
     height: 200px !important;
     width: 200px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .chart-container {
+    height: 250px; /* Mobil ekranlar uchun */
   }
 }
 </style>

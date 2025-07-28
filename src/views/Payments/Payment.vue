@@ -16,7 +16,7 @@
         :key="i"
         class="cards flex flex-wrap items-center justify-center mb-5 gap-x-5 gap-y-5"
       >
-        <div class="card sm:w-[308px] w-full" v-for="j in i" :key="j">
+        <div class="card sm:w-[295px] w-full" v-for="j in i" :key="j">
           <div
             class="relative flex flex-col min-w-0 break-words shadow-soft-xl rounded-xl bg-clip-border"
             :class="{
@@ -215,7 +215,23 @@
                   class="item flex justify-between border-b border-dashed border-black py-1 text-sm"
                 >
                   <span class="font-semibold">Kurs narxi:</span>
-                  <span id="coursePrice">{{ store.price }} so'm</span>
+
+                  <span class="flex flex-col items-end">
+                    <span
+                      v-if="form.discount !== 0 && form.discount !== ''"
+                      class="text-[10px] line-through"
+                      id="coursePrice"
+                      >{{ store.price }} so'm</span
+                    >
+                    <span id="coursePrice">{{ discountedPrice }} so'm</span>
+                  </span>
+                </div>
+                <div
+                  v-if="form.discount !== 0 && form.discount !== ''"
+                  class="item flex justify-between border-b border-dashed border-black py-1 text-sm"
+                >
+                  <span class="font-semibold">Chegirma:</span>
+                  <span id="teacher">{{ form.discount }}%</span>
                 </div>
                 <div
                   class="item flex justify-between border-b border-dashed border-black py-1 text-sm"
@@ -236,7 +252,7 @@
                 >
                   <span class="font-semibold">To'lov:</span>
                   <span id="amount" class="font-bold text-xs"
-                    >{{ form.price }} so'm</span
+                    >{{ store.pay_price }} so'm</span
                   >
                 </div>
                 <div
@@ -273,88 +289,110 @@
                 @submit.prevent="editProduct"
                 :class="{ darkForm: navbar.userNav }"
               >
-                <div class="grid font-medium gap-4 mb-4 sm:grid-cols-2">
-                  <div>
-                    <label for="year" class="block mb-2 text-sm"
-                      >Yilni tanlang</label
-                    >
-                    <select
-                      v-model="form.year"
-                      id="name"
-                      class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
-                      required
-                    >
-                      <option value="" disabled selected>Yilni tanlang</option>
-                      <option
-                        v-for="i in store.curentYil"
-                        :key="i.id"
-                        :value="i.name"
+                <div class="grid font-medium gap-4 mb-4 sm:grid-cols-1">
+                  <div class="grid gap-4 sm:grid-cols-2">
+                    <div>
+                      <label for="year" class="block mb-2 text-sm"
+                        >Yilni tanlang</label
                       >
-                        {{ i.name }}
-                      </option>
-                    </select>
-                  </div>
-                  <div>
-                    <label for="month" class="block mb-2 text-sm"
-                      >Oyni tanlang</label
-                    >
-                    <select
-                      v-model="form.month"
-                      id="month"
-                      class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
-                      required
-                    >
-                      <option value="" disabled selected>Oyni tanlang</option>
-                      <option value="01">Yanvar</option>
-                      <option value="02">Fevral</option>
-                      <option value="03">Mart</option>
-                      <option value="04">Aprel</option>
-                      <option value="05">May</option>
-                      <option value="06">Iyun</option>
-                      <option value="07">Iyul</option>
-                      <option value="08">Avgust</option>
-                      <option value="09">Sentabr</option>
-                      <option value="10">Oktabr</option>
-                      <option value="11">Noyabr</option>
-                      <option value="12">Dekabr</option>
-                    </select>
-                  </div>
-                  <div class="">
-                    <label for="price" class="block mb-2 text-sm">Price</label>
-                    <input
-                      v-model="form.price"
-                      type="number"
-                      name="price"
-                      id="price"
-                      class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full py-3 p-2.5"
-                      placeholder="To'lov sumani kiriting"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label
-                      for="name"
-                      class="block mb-2 text-sm"
-                      :class="navbar.userNav ? 'text-white' : 'text-black'"
-                      >To'lov turi tanlang</label
-                    >
-                    <select
-                      v-model="form.method"
-                      id="name"
-                      class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
-                      required
-                    >
-                      <option value="" disabled selected>
-                        To'lov turini tanlang
-                      </option>
-                      <option
-                        v-for="i in store.method"
-                        :key="i.id"
-                        :value="i.name"
+                      <select
+                        v-model="form.year"
+                        id="name"
+                        class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                        required
                       >
-                        {{ i.name }}
-                      </option>
-                    </select>
+                        <option value="" disabled selected>
+                          Yilni tanlang
+                        </option>
+                        <option
+                          v-for="i in store.curentYil"
+                          :key="i.id"
+                          :value="i.name"
+                        >
+                          {{ i.name }}
+                        </option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label for="month" class="block mb-2 text-sm"
+                        >Oyni tanlang</label
+                      >
+                      <select
+                        v-model="form.month"
+                        id="month"
+                        class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                        required
+                      >
+                        <option value="" disabled selected>Oyni tanlang</option>
+                        <option value="01">Yanvar</option>
+                        <option value="02">Fevral</option>
+                        <option value="03">Mart</option>
+                        <option value="04">Aprel</option>
+                        <option value="05">May</option>
+                        <option value="06">Iyun</option>
+                        <option value="07">Iyul</option>
+                        <option value="08">Avgust</option>
+                        <option value="09">Sentabr</option>
+                        <option value="10">Oktabr</option>
+                        <option value="11">Noyabr</option>
+                        <option value="12">Dekabr</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="grid gap-4 sm:grid-cols-3">
+                    <div class="">
+                      <label for="price" class="block mb-2 text-sm">Narx</label>
+                      <input
+                        v-model="store.pay_price"
+                        type="number"
+                        name="price"
+                        id="price"
+                        class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full py-3 p-2.5"
+                        placeholder="To'lov sumani kiriting"
+                        required
+                      />
+                    </div>
+                    <div class="">
+                      <label for="price" class="block mb-2 text-sm"
+                        >Chegirma (%)</label
+                      >
+                      <input
+                        v-model="form.discount"
+                        type="number"
+                        name="price"
+                        id="price"
+                        class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full py-3 p-2.5"
+                        placeholder="Chegirma % kiriting"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label
+                        for="name"
+                        class="block mb-2 text-sm"
+                        :class="navbar.userNav ? 'text-white' : 'text-black'"
+                        >To'lov turi tanlang</label
+                      >
+                      <select
+                        v-model="form.method"
+                        id="name"
+                        class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                        required
+                      >
+                        <option value="" disabled selected>
+                          To'lov turini tanlang
+                        </option>
+                        <option
+                          v-for="i in store.method"
+                          :key="i.id"
+                          :value="i.name"
+                        >
+                          {{ i.name }}
+                        </option>
+                      </select>
+                    </div>
                   </div>
                 </div>
                 <div
@@ -1531,10 +1569,10 @@
                     O'qituvchi (F . I . O)
                   </th>
                   <th scope="col" class="text-center py-3 whitespace-nowrap">
-                    Kurs narxi
+                    Guruh
                   </th>
                   <th scope="col" class="text-center py-3 whitespace-nowrap">
-                    Guruh
+                     Kurs narxi
                   </th>
                   <th scope="col" class="text-center py-3 whitespace-nowrap">
                     To'lov turi
@@ -1957,6 +1995,7 @@ const store = reactive({
   statistic: false,
   selectLamp: false,
   isSubmitting: false,
+  pay_price: 0
 });
 
 function toggleModal(id, name) {
@@ -2567,7 +2606,7 @@ const getHistory = (page) => {
   } else {
     return;
   }
-  
+
   axios
     .get(url, config)
     .then((res) => {
@@ -2652,8 +2691,8 @@ const getEditProduct = (id) => {
       edit.id = id;
       form.year = res.data.year;
       form.month = res.data.month;
-      form.price = res.data.price;
-      form.discount = res.discount;
+      store.pay_price = res.data.price;
+      form.discount = res.data.discount;
       form.method = res.data.method;
       form.id = res.data.student.id;
       form.group_id = res.data.group.id;
@@ -2682,8 +2721,8 @@ const editProduct = () => {
     year: form.year,
     month: form.month,
     method: form.method,
-    discount: 0,
-    price: form.price,
+    discount: form.discount,
+    price: store.pay_price,
   };
 
   const check = checkPayment(form.year, form.month, store.date);

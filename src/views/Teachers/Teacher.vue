@@ -87,7 +87,7 @@
                   required
                 />
               </div>
-              <div class="sm:w-[205%]">
+              <div class="">
                 <label
                   for="name"
                   class="block mb-2 text-sm"
@@ -104,7 +104,23 @@
                   required
                 />
               </div>
-              <div></div>
+             <div class="">
+                <label
+                  for="salary"
+                  class="block mb-2 text-sm"
+                  :class="navbar.userNav ? 'text-white' : 'text-black'"
+                  >Maoshi % da</label
+                >
+                <input
+                  v-model="form.salary"
+                  type="number"
+                  name="salary"
+                  id="salary"
+                  class="bg-white border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                  placeholder="Maoshni kiriting % da"
+                  
+                />
+              </div>
               <div>
                 <label
                   for="phone"
@@ -462,6 +478,23 @@
                   required
                 />
               </div>
+               <div class="">
+                <label
+                  for="salary"
+                  class="block mb-2 text-sm"
+                  :class="navbar.userNav ? 'text-white' : 'text-black'"
+                  >Maoshi % da</label
+                >
+                <input
+                  v-model="edit.salary"
+                  type="number"
+                  name="salary"
+                  id="salary"
+                  class="bg-white border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                  placeholder="Maoshni kiriting % da"
+                  
+                />
+              </div>
               <!-- <div>
                 <label
                   for="edit_password"
@@ -478,7 +511,7 @@
                   placeholder="*********"
                 />
               </div> -->
-              <div class="">
+              <div class="sm:w-[205%]">
                 <label
                   for="edit_name"
                   class="block mb-2 text-sm"
@@ -495,6 +528,7 @@
                   required
                 />
               </div>
+              <div></div>
               <div>
                 <label
                   for="edit_phone"
@@ -1072,6 +1106,7 @@ const form = reactive({
   role: "",
   subject: "",
   group: "",
+  salary: 0,
 });
 
 const edit = reactive({
@@ -1086,6 +1121,7 @@ const edit = reactive({
   id: "",
   subjectName: "",
   groupName: "",
+  salary: 0,
 });
 
 const remove = reactive({
@@ -1199,6 +1235,7 @@ const getOneProduct = async (id, modalType) => {
       edit.phone_number = res.data.phone_number;
       edit.login = res.data.login;
       edit.role = res.data.role;
+      edit.salary = res.data.salary;
       store.editModal = true;
     } else if (modalType === "group") {
       edit.group = res.data.group;
