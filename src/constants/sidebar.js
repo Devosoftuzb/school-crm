@@ -5,6 +5,7 @@ export const header = [
     link: "/",
     icon: "bx bxs-dashboard",
     role: "_sp_am_, _ow_sch_, _ad_sch_",
+    school: "camelot, itpark, element, sophies",
   },
   {
     id: 2,
@@ -12,6 +13,7 @@ export const header = [
     link: "/customer",
     icon: "bx bx-body",
     role: "_ad_sch_",
+    school: "camelot, itpark, element, sophies",
   },
   {
     id: 3,
@@ -19,6 +21,7 @@ export const header = [
     link: "/employees",
     icon: "bx bxs-user-rectangle",
     role: "_ow_sch_, _ad_sch_",
+    school: "camelot, itpark, element, sophies",
   },
   {
     id: 4,
@@ -26,6 +29,7 @@ export const header = [
     link: "/students",
     icon: "bx bxs-user",
     role: "_ad_sch_",
+    school: "camelot, itpark, element, sophies",
   },
   {
     id: 5,
@@ -33,6 +37,7 @@ export const header = [
     link: "/groups",
     icon: "bx bxs-group",
     role: "_ad_sch_",
+    school: "camelot, itpark, element, sophies",
   },
   {
     id: 6,
@@ -40,6 +45,7 @@ export const header = [
     link: "/subjects",
     icon: "bx bxs-book-bookmark",
     role: "_ad_sch_",
+    school: "camelot, itpark, element, sophies",
   },
   {
     id: 7,
@@ -47,6 +53,7 @@ export const header = [
     link: "/attendance",
     icon: "bx bx-user-check",
     role: "_ad_sch_",
+    school: "camelot, itpark, element, sophies",
   },
   {
     id: 8,
@@ -54,6 +61,7 @@ export const header = [
     link: "/payment",
     icon: "bx bxs-credit-card",
     role: "_ad_sch_",
+    school: "camelot, itpark, element, sophies",
   },
   {
     id: 9,
@@ -61,6 +69,7 @@ export const header = [
     link: "/sms",
     icon: "bx bxs-message-rounded-dots",
     role: "_ad_sch_",
+    school: "camelot, itpark, element, sophies",
   },
   {
     id: 10,
@@ -68,6 +77,7 @@ export const header = [
     link: "/tests",
     icon: "bx bx-credit-card-front",
     role: "_ad_sch_",
+    school: "camelot, element",
   },
   {
     id: 11,
@@ -75,6 +85,7 @@ export const header = [
     link: "/results",
     icon: "bx bxs-pie-chart-alt-2",
     role: "_ad_sch_",
+    school: "camelot, element",
   },
   {
     id: 12,
@@ -82,5 +93,6 @@ export const header = [
     link: "/settings",
     icon: "bx bxs-cog",
     role: "_sp_am_, _ow_sch_, _ad_sch_",
+    school: "camelot, itpark, element, sophies",
   },
 ];

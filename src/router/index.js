@@ -30,6 +30,7 @@ const routes = [
     component: HomeView,
     meta: {
       roles: ["_sp_am_", "_ow_sch_", "_ad_sch_"],
+      schools: ["camelot", "itpark", "element", "sophies"],
       title: "Home",
     },
     children: [
@@ -39,6 +40,7 @@ const routes = [
         component: Dashboard,
         meta: {
           roles: ["_sp_am_", "_ow_sch_", "_ad_sch_"],
+          schools: ["camelot", "itpark", "element", "sophies"],
           title: "Asosiy",
         },
       },
@@ -48,6 +50,7 @@ const routes = [
         component: Teachers,
         meta: {
           roles: ["_ow_sch_", "_ad_sch_"],
+          schools: ["camelot", "itpark", "element", "sophies"],
           title: "Xodimlar",
         },
       },
@@ -57,6 +60,7 @@ const routes = [
         component: SlugTeachers,
         meta: {
           roles: ["_ow_sch_", "_ad_sch_"],
+          schools: ["camelot", "itpark", "element", "sophies"],
           title: "Xodim Sahifasi",
         },
       },
@@ -66,6 +70,7 @@ const routes = [
         component: Students,
         meta: {
           roles: ["_ad_sch_"],
+          schools: ["camelot", "itpark", "element", "sophies"],
           title: "O'quvchilar",
         },
       },
@@ -75,6 +80,7 @@ const routes = [
         component: StudentsArchive,
         meta: {
           roles: ["_ad_sch_"],
+          schools: ["camelot", "itpark", "element", "sophies"],
           title: "Arxiv o'quvchilar",
         },
       },
@@ -84,6 +90,7 @@ const routes = [
         component: SlugStudent,
         meta: {
           roles: ["_ad_sch_"],
+          schools: ["camelot", "itpark", "element", "sophies"],
           title: "O'quvchi Sahifasi",
         },
       },
@@ -93,6 +100,7 @@ const routes = [
         component: Customer,
         meta: {
           roles: ["_ad_sch_"],
+          schools: ["camelot", "itpark", "element", "sophies"],
           title: "Mijozlar",
         },
       },
@@ -102,6 +110,7 @@ const routes = [
         component: Tests,
         meta: {
           roles: ["_ad_sch_"],
+          schools: ["camelot", "element"],
           title: "Testlar",
         },
       },
@@ -111,6 +120,7 @@ const routes = [
         component: Subjects,
         meta: {
           roles: ["_ad_sch_"],
+          schools: ["camelot", "itpark", "element", "sophies"],
           title: "Fanlar",
         },
       },
@@ -120,6 +130,7 @@ const routes = [
         component: Payment,
         meta: {
           roles: ["_ad_sch_"],
+          schools: ["camelot", "itpark", "element", "sophies"],
           title: "To'lovlar",
         },
       },
@@ -129,6 +140,7 @@ const routes = [
         component: Attendance,
         meta: {
           roles: ["_ad_sch_"],
+          schools: ["camelot", "itpark", "element", "sophies"],
           title: "Davomat",
         },
       },
@@ -138,6 +150,7 @@ const routes = [
         component: Sms,
         meta: {
           roles: ["_ad_sch_"],
+          schools: ["camelot", "itpark", "element", "sophies"],
           title: "SMS",
         },
       },
@@ -147,6 +160,7 @@ const routes = [
         component: Results,
         meta: {
           roles: ["_ad_sch_"],
+          schools: ["camelot", "element"],
           title: "Natijalar",
         },
       },
@@ -156,6 +170,7 @@ const routes = [
         component: SlugResults,
         meta: {
           roles: ["_ad_sch_"],
+          schools: ["camelot", "element"],
           title: "Natijalar Sahifasi",
         },
       },
@@ -165,6 +180,7 @@ const routes = [
         component: Groups,
         meta: {
           roles: ["_ad_sch_"],
+          schools: ["camelot", "itpark", "element", "sophies"],
           title: "Guruhlar",
         },
       },
@@ -174,6 +190,7 @@ const routes = [
         component: SlugGroups,
         meta: {
           roles: ["_ad_sch_"],
+          schools: ["camelot", "itpark", "element", "sophies"],
           title: "Guruh Sahifasi",
         },
       },
@@ -183,6 +200,7 @@ const routes = [
         component: SlugTests,
         meta: {
           roles: ["_ad_sch_"],
+          schools: ["camelot", "element"],
           title: "Savollar Sahifasi",
         },
       },
@@ -192,6 +210,7 @@ const routes = [
         component: Settings,
         meta: {
           roles: ["_sp_am_", "_ow_sch_", "_ad_sch_"],
+          schools: ["camelot", "itpark", "element", "sophies"],
           title: "Sozlamalar",
         },
       },
@@ -226,16 +245,25 @@ router.afterEach((to) => {
 router.beforeEach((to, from, next) => {
   const token = localStorage.getItem("token");
   const role = localStorage.getItem("role");
+  const schoolName = localStorage.getItem("school_name")?.toLowerCase();
 
   if (!token && to.name !== "login") {
-    next({ name: "login" });
-  } else if (token && to.name === "login") {
-    next({ name: "home" });
-  } else if (to.meta.roles && !to.meta.roles.includes(role)) {
-    next({ name: "error" });
-  } else {
-    next();
+    return next({ name: "login" });
   }
+
+  if (token && to.name === "login") {
+    return next({ name: "home" });
+  }
+
+  if (to.meta.roles && !to.meta.roles.includes(role)) {
+    return next({ name: "error" });
+  }
+
+  if (to.meta.schools && !to.meta.schools.includes(schoolName)) {
+    return next({ name: "error" });
+  }
+
+  next();
 });
 
 export default router;

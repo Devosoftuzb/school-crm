@@ -9,7 +9,7 @@
       :class="{ 'bg-[#1e293b]': navbar.userNav, 'bg-white': !navbar.userNav }"
     >
       <ul class="space-y-2 font-medium mt-[70px]">
-        <li v-for="i in header" v-show="checkRole(i.role)" :key="i.id">
+        <li v-for="i in header" v-show="checkRole(i.role) && checkSchool(i.school)" :key="i.id">
           <router-link
             class="flex items-center text-lg p-2 cursor-pointer duration-500 hover:bg-gray-400 rounded-lg gap-2"
             :class="{ 'text-white': navbar.userNav }"
@@ -48,6 +48,7 @@ const sidebar = useSidebarStore();
 const navbar = useNavStore();
 
 const store = reactive({
+  school: localStorage.getItem("school_name").toLowerCase(),
   guard: localStorage.getItem("role"),
   name:
     localStorage.getItem("role") == "_ow_sch_"
@@ -71,6 +72,11 @@ const Logout = () => {
 const checkRole = (roles) => {
   const roleArray = roles.split(", ");
   return roleArray.includes(store.guard);
+};
+
+const checkSchool = (school) => {
+  const schoolArray = school.split(", ");
+  return schoolArray.includes(store.school);
 };
 </script>
 

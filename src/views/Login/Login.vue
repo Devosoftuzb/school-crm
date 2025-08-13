@@ -104,8 +104,15 @@ const handleSubmit = async () => {
       console.log(userResponse.data);
 
       localStorage.setItem("school_id", userResponse.data.school[0].id);
+      localStorage.setItem("school_name", userResponse.data.school[0].name);
     } else if (role === "_ad_sch_" || role === "_tch_sch_") {
       localStorage.setItem("school_id", user.school_id);
+      const schoolName = await axios.get(`/school/${localStorage.getItem("school_id")}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      localStorage.setItem("school_name", schoolName.data.name);
     }
 
     router.push("/");
