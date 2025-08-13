@@ -48,7 +48,7 @@ const sidebar = useSidebarStore();
 const navbar = useNavStore();
 
 const store = reactive({
-  school: localStorage.getItem("school_name").toLowerCase(),
+  school: localStorage.getItem("school_name"),
   guard: localStorage.getItem("role"),
   name:
     localStorage.getItem("role") == "_ow_sch_"
