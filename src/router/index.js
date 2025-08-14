@@ -30,7 +30,7 @@ const routes = [
     component: HomeView,
     meta: {
       roles: ["_sp_am_", "_ow_sch_", "_ad_sch_"],
-      schools: ["dev_school", "camelot", "itpark", "element", "sophie's"],
+      schools: ["dev_school", "camelot", "it_park", "element", "sophie's"],
       title: "Home",
     },
     children: [
@@ -40,7 +40,7 @@ const routes = [
         component: Dashboard,
         meta: {
           roles: ["_sp_am_", "_ow_sch_", "_ad_sch_"],
-          schools: ["dev_school", "camelot", "itpark", "element", "sophie's"],
+          schools: ["dev_school", "camelot", "it_park", "element", "sophie's"],
           title: "Asosiy",
         },
       },
@@ -50,7 +50,7 @@ const routes = [
         component: Teachers,
         meta: {
           roles: ["_ow_sch_", "_ad_sch_"],
-          schools: ["dev_school", "camelot", "itpark", "element", "sophie's"],
+          schools: ["dev_school", "camelot", "it_park", "element", "sophie's"],
           title: "Xodimlar",
         },
       },
@@ -60,7 +60,7 @@ const routes = [
         component: SlugTeachers,
         meta: {
           roles: ["_ow_sch_", "_ad_sch_"],
-          schools: ["dev_school", "camelot", "itpark", "element", "sophie's"],
+          schools: ["dev_school", "camelot", "it_park", "element", "sophie's"],
           title: "Xodim Sahifasi",
         },
       },
@@ -70,7 +70,7 @@ const routes = [
         component: Students,
         meta: {
           roles: ["_ad_sch_"],
-          schools: ["dev_school", "camelot", "itpark", "element", "sophie's"],
+          schools: ["dev_school", "camelot", "it_park", "element", "sophie's"],
           title: "O'quvchilar",
         },
       },
@@ -80,7 +80,7 @@ const routes = [
         component: StudentsArchive,
         meta: {
           roles: ["_ad_sch_"],
-          schools: ["dev_school", "camelot", "itpark", "element", "sophie's"],
+          schools: ["dev_school", "camelot", "it_park", "element", "sophie's"],
           title: "Arxiv o'quvchilar",
         },
       },
@@ -90,7 +90,7 @@ const routes = [
         component: SlugStudent,
         meta: {
           roles: ["_ad_sch_"],
-          schools: ["dev_school", "camelot", "itpark", "element", "sophie's"],
+          schools: ["dev_school", "camelot", "it_park", "element", "sophie's"],
           title: "O'quvchi Sahifasi",
         },
       },
@@ -100,7 +100,7 @@ const routes = [
         component: Customer,
         meta: {
           roles: ["_ad_sch_"],
-          schools: ["dev_school", "camelot", "itpark", "element", "sophie's"],
+          schools: ["dev_school", "camelot", "it_park", "element", "sophie's"],
           title: "Mijozlar",
         },
       },
@@ -120,7 +120,7 @@ const routes = [
         component: Subjects,
         meta: {
           roles: ["_ad_sch_"],
-          schools: ["dev_school", "camelot", "itpark", "element", "sophie's"],
+          schools: ["dev_school", "camelot", "it_park", "element", "sophie's"],
           title: "Fanlar",
         },
       },
@@ -130,7 +130,7 @@ const routes = [
         component: Payment,
         meta: {
           roles: ["_ad_sch_"],
-          schools: ["dev_school", "camelot", "itpark", "element", "sophie's"],
+          schools: ["dev_school", "camelot", "it_park", "element", "sophie's"],
           title: "To'lovlar",
         },
       },
@@ -140,7 +140,7 @@ const routes = [
         component: Attendance,
         meta: {
           roles: ["_ad_sch_"],
-          schools: ["dev_school", "camelot", "itpark", "element", "sophie's"],
+          schools: ["dev_school", "camelot", "it_park", "element", "sophie's"],
           title: "Davomat",
         },
       },
@@ -150,7 +150,7 @@ const routes = [
         component: Sms,
         meta: {
           roles: ["_ad_sch_"],
-          schools: ["dev_school", "camelot", "itpark", "element", "sophie's"],
+          schools: ["dev_school", "camelot", "it_park", "element", "sophie's"],
           title: "SMS",
         },
       },
@@ -180,7 +180,7 @@ const routes = [
         component: Groups,
         meta: {
           roles: ["_ad_sch_"],
-          schools: ["dev_school", "camelot", "itpark", "element", "sophie's"],
+          schools: ["dev_school", "camelot", "it_park", "element", "sophie's"],
           title: "Guruhlar",
         },
       },
@@ -190,7 +190,7 @@ const routes = [
         component: SlugGroups,
         meta: {
           roles: ["_ad_sch_"],
-          schools: ["dev_school", "camelot", "itpark", "element", "sophie's"],
+          schools: ["dev_school", "camelot", "it_park", "element", "sophie's"],
           title: "Guruh Sahifasi",
         },
       },
@@ -210,7 +210,7 @@ const routes = [
         component: Settings,
         meta: {
           roles: ["_sp_am_", "_ow_sch_", "_ad_sch_"],
-          schools: ["dev_school", "camelot", "itpark", "element", "sophie's"],
+          schools: ["dev_school", "camelot", "it_park", "element", "sophie's"],
           title: "Sozlamalar",
         },
       },
