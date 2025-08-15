@@ -130,11 +130,9 @@
             </span>
             <span>
               SMS Namuna <br />
-              Assalomu alaykum {studentName} ning ota-onasi! Farzandingiz {studentName} ning JORIY
-              OY uchun TO'LOV larini amalga oshirishingiz kerak! Unutmang,
-              FARZANDINGIZNING O'QITUVCHISI o'z vaqtida MAOSH olishi sizning o'z
-              vaqtida to'lov qilishingizga bog'liq! Hurmat bilan {{store.schoolName}} o'quv
-              markazi.
+              Hurmatli ota-ona, Davlat Jo'rayev uchun joriy oy to'lovi
+              kutilmoqda. Iltimos, o'z vaqtida amalga oshiring.
+              {{ store.schoolName }}
             </span>
           </div>
         </div>
@@ -153,7 +151,6 @@ import { Placeholder2 } from "../../components";
 import { useNotificationStore } from "../../stores/notification";
 import axios from "@/services/axios";
 
-
 const notification = useNotificationStore();
 const navbar = useNavStore();
 const router = useRouter();
@@ -166,7 +163,7 @@ const store = reactive({
   filter: "",
   filter_show: false,
   searchList: [],
-  schoolName: ""
+  schoolName: "",
 });
 
 // ---------------------------- search ------------------------------------
@@ -222,7 +219,7 @@ const getAllProduct = () => {
 
 const sendSMS = () => {
   const data = {
-    group_id: form.group_id
+    group_id: form.group_id,
   };
   axios
     .post("/sms/payment", data, {
@@ -232,17 +229,17 @@ const sendSMS = () => {
     })
     .then((res) => {
       notification.success("SMS yuborildi!");
-      form.group_id = ""
+      form.group_id = "";
     })
     .catch((error) => {
       notification.warning(
-      "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
-    );
+        "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
+      );
     });
 };
 
 onMounted(() => {
-  getOneProduct()
+  getOneProduct();
   getAllProduct();
 });
 </script>
