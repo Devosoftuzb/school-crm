@@ -1,5 +1,5 @@
 <template>
-  <section :class="{ 'text-white': navbar.userNav }">
+  <section class="mb-28" :class="{ 'text-white': navbar.userNav }">
     <!-- Cards Section -->
     <div v-show="!store.PageProduct">
       <Placeholder1 />

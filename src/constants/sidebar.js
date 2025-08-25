@@ -71,8 +71,16 @@ export const header = [
     role: "_ad_sch_",
     school: "dev_school, camelot, it_park, element, sophie's, sayyimov_academy",
   },
-  {
+   {
     id: 10,
+    title: "Moliya",
+    link: "/finance",
+    icon: "bx  bx-dollar-circle",
+    role: "_ad_sch_, _ow_sch_",
+    school: "dev_school, camelot, it_park, element, sophie's, sayyimov_academy",
+  },
+  {
+    id: 11,
     title: "Testlar",
     link: "/tests",
     icon: "bx bx-credit-card-front",
@@ -80,7 +88,7 @@ export const header = [
     school: "dev_school, camelot, element, sayyimov_academy",
   },
   {
-    id: 11,
+    id: 12,
     title: "Natijalar",
     link: "/results",
     icon: "bx bxs-pie-chart-alt-2",
@@ -88,7 +96,7 @@ export const header = [
     school: "dev_school, camelot, element, sayyimov_academy",
   },
   {
-    id: 12,
+    id: 13,
     title: "Sozlamalar",
     link: "/settings",
     icon: "bx bxs-cog",

@@ -759,7 +759,9 @@
                   }
                 "
               >
-                <i class="md:hidden font-bold text-black text-2xl bx bx-chevron-left"></i>
+                <i
+                  class="md:hidden font-bold text-black text-2xl bx bx-chevron-left"
+                ></i>
                 <span class="hidden md:block">Oldingi</span>
               </li>
             </ul>
@@ -795,7 +797,9 @@
                 "
               >
                 <span class="hidden md:block">Keyingi</span>
-                <i class="md:hidden font-bold text-black text-2xl bx bx-chevron-right"></i>
+                <i
+                  class="md:hidden font-bold text-black text-2xl bx bx-chevron-right"
+                ></i>
               </li>
             </ul>
           </nav>
@@ -1096,6 +1100,7 @@ const getSubject = async () => {
 
 const getEmployee = async () => {
   try {
+    method;
     const res = await axios.get(
       `/employee/${localStorage.getItem("school_id")}`,
       {

@@ -21,6 +21,7 @@ import {
   Customer,
   Sms,
   StudentsArchive,
+  Finance,
 } from "../views";
 
 const routes = [
@@ -152,6 +153,16 @@ const routes = [
           roles: ["_ad_sch_"],
           schools: ["dev_school", "camelot", "it_park", "element", "sophie's", "sayyimov_academy"],
           title: "SMS",
+        },
+      },
+      {
+        path: "/finance",
+        name: "finance",
+        component: Finance,
+        meta: {
+          roles: ["_ad_sch_", "_ow_sch_"],
+          schools: ["dev_school", "camelot", "it_park", "element", "sophie's", "sayyimov_academy"],
+          title: "Moliya",
         },
       },
       {
