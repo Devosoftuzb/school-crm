@@ -8,6 +8,7 @@ import Subjects from './Subjects/Subjects.vue';
 import Tests from './Tests/Test.vue';
 import Login from './Login/Login.vue';
 import Error from './Error/Error.vue';
+import Technical from './Error/Technical.vue';
 import Settings from './Settings/Settings.vue';
 import SlugStudent from './Students/_slug.vue';
 import SlugTeachers from './Teachers/_slug.vue';
@@ -30,6 +31,7 @@ export {
     Subjects,
     Login,
     Error,
+    Technical,
     Tests,
     Settings,
     Results,

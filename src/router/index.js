@@ -6,6 +6,7 @@ import {
   Teachers,
   Login,
   Error,
+  Technical,
   Tests,
   Settings,
   Groups,
@@ -158,7 +159,7 @@ const routes = [
       {
         path: "/finance",
         name: "finance",
-        component: Finance,
+        component: Technical,
         meta: {
           roles: ["_ad_sch_", "_ow_sch_"],
           schools: ["dev_school", "camelot", "it_park", "element", "sophie's", "sayyimov_academy", "renesans"],
