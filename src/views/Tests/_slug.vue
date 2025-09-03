@@ -253,7 +253,10 @@
           >
             <div class="grid font-medium gap-4 mb-4 grid-cols-1">
               <div class="">
-                <label for="title" class="block mb-2 text-sm"
+                <label
+                  for="title"
+                  class="block mb-2 text-sm"
+                  :class="navbar.userNav ? 'text-white' : 'text-black'"
                   >Matn mavzusiz</label
                 >
                 <input

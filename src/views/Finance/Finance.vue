@@ -5,6 +5,201 @@
         <Placeholder2 />
       </div>
 
+      <!-- ---------------------------------------------- cost category create modal -------------------------------------------------- -->
+      <div
+        @click.self="costCategoryModal"
+        :class="
+          costCategory.modal
+            ? 'fixed overflow-y-auto flex bg-[rgba(0,0,0,0.5)] overflow-x-hidden z-50 justify-center items-center w-full inset-0 h-full'
+            : 'hidden'
+        "
+      >
+        <transition name="modal-fade">
+          <div class="relative p-4 w-full max-w-xl h-auto">
+            <!-- Modal content -->
+            <div
+              class="relative p-4 rounded-lg shadow sm:p-5"
+              :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
+            >
+              <!-- Modal header -->
+              <div
+                class="flex flex-col items-center gap-5 pb-4 mb-4 rounded-t border-b sm:mb-5"
+              >
+                <div class="flex items-center justify-between w-full">
+                  <h3
+                    class="text-lg"
+                    :class="navbar.userNav ? 'text-white' : 'text-black'"
+                  >
+                    Kategoriya kiritish
+                  </h3>
+                  <button
+                    @click="costCategoryModal"
+                    type="button"
+                    class="bg-transparent hover:bg-gray-200 hover rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+                    :class="{ 'text-white': navbar.userNav }"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      class="w-5 h-5"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                        clip-rule="evenodd"
+                      ></path>
+                    </svg>
+                    <span class="sr-only">Close modal</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Modal body -->
+              <form
+                @submit.prevent="createCostCategory"
+                :class="{ darkForm: navbar.userNav }"
+              >
+                <div class="grid font-medium gap-4 mb-4">
+                  <div>
+                    <label for="name" class="block mb-2 text-sm"
+                      >Nomini kiriting</label
+                    >
+                    <input
+                      v-model="costCategory.categoryName"
+                      id="name"
+                      type="name"
+                      class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full py-2.5 pl-3"
+                      placeholder="Suv uchun"
+                      required
+                    />
+                  </div>
+                  <h2 class="text-sm text-blue-700">
+                    Qo'shilgan kategoriyalar
+                  </h2>
+                  <div v-for="i in store.costCategory" :key="i.id">
+                    <div class="flex items-center justify-between gap-3">
+                      <h2
+                        class="bg-gray-50 border text-black border-gray-300 text-sm w-full p-2.5 rounded-lg"
+                      >
+                        {{ i.name }}
+                      </h2>
+                      <i
+                        @click="deleteCostCategoryFunc(i.id)"
+                        class="bx bxs-trash bg-red-300 cursor-pointer text-red-600 rounded-lg sm:p-2 p-1.5 focus:ring-2"
+                      >
+                      </i>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="w-full flex flex-col gap-5 justify-center border-t pt-5 mt-5"
+                >
+                  <div class="w-full flex items-center justify-between">
+                    <button
+                      @click="costCategoryModal"
+                      type="button"
+                      class="border inline-flex items-center hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                    >
+                      Bekor qilish
+                    </button>
+                    <button
+                      type="submit"
+                      class="btnAdd text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                    >
+                      Qo'shish
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </transition>
+      </div>
+      <!-- ---------------------------------------------- cost category create modal end ---------------------------------------------- -->
+
+      <!-- ----------------------------------------- cost category delete modal ---------------------------------------------------- -->
+      <div
+        :class="
+          costCategory.remove
+            ? 'absolute overflow-y-auto flex bg-[rgba(0,0,0,0.5)] overflow-x-hidden z-50 justify-center items-center w-full inset-0 h-full'
+            : 'hidden'
+        "
+      >
+        <div class="relative p-4 max-w-5xl min-w-[30%] h-auto">
+          <!-- Modal content -->
+          <div
+            class="relative p-4 rounded-lg shadow sm:p-5"
+            :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
+          >
+            <!-- Modal header -->
+            <div
+              class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5"
+            >
+              <h3
+                class="text-lg"
+                :class="navbar.userNav ? 'text-white' : 'text-black'"
+              >
+                Kategoriyani o'chirib tashlash
+              </h3>
+              <button
+                @click="costCategory.remove = false"
+                type="button"
+                class="bg-transparent hover:bg-gray-200 hover rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+                :class="navbar.userNav ? 'text-white' : 'text-black'"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="w-5 h-5"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                    clip-rule="evenodd"
+                  ></path>
+                </svg>
+              </button>
+            </div>
+            <!-- Modal body -->
+            <div :class="{ darkForm: navbar.userNav }">
+              <div class="grid font-medium gap-4 mb-4 grid-cols-1">
+                <div>
+                  <div></div>
+                  <h1
+                    class="text-2xl"
+                    :class="navbar.userNav ? 'text-white' : 'text-black'"
+                  >
+                    Siz kategoriyani o'chirishni xohlaysizmi?
+                  </h1>
+                </div>
+                <div
+                  class="w-full flex items-center justify-between border-t pt-5 mt-5"
+                >
+                  <button
+                    @click="costCategory.remove = false"
+                    type="button"
+                    class="border cursor-pointer inline-flex items-center hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                  >
+                    Bekor qilish
+                  </button>
+                  <button
+                    @click="deleteCostCategory"
+                    class="btnAdd cursor-pointer text-white inline-flex items-center bg-[#4141eb] hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-500 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                  >
+                    O'chirish
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- ----------------------------------------- cost category delete modal end ---------------------------------------------------- -->
+
       <!-- ---------------------------------------------- cost create modal -------------------------------------------------- -->
       <div
         @click.self="costModal"
@@ -80,6 +275,31 @@
                       for="name"
                       class="block mb-2 text-sm"
                       :class="navbar.userNav ? 'text-white' : 'text-black'"
+                      >Kategoriyani tanlang</label
+                    >
+                    <select
+                      v-model="cost.category_id"
+                      id="name"
+                      class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                      required
+                    >
+                      <option value="" disabled selected>
+                        Kategoriyani tanlang
+                      </option>
+                      <option
+                        v-for="i in store.costCategory"
+                        :key="i.id"
+                        :value="i.id"
+                      >
+                        {{ i.name }}
+                      </option>
+                    </select>
+                  </div>
+                  <div>
+                    <label
+                      for="name"
+                      class="block mb-2 text-sm"
+                      :class="navbar.userNav ? 'text-white' : 'text-black'"
                       >To'lov turi tanlang</label
                     >
                     <select
@@ -136,7 +356,6 @@
                       id="description"
                       class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full py-2.5 pl-3 h-32"
                       placeholder="Izoh.."
-                      required
                     ></textarea>
                   </div>
                 </div>
@@ -235,6 +454,31 @@
                       placeholder="100000 so'm"
                       required
                     />
+                  </div>
+                  <div>
+                    <label
+                      for="name"
+                      class="block mb-2 text-sm"
+                      :class="navbar.userNav ? 'text-white' : 'text-black'"
+                      >Kategoriyani tanlang</label
+                    >
+                    <select
+                      v-model="cost.category_id"
+                      id="name"
+                      class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                      required
+                    >
+                      <option value="" disabled selected>
+                        Kategoriyani tanlang
+                      </option>
+                      <option
+                        v-for="i in store.costCategory"
+                        :key="i.id"
+                        :value="i.id"
+                      >
+                        {{ i.name }}
+                      </option>
+                    </select>
                   </div>
                   <div>
                     <label
@@ -390,7 +634,7 @@
                   <button
                     @click="cost.remove = false"
                     type="button"
-                    class="border cursor-pointer inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                    class="border cursor-pointer inline-flex items-center hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                   >
                     Bekor qilish
                   </button>
@@ -581,7 +825,7 @@
       </div>
       <!-- ---------------------------------------------- salary create modal end ---------------------------------------------- -->
 
-      <!-- ----------------------------------------------- cost update modal ----------------------------------------- -->
+      <!-- ----------------------------------------------- salary update modal ----------------------------------------- -->
       <div
         @click.self="salaryUpdateModal"
         :class="
@@ -752,9 +996,9 @@
           </div>
         </transition>
       </div>
-      <!-- ----------------------------------------------- cost update modal end ------------------------------------- -->
+      <!-- ----------------------------------------------- salary update modal end ------------------------------------- -->
 
-      <!-- ----------------------------------------- cost delete modal ---------------------------------------------------- -->
+      <!-- ----------------------------------------- salary delete modal ---------------------------------------------------- -->
       <div
         :class="
           salary.remove
@@ -817,7 +1061,7 @@
                   <button
                     @click="salary.remove = false"
                     type="button"
-                    class="border cursor-pointer inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                    class="border cursor-pointer inline-flex items-center hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                   >
                     Bekor qilish
                   </button>
@@ -833,7 +1077,7 @@
           </div>
         </div>
       </div>
-      <!-- ----------------------------------------- cost delete modal end ---------------------------------------------------- -->
+      <!-- ----------------------------------------- salary delete modal end ---------------------------------------------------- -->
 
       <div
         v-show="store.CostPageProduct && store.SalaryPageProduct"
@@ -842,13 +1086,24 @@
         <!-- Start coding here -->
 
         <!------------------------------------------- Search ------------------------------------------->
+
         <div
           class="shadow rounded-xl flex flex-col lg:flex-row items-center justify-between lg:space-x-4 p-4 gap-3 mb-4"
           :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
         >
-          <h1 class="text-blue-700 font-bold text-lg w-full">
-            Moliyaviy hisobot
-          </h1>
+          <div class="flex items-center gap-5">
+            <h1 class="text-blue-700 font-bold text-lg w-full">
+              Moliyaviy hisobot
+            </h1>
+
+            <button
+              @click="costCategory.modal = true"
+              type="button"
+              class="btnAdd flex items-center w-full sm:max-w-fit justify-center whitespace-nowrap text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2.5"
+            >
+              <span class="">Kategoriya qo'shish</span>
+            </button>
+          </div>
 
           <div
             class="w-full lg:w-auto flex flex-row space-y-0 items-stretch md:items-center justify-end space-x-3"
@@ -858,14 +1113,14 @@
               type="button"
               class="btnAdd flex items-center w-full sm:max-w-fit justify-center whitespace-nowrap text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2.5"
             >
-              <span class="">Chiqim</span>
+              <span class="">Chiqim kiritish</span>
             </button>
             <button
               @click="salary.modal = true"
               type="button"
               class="btnAdd flex items-center w-full sm:max-w-fit justify-center whitespace-nowrap text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2.5"
             >
-              <span class="">Maosh</span>
+              <span class="">Maosh berish</span>
             </button>
           </div>
         </div>
@@ -888,11 +1143,18 @@
               <table class="w-full text-sm text-left">
                 <thead class="btnAdd text-white text-xs rounded-lg uppercase">
                   <tr>
+                    <th scope="col" class="text-center px-8 py-3">
+                      Kategoriya
+                    </th>
                     <th scope="col" class="text-center px-8 py-3">Suma</th>
-                    <th scope="col" class="text-center px-8 py-3">To'lov turi</th>
+                    <th scope="col" class="text-center px-8 py-3">
+                      To'lov turi
+                    </th>
                     <th scope="col" class="text-center px-8 py-3">Oy</th>
                     <th scope="col" class="text-center px-8 py-3">Izoh</th>
-                    <th scope="col" class="text-center px-8 py-3">To'lov sanasi</th>
+                    <th scope="col" class="text-center px-8 py-3">
+                      To'lov sanasi
+                    </th>
                     <th></th>
                   </tr>
                 </thead>
@@ -905,6 +1167,13 @@
                     v-for="i in store.CostPageProduct"
                     :key="i.id"
                   >
+                    <td
+                      class="text-center font-medium whitespace-nowrap text-blue-800 px-8 py-4"
+                    >
+                      <p class="bg-blue-100 rounded-[5px] p-1">
+                        {{ i.costCategory.name }}
+                      </p>
+                    </td>
                     <td
                       class="text-center font-medium whitespace-nowrap text-red-800 px-8 py-4"
                     >
@@ -926,6 +1195,7 @@
                         {{ monthNames(i.month) }}
                       </p>
                     </td>
+
                     <td class="text-center font-medium px-8 py-2 relative">
                       <div class="group relative w-40 inline-block">
                         <p class="truncate w-40 p-1 rounded-[5px]">
@@ -1070,9 +1340,13 @@
                       O'qituvchi (F . I . O)
                     </th>
                     <th scope="col" class="text-center px-8 py-3">Suma</th>
-                    <th scope="col" class="text-center px-8 py-3">To'lov turi</th>
+                    <th scope="col" class="text-center px-8 py-3">
+                      To'lov turi
+                    </th>
                     <th scope="col" class="text-center px-8 py-3">Oy</th>
-                    <th scope="col" class="text-center px-8 py-3">To'lov sanasi</th>
+                    <th scope="col" class="text-center px-8 py-3">
+                      To'lov sanasi
+                    </th>
                     <th></th>
                   </tr>
                 </thead>
@@ -1239,6 +1513,7 @@ const store = reactive({
   allProducts: true,
   CostPageProduct: "",
   SalaryPageProduct: "",
+  costCategory: "",
   method: "",
   employee: "",
   salaryPage: [],
@@ -1251,11 +1526,19 @@ const store = reactive({
 const cost = reactive({
   modal: false,
   id: "",
+  category_id: "",
   price: "",
   method: "",
   month: hozirgiOy,
   description: "",
   updateModal: false,
+  remove: false,
+});
+
+const costCategory = reactive({
+  modal: false,
+  id: "",
+  categoryName: "",
   remove: false,
 });
 
@@ -1268,9 +1551,15 @@ const salary = reactive({
   month: hozirgiOy,
 });
 
+const costCategoryModal = () => {
+  costCategory.modal = !costCategory.modal;
+  costCategory.categoryNmae = "";
+};
+
 const costModal = () => {
   cost.modal = !cost.modal;
   cost.month = hozirgiOy;
+  cost.category_id = "";
   cost.price = "";
   cost.method = "";
   cost.description = "";
@@ -1279,10 +1568,16 @@ const costModal = () => {
 const costUpdateModal = () => {
   cost.updateModal = !cost.updateModal;
   cost.id = "";
+  cost.category_id = "";
   cost.month = hozirgiOy;
   cost.price = "";
   cost.method = "";
   cost.description = "";
+};
+
+const deleteCostCategoryFunc = (id) => {
+  costCategory.id = id;
+  costCategory.remove = true;
 };
 
 const deleteCostFunc = (id) => {
@@ -1355,6 +1650,21 @@ const chekDateFormat = (date) => {
 
 // ------------ axios get ------------- //
 
+const getCostCategory = async () => {
+  await axios
+    .get(`/cost-category/${localStorage.getItem("school_id")}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    })
+    .then((res) => {
+      store.costCategory = res.data;
+    })
+    .catch((error) => {
+      store.costCategory = [{ name: "Kategoriya yaratilmagan" }];
+    });
+};
+
 const getCost = async (page) => {
   try {
     const res = await axios.get(
@@ -1369,6 +1679,7 @@ const getCost = async (page) => {
       res.data?.data?.pagination.currentPage,
       res.data?.data?.pagination.total_count,
     ];
+
     store.error = false;
   } catch (error) {
     store.CostPageProduct = error.response.data.message;
@@ -1439,6 +1750,7 @@ const getOneCost = async (id) => {
     );
 
     cost.id = res.data.id;
+    cost.category_id = res.data.category_id;
     cost.price = res.data.price;
     cost.method = res.data.method;
     cost.month = res.data.month;
@@ -1475,9 +1787,29 @@ const getOneSalary = async (id) => {
 
 // ------------ axios post ------------- //
 
+const createCostCategory = async () => {
+  const data = {
+    school_id: Number(localStorage.getItem("school_id")),
+    name: costCategory.categoryName,
+  };
+  try {
+    await axios.post("/cost-category", data, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    });
+    notification.success("Kategoriya kiritildi");
+    getCostCategory();
+    costCategoryModal();
+  } catch (error) {
+    notification.warning(
+      "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
+    );
+  }
+};
+
 const createCost = async () => {
   const data = {
     school_id: Number(localStorage.getItem("school_id")),
+    category_id: cost.category_id,
     price: cost.price,
     method: cost.method,
     month: cost.month,
@@ -1527,6 +1859,7 @@ const createSalary = async () => {
 const updateCost = async () => {
   const data = {
     school_id: Number(localStorage.getItem("school_id")),
+    category_id: cost.category_id,
     price: cost.price,
     method: cost.method,
     month: cost.month,
@@ -1580,6 +1913,24 @@ const updateSalary = async () => {
 
 // ------------ axios delete ------------ //
 
+const deleteCostCategory = async () => {
+  try {
+    await axios.delete(
+      `/cost-category/${localStorage.getItem("school_id")}/${costCategory.id}`,
+      {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      }
+    );
+    costCategory.remove = false;
+    getCostCategory();
+    notification.success("Kategoriya o'chirildi");
+  } catch (error) {
+    notification.warning(
+      "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
+    );
+  }
+};
+
 const deleteCost = async () => {
   try {
     await axios.delete(
@@ -1617,6 +1968,7 @@ const deleteSalary = async () => {
 };
 
 onMounted(() => {
+  getCostCategory();
   getCost(store.costPagination);
   getSalary(store.salaryPagination);
   getMethod();
