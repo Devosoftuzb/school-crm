@@ -70,7 +70,7 @@
                   required
                 />
               </div>
-              <div>
+              <div class="relative">
                 <label
                   for="password"
                   class="block mb-2 text-sm"
@@ -79,13 +79,63 @@
                 >
                 <input
                   v-model="form.password"
-                  type="password"
+                  :type="showPassword ? 'text' : 'password'"
                   name="password"
                   id="password"
                   class="bg-white border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                   placeholder="*********"
                   required
                 />
+                <button
+                  type="button"
+                  @click="showPassword = !showPassword"
+                  class="absolute top-[38px] right-3 text-gray-600 hover:text-gray-900 focus:outline-none"
+                  aria-label="Yangi parolni ko‘rsatish"
+                >
+                  <svg
+                    v-if="!showPassword"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    class="w-6 h-6"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                    />
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                    />
+                  </svg>
+
+                  <svg
+                    v-else
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    class="w-6 h-6"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M13.875 18.825A10.05 10.05 0 0112 19c-4.477 0-8.268-2.943-9.542-7a9.958 9.958 0 012.223-3.607m1.923-1.92A9.956 9.956 0 0112 5c4.477 0 8.268 2.943 9.542 7a10.025 10.025 0 01-4.683 5.12M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                    />
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M3 3l18 18"
+                    />
+                  </svg>
+                </button>
               </div>
               <div class="">
                 <label
@@ -104,7 +154,7 @@
                   required
                 />
               </div>
-             <div class="">
+              <div class="">
                 <label
                   for="salary"
                   class="block mb-2 text-sm"
@@ -118,7 +168,6 @@
                   id="salary"
                   class="bg-white border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                   placeholder="Maoshni kiriting % da"
-                  
                 />
               </div>
               <div>
@@ -426,37 +475,63 @@
         >
           <!-- Modal header -->
           <div
-            class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5"
+            class="flex flex-col items-center gap-5 pb-4 mb-4 rounded-t border-b sm:mb-5"
           >
-            <h3
-              class="text-lg"
-              :class="navbar.userNav ? 'text-white' : 'text-black'"
-            >
-              Xodim ma'lumotlarini o'zgartirish
-            </h3>
-            <button
-              @click="cancelFunc1"
-              type="button"
-              class="bg-transparent hover:bg-gray-200 hover rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
-              :class="navbar.userNav ? 'text-white' : 'text-black'"
-            >
-              <svg
-                aria-hidden="true"
-                class="w-5 h-5"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
+            <div class="w-full flex items-center justify-between">
+              <h3
+                class="text-lg"
+                :class="navbar.userNav ? 'text-white' : 'text-black'"
               >
-                <path
-                  fill-rule="evenodd"
-                  d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                  clip-rule="evenodd"
-                ></path>
-              </svg>
-            </button>
+                Xodim ma'lumotlarini o'zgartirish
+              </h3>
+              <button
+                @click="cancelFunc1"
+                type="button"
+                class="bg-transparent hover:bg-gray-200 hover rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+                :class="navbar.userNav ? 'text-white' : 'text-black'"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="w-5 h-5"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                    clip-rule="evenodd"
+                  ></path>
+                </svg>
+              </button>
+            </div>
+            <div
+              class="flex w-full items-center justify-between sm:w-auto"
+              id="navbar-sticky"
+            >
+              <ul
+                class="font-medium w-full flex flex-col sm:flex-row items-center gap-5 text-white"
+              >
+                <li
+                  class="cursor-pointer w-full sm:max-w-fit text-center bg-gray-600 hover:bg-gray-500 p-2 px-5 sm:text-md text-sm rounded-lg"
+                  :class="store.infoModal ? 'btnAdd' : 'bg-gray-600'"
+                  @click="infoCenModal"
+                >
+                  <span>Ma'lumotlarni o'zgartirish</span>
+                </li>
+                <li
+                  class="cursor-pointer w-full sm:max-w-fit text-center bg-gray-600 hover:bg-gray-500 p-2 px-5 sm:text-md text-sm rounded-lg"
+                  :class="store.passwordModal ? 'btnAdd' : 'bg-gray-600'"
+                  @click="passwordCenModal"
+                >
+                  <span>Parolni o'zgartirish</span>
+                </li>
+              </ul>
+            </div>
           </div>
           <!-- Modal body -->
           <form
+            v-show="store.infoModal"
             @submit.prevent="editProduct"
             :class="{ darkForm: navbar.userNav }"
           >
@@ -478,7 +553,7 @@
                   required
                 />
               </div>
-               <div class="">
+              <div class="">
                 <label
                   for="salary"
                   class="block mb-2 text-sm"
@@ -492,7 +567,6 @@
                   id="salary"
                   class="bg-white border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                   placeholder="Maoshni kiriting % da"
-                  
                 />
               </div>
               <!-- <div>
@@ -568,6 +642,170 @@
                 </select>
               </div>
             </div>
+            <div
+              class="w-full flex items-center justify-between border-t pt-5 mt-5"
+            >
+              <button
+                @click="cancelFunc1"
+                type="button"
+                class="border cursor-pointer inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+              >
+                Bekor qilish
+              </button>
+              <button
+                type="submit"
+                class="btnAdd cursor-pointer text-white inline-flex items-center bg-[#4141eb] hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-500 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+              >
+                O'zgartirish
+              </button>
+            </div>
+          </form>
+
+          <form
+            v-show="store.passwordModal"
+            @submit.prevent="changePassword"
+            :class="{ darkForm: navbar.userNav }"
+          >
+            <div class="grid font-medium gap-4 mb-4 sm:grid-cols-2">
+              <!-- Yangi parol -->
+              <div class="relative">
+                <label
+                  for="new_password"
+                  class="block mb-2 text-sm"
+                  :class="navbar.userNav ? 'text-white' : 'text-black'"
+                >
+                  Yangi parolni kiriting
+                </label>
+                <input
+                  v-model="edit.new_password"
+                  :type="showNewPassword ? 'text' : 'password'"
+                  name="new_password"
+                  id="new_password"
+                  class="bg-white placeholder-black border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 pr-10"
+                  placeholder="*********"
+                />
+                <button
+                  type="button"
+                  @click="showNewPassword = !showNewPassword"
+                  class="absolute top-[38px] right-3 text-gray-600 hover:text-gray-900 focus:outline-none"
+                  aria-label="Yangi parolni ko‘rsatish"
+                >
+                  <svg
+                    v-if="!showNewPassword"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    class="w-6 h-6"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                    />
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                    />
+                  </svg>
+
+                  <svg
+                    v-else
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    class="w-6 h-6"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M13.875 18.825A10.05 10.05 0 0112 19c-4.477 0-8.268-2.943-9.542-7a9.958 9.958 0 012.223-3.607m1.923-1.92A9.956 9.956 0 0112 5c4.477 0 8.268 2.943 9.542 7a10.025 10.025 0 01-4.683 5.12M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                    />
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M3 3l18 18"
+                    />
+                  </svg>
+                </button>
+              </div>
+
+              <!-- Yangi parolni qayta kiriting -->
+              <div class="relative">
+                <label
+                  for="new2_password"
+                  class="block mb-2 text-sm"
+                  :class="navbar.userNav ? 'text-white' : 'text-black'"
+                >
+                  Yangi parolni qaytadan kiriting
+                </label>
+                <input
+                  v-model="edit.new2_password"
+                  :type="showNew2Password ? 'text' : 'password'"
+                  name="new2_password"
+                  id="new2_password"
+                  class="bg-white placeholder-black border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 pr-10"
+                  placeholder="*********"
+                />
+                <button
+                  type="button"
+                  @click="showNew2Password = !showNew2Password"
+                  class="absolute top-[38px] right-3 text-gray-600 hover:text-gray-900 focus:outline-none"
+                  aria-label="Yangi parolni qayta ko‘rsatish"
+                >
+                  <svg
+                    v-if="!showNew2Password"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    class="w-6 h-6"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                    />
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                    />
+                  </svg>
+
+                  <svg
+                    v-else
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    class="w-6 h-6"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M13.875 18.825A10.05 10.05 0 0112 19c-4.477 0-8.268-2.943-9.542-7a9.958 9.958 0 012.223-3.607m1.923-1.92A9.956 9.956 0 0112 5c4.477 0 8.268 2.943 9.542 7a10.025 10.025 0 01-4.683 5.12M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                    />
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M3 3l18 18"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
+
             <div
               class="w-full flex items-center justify-between border-t pt-5 mt-5"
             >
@@ -1089,6 +1327,8 @@ const store = reactive({
   subjectModal: false,
   groupModal: false,
   editModal: false,
+  infoModal: true,
+  passwordModal: false,
   addSubject: "",
   hashed_password: "",
   guard: true,
@@ -1109,12 +1349,17 @@ const form = reactive({
   salary: 0,
 });
 
+const showPassword = ref(false);
+const showNewPassword = ref(false);
+const showNew2Password = ref(false);
+
 const edit = reactive({
   school_id: "",
   full_name: "",
   phone_number: "",
   login: "",
-  password: "",
+  new_password: "",
+  new2_password: "",
   role: "",
   subject: "",
   group: "",
@@ -1155,6 +1400,16 @@ const deleteFunc = (id) => {
 const cancelFunc1 = () => {
   Object.keys(edit).forEach((key) => (edit[key] = ""));
   store.editModal = false;
+};
+
+const infoCenModal = () => {
+  store.infoModal = true;
+  store.passwordModal = false;
+};
+
+const passwordCenModal = () => {
+  store.infoModal = false;
+  store.passwordModal = true;
 };
 
 // toggle
@@ -1230,7 +1485,7 @@ const getOneProduct = async (id, modalType) => {
 
     edit.id = res.data.id;
     if (modalType === "edit") {
-      edit.school_id = res.data.school_id
+      edit.school_id = res.data.school_id;
       edit.full_name = res.data.full_name;
       edit.phone_number = res.data.phone_number;
       edit.login = res.data.login;
@@ -1293,7 +1548,7 @@ const getProduct = async (page) => {
 };
 
 const editProduct = async () => {
-  const data = { ...edit,};
+  const data = { ...edit };
   try {
     await axios.put(
       `/employee/${localStorage.getItem("school_id")}/${edit.id}`,
@@ -1310,6 +1565,36 @@ const editProduct = async () => {
 
     notification.warning(
       "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
+    );
+  }
+};
+
+const changePassword = async () => {
+  if (edit.new_password === edit.new2_password) {
+    const data = {
+      new_password: edit.new_password,
+    };
+    try {
+      await axios.post(
+        `/employee/reset-password/${localStorage.getItem("school_id")}/${
+          edit.id
+        }`,
+        data,
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        }
+      );
+      notification.success("Xodim paroli tahrirlandi");
+      await getProduct(store.pagination);
+      cancelFunc1();
+    } catch (error) {
+      notification.warning(
+        "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
+      );
+    }
+  } else {
+    notification.warning(
+      "Yangi kiritilgan parol qayta kiritilgan parolga mos kelmayapti. Iltimos, parollarni tekshiring!"
     );
   }
 };

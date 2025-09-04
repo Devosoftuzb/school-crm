@@ -12,6 +12,7 @@
     "@headlessui/vue": "^1.7.23",
     "ant-design-vue": "^3.2.20",
     "axios": "^1.4.0",
+    "boxicons": "^2.1.4",
     "chart.js": "^4.3.0",
     "cors": "^2.8.5",
     "element-plus": "^2.3.7",

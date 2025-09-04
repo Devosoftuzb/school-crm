@@ -1100,7 +1100,6 @@ const getSubject = async () => {
 
 const getEmployee = async () => {
   try {
-    method;
     const res = await axios.get(
       `/employee/${localStorage.getItem("school_id")}`,
       {
