@@ -35,7 +35,7 @@
       </div>
 
       <div
-        v-show="store.guard"
+        v-show="!store.guard"
         class="cards grid xl:grid-cols-3 lg:grid-cols-3 sm:grid-cols-1 grid-cols-1 xl:mb-0 mb-5 2xl:gap-5 gap-3 px-2"
       >
         <div class="card" v-for="(i, index) in 3" :key="index">
