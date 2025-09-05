@@ -708,7 +708,7 @@
                 <span class="sm:block hidden">O'quvchi qo'shish</span>
                 <i class="sm:hidden block bx bxs-user-plus text-lg"></i>
               </button>
-              <router-link class="w-full" to="/students/archive">
+              <router-link v-show="store.guard" class="w-full" to="/students/archive">
                 <button
                   id=""
                   type="button"
@@ -1049,6 +1049,7 @@ const navbar = useNavStore();
 const router = useRouter();
 
 const modal = ref(false);
+const userRole = localStorage.getItem("role");
 
 const toggleModal = () => {
   modal.value = !modal.value;
@@ -1062,9 +1063,11 @@ const store = reactive({
   allProducts: [],
   error: false,
   group: [{ name: "Guruh yaratilmagan" }],
+  groupList: [],
   groupModal: false,
   filter: "",
   searchList: [],
+  guard: userRole == "_ow_sch_" || userRole == "_ad_sch_",
 });
 
 const groupSearch = reactive({
@@ -1211,12 +1214,46 @@ const getProduct = async (page) => {
 };
 
 const getGroups = async () => {
-  try {
-    const data = await fetchData(`/group/${localStorage.getItem("school_id")}`);
+  if (store.guard) {
+    try {
+      const data = await fetchData(
+        `/group/${localStorage.getItem("school_id")}`
+      );
 
-    store.group = data;
-  } catch {
-    store.group = [{ name: "Guruh yaratilmagan" }];
+      store.group = data;
+    } catch {
+      store.group = [{ name: "Guruh yaratilmagan" }];
+    }
+  } else {
+    const schoolId = localStorage.getItem("school_id");
+    const token = localStorage.getItem("token");
+    const id = localStorage.getItem("id");
+
+    try {
+      const employeeRes = await axios.get(`/employee/${schoolId}/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const employeeData = employeeRes.data;
+
+      const groupPromises = employeeData.group.map(async (group) => {
+        const groupRes = await axios.get(
+          `/group/${schoolId}/${group.group_id}/not`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        const groupData = groupRes.data;
+        groupData.student_date = group.createdAt.split("T")[0];
+        store.groupList.push(groupData);
+        return groupData;
+      });
+
+      await Promise.all(groupPromises);
+
+      store.group = store.groupList;
+    } catch (error) {
+      console.error("Xodim va guruh ma'lumotlarini olishda xato:", error);
+    }
   }
 };
 

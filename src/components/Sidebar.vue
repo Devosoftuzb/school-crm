@@ -57,6 +57,8 @@ const store = reactive({
       ? "administrator"
       : localStorage.getItem("role") == "_sp_am_"
       ? "superadmin"
+      : localStorage.getItem("role") == "_tch_sch_"
+      ? "teacher"
       : "admin",
 });
 

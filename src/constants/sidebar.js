@@ -4,7 +4,7 @@ export const header = [
     title: "Asosiy",
     link: "/",
     icon: "bx bxs-dashboard",
-    role: "_sp_am_, _ow_sch_, _ad_sch_",
+    role: "_sp_am_, _ow_sch_, _ad_sch_, _tch_sch_",
     school: "dev_school, camelot, it_park, element, sophie's, zafar_azimov_school, silverstudy, sayyimov_academy",
   },
   {
@@ -28,7 +28,7 @@ export const header = [
     title: "O'quvchilar",
     link: "/students",
     icon: "bx bxs-user",
-    role: "_ad_sch_",
+    role: "_ad_sch_, _tch_sch_",
     school: "dev_school, camelot, it_park, element, sophie's, zafar_azimov_school, silverstudy, sayyimov_academy",
   },
   {
@@ -36,7 +36,7 @@ export const header = [
     title: "Guruhlar",
     link: "/groups",
     icon: "bx bxs-group",
-    role: "_ad_sch_",
+    role: "_ad_sch_, _tch_sch_",
     school: "dev_school, camelot, it_park, element, sophie's, zafar_azimov_school, silverstudy, sayyimov_academy",
   },
   {
@@ -52,7 +52,7 @@ export const header = [
     title: "Davomat",
     link: "/attendance",
     icon: "bx bx-user-check",
-    role: "_ad_sch_",
+    role: "_ad_sch_, _tch_sch_",
     school: "dev_school, camelot, it_park, element, sophie's, zafar_azimov_school, silverstudy, sayyimov_academy",
   },
   {

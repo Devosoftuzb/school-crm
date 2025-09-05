@@ -505,14 +505,22 @@
 
     <section class="pt-4" :class="{ 'text-white': navbar.userNav }">
       <!------------------------------------------- Placeholder ------------------------------------------->
-      <div v-show="!store.PageProduct">
+      <div
+        v-if="
+          store.PageProduct?.length === 0 && store.allProducts?.length === 0
+        "
+      >
         <Placeholder2 />
       </div>
+
       <!------------------------------------------- Placeholder ------------------------------------------->
 
       <!------------------------------------------- Search ------------------------------------------->
 
-      <div v-show="store.PageProduct" class="w-full max-w-screen">
+      <div
+        v-show="store.PageProduct || store.allProducts"
+        class="w-full max-w-screen"
+      >
         <!-- Start coding here -->
         <div
           class="shadow rounded-xl flex flex-col lg:flex-row items-center justify-between lg:space-x-4 p-4 mb-4"
@@ -526,6 +534,7 @@
               class="lg:w-auto flex flex-row items-center justify-end space-x-3"
             >
               <button
+                v-show="store.guard"
                 @click="toggleModal"
                 id=""
                 type="button"
@@ -536,7 +545,7 @@
             </div>
           </div>
 
-          <div class="w-full lg:w-80">
+          <div v-show="store.guard" class="w-full lg:w-80">
             <form class="flex items-center text-gray-900 font-medium">
               <label for="simple-search" class="sr-only">Qidiruv</label>
               <div class="relative w-full">
@@ -596,7 +605,7 @@
           :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
         >
           <div class="overflow-x-auto">
-            <table class="w-full text-sm text-left">
+            <table v-show="store.guard" class="w-full text-sm text-left">
               <thead class="btnAdd text-white text-xs rounded-lg uppercase">
                 <tr>
                   <th scope="col" class="text-center py-3">Nomi</th>
@@ -734,11 +743,83 @@
                 </tr>
               </tbody>
             </table>
+            <table v-show="!store.guard" class="w-full text-sm text-left">
+              <thead class="btnAdd text-white text-xs rounded-lg uppercase">
+                <tr>
+                  <th scope="col" class="text-center py-3">Nomi</th>
+                  <th scope="col" class="text-center py-3">Fani</th>
+                  <th scope="col" class="text-center py-3">Narxi</th>
+                  <th scope="col" class="text-center py-3">
+                    Boshlanish sanasi
+                  </th>
+                  <th scope="col" class="text-center py-3">
+                    Qo'shilgan sanasi
+                  </th>
+                  <th scope="col" class="text-center py-3">To'liq</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  class="border-b"
+                  :class="
+                    navbar.userNav ? 'hover:bg-gray-700' : 'hover:bg-gray-50'
+                  "
+                  v-for="i in store.allProducts"
+                  :key="i.id"
+                >
+                  <td
+                    scope="row"
+                    class="text-center px-8 py-4 font-medium whitespace-nowrap"
+                  >
+                    {{ i.name }}
+                  </td>
+                  <td
+                    class="text-center font-medium whitespace-nowrap text-blue-800 px-8 py-4"
+                  >
+                    <p class="bg-blue-100 rounded-[5px] p-1">
+                      <span v-for="fan in i.subject" :key="fan.id"
+                        >{{ fan.subject_name }}
+                      </span>
+                    </p>
+                  </td>
+                  <td
+                    class="text-center font-medium whitespace-nowrap text-red-800 px-8 py-4"
+                  >
+                    <p class="bg-red-100 rounded-[5px] p-1">
+                      {{ i.price }} so'm
+                    </p>
+                  </td>
+                  <td
+                    class="text-center font-medium whitespace-nowrap text-blue-800 px-8 py-4"
+                  >
+                    <p class="bg-blue-100 rounded-[5px] p-1">
+                      {{ i.start_date }}
+                    </p>
+                  </td>
+                  <td
+                    class="text-center font-medium whitespace-nowrap text-blue-800 px-8 py-4"
+                  >
+                    <p class="bg-blue-100 rounded-[5px] p-1">
+                      {{ i.student_date }}
+                    </p>
+                  </td>
+                  <td class="text-center font-medium px-8 py-4">
+                    <button
+                      @click="enterSlug(i.id, i.name.toLowerCase())"
+                      class="btn bg-blue-600 rounded-lg px-5 py-2.5 text-white focus:ring-2"
+                    >
+                      Kirish
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
             <div v-show="store.error" class="flex w-full justify-center">
-              <h1 class="p-20 text-2xl font-medium">{{ store.PageProduct }}</h1>
+              <h1 class="p-20 text-2xl font-medium">{{ store.allProducts }}</h1>
             </div>
           </div>
           <nav
+            v-show="store.guard"
             v-if="!store.searchList.length"
             class="flex flex-row justify-between items-center space-y-0 p-4"
             aria-label="Table navigation"
@@ -806,7 +887,11 @@
         </div>
       </div>
       <div
-        v-show="store.PageProduct && store.error"
+        v-show="
+          store.error &&
+          (!store.PageProduct || store.PageProduct.length === 0) &&
+          (!store.allProducts || store.allProducts.length === 0)
+        "
         class="w-full max-w-screen"
       >
         <h1>Guruhlar ro'yhati bo'sh</h1>
@@ -828,19 +913,21 @@ import axios from "@/services/axios";
 const notification = useNotificationStore();
 const navbar = useNavStore();
 const router = useRouter();
-
+const userRole = localStorage.getItem("role");
 const modal = ref(false);
 const store = reactive({
   PageProduct: "",
   page: [],
   pagination: 1,
-  allProducts: [],
+  allProducts: "",
   subject: [{ name: "Fan yaratilmagan" }],
   employee: [{ name: "O'qituvchi yaratilmagan" }],
   error: false,
   filter: "",
   filter_show: false,
   searchList: [],
+  guard: userRole == "_ow_sch_" || userRole == "_ad_sch_",
+  group: [],
 });
 
 const form = reactive({
@@ -932,185 +1019,231 @@ const deleteFunc = (id) => {
 // ----------------------------------- axios --------------------------------
 
 const getAllProduct = async () => {
-  try {
-    const res = await axios.get(
-      `/group/${localStorage.getItem("school_id")}/find`,
-      {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      }
-    );
-    store.allProducts = res.data.sort((a, b) => b.id - a.id);
-    store.error = false;
-  } catch (error) {
-    store.allProducts = error.response.data.message;
-    store.error = true;
+  if (store.guard) {
+    try {
+      const res = await axios.get(
+        `/group/${localStorage.getItem("school_id")}/find`,
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        }
+      );
+      store.allProducts = res.data.sort((a, b) => b.id - a.id);
+      store.error = false;
+    } catch (error) {
+      store.allProducts = error.response.data.message;
+      store.error = true;
+    }
+  } else {
+    const schoolId = localStorage.getItem("school_id");
+    const token = localStorage.getItem("token");
+    const id = localStorage.getItem("id");
+
+    try {
+      const employeeRes = await axios.get(`/employee/${schoolId}/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const employeeData = employeeRes.data;
+
+      const groupPromises = employeeData.group.map(async (group) => {
+        const groupRes = await axios.get(
+          `/group/${schoolId}/${group.group_id}/not`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        const groupData = groupRes.data;
+        groupData.student_date = group.createdAt.split("T")[0];
+        store.group.push(groupData);
+        return groupData;
+      });
+
+      await Promise.all(groupPromises);
+
+      store.allProducts = store.group;
+    } catch (error) {
+      console.error("Xodim va guruh ma'lumotlarini olishda xato:", error);
+    }
   }
 };
 
 const getProduct = async (page) => {
-  try {
-    const res = await axios.get(
-      `/group/${localStorage.getItem("school_id")}/page?page=${page}`,
-      {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      }
-    );
-    store.PageProduct = res.data?.data?.records;
-    store.page = [
-      res.data?.data?.pagination.currentPage,
-      res.data?.data?.pagination.total_count,
-    ];
-    store.error = false;
-  } catch (error) {
-    store.PageProduct = error.response.data.message;
-    store.error = true;
+  if (store.guard) {
+    try {
+      const res = await axios.get(
+        `/group/${localStorage.getItem("school_id")}/page?page=${page}`,
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        }
+      );
+      store.PageProduct = res.data?.data?.records;
+      store.page = [
+        res.data?.data?.pagination.currentPage,
+        res.data?.data?.pagination.total_count,
+      ];
+      store.error = false;
+    } catch (error) {
+      store.PageProduct = error.response.data.message;
+      store.error = true;
+    }
   }
 };
 
 const getOneProduct = async (id) => {
-  try {
-    const res = await axios.get(
-      `/group/${localStorage.getItem("school_id")}/${id}`,
-      {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      }
-    );
-    console.log(res);
-    Object.assign(edit, {
-      name: res.data.name,
-      start_date: res.data.start_date,
-      price: res.data.price,
-      start_time: res.data.start_time,
-      end_time: res.data.end_time,
-      id: id,
-      subject: res.data.subject[0].subject_name,
-      employee: Number(res.data.employee[0].employee_id),
-      room_id: res.data.room_id,
-      toggle: true,
-    });
-  } catch (error) {
-    notification.warning(
-      "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
-    );
+  if (store.guard) {
+    try {
+      const res = await axios.get(
+        `/group/${localStorage.getItem("school_id")}/${id}`,
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        }
+      );
+      console.log(res);
+      Object.assign(edit, {
+        name: res.data.name,
+        start_date: res.data.start_date,
+        price: res.data.price,
+        start_time: res.data.start_time,
+        end_time: res.data.end_time,
+        id: id,
+        subject: res.data.subject[0].subject_name,
+        employee: Number(res.data.employee[0].employee_id),
+        room_id: res.data.room_id,
+        toggle: true,
+      });
+    } catch (error) {
+      notification.warning(
+        "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
+      );
+    }
   }
 };
 
 const createProduct = async () => {
-  const data = {
-    school_id: Number(localStorage.getItem("school_id")),
-    name: form.name,
-    start_date: form.start_date,
-    price: String(form.price),
-    room_id: 1,
-    start_time: form.start_time,
-    end_time: form.end_time,
-    status: true,
-  };
-  try {
-    const res = await axios.post("/group", data, {
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-    });
-    notification.success("Guruh yaratildi");
-
-    const subjectData = {
-      group_id: res.data.group.id,
-      subject_name: form.subject,
+  if (store.guard) {
+    const data = {
+      school_id: Number(localStorage.getItem("school_id")),
+      name: form.name,
+      start_date: form.start_date,
+      price: String(form.price),
+      room_id: 1,
+      start_time: form.start_time,
+      end_time: form.end_time,
+      status: true,
     };
-    await axios.post(`/group-subject`, subjectData, {
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-    });
+    try {
+      const res = await axios.post("/group", data, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      });
+      notification.success("Guruh yaratildi");
 
-    const employeeData = {
-      employee_id: form.employee,
-      group_id: res.data.group.id,
-      group_name: res.data.group.name,
-    };
-    await axios.post(`/employee-group`, employeeData, {
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-    });
+      const subjectData = {
+        group_id: res.data.group.id,
+        subject_name: form.subject,
+      };
+      await axios.post(`/group-subject`, subjectData, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      });
 
-    await getProduct(store.pagination);
-    cancelFunc();
-  } catch (error) {
-    notification.warning(
-      "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
-    );
+      const employeeData = {
+        employee_id: form.employee,
+        group_id: res.data.group.id,
+        group_name: res.data.group.name,
+      };
+      await axios.post(`/employee-group`, employeeData, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      });
+
+      await getProduct(store.pagination);
+      cancelFunc();
+    } catch (error) {
+      notification.warning(
+        "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
+      );
+    }
   }
 };
 
 const editProduct = async () => {
-  const data = {
-    school_id: Number(localStorage.getItem("school_id")),
-    name: edit.name,
-    start_date: edit.start_date,
-    price: String(edit.price),
-    start_time: edit.start_time,
-    end_time: edit.end_time,
-    room_id: edit.room_id,
-  };
-  try {
-    await axios.put(
-      `/group/${localStorage.getItem("school_id")}/${edit.id}`,
-      data,
-      {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      }
-    );
-    notification.success("Guruh tahrirlandi");
-    await getProduct(store.pagination);
-    cancelFunc1();
-  } catch (error) {
-    notification.warning(
-      "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
-    );
+  if (store.guard) {
+    const data = {
+      school_id: Number(localStorage.getItem("school_id")),
+      name: edit.name,
+      start_date: edit.start_date,
+      price: String(edit.price),
+      start_time: edit.start_time,
+      end_time: edit.end_time,
+      room_id: edit.room_id,
+    };
+    try {
+      await axios.put(
+        `/group/${localStorage.getItem("school_id")}/${edit.id}`,
+        data,
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        }
+      );
+      notification.success("Guruh tahrirlandi");
+      await getProduct(store.pagination);
+      cancelFunc1();
+    } catch (error) {
+      notification.warning(
+        "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
+      );
+    }
   }
 };
 
 const deleteProduct = async () => {
-  try {
-    await axios.delete(
-      `/group/${localStorage.getItem("school_id")}/${remove.id}`,
-      {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      }
-    );
-    notification.success("Guruh o'chirildi");
-    await getProduct(store.pagination);
-    remove.toggle = false;
-  } catch (error) {
-    notification.warning(
-      "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
-    );
+  if (store.guard) {
+    try {
+      await axios.delete(
+        `/group/${localStorage.getItem("school_id")}/${remove.id}`,
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        }
+      );
+      notification.success("Guruh o'chirildi");
+      await getProduct(store.pagination);
+      remove.toggle = false;
+    } catch (error) {
+      notification.warning(
+        "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
+      );
+    }
   }
 };
 
 const getSubject = async () => {
-  try {
-    const res = await axios.get(
-      `/subject/${localStorage.getItem("school_id")}`,
-      {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      }
-    );
-    store.subject = res.data || [{ name: "Fan yaratilmagan" }];
-  } catch (error) {
-    store.subject = error.response.data.message;
+  if (store.guard) {
+    try {
+      const res = await axios.get(
+        `/subject/${localStorage.getItem("school_id")}`,
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        }
+      );
+      store.subject = res.data || [{ name: "Fan yaratilmagan" }];
+    } catch (error) {
+      store.subject = error.response.data.message;
+    }
   }
 };
 
 const getEmployee = async () => {
-  try {
-    const res = await axios.get(
-      `/employee/${localStorage.getItem("school_id")}`,
-      {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      }
-    );
-    store.employee = res.data.filter((record) => record.role == "teacher") || [
-      { name: "O'qituvchi yaratilmagan" },
-    ];
-  } catch (error) {
-    store.employee = error.response.data.message;
+  if (store.guard) {
+    try {
+      const res = await axios.get(
+        `/employee/${localStorage.getItem("school_id")}`,
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        }
+      );
+      store.employee = res.data.filter(
+        (record) => record.role == "teacher"
+      ) || [{ name: "O'qituvchi yaratilmagan" }];
+    } catch (error) {
+      store.employee = error.response.data.message;
+    }
   }
 };
 

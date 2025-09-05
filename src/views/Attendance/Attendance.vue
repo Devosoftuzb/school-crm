@@ -674,6 +674,7 @@ import axios from "@/services/axios";
 // Stores
 const notification = useNotificationStore();
 const navbar = useNavStore();
+const userRole = localStorage.getItem("role");
 
 // Current Date
 const hozirgiSana = new Date();
@@ -690,7 +691,6 @@ const store = reactive({
   allProducts: false,
   groupAllProducts: false,
   error: false,
-  guard: "",
   group: "",
   filter: "",
   filter_show: false,
@@ -702,6 +702,8 @@ const store = reactive({
   curentYil: [],
   uniqueDates: [],
   selectLamp: false,
+  guard: userRole == "_ow_sch_" || userRole == "_ad_sch_",
+  groups: [],
 });
 
 // Form Reactive
@@ -852,17 +854,52 @@ const listStudent = (allStudent, groupID) => {
 
 // API Functions
 const getAllProduct = async () => {
-  try {
-    const res = await axios.get(`/group/${localStorage.getItem("school_id")}`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    });
-    store.groupAllProducts = res.data.sort((a, b) => b.id - a.id);
-    store.error = false;
-  } catch (error) {
-    store.groupAllProducts = error.response.data.message;
-    store.error = true;
+  if (store.group) {
+    try {
+      const res = await axios.get(
+        `/group/${localStorage.getItem("school_id")}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      store.groupAllProducts = res.data.sort((a, b) => b.id - a.id);
+      store.error = false;
+    } catch (error) {
+      store.groupAllProducts = error.response.data.message;
+      store.error = true;
+    }
+  } else {
+    const schoolId = localStorage.getItem("school_id");
+    const token = localStorage.getItem("token");
+    const id = localStorage.getItem("id");
+
+    try {
+      const employeeRes = await axios.get(`/employee/${schoolId}/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const employeeData = employeeRes.data;
+
+      const groupPromises = employeeData.group.map(async (group) => {
+        const groupRes = await axios.get(
+          `/group/${schoolId}/${group.group_id}/not`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        const groupData = groupRes.data;
+        groupData.student_date = group.createdAt.split("T")[0];
+        store.groups.push(groupData);
+        return groupData;
+      });
+
+      await Promise.all(groupPromises);
+
+      store.groupAllProducts = store.groups;
+    } catch (error) {
+      console.error("Xodim va guruh ma'lumotlarini olishda xato:", error);
+    }
   }
 };
 

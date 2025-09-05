@@ -31,17 +31,17 @@ const routes = [
     name: "home",
     component: HomeView,
     meta: {
-      roles: ["_sp_am_", "_ow_sch_", "_ad_sch_"],
+      roles: ["_sp_am_", "_ow_sch_", "_ad_sch_", "_tch_sch_"],
       schools: ["dev_school", "camelot", "it_park", "element", "sophie's", "zafar_azimov_school", "silverstudy", "sayyimov_academy"],
       title: "Home",
     },
     children: [
       {
-        path: "/",
+        path: "",
         name: "dashboard",
         component: Dashboard,
         meta: {
-          roles: ["_sp_am_", "_ow_sch_", "_ad_sch_"],
+          roles: ["_sp_am_", "_ow_sch_", "_ad_sch_", "_tch_sch_"],
           schools: ["dev_school", "camelot", "it_park", "element", "sophie's", "zafar_azimov_school", "silverstudy", "sayyimov_academy"],
           title: "Asosiy",
         },
@@ -71,7 +71,7 @@ const routes = [
         name: "students",
         component: Students,
         meta: {
-          roles: ["_ad_sch_"],
+          roles: ["_ad_sch_", "_tch_sch_"],
           schools: ["dev_school", "camelot", "it_park", "element", "sophie's", "zafar_azimov_school", "silverstudy", "sayyimov_academy"],
           title: "O'quvchilar",
         },
@@ -81,7 +81,7 @@ const routes = [
         name: "studentsArchive",
         component: StudentsArchive,
         meta: {
-          roles: ["_ad_sch_"],
+          roles: ["_ad_sch_", "_tch_sch_"],
           schools: ["dev_school", "camelot", "it_park", "element", "sophie's", "zafar_azimov_school", "silverstudy", "sayyimov_academy"],
           title: "Arxiv o'quvchilar",
         },
@@ -91,7 +91,7 @@ const routes = [
         name: "slug_students",
         component: SlugStudent,
         meta: {
-          roles: ["_ad_sch_"],
+          roles: ["_ad_sch_", "_tch_sch_"],
           schools: ["dev_school", "camelot", "it_park", "element", "sophie's", "zafar_azimov_school", "silverstudy", "sayyimov_academy"],
           title: "O'quvchi Sahifasi",
         },
@@ -141,7 +141,7 @@ const routes = [
         name: "attendance",
         component: Attendance,
         meta: {
-          roles: ["_ad_sch_"],
+          roles: ["_ad_sch_", "_tch_sch_"],
           schools: ["dev_school", "camelot", "it_park", "element", "sophie's", "zafar_azimov_school", "silverstudy", "sayyimov_academy"],
           title: "Davomat",
         },
@@ -191,7 +191,7 @@ const routes = [
         name: "groups",
         component: Groups,
         meta: {
-          roles: ["_ad_sch_"],
+          roles: ["_ad_sch_", "_tch_sch_"],
           schools: ["dev_school", "camelot", "it_park", "element", "sophie's", "zafar_azimov_school", "silverstudy", "sayyimov_academy"],
           title: "Guruhlar",
         },
@@ -201,7 +201,7 @@ const routes = [
         name: "slug_groups",
         component: SlugGroups,
         meta: {
-          roles: ["_ad_sch_"],
+          roles: ["_ad_sch_", "_tch_sch_"],
           schools: ["dev_school", "camelot", "it_park", "element", "sophie's", "zafar_azimov_school", "silverstudy", "sayyimov_academy"],
           title: "Guruh Sahifasi",
         },

@@ -125,7 +125,8 @@ const toggleUserInfo = () => {
 const getOneProduct = () => {
   if (
     localStorage.getItem("role") == "_ad_sch_" ||
-    localStorage.getItem("role") == "_ow_sch_"
+    localStorage.getItem("role") == "_ow_sch_" ||
+    localStorage.getItem("role") == "_tch_sch_"
   ) {
     axios
       .get(`/school/${localStorage.getItem("school_id")}`, {
