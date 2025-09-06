@@ -708,7 +708,11 @@
                 <span class="sm:block hidden">O'quvchi qo'shish</span>
                 <i class="sm:hidden block bx bxs-user-plus text-lg"></i>
               </button>
-              <router-link v-show="store.guard" class="w-full" to="/students/archive">
+              <router-link
+                v-show="store.guard"
+                class="w-full"
+                to="/students/archive"
+              >
                 <button
                   id=""
                   type="button"
@@ -957,7 +961,7 @@
               </tbody>
             </table>
             <div
-              v-show="store.PageProduct && store.error"
+              v-show="store.PageProduct.length == 0"
               class="w-full max-w-screen text-center p-20 text-2xl font-medium"
             >
               <h1>O'quvchilar ro'yhati bo'sh</h1>
@@ -1170,19 +1174,26 @@ const fetchData = async (url, method = "get", data = null) => {
 };
 
 const getAllProduct = async () => {
+  const school_id = localStorage.getItem("school_id");
+  const teacher_id = localStorage.getItem("id");
+
   try {
-    const data = await fetchData(
-      `/student/${localStorage.getItem("school_id")}/find`
-    );
+    const endpoint = store.guard
+      ? `/student/${school_id}/find`
+      : `/student/${school_id}/${teacher_id}/teacher-student`;
+
+    const data = await fetchData(endpoint);
 
     store.allProducts = data.map((record) => {
-      if (record.group) {
-        record.group.forEach((group) => {
+      if (record.StudentGroups) {
+        record.StudentGroups.forEach((group) => {
           group.group_name = group.Group?.name || "Noma'lum";
         });
       }
       return record;
     });
+
+    store.error = false;
   } catch {
     store.allProducts = [];
     store.error = true;
@@ -1191,9 +1202,13 @@ const getAllProduct = async () => {
 
 const getProduct = async (page) => {
   try {
-    const data = await fetchData(
-      `/student/${localStorage.getItem("school_id")}/page?page=${page}`
-    );
+    const endpoint = store.guard
+      ? `/student/${localStorage.getItem("school_id")}/page?page=${page}`
+      : `/student/${localStorage.getItem("school_id")}/teacher-student/${localStorage.getItem(
+          "id"
+        )}/page?page=${page}`;
+
+    const data = await fetchData(endpoint);
 
     store.PageProduct = data?.data?.records.map((record) => {
       if (record.group) {

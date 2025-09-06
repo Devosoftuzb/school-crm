@@ -505,11 +505,7 @@
 
     <section class="pt-4" :class="{ 'text-white': navbar.userNav }">
       <!------------------------------------------- Placeholder ------------------------------------------->
-      <div
-        v-if="
-          store.PageProduct?.length === 0 && store.allProducts?.length === 0
-        "
-      >
+      <div v-if="store.PageProduct && store.allProducts">
         <Placeholder2 />
       </div>
 
@@ -814,6 +810,15 @@
                 </tr>
               </tbody>
             </table>
+            <div
+              v-show="
+                (!store.PageProduct || store.PageProduct.length === 0) &&
+                (!store.allProducts || store.allProducts.length === 0)
+              "
+              class="w-full max-w-screen text-center p-20 text-2xl font-medium"
+            >
+              <h1>Guruhlar ro'yhati bo'sh</h1>
+            </div>
             <div v-show="store.error" class="flex w-full justify-center">
               <h1 class="p-20 text-2xl font-medium">{{ store.allProducts }}</h1>
             </div>
@@ -885,16 +890,6 @@
             </ul>
           </nav>
         </div>
-      </div>
-      <div
-        v-show="
-          store.error &&
-          (!store.PageProduct || store.PageProduct.length === 0) &&
-          (!store.allProducts || store.allProducts.length === 0)
-        "
-        class="w-full max-w-screen"
-      >
-        <h1>Guruhlar ro'yhati bo'sh</h1>
       </div>
     </section>
 
