@@ -505,7 +505,9 @@
 
     <section class="pt-4" :class="{ 'text-white': navbar.userNav }">
       <!------------------------------------------- Placeholder ------------------------------------------->
-      <div v-if="store.PageProduct && store.allProducts">
+      <div
+        v-if="!store.PageProduct && !store.allProducts"
+      >
         <Placeholder2 />
       </div>
 
@@ -811,10 +813,7 @@
               </tbody>
             </table>
             <div
-              v-show="
-                (!store.PageProduct || store.PageProduct.length === 0) &&
-                (!store.allProducts || store.allProducts.length === 0)
-              "
+              v-if="isEmpty(store.PageProduct) && isEmpty(store.allProducts)"
               class="w-full max-w-screen text-center p-20 text-2xl font-medium"
             >
               <h1>Guruhlar ro'yhati bo'sh</h1>
@@ -911,10 +910,10 @@ const router = useRouter();
 const userRole = localStorage.getItem("role");
 const modal = ref(false);
 const store = reactive({
-  PageProduct: "",
+  PageProduct: null,
   page: [],
   pagination: 1,
-  allProducts: "",
+  allProducts: null,
   subject: [{ name: "Fan yaratilmagan" }],
   employee: [{ name: "O'qituvchi yaratilmagan" }],
   error: false,
@@ -952,6 +951,15 @@ const remove = reactive({
   id: "",
   toggle: false,
 });
+
+const isEmpty = (value) => {
+  return (
+    value === null ||
+    value === undefined ||
+    value === '' ||
+    (Array.isArray(value) && value.length === 0)
+  );
+};
 
 // ---------------------------- search ------------------------------------
 function searchFunc() {
