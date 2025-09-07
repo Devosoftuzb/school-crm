@@ -1075,14 +1075,18 @@ const editProduct = () => {
   }
 
   const data = {
-    text_id: edit.text_id,
+    text_id:
+      edit.text_id === "" && edit.test_id === "null" ? null : edit.text_id,
     test_id: +router.currentRoute?.value?.params?.name,
     file: getImg.value,
     question: edit.question,
   };
+
   const formData = new FormData();
-  for (let i of Object.keys(data)) {
-    formData.append(i, data[i]);
+  for (let key of Object.keys(data)) {
+    if (data[key] !== null && data[key] !== undefined) {
+      formData.append(key, data[key]);
+    }
   }
 
   axios
