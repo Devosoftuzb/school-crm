@@ -1,7 +1,12 @@
 <template>
   <div class="px-2">
     <section class="pt-4" :class="{ 'text-white': navbar.userNav }">
-      <div v-show="!store.CostPageProduct && !store.SalaryPageProduct">
+      <div
+        v-show="
+          (!store.CostPageProduct && !store.SalaryPageProduct) ||
+          !store.PageProduct
+        "
+      >
         <Placeholder2 />
       </div>
 
@@ -1080,7 +1085,10 @@
       <!-- ----------------------------------------- salary delete modal end ---------------------------------------------------- -->
 
       <div
-        v-show="store.CostPageProduct && store.SalaryPageProduct"
+        v-show="
+          (store.CostPageProduct && store.SalaryPageProduct) ||
+          store.PageProduct
+        "
         class="w-full max-w-screen"
       >
         <!-- Start coding here -->
@@ -1097,6 +1105,7 @@
             </h1>
 
             <button
+              v-show="store.guard"
               @click="costCategory.modal = true"
               type="button"
               class="btnAdd flex items-center w-full sm:max-w-fit justify-center whitespace-nowrap text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2.5"
@@ -1106,6 +1115,7 @@
           </div>
 
           <div
+            v-show="store.guard"
             class="w-full lg:w-auto flex flex-row space-y-0 items-stretch md:items-center justify-end space-x-3"
           >
             <button
@@ -1126,6 +1136,7 @@
         </div>
 
         <div
+          v-show="store.guard"
           class="rounded-lg p-5 mb-10"
           :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
         >
@@ -1319,6 +1330,7 @@
         </div>
 
         <div
+          v-show="store.guard"
           class="rounded-lg p-5 mb-28"
           :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
         >
@@ -1506,10 +1518,14 @@ import { useNotificationStore } from "../../stores/notification";
 const notification = useNotificationStore();
 const navbar = useNavStore();
 const hozirgiSana = new Date();
+const hozirgiYil = String(hozirgiSana.getFullYear());
 let hozirgiOy = hozirgiSana.getMonth() + 1;
 hozirgiOy = hozirgiOy.toString().padStart(2, "0");
+let hozirgiKun = hozirgiSana.getDate();
 
+const userRole = localStorage.getItem("role");
 const store = reactive({
+  PageProduct: "",
   allProducts: true,
   CostPageProduct: "",
   SalaryPageProduct: "",
@@ -1520,7 +1536,11 @@ const store = reactive({
   salaryPagination: 1,
   costPage: [],
   costPagination: 1,
+  teacherPage: [],
+  teacherPagination: 1,
   error: false,
+  guard: userRole == "_ow_sch_" || userRole == "_ad_sch_",
+  group: "",
 });
 
 const cost = reactive({
@@ -1607,6 +1627,44 @@ const deleteSalaryFunc = (id) => {
   salary.remove = true;
 };
 
+const historyDayModal = () => {
+  history.dayModal = true;
+  history.monthModal = false;
+};
+
+const historyMonthModal = () => {
+  history.dayModal = false;
+  history.monthModal = true;
+};
+
+const historyModal = () => {
+  history.modal = !history.modal;
+  history.year = hozirgiYil;
+  history.month = hozirgiOy;
+  history.day = hozirgiKun;
+  history.group_id = "";
+  historyDayModal();
+  getHistory(store.pagination);
+};
+
+const history = reactive({
+  year: hozirgiYil,
+  month: hozirgiOy,
+  day: hozirgiKun,
+  group_id: "",
+  group_name: "",
+  modal: false,
+  dayModal: true,
+  monthModal: false,
+  filter_show: false,
+  filter: "",
+  selectLamp: false,
+  searchList: [],
+  dayList: [],
+  monthList: [],
+  dayPay: 0,
+});
+
 const monthNames = (month) => {
   switch (month) {
     case "01":
@@ -1637,6 +1695,17 @@ const monthNames = (month) => {
       return "Notog'ri oy";
   }
 };
+
+function searchHistoryFunc() {
+  history.searchList = [];
+  if (history.filter) {
+    for (let i of store.group) {
+      if (i.name.toLowerCase().includes(history.filter.toLowerCase())) {
+        history.searchList.push(i);
+      }
+    }
+  }
+}
 
 const chekDateFormat = (date) => {
   const year = date.getFullYear();
@@ -1673,7 +1742,6 @@ const getCost = async (page) => {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       }
     );
-
     store.CostPageProduct = res.data?.data?.records;
     store.costPage = [
       res.data?.data?.pagination.currentPage,
@@ -1783,6 +1851,43 @@ const getOneSalary = async (id) => {
       "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
     );
   }
+};
+
+const getHistory = (page) => {
+  const id = localStorage.getItem("id");
+  const schoolId = localStorage.getItem("school_id");
+  const token = localStorage.getItem("token");
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  let url;
+  if (history.dayModal) {
+    url = `/payment/employeeDay/${schoolId}/${id}/${history.year}/${history.month}/${history.day}/page?page=${page}`;
+  } else if (history.monthModal) {
+    url = `/payment/month/${schoolId}/${history.group_id}/${history.year}/${history.month}/page?page=${page}`;
+  } else {
+    return;
+  }
+
+  axios
+    .get(url, config)
+    .then((res) => {
+      console.log(res)
+      if (records.length !== 0) {
+        history.group_name = records[0].group_name;
+      }
+      history.dayPay = res.data?.data?.total_sum;
+      store.PageProduct = records;
+      console.log(store.PageProduct)
+      const pagination = res.data?.data?.pagination;
+      store.teacherPage = [pagination.currentPage, pagination.total_count];
+    })
+    .catch((error) => {
+      store.PageProduct = error.response?.data?.message;
+    });
 };
 
 // ------------ axios post ------------- //
@@ -1968,11 +2073,15 @@ const deleteSalary = async () => {
 };
 
 onMounted(() => {
-  getCostCategory();
-  getCost(store.costPagination);
-  getSalary(store.salaryPagination);
-  getMethod();
-  getEmployee();
+  if (store.guard) {
+    getCostCategory();
+    getCost(store.costPagination);
+    getSalary(store.salaryPagination);
+    getMethod();
+    getEmployee();
+  } else {
+    getHistory(store.teacherPagination);
+  }
 });
 </script>
 

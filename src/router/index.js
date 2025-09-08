@@ -159,9 +159,9 @@ const routes = [
       {
         path: "/finance",
         name: "finance",
-        component: Finance,
+        component: Technical,
         meta: {
-          roles: ["_ad_sch_", "_ow_sch_"],
+          roles: ["_ad_sch_", "_ow_sch_", "_tch_sch_"],
           schools: ["dev_school", "camelot", "it_park", "element", "sophie's", "zafar_azimov_school", "silverstudy", "sayyimov_academy"],
           title: "Moliya",
         },

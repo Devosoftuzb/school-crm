@@ -224,23 +224,23 @@ const monthNames = (month) => {
 };
 
 const getStatistics = async () => {
-  if (store.guard) {
-    try {
-      const res = await axios.get(
-        `/statistic/school/${localStorage.getItem("school_id")}`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
-      info.students = res.data.student_number;
-      info.staff = res.data.employee_number;
-      info.groups = res.data.group_number;
-      info.payment = res.data.payment_sum;
-    } catch (err) {
-      console.error("Statistikani olishda xato:", err);
-    }
+  try {
+    const url = store.guard
+      ? `/statistic/school/${localStorage.getItem("school_id")}`
+      : `/statistic/teacher-stats/${localStorage.getItem(
+          "school_id"
+        )}/${localStorage.getItem("id")}`;
+    const res = await axios.get(url, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+    info.students = res.data.student_number;
+    info.staff = res.data.employee_number;
+    info.groups = res.data.group_number;
+    info.payment = res.data.payment_sum;
+  } catch (err) {
+    console.error("Statistikani olishda xato:", err);
   }
 };
 

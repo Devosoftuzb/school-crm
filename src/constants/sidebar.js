@@ -76,7 +76,7 @@ export const header = [
     title: "Moliya",
     link: "/finance",
     icon: "bx  bx-dollar-circle",
-    role: "_ad_sch_, _ow_sch_",
+    role: "_ad_sch_, _ow_sch_, _tch_sch_",
     school: "dev_school, camelot, it_park, element, sophie's, zafar_azimov_school, silverstudy, sayyimov_academy",
   },
   {

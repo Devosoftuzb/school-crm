@@ -804,7 +804,7 @@
                   <td class="text-center font-medium px-8 py-4">
                     <button
                       @click="enterSlug(i.id, i.name.toLowerCase())"
-                      class="btn bg-blue-600 rounded-lg px-5 py-2.5 text-white focus:ring-2"
+                      class="btnAdd bg-blue-600 rounded-lg px-5 py-2.5 text-white focus:ring-2"
                     >
                       Kirish
                     </button>
