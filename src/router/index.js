@@ -159,7 +159,7 @@ const routes = [
       {
         path: "/finance",
         name: "finance",
-        component: Technical,
+        component: Finance,
         meta: {
           roles: ["_ad_sch_", "_ow_sch_", "_tch_sch_"],
           schools: ["dev_school", "camelot", "it_park", "element", "sophie's", "zafar_azimov_school", "silverstudy", "sayyimov_academy"],
@@ -221,7 +221,7 @@ const routes = [
         name: "settings",
         component: Settings,
         meta: {
-          roles: ["_sp_am_", "_ow_sch_", "_ad_sch_"],
+          roles: ["_sp_am_", "_ow_sch_", "_ad_sch_", "_tch_sch_"],
           schools: ["dev_school", "camelot", "it_park", "element", "sophie's", "zafar_azimov_school", "silverstudy", "sayyimov_academy"],
           title: "Sozlamalar",
         },

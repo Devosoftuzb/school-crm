@@ -32,7 +32,7 @@
             </p>
             <p class="text-sm flex items-center gap-3">
               <span class="font-bold">Kurs narxi:</span>
-              {{ store.group_price }} so'm
+              {{ Number(store.group_price).toLocaleString("uz-UZ") }} so'm
             </p>
             <p class="text-sm flex items-center gap-3">
               <span class="font-bold">O'quvchilar soni:</span>

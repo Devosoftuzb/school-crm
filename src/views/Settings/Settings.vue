@@ -998,6 +998,7 @@ const edit = reactive({
   full_name: "",
   phone_number: "",
   login: "",
+  role: "",
   password: "",
   newPassword: "",
   confirmNewPassword: "",
@@ -1024,7 +1025,7 @@ const pay = reactive({
 // ----------------------------------- axios --------------------------------
 
 const getOneProduct = () => {
-  if (localStorage.getItem("role") == "_ad_sch_") {
+  if (localStorage.getItem("role") == "_ad_sch_" || "_tch_sch_") {
     axios
       .get(
         `/employee/${localStorage.getItem("school_id")}/${localStorage.getItem(
@@ -1042,6 +1043,7 @@ const getOneProduct = () => {
         edit.full_name = res.data.full_name;
         edit.phone_number = res.data.phone_number;
         edit.login = res.data.login;
+        edit.role = res.data.role;
       })
       .catch((error) => {});
   } else {
@@ -1068,10 +1070,12 @@ const changeInfo = (id) => {
     phone_number: edit.phone_number,
     login: edit.login,
   };
-  if (localStorage.getItem("role") == "_ad_sch_") {
+  if (localStorage.getItem("role") == "_ad_sch_" || "_tch_sch_") {
+    data.school_id = Number(localStorage.getItem("school_id"));
+    data.role = edit.role;
     axios
       .put(`/employee/${localStorage.getItem("school_id")}/${id}`, data, {
-        headers: {
+        headers: {  
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       })
@@ -1080,6 +1084,8 @@ const changeInfo = (id) => {
         getOneProduct();
       })
       .catch((error) => {
+        console.log(error);
+
         if (error.response.data.message.slice(0, 5) === "Login") {
           notification.warning("Bunday login mavjud! Boshqa kiritib ko'ring");
         } else {
@@ -1117,7 +1123,7 @@ const changePassword = (id) => {
       old_password: edit.password,
       new_password: edit.newPassword,
     };
-    if (localStorage.getItem("role") == "_ad_sch_") {
+    if (localStorage.getItem("role") == "_ad_sch_" || "_tch_sch_") {
       axios
         .post(
           `/employee/change-password/${localStorage.getItem(
@@ -1135,16 +1141,7 @@ const changePassword = (id) => {
           getOneProduct();
         })
         .catch((error) => {
-          if (
-            error.response.data.message ===
-            "The current password did not match!"
-          ) {
-            notification.warning("Joriy parol mos kelmadi!");
-          } else {
-            notification.warning(
-              "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
-            );
-          }
+          notification.warning(error.response.data.message);
         });
     } else {
       axios

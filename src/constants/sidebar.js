@@ -100,7 +100,7 @@ export const header = [
     title: "Sozlamalar",
     link: "/settings",
     icon: "bx bxs-cog",
-    role: "_sp_am_, _ow_sch_, _ad_sch_",
+    role: "_sp_am_, _ow_sch_, _ad_sch_, _tch_sch_",
     school: "dev_school, camelot, it_park, element, sophie's, zafar_azimov_school, silverstudy, sayyimov_academy",
   },
 ];

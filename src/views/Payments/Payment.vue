@@ -31,12 +31,12 @@
                   :class="navbar.userNav ? 'text-white' : 'text-black'"
                 >
                   <h3 class="font-semibold leading-normal sm:text-md text-sm">
-                    {{ j.method }} - {{ j.count }}
+                    {{ j.method }} - {{ j.count.toLocaleString("uz-UZ") }}
                   </h3>
                   <h5
                     class="font-bold bg-blue-100 text-blue-700 p-1 px-3 rounded-lg sm:text-md text-sm"
                   >
-                    {{ j.sum }} so'm
+                    {{ j.sum.toLocaleString("uz-UZ") }} so'm
                   </h5>
                 </div>
               </div>
@@ -221,9 +221,9 @@
                       v-if="form.discount !== 0 && form.discount !== ''"
                       class="text-[10px] line-through"
                       id="coursePrice"
-                      >{{ store.price }} so'm</span
+                      >{{ store.price?.toLocaleString("uz-UZ") }} so'm</span
                     >
-                    <span id="coursePrice">{{ discountedPrice }} so'm</span>
+                    <span id="coursePrice">{{ discountedPrice?.toLocaleString("uz-UZ") }} so'm</span>
                   </span>
                 </div>
                 <div
@@ -252,7 +252,7 @@
                 >
                   <span class="font-semibold">To'lov:</span>
                   <span id="amount" class="font-bold text-xs"
-                    >{{ store.pay_price }} so'm</span
+                    >{{ store.pay_price?.toLocaleString("uz-UZ") }} so'm</span
                   >
                 </div>
                 <div
@@ -513,9 +513,9 @@
                       v-if="form.discount !== 0 && form.discount !== ''"
                       class="text-[10px] line-through"
                       id="coursePrice"
-                      >{{ store.price }} so'm</span
+                      >{{ store.price?.toLocaleString("uz-UZ") }} so'm</span
                     >
-                    <span id="coursePrice">{{ discountedPrice }} so'm</span>
+                    <span id="coursePrice">{{ discountedPrice.toLocaleString("uz-UZ") }} so'm</span>
                   </span>
                 </div>
                 <div
@@ -544,7 +544,7 @@
                 >
                   <span class="font-semibold">To'lov:</span>
                   <span id="amount" class="font-bold text-xs"
-                    >{{ form.price }} so'm</span
+                    >{{ form.price.toLocaleString("uz-UZ") }} so'm</span
                   >
                 </div>
                 <div
@@ -1629,7 +1629,7 @@
                     <p
                       class="bg-red-100 rounded-[5px] p-1 px-3 whitespace-nowrap"
                     >
-                      {{ i.group_price }} so'm
+                      {{ Number(i.group_price)?.toLocaleString("uz-UZ") }} so'm
                     </p>
                   </td>
                   <td class="text-center font-medium text-blue-800 px-8 py-4">
@@ -1643,7 +1643,7 @@
                     <p
                       class="bg-green-100 rounded-[5px] p-1 px-3 whitespace-nowrap"
                     >
-                      {{ i.price }} so'm
+                      {{ i.price?.toLocaleString("uz-UZ") }} so'm
                     </p>
                   </td>
                   <td class="text-center font-medium text-blue-800 px-8 py-4">
@@ -1763,14 +1763,14 @@
                     <p
                       class="bg-green-100 rounded-[5px] p-1 px-3 whitespace-nowrap"
                     >
-                      {{ i.group_price }} so'm
+                      {{ i.group_price?.toLocaleString("uz-UZ") }} so'm
                     </p>
                   </td>
                   <td class="text-center font-medium text-red-800 px-8 py-4">
                     <p
                       class="bg-red-100 rounded-[5px] p-1 px-3 whitespace-nowrap"
                     >
-                      {{ i.debt }} so'm
+                      {{ i.debt?.toLocaleString("uz-UZ") }} so'm
                     </p>
                   </td>
                   <td
@@ -2400,7 +2400,7 @@ const calculatePaymentStatus = (paymentHistory, groupPrice) => {
     return "To'langan";
   } else {
     const amountDue = discountedPrice - currentMonthPaid;
-    return `(${amountDue}) so'm to'lanmagan`;
+    return `(${amountDue.toLocaleString("uz-UZ")}) so'm to'lanmagan`;
   }
 };
 
@@ -2882,10 +2882,10 @@ const printReceipt = () => {
             <span class="card">
               ${
                 form.discount !== 0 && form.discount !== ""
-                  ? `<span class="strike">${store.price} so'm</span>`
+                  ? `<span class="strike">${store.price?.toLocaleString("uz-UZ")} so'm</span>`
                   : ""
               }
-              ${discountedPrice.value} so'm
+              ${discountedPrice.value?.toLocaleString("uz-UZ")} so'm
             </span>
           </div>
           ${
@@ -2908,7 +2908,7 @@ const printReceipt = () => {
           </div>
           <div class="row">
             <span class="bold">To'lov:</span>
-            <span class="bold">${form.price} so'm</span>
+            <span class="bold">${Number(form.price)?.toLocaleString("uz-UZ")} so'm</span>
           </div>
           <div class="row">
             <span class="bold">Sana:</span>
@@ -3055,10 +3055,10 @@ const printChek = (id) => {
             <span class="card">
               ${
                 product.discount !== 0 && product.discount !== ""
-                  ? `<span class="strike">${product.group_price} so'm</span>`
+                  ? `<span class="strike">${Number(product.group_price)?.toLocaleString("uz-UZ")} so'm</span>`
                   : ""
               }
-              ${priceDiscounted} so'm
+              ${Number(priceDiscounted)?.toLocaleString("uz-UZ")} so'm
             </span>
           </div>
           ${
@@ -3081,7 +3081,7 @@ const printChek = (id) => {
           </div>
           <div class="row">
             <span class="bold">To'lov:</span>
-            <span class="bold">${product.price} so'm</span>
+            <span class="bold">${product.price?.toLocaleString("uz-UZ")} so'm</span>
           </div>
           <div class="row">
             <span class="bold">Sana:</span>

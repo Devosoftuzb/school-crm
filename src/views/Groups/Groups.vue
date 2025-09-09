@@ -645,7 +645,7 @@
                     class="text-center font-medium whitespace-nowrap text-red-800 px-8 py-4"
                   >
                     <p class="bg-red-100 rounded-[5px] p-1">
-                      {{ i.price }} so'm
+                      {{ Number(i.price).toLocaleString("uz-UZ") }} so'm
                     </p>
                   </td>
                   <td
@@ -784,7 +784,7 @@
                     class="text-center font-medium whitespace-nowrap text-red-800 px-8 py-4"
                   >
                     <p class="bg-red-100 rounded-[5px] p-1">
-                      {{ i.price }} so'm
+                      {{ Number(i.price).toLocaleString("uz-UZ") }} so'm
                     </p>
                   </td>
                   <td

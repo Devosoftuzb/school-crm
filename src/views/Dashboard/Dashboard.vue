@@ -25,7 +25,7 @@
               <h5
                 class="mb-0 2xl:text-[16px] sm:absolute bottom-5 right-5 bg-blue-100 text-blue-700 text-sm rounded-lg 2xl:px-5 py-2 px-3 max-w-fit font-bold"
               >
-                {{ getCardValue(index) }}
+                {{ getCardValue(index)?.toLocaleString("uz-UZ") }}
                 <span v-if="index == 3">so'm</span
                 ><span v-if="index != 3">ta</span>
               </h5>
@@ -53,7 +53,7 @@
               <h5
                 class="mb-0 2xl:text-[16px] sm:absolute bottom-5 right-5 bg-blue-100 text-blue-700 text-sm rounded-lg 2xl:px-5 py-2 px-3 max-w-fit font-bold"
               >
-                {{ getCardValue(index) }}
+                {{ getCardValue(index)?.toLocaleString("uz-UZ") }}
                 <span v-if="index == 2">so'm</span
                 ><span v-if="index != 2">ta</span>
               </h5>

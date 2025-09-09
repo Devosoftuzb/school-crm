@@ -3,8 +3,9 @@
     <section class="pt-4" :class="{ 'text-white': navbar.userNav }">
       <div
         v-show="
-          (!store.CostPageProduct && !store.SalaryPageProduct) ||
-          !store.PageProduct
+          !store.PageProduct &&
+          !store.CostPageProduct &&
+          !store.SalaryPageProduct
         "
       >
         <Placeholder2 />
@@ -1084,6 +1085,326 @@
       </div>
       <!-- ----------------------------------------- salary delete modal end ---------------------------------------------------- -->
 
+      <!-- ----------------------------------------- teacher payment history modal -------------------------------------------- -->
+      <div
+        @click.self="historyModal"
+        :class="
+          history.modal
+            ? 'fixed overflow-y-auto flex bg-[rgba(0,0,0,0.5)] overflow-x-hidden z-50 justify-center items-center w-full inset-0 h-full'
+            : 'hidden'
+        "
+      >
+        <transition name="modal-fade">
+          <div class="relative p-4 w-full max-w-xl h-auto">
+            <!-- Modal content -->
+            <div
+              class="relative p-4 rounded-lg shadow sm:p-5"
+              :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
+            >
+              <!-- Modal header -->
+              <div
+                class="flex flex-col items-center gap-5 pb-4 mb-4 rounded-t border-b sm:mb-5"
+              >
+                <div class="flex items-center justify-between w-full">
+                  <h3
+                    class="text-lg"
+                    :class="navbar.userNav ? 'text-white' : 'text-black'"
+                  >
+                    To'lov tarixini ko'rish
+                  </h3>
+                  <button
+                    @click="historyModal"
+                    type="button"
+                    class="bg-transparent hover:bg-gray-200 hover rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+                    :class="{ 'text-white': navbar.userNav }"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      class="w-5 h-5"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                        clip-rule="evenodd"
+                      ></path>
+                    </svg>
+                    <span class="sr-only">Close modal</span>
+                  </button>
+                </div>
+                <div
+                  class="flex w-full items-center justify-between sm:w-auto"
+                  id="navbar-sticky"
+                >
+                  <ul
+                    class="font-medium w-full flex flex-col sm:flex-row items-center gap-5 text-white"
+                  >
+                    <li
+                      class="cursor-pointer w-full sm:max-w-fit text-center bg-gray-600 hover:bg-gray-500 p-2 px-5 sm:text-md text-sm rounded-lg"
+                      :class="history.dayModal ? 'btnAdd' : 'bg-gray-600'"
+                      @click="historyDayModal"
+                    >
+                      <span>Kun bo'yicha ko'rish</span>
+                    </li>
+                    <li
+                      class="cursor-pointer w-full sm:max-w-fit text-center bg-gray-600 hover:bg-gray-500 p-2 px-5 sm:text-md text-sm rounded-lg"
+                      :class="history.monthModal ? 'btnAdd' : 'bg-gray-600'"
+                      @click="historyMonthModal"
+                    >
+                      <span>Oy bo'yicha ko'rish</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <!-- Modal body -->
+              <form
+                v-show="history.dayModal"
+                @submit.prevent="getHistory(store.teacherPagination)"
+                :class="{ darkForm: navbar.userNav }"
+              >
+                <div class="grid font-medium gap-4 mb-4">
+                  <div>
+                    <label for="year" class="block mb-2 text-sm"
+                      >Yilni tanlang</label
+                    >
+                    <select
+                      v-model="history.year"
+                      id="name"
+                      class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                      required
+                    >
+                      <option value="" disabled selected>Yilni tanlang</option>
+                      <option
+                        v-for="i in store.curentYil"
+                        :key="i.id"
+                        :value="i.name"
+                      >
+                        {{ i.name }}
+                      </option>
+                    </select>
+                  </div>
+                  <div>
+                    <label for="month" class="block mb-2 text-sm"
+                      >Oyni tanlang</label
+                    >
+                    <select
+                      v-model="history.month"
+                      id="month"
+                      class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                      required
+                    >
+                      <option value="" disabled selected>Oyni tanlang</option>
+                      <option value="01">Yanvar</option>
+                      <option value="02">Fevral</option>
+                      <option value="03">Mart</option>
+                      <option value="04">Aprel</option>
+                      <option value="05">May</option>
+                      <option value="06">Iyun</option>
+                      <option value="07">Iyul</option>
+                      <option value="08">Avgust</option>
+                      <option value="09">Sentabr</option>
+                      <option value="10">Oktabr</option>
+                      <option value="11">Noyabr</option>
+                      <option value="12">Dekabr</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label for="day" class="block mb-2 text-sm"
+                      >Kuni kiriting</label
+                    >
+                    <input
+                      v-model="history.day"
+                      id="day"
+                      type="number"
+                      class="bg-white text-black border border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full py-2.5 pl-3"
+                      placeholder="Kuni kiriting.."
+                      min="1"
+                      max="31"
+                      required
+                    />
+                  </div>
+                </div>
+                <div
+                  class="w-full flex flex-col gap-5 justify-center border-t pt-5 mt-5"
+                >
+                  <div class="w-full flex items-center justify-between">
+                    <button
+                      @click="historyModal"
+                      type="button"
+                      class="border inline-flex items-center hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                    >
+                      Bekor qilish
+                    </button>
+                    <button
+                      type="submit"
+                      class="btnAdd text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                    >
+                      Ko'rish
+                    </button>
+                  </div>
+                </div>
+              </form>
+              <form
+                v-show="history.monthModal"
+                @submit.prevent="getHistory(store.teacherPagination)"
+                :class="{ darkForm: navbar.userNav }"
+              >
+                <div class="grid font-medium gap-4 mb-4">
+                  <div>
+                    <label for="year" class="block mb-2 text-sm"
+                      >Yilni tanlang</label
+                    >
+                    <select
+                      v-model="history.year"
+                      id="name"
+                      class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                      required
+                    >
+                      <option value="" disabled selected>Yilni tanlang</option>
+                      <option
+                        v-for="i in store.curentYil"
+                        :key="i.id"
+                        :value="i.name"
+                      >
+                        {{ i.name }}
+                      </option>
+                    </select>
+                  </div>
+                  <div>
+                    <label for="month" class="block mb-2 text-sm"
+                      >Oyni tanlang</label
+                    >
+                    <select
+                      v-model="history.month"
+                      id="month"
+                      class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                      required
+                    >
+                      <option value="" disabled selected>Oyni tanlang</option>
+                      <option value="01">Yanvar</option>
+                      <option value="02">Fevral</option>
+                      <option value="03">Mart</option>
+                      <option value="04">Aprel</option>
+                      <option value="05">May</option>
+                      <option value="06">Iyun</option>
+                      <option value="07">Iyul</option>
+                      <option value="08">Avgust</option>
+                      <option value="09">Sentabr</option>
+                      <option value="10">Oktabr</option>
+                      <option value="11">Noyabr</option>
+                      <option value="12">Dekabr</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label
+                      for="name"
+                      class="block mb-2 text-sm"
+                      :class="navbar.userNav ? 'text-white' : 'text-black'"
+                      >Guruhni tanlang</label
+                    >
+                    <div class="relative w-full text-black">
+                      <div
+                        class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"
+                      >
+                        <svg
+                          aria-hidden="true"
+                          class="w-5 h-5"
+                          fill="currentColor"
+                          viewbox="0 0 20 20"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            fill-rule="evenodd"
+                            d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                            clip-rule="evenodd"
+                          />
+                        </svg>
+                      </div>
+                      <input
+                        v-model="history.filter"
+                        @focus="history.selectLamp = true"
+                        @blur="
+                          history.selectLamp = false;
+                          history.filter_show = false;
+                        "
+                        @input="
+                          history.filter_show = true;
+                          searchHistoryFunc();
+                        "
+                        type="search"
+                        id="simple-search"
+                        class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2"
+                        placeholder="Guruhni tanlang yoki qidirish..."
+                      />
+                      <ul
+                        v-show="
+                          history.filter_show && history.searchList.length > 0
+                        "
+                        class="absolute z-10 max-h-80 overflow-y-auto overflow-hidden py-1 text-gray-600 rounded bg-white w-full bottom-full"
+                      >
+                        <li
+                          class="hover:bg-blue-600 hover:text-white cursor-pointer pl-2"
+                          v-for="(i, index) in history.searchList"
+                          :key="index"
+                          @mousedown.prevent="
+                            history.group_id = i.id;
+                            history.group_name = i.name;
+                            history.filter_show = false;
+                            history.filter = i.name;
+                          "
+                        >
+                          {{ i.name }}
+                        </li>
+                      </ul>
+                      <ul
+                        v-show="history.selectLamp && !history.filter"
+                        class="absolute z-10 max-h-80 overflow-y-auto overflow-hidden py-1 text-gray-600 rounded bg-white w-full bottom-full"
+                      >
+                        <li
+                          class="hover:bg-blue-600 hover:text-white whitespace-nowrap cursor-pointer pl-2"
+                          v-for="(i, index) in store.group"
+                          :key="index"
+                          @mousedown.prevent="
+                            history.group_id = i.id;
+                            history.group_name = i.name;
+                            history.selectLamp = false;
+                            history.filter = i.name;
+                          "
+                        >
+                          {{ i.name }}
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="w-full flex flex-col gap-5 justify-center border-t pt-5 mt-5"
+                >
+                  <div class="w-full flex items-center justify-between">
+                    <button
+                      @click="historyModal"
+                      type="button"
+                      class="border inline-flex items-center hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                    >
+                      Bekor qilish
+                    </button>
+                    <button
+                      type="submit"
+                      class="btnAdd text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                    >
+                      Ko'rish
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </transition>
+      </div>
+      <!-- ----------------------------------------- teacher payment hsitory modal end ---------------------------------------- -->
       <div
         v-show="
           (store.CostPageProduct && store.SalaryPageProduct) ||
@@ -1099,7 +1420,9 @@
           class="shadow rounded-xl flex flex-col lg:flex-row items-center justify-between lg:space-x-4 p-4 gap-3 mb-4"
           :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
         >
-          <div class="flex items-center gap-5">
+          <div
+            class="w-full lg:w-auto flex sm:flex-row flex-col items-center justify-between gap-3"
+          >
             <h1 class="text-blue-700 font-bold text-lg w-full">
               Moliyaviy hisobot
             </h1>
@@ -1115,22 +1438,32 @@
           </div>
 
           <div
-            v-show="store.guard"
             class="w-full lg:w-auto flex flex-row space-y-0 items-stretch md:items-center justify-end space-x-3"
           >
             <button
+              v-show="store.guard"
               @click="cost.modal = true"
               type="button"
-              class="btnAdd flex items-center w-full sm:max-w-fit justify-center whitespace-nowrap text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2.5"
+              class="btnAdd flex items-center w-full justify-center whitespace-nowrap text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2.5"
             >
               <span class="">Chiqim kiritish</span>
             </button>
             <button
+              v-show="store.guard"
               @click="salary.modal = true"
+              type="button"
+              class="btnAdd flex items-center w-full justify-center whitespace-nowrap text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2.5"
+            >
+              <span class="">Maosh berish</span>
+            </button>
+
+            <button
+              v-show="!store.guard"
+              @click="history.modal = true"
               type="button"
               class="btnAdd flex items-center w-full sm:max-w-fit justify-center whitespace-nowrap text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2.5"
             >
-              <span class="">Maosh berish</span>
+              <span class="">To'lov tarixi</span>
             </button>
           </div>
         </div>
@@ -1140,12 +1473,148 @@
           class="rounded-lg p-5 mb-10"
           :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
         >
-          <h1 class="font-bold text-lg w-full mb-3">
-            Chiqimlar ro'yxati (<span class="text-blue-700">{{
-              monthNames(hozirgiOy)
-            }}</span
-            >)
-          </h1>
+          <div
+            class="flex w-full lg:flex-row flex-col lg:items-center justify-between gap-x-20"
+          >
+            <h1
+              class="font-bold 2xl:text-lg lg:text-xl sm:text-xl text-md whitespace-nowrap mb-3"
+            >
+              Chiqimlar ro'yxati
+            </h1>
+
+            <form
+              @submit.prevent="getCost(store.costPagination)"
+              classs="w-full"
+              :class="{ darkForm: navbar.userNav }"
+            >
+              <div
+                class="flex sm:flex-row flex-col items-center justify-end gap-3 font-medium mb-4 w-full"
+              >
+                <div class="flex items-center justify-between gap-3 w-full">
+                  <div class="w-full">
+                    <select
+                      v-model="costHistory.year"
+                      id="name"
+                      class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-[7px]"
+                      required
+                    >
+                      <option value="" disabled selected>Yilni tanlang</option>
+                      <option
+                        v-for="i in store.curentYil"
+                        :key="i.id"
+                        :value="i.name"
+                      >
+                        {{ i.name }}
+                      </option>
+                    </select>
+                  </div>
+                  <div class="w-full">
+                    <select
+                      v-model="costHistory.month"
+                      id="month"
+                      class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-[7px]"
+                      required
+                    >
+                      <option value="" disabled selected>Oyni tanlang</option>
+                      <option value="01">Yanvar</option>
+                      <option value="02">Fevral</option>
+                      <option value="03">Mart</option>
+                      <option value="04">Aprel</option>
+                      <option value="05">May</option>
+                      <option value="06">Iyun</option>
+                      <option value="07">Iyul</option>
+                      <option value="08">Avgust</option>
+                      <option value="09">Sentabr</option>
+                      <option value="10">Oktabr</option>
+                      <option value="11">Noyabr</option>
+                      <option value="12">Dekabr</option>
+                    </select>
+                  </div>
+                </div>
+                <!-- <div class="w-full">
+                  <div class="relative w-full text-black">
+                    <div
+                      class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"
+                    >
+                      <svg
+                        aria-hidden="true"
+                        class="w-5 h-5"
+                        fill="currentColor"
+                        viewbox="0 0 20 20"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                          clip-rule="evenodd"
+                        />
+                      </svg>
+                    </div>
+                    <input
+                      v-model="history.filter"
+                      @focus="history.selectLamp = true"
+                      @blur="
+                        history.selectLamp = false;
+                        history.filter_show = false;
+                      "
+                      @input="
+                        history.filter_show = true;
+                        searchHistoryFunc();
+                      "
+                      type="search"
+                      id="simple-search"
+                      class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-[9px]"
+                      placeholder="Kategoriyani tanlang yoki qidirish..."
+                    />
+                    <ul
+                      v-show="
+                        history.filter_show && history.searchList.length > 0
+                      "
+                      class="absolute z-10 max-h-80 overflow-y-auto overflow-hidden py-1 text-gray-600 rounded bg-white w-full bottom-full"
+                    >
+                      <li
+                        class="hover:bg-blue-600 hover:text-white cursor-pointer pl-2"
+                        v-for="(i, index) in history.searchList"
+                        :key="index"
+                        @mousedown.prevent="
+                          history.group_id = i.id;
+                          history.group_name = i.name;
+                          history.filter_show = false;
+                          history.filter = i.name;
+                        "
+                      >
+                        {{ i.name }}
+                      </li>
+                    </ul>
+                    <ul
+                      v-show="history.selectLamp && !history.filter"
+                      class="absolute z-10 max-h-80 overflow-y-auto overflow-hidden py-1 text-gray-600 rounded bg-white w-full bottom-full"
+                    >
+                      <li
+                        class="hover:bg-blue-600 hover:text-white whitespace-nowrap cursor-pointer pl-2"
+                        v-for="(i, index) in store.group"
+                        :key="index"
+                        @mousedown.prevent="
+                          history.group_id = i.id;  
+                          history.group_name = i.name;
+                          history.selectLamp = false;
+                          history.filter = i.name;
+                        "
+                      >
+                        {{ i.name }}
+                      </li>
+                    </ul>
+                  </div>
+                </div> -->
+                <button
+                  type="submit"
+                  class="btnAdd w-full sm:max-w-fit text-white items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                >
+                  Ko'rish
+                </button>
+              </div>
+            </form>
+          </div>
           <div
             class="relative shadow-md rounded-lg overflow-hidden"
             :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
@@ -1158,12 +1627,18 @@
                       Kategoriya
                     </th>
                     <th scope="col" class="text-center px-8 py-3">Suma</th>
-                    <th scope="col" class="text-center px-8 py-3">
+                    <th
+                      scope="col"
+                      class="text-center px-8 py-3 whitespace-nowrap"
+                    >
                       To'lov turi
                     </th>
                     <th scope="col" class="text-center px-8 py-3">Oy</th>
                     <th scope="col" class="text-center px-8 py-3">Izoh</th>
-                    <th scope="col" class="text-center px-8 py-3">
+                    <th
+                      scope="col"
+                      class="text-center px-8 py-3 whitespace-nowrap"
+                    >
                       To'lov sanasi
                     </th>
                     <th></th>
@@ -1334,12 +1809,148 @@
           class="rounded-lg p-5 mb-28"
           :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
         >
-          <h1 class="font-bold text-lg w-full mb-3">
-            Berilgan maoshlar ro'yxati (<span class="text-blue-700">{{
-              monthNames(hozirgiOy)
-            }}</span
-            >)
-          </h1>
+          <div
+            class="flex w-full lg:flex-row flex-col lg:items-center justify-between gap-x-20"
+          >
+            <h1
+              class="font-bold 2xl:text-lg lg:text-xl sm:text-xl text-md whitespace-nowrap mb-3"
+            >
+              Berilgan maoshlar ro'yxati
+            </h1>
+
+            <form
+              @submit.prevent="getSalary(store.teacherPagination)"
+              classs="w-full"
+              :class="{ darkForm: navbar.userNav }"
+            >
+              <div
+                class="flex sm:flex-row flex-col items-center justify-end gap-3 font-medium mb-4 w-full"
+              >
+                <div class="flex items-center justify-between gap-3 w-full">
+                  <div class="w-full">
+                    <select
+                      v-model="salaryHistory.year"
+                      id="name"
+                      class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-[7px]"
+                      required
+                    >
+                      <option value="" disabled selected>Yilni tanlang</option>
+                      <option
+                        v-for="i in store.curentYil"
+                        :key="i.id"
+                        :value="i.name"
+                      >
+                        {{ i.name }}
+                      </option>
+                    </select>
+                  </div>
+                  <div class="w-full">
+                    <select
+                      v-model="salaryHistory.month"
+                      id="month"
+                      class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-[7px]"
+                      required
+                    >
+                      <option value="" disabled selected>Oyni tanlang</option>
+                      <option value="01">Yanvar</option>
+                      <option value="02">Fevral</option>
+                      <option value="03">Mart</option>
+                      <option value="04">Aprel</option>
+                      <option value="05">May</option>
+                      <option value="06">Iyun</option>
+                      <option value="07">Iyul</option>
+                      <option value="08">Avgust</option>
+                      <option value="09">Sentabr</option>
+                      <option value="10">Oktabr</option>
+                      <option value="11">Noyabr</option>
+                      <option value="12">Dekabr</option>
+                    </select>
+                  </div>
+                </div>
+                <!-- <div class="w-full">
+                  <div class="relative w-full text-black">
+                    <div
+                      class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"
+                    >
+                      <svg
+                        aria-hidden="true"
+                        class="w-5 h-5"
+                        fill="currentColor"
+                        viewbox="0 0 20 20"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                          clip-rule="evenodd"
+                        />
+                      </svg>
+                    </div>
+                    <input
+                      v-model="history.filter"
+                      @focus="history.selectLamp = true"
+                      @blur="
+                        history.selectLamp = false;
+                        history.filter_show = false;
+                      "
+                      @input="
+                        history.filter_show = true;
+                        searchHistoryFunc();
+                      "
+                      type="search"
+                      id="simple-search"
+                      class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-[9px]"
+                      placeholder="O'qituvchini tanlang yoki qidirish..."
+                    />
+                    <ul
+                      v-show="
+                        history.filter_show && history.searchList.length > 0
+                      "
+                      class="absolute z-10 max-h-80 overflow-y-auto overflow-hidden py-1 text-gray-600 rounded bg-white w-full bottom-full"
+                    >
+                      <li
+                        class="hover:bg-blue-600 hover:text-white cursor-pointer pl-2"
+                        v-for="(i, index) in history.searchList"
+                        :key="index"
+                        @mousedown.prevent="
+                          history.group_id = i.id;
+                          history.group_name = i.name;
+                          history.filter_show = false;
+                          history.filter = i.name;
+                        "
+                      >
+                        {{ i.name }}
+                      </li>
+                    </ul>
+                    <ul
+                      v-show="history.selectLamp && !history.filter"
+                      class="absolute z-10 max-h-80 overflow-y-auto overflow-hidden py-1 text-gray-600 rounded bg-white w-full bottom-full"
+                    >
+                      <li
+                        class="hover:bg-blue-600 hover:text-white whitespace-nowrap cursor-pointer pl-2"
+                        v-for="(i, index) in store.group"
+                        :key="index"
+                        @mousedown.prevent="
+                          history.group_id = i.id;
+                          history.group_name = i.name;
+                          history.selectLamp = false;
+                          history.filter = i.name;
+                        "
+                      >
+                        {{ i.name }}
+                      </li>
+                    </ul>
+                  </div>
+                </div> -->
+                <button
+                  type="submit"
+                  class="btnAdd w-full sm:max-w-fit text-white items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                >
+                  Ko'rish
+                </button>
+              </div>
+            </form>
+          </div>
           <div
             class="relative shadow-md rounded-lg overflow-hidden"
             :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
@@ -1348,15 +1959,24 @@
               <table class="w-full text-sm text-left">
                 <thead class="btnAdd text-white text-xs rounded-lg uppercase">
                   <tr>
-                    <th scope="col" class="text-center px-8 py-3">
+                    <th
+                      scope="col"
+                      class="text-center px-8 py-3 whitespace-nowrap"
+                    >
                       O'qituvchi (F . I . O)
                     </th>
                     <th scope="col" class="text-center px-8 py-3">Suma</th>
-                    <th scope="col" class="text-center px-8 py-3">
+                    <th
+                      scope="col"
+                      class="text-center px-8 py-3 whitespace-nowrap"
+                    >
                       To'lov turi
                     </th>
                     <th scope="col" class="text-center px-8 py-3">Oy</th>
-                    <th scope="col" class="text-center px-8 py-3">
+                    <th
+                      scope="col"
+                      class="text-center px-8 py-3 whitespace-nowrap"
+                    >
                       To'lov sanasi
                     </th>
                     <th></th>
@@ -1503,6 +2123,195 @@
             </nav>
           </div>
         </div>
+
+        <div
+          v-show="!store.guard"
+          class="flex sm:flex-row flex-col justify-between sm:items-center gap-4 font-bold"
+        >
+          <h2
+            v-show="history.dayModal"
+            class="text-gray-600 font-bold sm:text-md text-sm pl-4 pb-2"
+          >
+            Kunlik to'lov tarixi - {{ history.year }}/{{ history.month }}/{{
+              history.day
+            }}
+          </h2>
+          <h2
+            v-show="history.monthModal"
+            class="text-gray-600 font-bold sm:text-md text-sm pl-4 pb-2"
+          >
+            Guruhni oylik to'lov tarixi - {{ history.year }}/{{
+              history.month
+            }}/{{ history.group_name }}
+          </h2>
+        </div>
+
+        <div
+          v-show="!store.guard"
+          class="relative shadow-md rounded-lg overflow-hidden"
+          :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
+        >
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm text-left">
+              <thead class="btnAdd text-white text-xs rounded-lg uppercase">
+                <tr>
+                  <th scope="col" class="text-center py-3 whitespace-nowrap">
+                    O'quvchi (F . I . O)
+                  </th>
+                  <th scope="col" class="text-center py-3 whitespace-nowrap">
+                    Guruh
+                  </th>
+                  <th scope="col" class="text-center py-3 whitespace-nowrap">
+                    Kurs narxi
+                  </th>
+                  <th scope="col" class="text-center py-3 whitespace-nowrap">
+                    To'lov turi
+                  </th>
+                  <th scope="col" class="text-center py-3 whitespace-nowrap">
+                    To'lov narxi
+                  </th>
+                  <th scope="col" class="text-center py-3 whitespace-nowrap">
+                    Oy
+                  </th>
+                  <th scope="col" class="text-center py-3 whitespace-nowrap">
+                    To'lov sanasi
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  v-for="i in store.PageProduct"
+                  :key="i"
+                  class="border-b"
+                  :class="
+                    navbar.userNav ? 'hover:bg-gray-700' : 'hover:bg-gray-50'
+                  "
+                >
+                  <th
+                    scope="row"
+                    class="text-center px-8 py-4 font-medium whitespace-nowrap"
+                  >
+                    <span>{{ i.student_name }}</span>
+                  </th>
+
+                  <td class="text-center font-medium text-blue-800 px-8 py-4">
+                    <p
+                      class="bg-blue-100 rounded-[5px] p-1 px-3 whitespace-nowrap"
+                    >
+                      {{ i.group_name }}
+                    </p>
+                  </td>
+                  <td class="text-center font-medium text-red-800 px-8 py-4">
+                    <p
+                      class="bg-red-100 rounded-[5px] p-1 px-3 whitespace-nowrap"
+                    >
+                      {{ i.group_price }} so'm
+                    </p>
+                  </td>
+                  <td class="text-center font-medium text-blue-800 px-8 py-4">
+                    <p
+                      class="bg-blue-100 rounded-[5px] p-1 px-3 whitespace-nowrap"
+                    >
+                      {{ i.method }}
+                    </p>
+                  </td>
+                  <td class="text-center font-medium text-green-700 px-8 py-4">
+                    <p
+                      class="bg-green-100 rounded-[5px] p-1 px-3 whitespace-nowrap"
+                    >
+                      {{ i.price }} so'm
+                    </p>
+                  </td>
+                  <td class="text-center font-medium text-blue-800 px-8 py-4">
+                    <p
+                      class="bg-blue-100 rounded-[5px] p-1 px-3 whitespace-nowrap"
+                    >
+                      {{ monthNames(i.month) }}
+                    </p>
+                  </td>
+                  <td class="text-center font-medium text-blue-800 px-8 py-4">
+                    <p
+                      class="bg-blue-100 rounded-[5px] p-1 px-3 whitespace-nowrap"
+                    >
+                      {{ chekDateFormat(new Date(i.createdAt)) }}
+                    </p>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div
+              v-show="store.PageProduct && store.PageProduct.length == 0"
+              class="w-full max-w-screen text-center p-20 text-2xl font-medium"
+            >
+              <h1>To'lov ro'yhati bo'sh</h1>
+            </div>
+          </div>
+          <nav
+            class="flex flex-row justify-between items-center space-y-0 p-4"
+            aria-label="Table navigation"
+          >
+            <!-- Oldingi sahifa tugmasi -->
+            <ul class="flex items-center">
+              <li
+                :class="[
+                  store.teacherPagination === 1
+                    ? 'pointer-events-none opacity-50'
+                    : '',
+                  'flex font-bold text-black border-2 bg-white hover:bg-gray-300 items-center justify-center text-sm sm:py-2 sm:px-6 px-3 rounded-lg leading-tight cursor-pointer transition duration-200 ease-in-out',
+                ]"
+                @click="
+                  if (store.teacherPagination > 1) {
+                    store.teacherPagination -= 1;
+                    getHistory(store.teacherPagination);
+                  }
+                "
+              >
+                <i
+                  class="md:hidden font-bold text-black text-2xl bx bx-chevron-left"
+                ></i>
+                <span class="hidden md:block">Oldingi</span>
+              </li>
+            </ul>
+
+            <!-- Sahifa raqami -->
+            <span class="text-sm font-normal text-center">
+              Sahifa
+              <span class="font-semibold">
+                <span>{{ store.teacherPage[0] * 15 - 14 }}</span> -
+                <span v-if="store.teacherPage[0] * 15 < store.teacherPage[1]">{{
+                  store.teacherPage[0] * 15
+                }}</span
+                ><span v-else>{{ store.teacherPage[1] }}</span>
+              </span>
+              dan
+              <span class="font-semibold">{{ store.teacherPage[1] }}</span>
+            </span>
+
+            <!-- Keyingi sahifa tugmasi -->
+            <ul class="flex items-center">
+              <li
+                :class="[
+                  store.teacherPage[0] * 15 >= store.teacherPage[1]
+                    ? 'pointer-events-none opacity-50'
+                    : '',
+                  'flex font-bold text-black border-2 bg-white hover:bg-gray-300 items-center justify-center text-sm sm:py-2 sm:px-6 px-3 rounded-lg leading-tight cursor-pointer transition duration-200 ease-in-out',
+                ]"
+                @click="
+                  if (store.teacherPage[0] * 15 < store.teacherPage[1]) {
+                    store.teacherPagination += 1;
+                    getHistory(store.teacherPagination);
+                  }
+                "
+              >
+                <span class="hidden md:block">Keyingi</span>
+                <i
+                  class="md:hidden font-bold text-black text-2xl bx bx-chevron-right"
+                ></i>
+              </li>
+            </ul>
+          </nav>
+        </div>
       </div>
     </section>
   </div>
@@ -1514,11 +2323,13 @@ import { useNavStore } from "../../stores/toggle";
 import { Placeholder2 } from "../../components";
 import axios from "@/services/axios";
 import { useNotificationStore } from "../../stores/notification";
+import { storeToRefs } from "pinia";
 
 const notification = useNotificationStore();
 const navbar = useNavStore();
 const hozirgiSana = new Date();
 const hozirgiYil = String(hozirgiSana.getFullYear());
+const orqaYil = hozirgiSana.getFullYear() - 2;
 let hozirgiOy = hozirgiSana.getMonth() + 1;
 hozirgiOy = hozirgiOy.toString().padStart(2, "0");
 let hozirgiKun = hozirgiSana.getDate();
@@ -1541,6 +2352,8 @@ const store = reactive({
   error: false,
   guard: userRole == "_ow_sch_" || userRole == "_ad_sch_",
   group: "",
+  groupList: [],
+  curentYil: [],
 });
 
 const cost = reactive({
@@ -1571,9 +2384,21 @@ const salary = reactive({
   month: hozirgiOy,
 });
 
+const salaryHistory = reactive({
+  year: hozirgiYil,
+  month: hozirgiOy,
+  teacher_name: "",
+});
+
+const costHistory = reactive({
+  year: hozirgiYil,
+  month: hozirgiOy,
+  category_name: "",
+});
+
 const costCategoryModal = () => {
   costCategory.modal = !costCategory.modal;
-  costCategory.categoryNmae = "";
+  costCategory.categoryName = "";
 };
 
 const costModal = () => {
@@ -1644,7 +2469,7 @@ const historyModal = () => {
   history.day = hozirgiKun;
   history.group_id = "";
   historyDayModal();
-  getHistory(store.pagination);
+  getHistory(store.teacherPagination);
 };
 
 const history = reactive({
@@ -1737,7 +2562,9 @@ const getCostCategory = async () => {
 const getCost = async (page) => {
   try {
     const res = await axios.get(
-      `/cost/${localStorage.getItem("school_id")}/page?page=${page}`,
+      `/cost/${localStorage.getItem("school_id")}/${costHistory.year}/${
+        costHistory.month
+      }/page?page=${page}`,
       {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       }
@@ -1758,19 +2585,23 @@ const getCost = async (page) => {
 const getSalary = async (page) => {
   try {
     const res = await axios.get(
-      `/salary/${localStorage.getItem("school_id")}/page?page=${page}`,
+      `/salary/${localStorage.getItem("school_id")}/${salaryHistory.year}/${
+        salaryHistory.month
+      }/page?page=${page}`,
       {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       }
     );
 
     store.SalaryPageProduct = res.data?.data?.records;
+    console.log(store.SalaryPageProduct);
     store.salaryPage = [
       res.data?.data?.pagination.currentPage,
       res.data?.data?.pagination.total_count,
     ];
     store.error = false;
   } catch (error) {
+    console.log(error);
     store.SalaryPageProduct = error.response.data.message;
     store.error = true;
   }
@@ -1875,19 +2706,66 @@ const getHistory = (page) => {
   axios
     .get(url, config)
     .then((res) => {
-      console.log(res)
+      const records = res.data.data.records;
       if (records.length !== 0) {
         history.group_name = records[0].group_name;
       }
       history.dayPay = res.data?.data?.total_sum;
       store.PageProduct = records;
-      console.log(store.PageProduct)
       const pagination = res.data?.data?.pagination;
       store.teacherPage = [pagination.currentPage, pagination.total_count];
+      history.modal = false;
     })
     .catch((error) => {
       store.PageProduct = error.response?.data?.message;
     });
+};
+
+const getGroups = async () => {
+  if (store.guard) {
+    // try {
+    //   const res = await axios.get(
+    //     `/group/${localStorage.getItem("school_id")}/find`,
+    //     {
+    //       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    //     }
+    //   );
+    //   store.allProducts = res.data.sort((a, b) => b.id - a.id);
+    //   store.error = false;
+    // } catch (error) {
+    //   store.allProducts = error.response.data.message;
+    //   store.error = true;
+    // }
+  } else {
+    const schoolId = localStorage.getItem("school_id");
+    const token = localStorage.getItem("token");
+    const id = localStorage.getItem("id");
+
+    try {
+      const employeeRes = await axios.get(`/employee/${schoolId}/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const employeeData = employeeRes.data;
+
+      const groupPromises = employeeData.group.map(async (group) => {
+        const groupRes = await axios.get(
+          `/group/${schoolId}/${group.group_id}/not`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        const groupData = groupRes.data;
+        store.groupList.push(groupData);
+        return groupData;
+      });
+
+      await Promise.all(groupPromises);
+
+      store.group = store.groupList;
+    } catch (error) {
+      console.error("Xodim va guruh ma'lumotlarini olishda xato:", error);
+    }
+  }
 };
 
 // ------------ axios post ------------- //
@@ -2081,6 +2959,14 @@ onMounted(() => {
     getEmployee();
   } else {
     getHistory(store.teacherPagination);
+    getGroups();
+  }
+  for (let i = 0; i < 5; i++) {
+    let list = {
+      id: i,
+      name: String(orqaYil + i),
+    };
+    store.curentYil.push(list);
   }
 });
 </script>

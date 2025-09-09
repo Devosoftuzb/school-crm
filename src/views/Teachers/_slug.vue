@@ -518,7 +518,7 @@
                       class="text-center font-medium whitespace-nowrap text-red-800 px-8 py-4"
                     >
                       <p class="bg-red-100 rounded-[5px] p-1">
-                        {{ i.price }} so'm
+                        {{ Number(i.price).toLocaleString("uz-UZ") }} so'm
                       </p>
                     </td>
                     <td
@@ -664,7 +664,7 @@
               <p
                 class="font-bold bg-blue-100 text-blue-700 p-1 px-3 max-w-fit rounded-lg sm:text-md text-[12px]"
               >
-                Tushum - {{ history.dayPay }} so'm
+                Tushum - {{ history.dayPay.toLocaleString("uz-UZ") }} so'm
               </p>
             </h2>
             <h2
@@ -743,7 +743,7 @@
                       <p
                         class="bg-red-100 rounded-[5px] p-1 px-3 whitespace-nowrap"
                       >
-                        {{ i.group_price }} so'm
+                        {{ Number(i.group_price).toLocaleString("uz-UZ") }} so'm
                       </p>
                     </td>
                     <td class="text-center font-medium text-blue-800 px-8 py-4">
@@ -759,7 +759,7 @@
                       <p
                         class="bg-green-100 rounded-[5px] p-1 px-3 whitespace-nowrap"
                       >
-                        {{ i.price }} so'm
+                        {{ i.price.toLocaleString("uz-UZ") }} so'm
                       </p>
                     </td>
                     <td class="text-center font-medium text-blue-800 px-8 py-4">

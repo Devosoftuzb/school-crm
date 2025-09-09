@@ -804,7 +804,7 @@ const calculatePaymentStatus = (paymentHistory, groupPrice) => {
     return "To'langan";
   } else {
     const amountDue = discountedPrice - currentMonthPaid;
-    return `(${amountDue}) so'm to'lanmagan`;
+    return `(${amountDue.toLocaleString("uz-UZ")}) so'm to'lanmagan`;
   }
 };
 
@@ -854,7 +854,7 @@ const listStudent = (allStudent, groupID) => {
 
 // API Functions
 const getAllProduct = async () => {
-  if (store.group) {
+  if (store.guard) {
     try {
       const res = await axios.get(
         `/group/${localStorage.getItem("school_id")}`,
