@@ -2105,7 +2105,7 @@
     <!-- ----------------------------------------- EMPLYE TABLE END --------------------------------------------- -->
   </div>
 </template>
-form.group_id = '';
+
 <script setup>
 import { onMounted, ref, reactive, computed } from "vue";
 import { useNavStore } from "../../stores/toggle";

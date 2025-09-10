@@ -11,6 +11,44 @@
         <Placeholder2 />
       </div>
 
+       <!-- ---------------------------------------- Statistic ------------------------------------- -->
+
+      <div
+        v-for="i in store.statistic"
+        :key="i"
+        class="cards flex flex-wrap items-center justify-center mb-5 gap-x-5 gap-y-5"
+      >
+        <div class="card sm:w-[295px] w-full" v-for="j in i" :key="j">
+          <div
+            class="relative flex flex-col min-w-0 break-words shadow-soft-xl rounded-xl bg-clip-border"
+            :class="{
+              'bg-[#1e293b]': navbar.userNav,
+              'bg-white': !navbar.userNav,
+            }"
+          >
+            <div class="flex-auto p-4">
+              <div class="flex flex-row -mx-3">
+                <div
+                  class="flex items-center justify-between w-full px-3"
+                  :class="navbar.userNav ? 'text-white' : 'text-black'"
+                >
+                  <h3 class="font-semibold leading-normal sm:text-md text-sm">
+                    {{ j.name }}
+                  </h3>
+                  <h5
+                    class="font-bold bg-blue-100 text-blue-700 p-1 px-3 rounded-lg sm:text-md text-sm"
+                  >
+                    {{ j.sum?.toLocaleString("uz-UZ") }} so'm
+                  </h5>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ---------------------------------------- Statistic ------------------------------------- -->
+
       <!-- ---------------------------------------------- cost category create modal -------------------------------------------------- -->
       <div
         @click.self="costCategoryModal"
@@ -2354,6 +2392,7 @@ const store = reactive({
   group: "",
   groupList: [],
   curentYil: [],
+  statistic: "",
 });
 
 const cost = reactive({
@@ -2544,6 +2583,22 @@ const chekDateFormat = (date) => {
 
 // ------------ axios get ------------- //
 
+const getStatistic = () => {
+  axios
+    .get(
+      `/statistic/finance/${localStorage.getItem("school_id")}`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    )
+    .then((res) => {
+      store.statistic = res.data;
+    })
+    .catch((error) => {});
+};
+
 const getCostCategory = async () => {
   await axios
     .get(`/cost-category/${localStorage.getItem("school_id")}`, {
@@ -2594,14 +2649,12 @@ const getSalary = async (page) => {
     );
 
     store.SalaryPageProduct = res.data?.data?.records;
-    console.log(store.SalaryPageProduct);
     store.salaryPage = [
       res.data?.data?.pagination.currentPage,
       res.data?.data?.pagination.total_count,
     ];
     store.error = false;
   } catch (error) {
-    console.log(error);
     store.SalaryPageProduct = error.response.data.message;
     store.error = true;
   }
@@ -2952,6 +3005,7 @@ const deleteSalary = async () => {
 
 onMounted(() => {
   if (store.guard) {
+    getStatistic()
     getCostCategory();
     getCost(store.costPagination);
     getSalary(store.salaryPagination);
