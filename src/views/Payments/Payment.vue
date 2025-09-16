@@ -31,7 +31,7 @@
                   :class="navbar.userNav ? 'text-white' : 'text-black'"
                 >
                   <h3 class="font-semibold leading-normal sm:text-md text-sm">
-                    {{ j.method }} - {{ j.count.toLocaleString("uz-UZ") }}
+                    {{ j.method }} ({{ j.count.toLocaleString("uz-UZ") }})
                   </h3>
                   <h5
                     class="font-bold bg-blue-100 text-blue-700 p-1 px-3 rounded-lg sm:text-md text-sm"
@@ -396,6 +396,19 @@
                       </select>
                     </div>
                   </div>
+                  <div>
+                      <label for="description" class="block mb-2 text-sm"
+                        >To'lovga izoh qoldirish</label
+                      >
+                      <textarea 
+                        v-model="form.description"
+                        name="description"
+                        id="description"
+                        class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block h-20 w-full py-3 p-2.5"
+                        placeholder="To'lovga izoh kiriting"
+                        cols="30" rows="10" >
+                        </textarea>
+                    </div>
                 </div>
                 <div
                   class="w-full flex items-center justify-between border-t pt-5 mt-5"
@@ -690,6 +703,19 @@
                       </select>
                     </div>
                   </div>
+                  <div>
+                      <label for="description" class="block mb-2 text-sm"
+                        >To'lovga izoh qoldirish</label
+                      >
+                      <textarea 
+                        v-model="form.description"
+                        name="description"
+                        id="description"
+                        class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block h-20 w-full py-3 p-2.5"
+                        placeholder="To'lovga izoh kiriting"
+                        cols="30" rows="10" >
+                        </textarea>
+                    </div>
                 </div>
                 <div
                   class="w-full flex items-center justify-between border-t pt-5 mt-5"
@@ -1554,6 +1580,60 @@
         </div>
         <!------------------------------------------- Search ------------------------------------------->
 
+        <div v-show="!debtor.isTable" class="w-full bg-transparent rounded-lg mb-5">
+          <ul
+            class="bg-[rgba(213,219,242,0.5)] flex w-full font-medium gap-2 text-center text-sm rounded-t-lg"
+            id="defaultTab"
+            data-tabs-toggle="#defaultTabContent"
+            role="tablist"
+          >
+            <li
+              class="w-full rounded-lg"
+              :class="
+                navbar.userNav
+                  ? 'bg-[#1e293b] text-white hover:bg-white hover:text-black'
+                  : 'bg-white hover:bg-[#1e293b] hover:text-white'
+              "
+            >
+              <button
+                @click="statusPaymentModal"
+                class="shadow-lg rounded-lg px-5 py-2.5 focus:ring-2 text-sm w-full"
+                :class="history.statusPayment ? 'btnAdd text-white' : ''"
+              >
+                To'liq to'lovlar 
+              </button>
+            </li>
+            <li class="w-full rounded-lg"
+              :class="
+                navbar.userNav
+                  ? 'bg-[#1e293b] text-white hover:bg-white hover:text-black'
+                  : 'bg-white hover:bg-[#1e293b] hover:text-white'
+              ">
+              <button
+                @click="statusHalfPaymentModal"
+                class="shadow-lg rounded-lg px-5 py-2.5 focus:ring-2 text-sm w-full"
+                :class="history.statusHalfPayment ? 'btnAdd text-white': ''"
+              >
+                Yarim to'lovlar 
+              </button>
+            </li>
+            <li class="w-full rounded-lg"
+              :class="
+                navbar.userNav
+                  ? 'bg-[#1e293b] text-white hover:bg-white hover:text-black'
+                  : 'bg-white hover:bg-[#1e293b] hover:text-white'
+              ">
+              <button
+                @click="statusDiscountModal"
+                class="shadow-lg rounded-lg px-5 py-2.5 focus:ring-2 text-sm w-full"
+                :class="history.statusDiscount ? 'btnAdd text-white': ''"
+              >
+                Chegirmali to'lovlar 
+              </button>
+            </li>
+          </ul>
+        </div>
+
         <h2
           v-show="history.dayModal"
           class="text-gray-600 font-bold sm:text-md text-sm pl-4 pb-2"
@@ -1693,7 +1773,16 @@
                   >
                     <button
                       v-show="store.btn_lamp"
-                      @click="toggleModalStudent(i.studentId, i.groupId, i.studentFullName, i.teacherName, i.groupPrice, i.groupName)"
+                      @click="
+                        toggleModalStudent(
+                          i.studentId,
+                          i.groupId,
+                          i.studentFullName,
+                          i.teacherName,
+                          i.groupPrice,
+                          i.groupName
+                        )
+                      "
                       class="bg-green-600 rounded-lg py-2.5 px-5 text-white"
                     >
                       To'lov qilish
@@ -1719,7 +1808,7 @@
             <table class="w-full text-sm text-left">
               <thead class="btnAdd text-white text-xs rounded-lg uppercase">
                 <tr>
-                  <th scope="col" class="text-center py-3 whitespace-nowrap">
+                  <th scope="col" class="text-center py-3 pl-8 whitespace-nowrap">
                     O'quvchi (F . I . O)
                   </th>
                   <th scope="col" class="text-center py-3 whitespace-nowrap">
@@ -2172,7 +2261,14 @@ function toggleModal(id, name) {
   formatDateToNumeric(new Date());
 }
 
-function toggleModalStudent(id, groupID, studentName, teacherName, groupPrice, groupName) {
+function toggleModalStudent(
+  id,
+  groupID,
+  studentName,
+  teacherName,
+  groupPrice,
+  groupName
+) {
   modal.value = !modal.value;
   form.year = hozirgiYil;
   form.month = hozirgiOy;
@@ -2181,9 +2277,9 @@ function toggleModalStudent(id, groupID, studentName, teacherName, groupPrice, g
   form.id = id;
   form.group_id = groupID;
   store.student_name = studentName;
-  store.price = groupPrice
-  store.teacher_name = teacherName
-  store.group_name = groupName
+  store.price = groupPrice;
+  store.teacher_name = teacherName;
+  store.group_name = groupName;
   formatDateToNumeric(new Date());
 }
 
@@ -2260,7 +2356,9 @@ function searchFuncStudent() {
   store.searchListStudent = [];
   if (store.filterStudent) {
     for (let i of store.studentAllProducts) {
-      if (i.full_name.toLowerCase().includes(store.filterStudent.toLowerCase())) {
+      if (
+        i.full_name.toLowerCase().includes(store.filterStudent.toLowerCase())
+      ) {
         store.searchListStudent.push(i);
       }
     }
@@ -2278,6 +2376,7 @@ const form = reactive({
   id: "",
   group_id: "",
   discount: 0,
+  description: "",
 });
 
 const edit = reactive({
@@ -2315,6 +2414,30 @@ const historyModal = () => {
   getHistory(store.pagination);
 };
 
+const statusPaymentModal = () => {
+  history.status = "payment";
+  history.statusPayment = true;
+  history.statusHalfPayment = false;
+  history.statusDiscount = false;
+  getHistory(1);
+};
+
+const statusHalfPaymentModal = () => {
+  history.status = "halfPayment";
+  history.statusHalfPayment = true;
+  history.statusPayment = false;
+  history.statusDiscount = false;
+  getHistory(1);
+};
+
+const statusDiscountModal = () => {
+  history.status = "discount";
+  history.statusDiscount = true;
+  history.statusPayment = false;
+  history.statusHalfPayment = false;
+  getHistory(1);
+};
+
 const history = reactive({
   year: hozirgiYil,
   month: hozirgiOy,
@@ -2330,6 +2453,10 @@ const history = reactive({
   searchList: [],
   dayList: [],
   monthList: [],
+  status: "payment",
+  statusPayment: true,
+  statusHalfPayment: false,
+  statusDiscount: false,
 });
 
 const debtorDayModal = () => {
@@ -2617,7 +2744,7 @@ const getOneProduct = async (id) => {
     form.filter = "";
   } else {
     form.id = "";
-    form.filterStudent = ""
+    form.filterStudent = "";
     try {
       const schoolId = localStorage.getItem("school_id");
       const token = localStorage.getItem("token");
@@ -2687,26 +2814,21 @@ const getStudentGroups = async (student_id) => {
     const token = localStorage.getItem("token");
     const headers = { headers: { Authorization: `Bearer ${token}` } };
 
-    
     const studentResponse = await axios.get(
       `/student/${schoolId}/${student_id}/not`,
       headers
     );
     const studentFullName = studentResponse.data.full_name;
 
-    
     const groupsResponse = await axios.get(
       `/student/${schoolId}/${student_id}/studentGroup`,
       headers
     );
     const groups = groupsResponse.data.group;
 
- 
     const groupDetailsPromises = groups.map(async (group) => {
-    
       const groupId = group.group_id;
 
-      
       const groupPaymentResponse = await axios.get(
         `/group/${schoolId}/${groupId}/payment`,
         headers
@@ -2716,7 +2838,6 @@ const getStudentGroups = async (student_id) => {
       const groupName = groupData.name;
       const groupStartDate = groupData.start_date;
 
-    
       const employeeId = groupData.employee[0].employee_id;
       const employeeResponse = await axios.get(
         `/employee/${schoolId}/${employeeId}/fullname`,
@@ -2724,25 +2845,21 @@ const getStudentGroups = async (student_id) => {
       );
       const teacherName = employeeResponse.data.full_name;
 
-      
       const studentInfoResponse = await axios.get(
         `/student/${schoolId}/${student_id}/payment`,
         headers
       );
       const payments = studentInfoResponse.data.payment;
 
-     
       const paymentsForGroup = payments.filter(
         (payment) => payment.group_id === groupId
       );
 
-      
       const paymentStatus = calculatePaymentStatus(
         paymentsForGroup,
         groupPrice
       );
 
-    
       return {
         studentId: student_id,
         studentFullName,
@@ -2755,15 +2872,11 @@ const getStudentGroups = async (student_id) => {
       };
     });
 
-   
     const detailedGroups = await Promise.all(groupDetailsPromises);
 
-    
     store.studentGroups = detailedGroups;
-    store.allProducts = false; 
-    
+    store.allProducts = false;
   } catch (error) {
-    
     notification.warning(
       "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
     );
@@ -2842,6 +2955,7 @@ const addPayment = async () => {
     method: form.method,
     discount: form.discount,
     price: form.price,
+    description: form.description,
   };
 
   const check = checkPayment(form.year, form.month, store.date);
@@ -2882,10 +2996,10 @@ const addPayment = async () => {
     } else if (store.allProducts) {
       getOneProduct(form.group_id);
     } else {
-      getStudentGroups(form.id)
+      getStudentGroups(form.id);
     }
   } catch (error) {
-  console.log(error)
+    console.log(error);
     notification.warning(
       "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
     );
@@ -2905,10 +3019,10 @@ const getHistory = (page) => {
 
   let url;
   if (history.dayModal) {
-    url = `/payment/day/${schoolId}/${history.year}/${history.month}/${history.day}/page?page=${page}`;
+    url = `/payment/day/${schoolId}/${history.year}/${history.month}/${history.day}/${history.status}/page?page=${page}`;
     getStatistic(`${history.year}-${history.month}-${history.day}`);
   } else if (history.monthModal) {
-    url = `/payment/month/${schoolId}/${history.group_id}/${history.year}/${history.month}/page?page=${page}`;
+    url = `/payment/month/${schoolId}/${history.group_id}/${history.year}/${history.month}/${history.status}/page?page=${page}`;
     getStatistic(`${history.year}-${history.month}`);
   } else {
     return;

@@ -482,6 +482,7 @@
                     class="text-center whitespace-nowrap font-medium pr-5 py-4"
                   >
                     <i
+                    v-show="store.guard"
                       @click="deleteFunc(i.id)"
                       class="bx bxs-trash bg-red-300 cursor-pointer text-red-600 rounded-lg p-2 focus:ring-2"
                     >
@@ -574,6 +575,7 @@
                     class="text-center whitespace-nowrap font-medium pr-5 py-4"
                   >
                     <i
+                    v-show="store.guard"
                       @click="deleteFunc(i.student_id)"
                       class="bx bxs-trash bg-red-300 cursor-pointer text-red-600 rounded-lg p-2 focus:ring-2"
                     >

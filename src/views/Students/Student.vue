@@ -872,6 +872,7 @@
                     >
                     </i>
                     <i
+                      v-show="store.guard"
                       @click="deleteFunc(i.id)"
                       class="bx bxs-trash bg-red-300 cursor-pointer text-red-600 rounded-lg p-2 focus:ring-2"
                     >
@@ -952,6 +953,7 @@
                     >
                     </i>
                     <i
+                      v-show="store.guard"
                       @click="deleteFunc(i.id)"
                       class="bx bxs-trash bg-red-300 cursor-pointer text-red-600 rounded-lg p-2 focus:ring-2"
                     >
@@ -1204,9 +1206,9 @@ const getProduct = async (page) => {
   try {
     const endpoint = store.guard
       ? `/student/${localStorage.getItem("school_id")}/page?page=${page}`
-      : `/student/${localStorage.getItem("school_id")}/teacher-student/${localStorage.getItem(
-          "id"
-        )}/page?page=${page}`;
+      : `/student/${localStorage.getItem(
+          "school_id"
+        )}/teacher-student/${localStorage.getItem("id")}/page?page=${page}`;
 
     const data = await fetchData(endpoint);
 
