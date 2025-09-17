@@ -12,6 +12,7 @@
       <!-- ---------------------------------------- Statistic ------------------------------------- -->
 
       <div
+      v-show="store.PageProduct"
         v-for="i in store.statistic"
         :key="i"
         class="cards flex flex-wrap items-center justify-center mb-5 gap-x-5 gap-y-5"
@@ -138,7 +139,7 @@
         "
       >
         <transition name="modal-fade">
-          <div class="relative p-4 w-full max-w-3xl h-auto">
+          <div class="relative p-4 w-full md:max-w-5xl max-w-3xl h-auto">
             <!-- Modal content -->
             <div
               class="relative p-4 rounded-lg shadow sm:p-5"
@@ -177,6 +178,7 @@
                 </button>
               </div>
 
+              <div class="flex md:flex-row flex-col items-center gap-5 w-full">
               <div
                 class="hidden sm:block max-w-xs mx-auto bg-white shadow-lg rounded-lg p-3 mb-5"
                 id="receipt"
@@ -289,6 +291,7 @@
               <!-- Modal body -->
               <form
                 @submit.prevent="editProduct"
+                class="md:w-[60%] w-full"
                 :class="{ darkForm: navbar.userNav }"
               >
                 <div class="grid font-medium gap-4 mb-4 sm:grid-cols-1">
@@ -373,7 +376,7 @@
                     <div>
                       <label
                         for="name"
-                        class="block mb-2 text-sm"
+                        class="block mb-2 text-sm whitespace-nowrap"
                         :class="navbar.userNav ? 'text-white' : 'text-black'"
                         >To'lov turi tanlang</label
                       >
@@ -397,18 +400,20 @@
                     </div>
                   </div>
                   <div>
-                      <label for="description" class="block mb-2 text-sm"
-                        >To'lovga izoh qoldirish</label
-                      >
-                      <textarea 
-                        v-model="form.description"
-                        name="description"
-                        id="description"
-                        class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block h-20 w-full py-3 p-2.5"
-                        placeholder="To'lovga izoh kiriting"
-                        cols="30" rows="10" >
-                        </textarea>
-                    </div>
+                    <label for="description" class="block mb-2 text-sm"
+                      >To'lovga izoh qoldirish</label
+                    >
+                    <textarea
+                      v-model="form.description"
+                      name="description"
+                      id="description"
+                      class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block h-20 w-full py-3 p-2.5"
+                      placeholder="To'lovga izoh kiriting"
+                      cols="30"
+                      rows="10"
+                    >
+                    </textarea>
+                  </div>
                 </div>
                 <div
                   class="w-full flex items-center justify-between border-t pt-5 mt-5"
@@ -428,6 +433,7 @@
                   </button>
                 </div>
               </form>
+              </div>
             </div>
           </div>
         </transition>
@@ -445,7 +451,7 @@
         "
       >
         <transition name="modal-fade">
-          <div v-show="modal" class="relative p-4 w-full max-w-3xl h-auto">
+          <div v-show="modal" class="relative p-4 w-full md:max-w-5xl max-w-3xl h-auto">
             <!-- Modal content -->
             <div
               class="relative p-4 rounded-lg shadow sm:p-5"
@@ -484,6 +490,7 @@
                 </button>
               </div>
 
+              <div class="flex md:flex-row flex-col items-center gap-5 w-full">
               <div
                 class="hidden sm:block max-w-xs mx-auto bg-white shadow-lg rounded-lg p-3 mb-5"
                 id="receipt"
@@ -596,6 +603,7 @@
               <!-- Modal body -->
               <form
                 @submit.prevent="addPayment"
+                class="md:w-[60%] w-full"
                 :class="{ darkForm: navbar.userNav }"
               >
                 <div class="grid font-medium gap-4 mb-4 sm:grid-cols-1">
@@ -680,7 +688,7 @@
                     <div>
                       <label
                         for="name"
-                        class="block mb-2 text-sm"
+                        class="block mb-2 text-sm whitespace-nowrap"
                         :class="navbar.userNav ? 'text-white' : 'text-black'"
                         >To'lov turi tanlang</label
                       >
@@ -704,18 +712,20 @@
                     </div>
                   </div>
                   <div>
-                      <label for="description" class="block mb-2 text-sm"
-                        >To'lovga izoh qoldirish</label
-                      >
-                      <textarea 
-                        v-model="form.description"
-                        name="description"
-                        id="description"
-                        class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block h-20 w-full py-3 p-2.5"
-                        placeholder="To'lovga izoh kiriting"
-                        cols="30" rows="10" >
-                        </textarea>
-                    </div>
+                    <label for="description" class="block mb-2 text-sm"
+                      >To'lovga izoh qoldirish</label
+                    >
+                    <textarea
+                      v-model="form.description"
+                      name="description"
+                      id="description"
+                      class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block h-20 w-full py-3 p-2.5"
+                      placeholder="To'lovga izoh kiriting"
+                      cols="30"
+                      rows="10"
+                    >
+                    </textarea>
+                  </div>
                 </div>
                 <div
                   class="w-full flex items-center justify-between border-t pt-5 mt-5"
@@ -736,6 +746,7 @@
                   </button>
                 </div>
               </form>
+              </div>
             </div>
           </div>
         </transition>
@@ -1580,7 +1591,12 @@
         </div>
         <!------------------------------------------- Search ------------------------------------------->
 
-        <div v-show="!debtor.isTable" class="w-full bg-transparent rounded-lg mb-5">
+        <div
+          v-show="
+              !store.allProducts && !debtor.isTable && !store.studentGroups
+            "
+          class="w-full bg-transparent rounded-lg mb-5"
+        >
           <ul
             class="bg-[rgba(213,219,242,0.5)] flex w-full font-medium gap-2 text-center text-sm rounded-t-lg"
             id="defaultTab"
@@ -1600,42 +1616,46 @@
                 class="shadow-lg rounded-lg px-5 py-2.5 focus:ring-2 text-sm w-full"
                 :class="history.statusPayment ? 'btnAdd text-white' : ''"
               >
-                To'liq to'lovlar 
+                To'liq to'lovlar ({{ statusCount.payment }})
               </button>
             </li>
-            <li class="w-full rounded-lg"
+            <li
+              class="w-full rounded-lg"
               :class="
                 navbar.userNav
                   ? 'bg-[#1e293b] text-white hover:bg-white hover:text-black'
                   : 'bg-white hover:bg-[#1e293b] hover:text-white'
-              ">
+              "
+            >
               <button
                 @click="statusHalfPaymentModal"
                 class="shadow-lg rounded-lg px-5 py-2.5 focus:ring-2 text-sm w-full"
-                :class="history.statusHalfPayment ? 'btnAdd text-white': ''"
+                :class="history.statusHalfPayment ? 'btnAdd text-white' : ''"
               >
-                Yarim to'lovlar 
+                Yarim to'lovlar ({{ statusCount.halfPayment }})
               </button>
             </li>
-            <li class="w-full rounded-lg"
+            <li
+              class="w-full rounded-lg"
               :class="
                 navbar.userNav
                   ? 'bg-[#1e293b] text-white hover:bg-white hover:text-black'
                   : 'bg-white hover:bg-[#1e293b] hover:text-white'
-              ">
+              "
+            >
               <button
                 @click="statusDiscountModal"
                 class="shadow-lg rounded-lg px-5 py-2.5 focus:ring-2 text-sm w-full"
-                :class="history.statusDiscount ? 'btnAdd text-white': ''"
+                :class="history.statusDiscount ? 'btnAdd text-white' : ''"
               >
-                Chegirmali to'lovlar 
+                Chegirmali to'lovlar ({{ statusCount.discount }})
               </button>
             </li>
           </ul>
         </div>
 
         <h2
-          v-show="history.dayModal"
+          v-show="history.dayModal && !store.allProducts && !debtor.isTable && !store.studentGroups && !history.loader"
           class="text-gray-600 font-bold sm:text-md text-sm pl-4 pb-2"
         >
           Kunlik to'lov tarixi - {{ history.year }}/{{ history.month }}/{{
@@ -1643,7 +1663,7 @@
           }}
         </h2>
         <h2
-          v-show="history.monthModal"
+          v-show="history.monthModal && !store.allProducts && !debtor.isTable && !store.studentGroups && !history.loader"
           class="text-gray-600 font-bold sm:text-md text-sm pl-4 pb-2"
         >
           Guruhni oylik to'lov tarixi - {{ history.year }}/{{
@@ -1655,6 +1675,10 @@
           class="relative shadow-md rounded-lg overflow-hidden mb-28"
           :class="navbar.userNav ? 'bg-[#1e293b] text-white' : 'bg-white'"
         >
+          <div v-show="history.loader">
+            <Placeholder3 />
+          </div>
+
           <div
             v-show="store.allProducts && !store.studentGroups"
             class="overflow-x-auto"
@@ -1720,7 +1744,7 @@
           </div>
 
           <div
-            v-show="store.studentGroups && !store.allProducts"
+            v-show="store.studentGroups && !store.allProducts && !debtor.isTable"
             class="overflow-x-auto"
           >
             <table class="w-full text-sm text-left">
@@ -1801,14 +1825,17 @@
 
           <div
             v-show="
-              !store.allProducts && !debtor.isTable && !store.studentGroups
+              !store.allProducts && !debtor.isTable && !store.studentGroups && !history.loader
             "
             class="overflow-x-auto"
           >
             <table class="w-full text-sm text-left">
               <thead class="btnAdd text-white text-xs rounded-lg uppercase">
                 <tr>
-                  <th scope="col" class="text-center py-3 pl-8 whitespace-nowrap">
+                  <th
+                    scope="col"
+                    class="text-center py-3 pl-8 whitespace-nowrap"
+                  >
                     O'quvchi (F . I . O)
                   </th>
                   <th scope="col" class="text-center py-3 whitespace-nowrap">
@@ -1833,6 +1860,10 @@
                     To'lov sanasi
                   </th>
                   <th scope="col" class="text-center py-3 whitespace-nowrap">
+                    Izoh
+                  </th>
+
+                  <th scope="col" class="text-center py-3 whitespace-nowrap">
                     Chek
                   </th>
                   <th
@@ -1846,9 +1877,11 @@
                   v-for="i in store.PageProduct"
                   :key="i"
                   class="border-b"
-                  :class="
-                    navbar.userNav ? 'hover:bg-gray-700' : 'hover:bg-gray-50'
-                  "
+                  :class="[
+                    navbar.userNav ? 'hover:bg-gray-700' : 'hover:bg-gray-50',
+                    i.status === 'update' ? 'btnAdd3' : '',
+                    i.status === 'delete' ? 'btnAdd2' : '',
+                  ]"
                 >
                   <th
                     scope="row"
@@ -1905,6 +1938,25 @@
                     >
                       {{ chekDateFormat(new Date(i.createdAt)) }}
                     </p>
+                  </td>
+                  <td class="text-center font-medium px-8 py-2 relative">
+                    <div class="group relative w-40 inline-block">
+                      <p class="truncate w-40 p-1 rounded-[5px]">
+                        {{
+                          !i.description || i.description.trim() === ""
+                            ? "Izoh yo'q"
+                            : i.description.split(" ").length > 3
+                            ? i.description.split(" ").slice(0, 3).join(" ") +
+                              "..."
+                            : i.description
+                        }}
+                      </p>
+                      <span
+                        class="absolute left-1/2 -translate-x-1/2 bottom-full mb-1 hidden w-max max-w-xs bg-blue-100 text-blue-800 text-sm p-2 rounded-md shadow-lg group-hover:block"
+                      >
+                        {{ !i.description ? "Izoh yo'q": i.description }}
+                      </span>
+                    </div>
                   </td>
                   <td
                     class="text-center font-medium px-8 py-4 whitespace-nowrap"
@@ -2057,7 +2109,7 @@
           </div>
 
           <nav
-            v-show="!store.allProducts && !debtor.isTable"
+            v-show="!store.allProducts && !debtor.isTable && !history.loader && !store.studentGroups"
             class="flex flex-row justify-between items-center space-y-0 p-4"
             aria-label="Table navigation"
           >
@@ -2199,6 +2251,7 @@
 import { onMounted, ref, reactive, computed } from "vue";
 import { useNavStore } from "../../stores/toggle";
 import { Placeholder2 } from "../../components";
+import { Placeholder3 } from "../../components";
 import { useNotificationStore } from "../../stores/notification";
 import axios from "@/services/axios";
 import * as XLSX from "xlsx";
@@ -2250,6 +2303,12 @@ const store = reactive({
   studentGroups: false,
 });
 
+const statusCount = reactive({
+  payment: 0,
+  halfPayment: 0,
+  discount: 0,
+});
+
 function toggleModal(id, name) {
   modal.value = !modal.value;
   form.year = hozirgiYil;
@@ -2257,6 +2316,7 @@ function toggleModal(id, name) {
   form.method = "";
   form.price = store.price;
   form.id = id;
+  form.discount = 0;
   store.student_name = name;
   formatDateToNumeric(new Date());
 }
@@ -2315,6 +2375,7 @@ function cancelFunc() {
   form.month = "";
   form.method = "";
   form.price = store.price;
+  form.discount = 0;
   modal.value = false;
 }
 
@@ -2419,6 +2480,7 @@ const statusPaymentModal = () => {
   history.statusPayment = true;
   history.statusHalfPayment = false;
   history.statusDiscount = false;
+  history.loader = true;
   getHistory(1);
 };
 
@@ -2427,6 +2489,7 @@ const statusHalfPaymentModal = () => {
   history.statusHalfPayment = true;
   history.statusPayment = false;
   history.statusDiscount = false;
+   history.loader = true;
   getHistory(1);
 };
 
@@ -2435,6 +2498,7 @@ const statusDiscountModal = () => {
   history.statusDiscount = true;
   history.statusPayment = false;
   history.statusHalfPayment = false;
+   history.loader = true;
   getHistory(1);
 };
 
@@ -2457,6 +2521,7 @@ const history = reactive({
   statusPayment: true,
   statusHalfPayment: false,
   statusDiscount: false,
+  loader: true,
 });
 
 const debtorDayModal = () => {
@@ -2555,9 +2620,9 @@ const getAllHistoryForExport = async () => {
 
   let urlBase;
   if (history.dayModal) {
-    urlBase = `/payment/day/${schoolId}/${history.year}/${history.month}/${history.day}/page`;
+    urlBase = `/payment/day/${schoolId}/${history.year}/${history.month}/${history.day}/all/page`;
   } else if (history.monthModal) {
-    urlBase = `/payment/month/${schoolId}/${history.group_id}/${history.year}/${history.month}/page`;
+    urlBase = `/payment/month/${schoolId}/${history.group_id}/${history.year}/${history.month}/all/page`;
   } else {
     return;
   }
@@ -3035,11 +3100,17 @@ const getHistory = (page) => {
       if (records.length !== 0) {
         history.group_name = records[0].group_name;
       }
+
+      store.studentGroups = false;
+      statusCount.payment = res.data?.data?.summary.paymentCount;
+      statusCount.halfPayment = res.data?.data?.summary.halfPaymentCount;
+      statusCount.discount = res.data?.data?.summary.discountCount;
+      history.modal = false;
       store.PageProduct = records;
       const pagination = res.data?.data?.pagination;
       store.page = [pagination.currentPage, pagination.total_count];
       store.error = false;
-      history.modal = false;
+      history.loader = false;
     })
     .catch((error) => {
       store.PageProduct = error.response?.data?.message;
@@ -3115,6 +3186,7 @@ const getEditProduct = (id) => {
       store.pay_price = res.data.price;
       form.discount = res.data.discount;
       form.method = res.data.method;
+      form.description = res.data.description;
       form.id = res.data.student.id;
       form.group_id = res.data.group.id;
       formatDateToNumeric(new Date(res.data.createdAt));
@@ -3546,6 +3618,7 @@ const printChek = (id) => {
 };
 
 onMounted(() => {
+  getSchool()
   getAllProduct();
   getAllStudent();
   getHistory(store.pagination);
