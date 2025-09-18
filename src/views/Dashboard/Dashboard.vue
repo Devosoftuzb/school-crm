@@ -1,10 +1,10 @@
 <template>
   <section class="mb-28" :class="{ 'text-white': navbar.userNav }">
     <!-- Cards Section -->
-    <div v-show="!store.PageProduct">
+    <div v-show="!info.students">
       <Placeholder1 />
     </div>
-    <div v-show="store.PageProduct" class="rounded-lg pt-4">
+    <div v-show="info.students" class="rounded-lg pt-4">
       <!-- Cards -->
       <div
         v-show="store.guard"
@@ -432,11 +432,11 @@ watch(
   }
 );
 
-onBeforeMount(() => {
-  setTimeout(() => {
-    store.PageProduct = true;
-  }, 500);
-});
+// onBeforeMount(() => {
+//   setTimeout(() => {
+//     store.PageProduct = true;
+//   }, 500);
+// });
 
 onMounted(() => {
   setTimeout(createPaymentChart, 300);

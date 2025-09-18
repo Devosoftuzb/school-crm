@@ -1603,6 +1603,22 @@
             data-tabs-toggle="#defaultTabContent"
             role="tablist"
           >
+          <li
+              class="w-full rounded-lg"
+              :class="
+                navbar.userNav
+                  ? 'bg-[#1e293b] text-white hover:bg-white hover:text-black'
+                  : 'bg-white hover:bg-[#1e293b] hover:text-white'
+              "
+            >
+              <button
+                @click="statusPaymentAllModal"
+                class="shadow-lg rounded-lg px-5 py-2.5 focus:ring-2 text-sm w-full"
+                :class="history.statusPaymentAll ? 'btnAdd text-white' : ''"
+              >
+                Barcha to'lovlar ({{ statusCount.payment + statusCount.halfPayment + statusCount.discount }})
+              </button>
+            </li>
             <li
               class="w-full rounded-lg"
               :class="
@@ -1972,10 +1988,12 @@
                     class="text-center whitespace-nowrap font-medium pr-5 py-4"
                   >
                     <i
+                    v-show="i.status !== 'delete'"
                       @click="getEditProduct(i.id)"
                       class="bx bxs-pencil bg-blue-300 text-blue-600 rounded-lg p-2 mr-3 cursor-pointer focus:ring-2"
                     >
                     </i>
+                    <i v-show="i.status == 'delete'" class="pl-10"></i>
                     <i
                       @click="deleteFunc(i.id)"
                       class="bx bxs-trash bg-red-300 cursor-pointer text-red-600 rounded-lg p-2 focus:ring-2"
@@ -2256,6 +2274,7 @@ import { useNotificationStore } from "../../stores/notification";
 import axios from "@/services/axios";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
+import { FwbNavbarCollapse } from "flowbite-vue";
 
 const notification = useNotificationStore();
 const navbar = useNavStore();
@@ -2475,9 +2494,20 @@ const historyModal = () => {
   getHistory(store.pagination);
 };
 
+const statusPaymentAllModal = () => {
+  history.status = "all";
+  history.statusPaymentAll = true;
+  history.statusPayment = false;
+  history.statusHalfPayment = false;
+  history.statusDiscount = false;
+  history.loader = true;
+  getHistory(1);
+};
+
 const statusPaymentModal = () => {
   history.status = "payment";
   history.statusPayment = true;
+  history.statusPaymentAll = false;
   history.statusHalfPayment = false;
   history.statusDiscount = false;
   history.loader = true;
@@ -2487,18 +2517,20 @@ const statusPaymentModal = () => {
 const statusHalfPaymentModal = () => {
   history.status = "halfPayment";
   history.statusHalfPayment = true;
+  history.statusPaymentAll = false;
   history.statusPayment = false;
   history.statusDiscount = false;
-   history.loader = true;
+  history.loader = true;
   getHistory(1);
 };
 
 const statusDiscountModal = () => {
   history.status = "discount";
   history.statusDiscount = true;
+  history.statusPaymentAll = false;
   history.statusPayment = false;
   history.statusHalfPayment = false;
-   history.loader = true;
+  history.loader = true;
   getHistory(1);
 };
 
@@ -2517,8 +2549,9 @@ const history = reactive({
   searchList: [],
   dayList: [],
   monthList: [],
-  status: "payment",
-  statusPayment: true,
+  status: "all",
+  statusPaymentAll: true,
+  statusPayment: false,
   statusHalfPayment: false,
   statusDiscount: false,
   loader: true,
@@ -2621,6 +2654,7 @@ const getAllHistoryForExport = async () => {
   let urlBase;
   if (history.dayModal) {
     urlBase = `/payment/day/${schoolId}/${history.year}/${history.month}/${history.day}/all/page`;
+    getStatistic(`${history.year}-${history.month}-${history.day}`);
   } else if (history.monthModal) {
     urlBase = `/payment/month/${schoolId}/${history.group_id}/${history.year}/${history.month}/all/page`;
   } else {
@@ -2669,26 +2703,58 @@ const exportToExcel = async () => {
     "O'quvchi (F . I . O)": item.student_name,
     "O'qituvchi (F . I . O)": item.teacher_name,
     "Guruh nomi": item.group_name,
-    "Guruh narxi": item.group_price + " so'm",
+    "Guruh narxi": Number(item.group_price).toLocaleString("uz-UZ") + " so'm",
     "To'lov turi": item.method,
-    "To'langan summa": item.price + " so'm",
+    "To'langan summa": Number(item.price).toLocaleString("uz-UZ") + " so'm",
     "Chegirma (%)": item.discount + " %",
     Oy: monthNames(item.month),
     "To'lov sanasi": chekDateFormat(new Date(item.createdAt)),
+    "Holati": item.status === 'delete' ? "O'chirilgan" : item.status === 'update' ? "O'zgartirilgan" : "Tasdiqlangan"
   }));
 
   const ws = XLSX.utils.json_to_sheet(dataToExport, { origin: "A1" });
 
+  const lastRow = dataToExport.length + 1; 
+
+  if (history.dayModal && store.statistic.statistics && store.statistic.statistics.length > 0) {
+    const startRow = lastRow + 4;
+
+    ws[`A${startRow}`] = { t: 's', v: "To'lov turi" };
+    ws[`B${startRow}`] = { t: 's', v: "To'lovlar soni" };
+    ws[`C${startRow}`] = { t: 's', v: "Jami summa" };
+
+    store.statistic.statistics.forEach((stat, idx) => {
+      const row = startRow + idx + 1;
+      ws[`A${row}`] = { t: 's', v: stat.method };
+      ws[`B${row}`] = { t: 's', v: Number(stat.count).toLocaleString("uz-UZ") + " ta"};
+      ws[`C${row}`] = { t: 's', v: Number(stat.sum).toLocaleString("uz-UZ") + " so'm"};
+    });
+
+    const numColumns = Object.keys(dataToExport[0]).length;
+    const maxRow = startRow + store.statistic.statistics.length;
+    ws['!ref'] = XLSX.utils.encode_range({
+      s: { c: 0, r: 0 },
+      e: { c: numColumns - 1, r: maxRow - 1 }
+    });
+  } else {
+    const numColumns = Object.keys(dataToExport[0]).length;
+    ws['!ref'] = XLSX.utils.encode_range({
+      s: { c: 0, r: 0 },
+      e: { c: numColumns - 1, r: dataToExport.length }
+    });
+  }
+
   ws["!cols"] = [
     { wpx: 180 },
     { wpx: 180 },
-    { wpx: 150 },
+    { wpx: 200 },
     { wpx: 120 },
     { wpx: 120 },
     { wpx: 130 },
     { wpx: 110 },
     { wpx: 90 },
     { wpx: 160 },
+    { wpx: 90 }, 
   ];
 
   const wb = XLSX.utils.book_new();
@@ -2699,10 +2765,9 @@ const exportToExcel = async () => {
     : `oylik_tolov_tarixi_${history.year}-${history.month}-${history.group_name}.xlsx`;
 
   const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
-  const blob = new Blob([excelBuffer], {
-    type: "application/octet-stream",
-  });
+  const blob = new Blob([excelBuffer], { type: "application/octet-stream" });
   saveAs(blob, fileName);
+  location.reload()
   notification.success("Excel fayl yuklab olindi!");
   history.modal = !history.modal;
 };
@@ -2851,7 +2916,7 @@ const getOneProduct = async (id) => {
           );
           const payments = studentInfo.data.payment;
           const paymentsForGroup = payments.filter(
-            (payment) => payment.group_id === form.group_id
+            (payment) => payment.group_id === form.group_id && payment.status !== 'delete'
           );
 
           studentInfo.data.paymentStatus = calculatePaymentStatus(
@@ -2917,7 +2982,7 @@ const getStudentGroups = async (student_id) => {
       const payments = studentInfoResponse.data.payment;
 
       const paymentsForGroup = payments.filter(
-        (payment) => payment.group_id === groupId
+        (payment) => payment.group_id === groupId && payment.status !== 'delete'
       );
 
       const paymentStatus = calculatePaymentStatus(
@@ -2986,7 +3051,8 @@ const checkOldPayment = async (
         payment.student_id === student_id &&
         payment.group_id === group_id &&
         payment.year === year &&
-        payment.month === month
+        payment.month === month &&
+        payment.status !== 'delete'
     );
 
     // Agar chegirma mavjud bo'lsa, uni hisoblash
@@ -3100,7 +3166,6 @@ const getHistory = (page) => {
       if (records.length !== 0) {
         history.group_name = records[0].group_name;
       }
-
       store.studentGroups = false;
       statusCount.payment = res.data?.data?.summary.paymentCount;
       statusCount.halfPayment = res.data?.data?.summary.halfPaymentCount;

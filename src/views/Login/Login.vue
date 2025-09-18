@@ -152,7 +152,6 @@ const handleSubmit = async () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log(userResponse.data);
 
       localStorage.setItem("school_id", userResponse.data.school[0].id);
       localStorage.setItem(
