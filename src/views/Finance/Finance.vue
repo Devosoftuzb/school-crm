@@ -2243,7 +2243,7 @@
                     <p
                       class="bg-red-100 rounded-[5px] p-1 px-3 whitespace-nowrap"
                     >
-                      {{ i.group_price }} so'm
+                      {{ Number(i.group_price).toLocaleString("uz-UZ") }} so'm
                     </p>
                   </td>
                   <td class="text-center font-medium text-blue-800 px-8 py-4">
@@ -2257,7 +2257,7 @@
                     <p
                       class="bg-green-100 rounded-[5px] p-1 px-3 whitespace-nowrap"
                     >
-                      {{ i.price }} so'm
+                      {{ i.price.toLocaleString("uz-UZ") }} so'm
                     </p>
                   </td>
                   <td class="text-center font-medium text-blue-800 px-8 py-4">

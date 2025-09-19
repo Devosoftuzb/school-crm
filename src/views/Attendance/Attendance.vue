@@ -938,7 +938,7 @@ const getOneProduct = async (id) => {
         );
 
         const paymentsForGroup = studentInfo.data.payment.filter(
-          (payment) => payment.group_id === form.group_id
+          (payment) => payment.group_id === form.group_id && payment.status !== 'delete'
         );
         studentInfo.data.paymentStatus = calculatePaymentStatus(
           paymentsForGroup,

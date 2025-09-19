@@ -700,6 +700,7 @@
               class="lg:w-auto flex md:space-y-0 items-center justify-end space-x-3"
             >
               <button
+              v-show="store.guard"
                 @click="toggleModal"
                 id=""
                 type="button"

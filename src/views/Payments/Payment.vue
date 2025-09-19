@@ -973,87 +973,6 @@
                       <option value="12">Dekabr</option>
                     </select>
                   </div>
-                  <div>
-                    <label
-                      for="name"
-                      class="block mb-2 text-sm"
-                      :class="navbar.userNav ? 'text-white' : 'text-black'"
-                      >Guruhni tanlang</label
-                    >
-                    <div class="relative w-full">
-                      <div
-                        class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"
-                      >
-                        <svg
-                          aria-hidden="true"
-                          class="w-5 h-5"
-                          fill="currentColor"
-                          viewbox="0 0 20 20"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            fill-rule="evenodd"
-                            d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                            clip-rule="evenodd"
-                          />
-                        </svg>
-                      </div>
-                      <input
-                        v-model="history.filter"
-                        @focus="history.selectLamp = true"
-                        @blur="
-                          history.selectLamp = false;
-                          history.filter_show = false;
-                        "
-                        @input="
-                          history.filter_show = true;
-                          searchHistoryFunc();
-                        "
-                        type="search"
-                        id="simple-search"
-                        class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2"
-                        placeholder="Guruhni tanlang yoki qidirish..."
-                      />
-                      <ul
-                        v-show="
-                          history.filter_show && history.searchList.length > 0
-                        "
-                        class="absolute z-10 max-h-80 overflow-y-auto overflow-hidden py-1 text-gray-600 rounded bg-white w-full bottom-full"
-                      >
-                        <li
-                          class="hover:bg-blue-600 hover:text-white cursor-pointer pl-2"
-                          v-for="(i, index) in history.searchList"
-                          :key="index"
-                          @mousedown.prevent="
-                            history.group_id = i.id;
-                            history.group_name = i.name;
-                            history.filter_show = false;
-                            history.filter = i.name;
-                          "
-                        >
-                          {{ i.name }}
-                        </li>
-                      </ul>
-                      <ul
-                        v-show="history.selectLamp && !history.filter"
-                        class="absolute z-10 max-h-80 overflow-y-auto overflow-hidden py-1 text-gray-600 rounded bg-white w-full bottom-full"
-                      >
-                        <li
-                          class="hover:bg-blue-600 hover:text-white whitespace-nowrap cursor-pointer pl-2"
-                          v-for="(i, index) in store.groupAllProducts"
-                          :key="index"
-                          @mousedown.prevent="
-                            history.group_id = i.id;
-                            history.group_name = i.name;
-                            history.selectLamp = false;
-                            history.filter = i.name;
-                          "
-                        >
-                          {{ i.name }}
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
                 </div>
                 <div
                   class="w-full flex flex-col gap-5 justify-center border-t pt-5 mt-5"
@@ -1682,9 +1601,9 @@
           v-show="history.monthModal && !store.allProducts && !debtor.isTable && !store.studentGroups && !history.loader"
           class="text-gray-600 font-bold sm:text-md text-sm pl-4 pb-2"
         >
-          Guruhni oylik to'lov tarixi - {{ history.year }}/{{
+          Oylik to'lov tarixi - {{ history.year }}/{{
             history.month
-          }}/{{ history.group_name }}
+          }}
         </h2>
 
         <div
@@ -2656,7 +2575,8 @@ const getAllHistoryForExport = async () => {
     urlBase = `/payment/day/${schoolId}/${history.year}/${history.month}/${history.day}/all/page`;
     getStatistic(`${history.year}-${history.month}-${history.day}`);
   } else if (history.monthModal) {
-    urlBase = `/payment/month/${schoolId}/${history.group_id}/${history.year}/${history.month}/all/page`;
+    urlBase = `/payment/month/${schoolId}/${history.year}/${history.month}/all/page`;
+    getStatistic(`${history.year}-${history.month}`);
   } else {
     return;
   }
@@ -2716,7 +2636,7 @@ const exportToExcel = async () => {
 
   const lastRow = dataToExport.length + 1; 
 
-  if (history.dayModal && store.statistic.statistics && store.statistic.statistics.length > 0) {
+  if (store.statistic.statistics && store.statistic.statistics.length > 0) {
     const startRow = lastRow + 4;
 
     ws[`A${startRow}`] = { t: 's', v: "To'lov turi" };
@@ -3153,7 +3073,7 @@ const getHistory = (page) => {
     url = `/payment/day/${schoolId}/${history.year}/${history.month}/${history.day}/${history.status}/page?page=${page}`;
     getStatistic(`${history.year}-${history.month}-${history.day}`);
   } else if (history.monthModal) {
-    url = `/payment/month/${schoolId}/${history.group_id}/${history.year}/${history.month}/${history.status}/page?page=${page}`;
+    url = `/payment/month/${schoolId}/${history.year}/${history.month}/${history.status}/page?page=${page}`;
     getStatistic(`${history.year}-${history.month}`);
   } else {
     return;
