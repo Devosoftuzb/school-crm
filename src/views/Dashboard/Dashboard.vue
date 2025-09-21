@@ -1,10 +1,10 @@
 <template>
   <section class="mb-28" :class="{ 'text-white': navbar.userNav }">
     <!-- Cards Section -->
-    <div v-show="!info.students">
+    <div v-show="store.loader">
       <Placeholder1 />
     </div>
-    <div v-show="info.students" class="rounded-lg pt-4">
+    <div v-show="!store.loader" class="rounded-lg pt-4">
       <!-- Cards -->
       <div
         v-show="store.guard"
@@ -181,6 +181,7 @@ const store = reactive({
   year: hozirgiSana.getFullYear(),
   month: (hozirgiSana.getMonth() + 1).toString().padStart(2, "0"),
   guard: userRole == "_ow_sch_" || userRole == "_ad_sch_",
+  loader: true
 });
 
 const info = reactive({
@@ -239,6 +240,7 @@ const getStatistics = async () => {
     info.staff = res.data.employee_number;
     info.groups = res.data.group_number;
     info.payment = res.data.payment_sum;
+    store.loader = false
   } catch (err) {
     console.error("Statistikani olishda xato:", err);
   }
