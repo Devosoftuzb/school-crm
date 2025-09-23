@@ -34,7 +34,7 @@
           "
         >
           <transition name="modal-fade">
-            <div class="relative p-4 w-full max-w-xl h-auto">
+            <div class="relative p-4 w-full max-w-2xl h-auto">
               <!-- Modal content -->
               <div
                 class="relative p-4 rounded-lg shadow sm:p-5"
@@ -93,6 +93,13 @@
                         @click="historyMonthModal"
                       >
                         <span>Oy bo'yicha ko'rish</span>
+                      </li>
+                      <li
+                        class="cursor-pointer w-full sm:max-w-fit text-center bg-gray-600 hover:bg-gray-500 p-2 px-5 sm:text-md text-sm rounded-lg"
+                        :class="history.groupMonthModal ? 'btn' : 'bg-gray-600'"
+                        @click="historyGroupMonthModal"
+                      >
+                        <span>Guruh bo'yicha ko'rish</span>
                       </li>
                     </ul>
                   </div>
@@ -190,6 +197,81 @@
                 </form>
                 <form
                   v-show="history.monthModal"
+                  @submit.prevent="getHistory(store.pagination)"
+                  :class="{ darkForm: navbar.userNav }"
+                >
+                  <div class="grid font-medium gap-4 mb-4">
+                    <div>
+                      <label for="year" class="block mb-2 text-sm"
+                        >Yilni tanlang</label
+                      >
+                      <select
+                        v-model="history.year"
+                        id="name"
+                        class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                        required
+                      >
+                        <option value="" disabled selected>
+                          Yilni tanlang
+                        </option>
+                        <option
+                          v-for="i in store.curentYil"
+                          :key="i.id"
+                          :value="i.name"
+                        >
+                          {{ i.name }}
+                        </option>
+                      </select>
+                    </div>
+                    <div>
+                      <label for="month" class="block mb-2 text-sm"
+                        >Oyni tanlang</label
+                      >
+                      <select
+                        v-model="history.month"
+                        id="month"
+                        class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                        required
+                      >
+                        <option value="" disabled selected>Oyni tanlang</option>
+                        <option value="01">Yanvar</option>
+                        <option value="02">Fevral</option>
+                        <option value="03">Mart</option>
+                        <option value="04">Aprel</option>
+                        <option value="05">May</option>
+                        <option value="06">Iyun</option>
+                        <option value="07">Iyul</option>
+                        <option value="08">Avgust</option>
+                        <option value="09">Sentabr</option>
+                        <option value="10">Oktabr</option>
+                        <option value="11">Noyabr</option>
+                        <option value="12">Dekabr</option>
+                      </select>
+                    </div>
+                   
+                  </div>
+                  <div
+                    class="w-full flex flex-col gap-5 justify-center border-t pt-5 mt-5"
+                  >
+                    <div class="w-full flex items-center justify-between">
+                      <button
+                        @click="historyModal"
+                        type="button"
+                        class="border inline-flex items-center hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                      >
+                        Bekor qilish
+                      </button>
+                      <button
+                        type="submit"
+                        class="btn text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                      >
+                        Ko'rish
+                      </button>
+                    </div>
+                  </div>
+                </form>
+                <form
+                  v-show="history.groupMonthModal"
                   @submit.prevent="getHistory(store.pagination)"
                   :class="{ darkForm: navbar.userNav }"
                 >
@@ -652,7 +734,7 @@
 
           <div
             v-show="store.modalPayment"
-            class="flex sm:flex-row flex-col justify-between sm:items-center gap-4 font-bold mb-5 p-5 border-t border-blue-700"
+            class="flex sm:flex-row flex-col justify-between sm:items-center gap-4 font-bold p-5 border-t border-blue-700"
           >
             <h2
               v-show="history.dayModal"
@@ -661,14 +743,17 @@
               Kunlik to'lov tarixi - {{ history.year }}/{{ history.month }}/{{
                 history.day
               }}
-              <p
-                class="font-bold bg-blue-100 text-blue-700 p-1 px-3 max-w-fit rounded-lg sm:text-md text-[12px]"
-              >
-                Tushum - {{ history.dayPay.toLocaleString("uz-UZ") }} so'm
-              </p>
             </h2>
             <h2
               v-show="history.monthModal"
+              class="sm:text-lg text-sm text-blue-700"
+            >
+              Oylik to'lov tarixi - {{ history.year }}/{{
+                history.month
+              }}
+            </h2>
+            <h2
+              v-show="history.groupMonthModal"
               class="sm:text-lg text-sm text-blue-700"
             >
               Guruhni oylik to'lov tarixi - {{ history.year }}/{{
@@ -933,11 +1018,19 @@ const paymentModal = () => {
 const historyDayModal = () => {
   history.dayModal = true;
   history.monthModal = false;
+  history.groupMonthModal = false;
 };
 
 const historyMonthModal = () => {
   history.dayModal = false;
   history.monthModal = true;
+  history.groupMonthModal = false;
+};
+
+const historyGroupMonthModal = () => {
+  history.dayModal = false;
+  history.monthModal = false;
+  history.groupMonthModal = true;
 };
 
 const historyModal = () => {
@@ -959,6 +1052,7 @@ const history = reactive({
   modal: false,
   dayModal: true,
   monthModal: false,
+  groupMonthModal: false,
   filter_show: false,
   filter: "",
   selectLamp: false,
@@ -1230,7 +1324,9 @@ const getHistory = (page) => {
   if (history.dayModal) {
     url = `/payment/employeeDay/${schoolId}/${id}/${history.year}/${history.month}/${history.day}/page?page=${page}`;
   } else if (history.monthModal) {
-    url = `/payment/month/${schoolId}/${history.group_id}/${history.year}/${history.month}/page?page=${page}`;
+    url = `/payment/employeeMonth/${schoolId}/${id}/${history.year}/${history.month}/page?page=${page}`;
+  } else if (history.groupMonthModal) {
+    url = `/payment/groupMonth/${schoolId}/${history.group_id}/${history.year}/${history.month}/all/page?page=${page}`;
   } else {
     return;
   }
@@ -1242,7 +1338,8 @@ const getHistory = (page) => {
       if (records.length !== 0) {
         history.group_name = records[0].group_name;
       }
-      history.dayPay = res.data?.data?.total_sum
+      console.log(records)
+      // history.dayPay = res.data?.data?.total_sum
       store.PageProduct = records;
       const pagination = res.data?.data?.pagination;
       store.page = [pagination.currentPage, pagination.total_count];

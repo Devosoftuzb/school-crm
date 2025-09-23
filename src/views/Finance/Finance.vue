@@ -11,7 +11,7 @@
         <Placeholder2 />
       </div>
 
-       <!-- ---------------------------------------- Statistic ------------------------------------- -->
+      <!-- ---------------------------------------- Statistic ------------------------------------- -->
 
       <div
         v-for="i in store.statistic"
@@ -1133,7 +1133,7 @@
         "
       >
         <transition name="modal-fade">
-          <div class="relative p-4 w-full max-w-xl h-auto">
+          <div class="relative p-4 w-full max-w-2xl h-auto">
             <!-- Modal content -->
             <div
               class="relative p-4 rounded-lg shadow sm:p-5"
@@ -1192,6 +1192,15 @@
                       @click="historyMonthModal"
                     >
                       <span>Oy bo'yicha ko'rish</span>
+                    </li>
+                    <li
+                      class="cursor-pointer w-full sm:max-w-fit text-center bg-gray-600 hover:bg-gray-500 p-2 px-5 sm:text-md text-sm rounded-lg"
+                      :class="
+                        history.groupMonthModal ? 'btnAdd' : 'bg-gray-600'
+                      "
+                      @click="historyGroupMonthModal"
+                    >
+                      <span>Guruh bo'yicha ko'rish</span>
                     </li>
                   </ul>
                 </div>
@@ -1287,6 +1296,78 @@
               </form>
               <form
                 v-show="history.monthModal"
+                @submit.prevent="getHistory(store.teacherPagination)"
+                :class="{ darkForm: navbar.userNav }"
+              >
+                <div class="grid font-medium gap-4 mb-4">
+                  <div>
+                    <label for="year" class="block mb-2 text-sm"
+                      >Yilni tanlang</label
+                    >
+                    <select
+                      v-model="history.year"
+                      id="name"
+                      class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                      required
+                    >
+                      <option value="" disabled selected>Yilni tanlang</option>
+                      <option
+                        v-for="i in store.curentYil"
+                        :key="i.id"
+                        :value="i.name"
+                      >
+                        {{ i.name }}
+                      </option>
+                    </select>
+                  </div>
+                  <div>
+                    <label for="month" class="block mb-2 text-sm"
+                      >Oyni tanlang</label
+                    >
+                    <select
+                      v-model="history.month"
+                      id="month"
+                      class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                      required
+                    >
+                      <option value="" disabled selected>Oyni tanlang</option>
+                      <option value="01">Yanvar</option>
+                      <option value="02">Fevral</option>
+                      <option value="03">Mart</option>
+                      <option value="04">Aprel</option>
+                      <option value="05">May</option>
+                      <option value="06">Iyun</option>
+                      <option value="07">Iyul</option>
+                      <option value="08">Avgust</option>
+                      <option value="09">Sentabr</option>
+                      <option value="10">Oktabr</option>
+                      <option value="11">Noyabr</option>
+                      <option value="12">Dekabr</option>
+                    </select>
+                  </div>
+                </div>
+                <div
+                  class="w-full flex flex-col gap-5 justify-center border-t pt-5 mt-5"
+                >
+                  <div class="w-full flex items-center justify-between">
+                    <button
+                      @click="historyModal"
+                      type="button"
+                      class="border inline-flex items-center hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                    >
+                      Bekor qilish
+                    </button>
+                    <button
+                      type="submit"
+                      class="btnAdd text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                    >
+                      Ko'rish
+                    </button>
+                  </div>
+                </div>
+              </form>
+              <form
+                v-show="history.groupMonthModal"
                 @submit.prevent="getHistory(store.teacherPagination)"
                 :class="{ darkForm: navbar.userNav }"
               >
@@ -1843,7 +1924,203 @@
         </div>
 
         <div
-          v-show="store.guard"
+          v-show="!store.guard"
+          class="flex sm:flex-row flex-col justify-between sm:items-center gap-4 font-bold"
+        >
+          <h2
+            v-show="history.dayModal"
+            class="text-gray-600 font-bold sm:text-md text-sm pl-4 pb-2"
+          >
+            Kunlik to'lov tarixi - {{ history.year }}/{{ history.month }}/{{
+              history.day
+            }}
+          </h2>
+          <h2
+            v-show="history.monthModal"
+            class="text-gray-600 font-bold sm:text-md text-sm pl-4 pb-2"
+          >
+            Oylik to'lov tarixi - {{ history.year }}/{{
+              history.month
+            }}
+          </h2>
+          <h2
+            v-show="history.groupMonthModal"
+            class="text-gray-600 font-bold sm:text-md text-sm pl-4 pb-2"
+          >
+            Guruhni oylik to'lov tarixi - {{ history.year }}/{{
+              history.month
+            }}/{{ history.group_name }}
+          </h2>
+        </div>
+
+        <div
+          v-show="!store.guard"
+          class="relative shadow-md rounded-lg overflow-hidden mb-10"
+          :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
+        >
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm text-left">
+              <thead class="btnAdd text-white text-xs rounded-lg uppercase">
+                <tr>
+                  <th scope="col" class="text-center py-3 whitespace-nowrap">
+                    O'quvchi (F . I . O)
+                  </th>
+                  <th scope="col" class="text-center py-3 whitespace-nowrap">
+                    Guruh
+                  </th>
+                  <th scope="col" class="text-center py-3 whitespace-nowrap">
+                    Kurs narxi
+                  </th>
+                  <th scope="col" class="text-center py-3 whitespace-nowrap">
+                    To'lov turi
+                  </th>
+                  <th scope="col" class="text-center py-3 whitespace-nowrap">
+                    To'lov narxi
+                  </th>
+                  <th scope="col" class="text-center py-3 whitespace-nowrap">
+                    Oy
+                  </th>
+                  <th scope="col" class="text-center py-3 whitespace-nowrap">
+                    To'lov sanasi
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  v-for="i in store.PageProduct"
+                  :key="i"
+                  class="border-b"
+                  :class="
+                    navbar.userNav ? 'hover:bg-gray-700' : 'hover:bg-gray-50'
+                  "
+                >
+                  <th
+                    scope="row"
+                    class="text-center px-8 py-4 font-medium whitespace-nowrap"
+                  >
+                    <span>{{ i.student_name }}</span>
+                  </th>
+
+                  <td class="text-center font-medium text-blue-800 px-8 py-4">
+                    <p
+                      class="bg-blue-100 rounded-[5px] p-1 px-3 whitespace-nowrap"
+                    >
+                      {{ i.group_name }}
+                    </p>
+                  </td>
+                  <td class="text-center font-medium text-red-800 px-8 py-4">
+                    <p
+                      class="bg-red-100 rounded-[5px] p-1 px-3 whitespace-nowrap"
+                    >
+                      {{ Number(i.group_price).toLocaleString("uz-UZ") }} so'm
+                    </p>
+                  </td>
+                  <td class="text-center font-medium text-blue-800 px-8 py-4">
+                    <p
+                      class="bg-blue-100 rounded-[5px] p-1 px-3 whitespace-nowrap"
+                    >
+                      {{ i.method }}
+                    </p>
+                  </td>
+                  <td class="text-center font-medium text-green-700 px-8 py-4">
+                    <p
+                      class="bg-green-100 rounded-[5px] p-1 px-3 whitespace-nowrap"
+                    >
+                      {{ i.price.toLocaleString("uz-UZ") }} so'm
+                    </p>
+                  </td>
+                  <td class="text-center font-medium text-blue-800 px-8 py-4">
+                    <p
+                      class="bg-blue-100 rounded-[5px] p-1 px-3 whitespace-nowrap"
+                    >
+                      {{ monthNames(i.month) }}
+                    </p>
+                  </td>
+                  <td class="text-center font-medium text-blue-800 px-8 py-4">
+                    <p
+                      class="bg-blue-100 rounded-[5px] p-1 px-3 whitespace-nowrap"
+                    >
+                      {{ chekDateFormat(new Date(i.createdAt)) }}
+                    </p>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div
+              v-show="store.PageProduct && store.PageProduct.length == 0"
+              class="w-full max-w-screen text-center p-20 text-2xl font-medium"
+            >
+              <h1>To'lov ro'yhati bo'sh</h1>
+            </div>
+          </div>
+          <nav
+            class="flex flex-row justify-between items-center space-y-0 p-4"
+            aria-label="Table navigation"
+          >
+            <!-- Oldingi sahifa tugmasi -->
+            <ul class="flex items-center">
+              <li
+                :class="[
+                  store.teacherPagination === 1
+                    ? 'pointer-events-none opacity-50'
+                    : '',
+                  'flex font-bold text-black border-2 bg-white hover:bg-gray-300 items-center justify-center text-sm sm:py-2 sm:px-6 px-3 rounded-lg leading-tight cursor-pointer transition duration-200 ease-in-out',
+                ]"
+                @click="
+                  if (store.teacherPagination > 1) {
+                    store.teacherPagination -= 1;
+                    getHistory(store.teacherPagination);
+                  }
+                "
+              >
+                <i
+                  class="md:hidden font-bold text-black text-2xl bx bx-chevron-left"
+                ></i>
+                <span class="hidden md:block">Oldingi</span>
+              </li>
+            </ul>
+
+            <!-- Sahifa raqami -->
+            <span class="text-sm font-normal text-center">
+              Sahifa
+              <span class="font-semibold">
+                <span>{{ store.teacherPage[0] * 15 - 14 }}</span> -
+                <span v-if="store.teacherPage[0] * 15 < store.teacherPage[1]">{{
+                  store.teacherPage[0] * 15
+                }}</span
+                ><span v-else>{{ store.teacherPage[1] }}</span>
+              </span>
+              dan
+              <span class="font-semibold">{{ store.teacherPage[1] }}</span>
+            </span>
+
+            <!-- Keyingi sahifa tugmasi -->
+            <ul class="flex items-center">
+              <li
+                :class="[
+                  store.teacherPage[0] * 15 >= store.teacherPage[1]
+                    ? 'pointer-events-none opacity-50'
+                    : '',
+                  'flex font-bold text-black border-2 bg-white hover:bg-gray-300 items-center justify-center text-sm sm:py-2 sm:px-6 px-3 rounded-lg leading-tight cursor-pointer transition duration-200 ease-in-out',
+                ]"
+                @click="
+                  if (store.teacherPage[0] * 15 < store.teacherPage[1]) {
+                    store.teacherPagination += 1;
+                    getHistory(store.teacherPagination);
+                  }
+                "
+              >
+                <span class="hidden md:block">Keyingi</span>
+                <i
+                  class="md:hidden font-bold text-black text-2xl bx bx-chevron-right"
+                ></i>
+              </li>
+            </ul>
+          </nav>
+        </div>
+
+        <div
           class="rounded-lg p-5 mb-28"
           :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
         >
@@ -2017,7 +2294,7 @@
                     >
                       To'lov sanasi
                     </th>
-                    <th></th>
+                    <th v-show="store.guard"></th>
                   </tr>
                 </thead>
                 <tbody v-show="!store.error">
@@ -2065,6 +2342,7 @@
                       </p>
                     </td>
                     <td
+                    v-show="store.guard"
                       class="text-center whitespace-nowrap font-medium pr-5 py-4"
                     >
                       <i
@@ -2160,195 +2438,6 @@
               </ul>
             </nav>
           </div>
-        </div>
-
-        <div
-          v-show="!store.guard"
-          class="flex sm:flex-row flex-col justify-between sm:items-center gap-4 font-bold"
-        >
-          <h2
-            v-show="history.dayModal"
-            class="text-gray-600 font-bold sm:text-md text-sm pl-4 pb-2"
-          >
-            Kunlik to'lov tarixi - {{ history.year }}/{{ history.month }}/{{
-              history.day
-            }}
-          </h2>
-          <h2
-            v-show="history.monthModal"
-            class="text-gray-600 font-bold sm:text-md text-sm pl-4 pb-2"
-          >
-            Guruhni oylik to'lov tarixi - {{ history.year }}/{{
-              history.month
-            }}/{{ history.group_name }}
-          </h2>
-        </div>
-
-        <div
-          v-show="!store.guard"
-          class="relative shadow-md rounded-lg overflow-hidden"
-          :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
-        >
-          <div class="overflow-x-auto">
-            <table class="w-full text-sm text-left">
-              <thead class="btnAdd text-white text-xs rounded-lg uppercase">
-                <tr>
-                  <th scope="col" class="text-center py-3 whitespace-nowrap">
-                    O'quvchi (F . I . O)
-                  </th>
-                  <th scope="col" class="text-center py-3 whitespace-nowrap">
-                    Guruh
-                  </th>
-                  <th scope="col" class="text-center py-3 whitespace-nowrap">
-                    Kurs narxi
-                  </th>
-                  <th scope="col" class="text-center py-3 whitespace-nowrap">
-                    To'lov turi
-                  </th>
-                  <th scope="col" class="text-center py-3 whitespace-nowrap">
-                    To'lov narxi
-                  </th>
-                  <th scope="col" class="text-center py-3 whitespace-nowrap">
-                    Oy
-                  </th>
-                  <th scope="col" class="text-center py-3 whitespace-nowrap">
-                    To'lov sanasi
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr
-                  v-for="i in store.PageProduct"
-                  :key="i"
-                  class="border-b"
-                  :class="
-                    navbar.userNav ? 'hover:bg-gray-700' : 'hover:bg-gray-50'
-                  "
-                >
-                  <th
-                    scope="row"
-                    class="text-center px-8 py-4 font-medium whitespace-nowrap"
-                  >
-                    <span>{{ i.student_name }}</span>
-                  </th>
-
-                  <td class="text-center font-medium text-blue-800 px-8 py-4">
-                    <p
-                      class="bg-blue-100 rounded-[5px] p-1 px-3 whitespace-nowrap"
-                    >
-                      {{ i.group_name }}
-                    </p>
-                  </td>
-                  <td class="text-center font-medium text-red-800 px-8 py-4">
-                    <p
-                      class="bg-red-100 rounded-[5px] p-1 px-3 whitespace-nowrap"
-                    >
-                      {{ Number(i.group_price).toLocaleString("uz-UZ") }} so'm
-                    </p>
-                  </td>
-                  <td class="text-center font-medium text-blue-800 px-8 py-4">
-                    <p
-                      class="bg-blue-100 rounded-[5px] p-1 px-3 whitespace-nowrap"
-                    >
-                      {{ i.method }}
-                    </p>
-                  </td>
-                  <td class="text-center font-medium text-green-700 px-8 py-4">
-                    <p
-                      class="bg-green-100 rounded-[5px] p-1 px-3 whitespace-nowrap"
-                    >
-                      {{ i.price.toLocaleString("uz-UZ") }} so'm
-                    </p>
-                  </td>
-                  <td class="text-center font-medium text-blue-800 px-8 py-4">
-                    <p
-                      class="bg-blue-100 rounded-[5px] p-1 px-3 whitespace-nowrap"
-                    >
-                      {{ monthNames(i.month) }}
-                    </p>
-                  </td>
-                  <td class="text-center font-medium text-blue-800 px-8 py-4">
-                    <p
-                      class="bg-blue-100 rounded-[5px] p-1 px-3 whitespace-nowrap"
-                    >
-                      {{ chekDateFormat(new Date(i.createdAt)) }}
-                    </p>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-
-            <div
-              v-show="store.PageProduct && store.PageProduct.length == 0"
-              class="w-full max-w-screen text-center p-20 text-2xl font-medium"
-            >
-              <h1>To'lov ro'yhati bo'sh</h1>
-            </div>
-          </div>
-          <nav
-            class="flex flex-row justify-between items-center space-y-0 p-4"
-            aria-label="Table navigation"
-          >
-            <!-- Oldingi sahifa tugmasi -->
-            <ul class="flex items-center">
-              <li
-                :class="[
-                  store.teacherPagination === 1
-                    ? 'pointer-events-none opacity-50'
-                    : '',
-                  'flex font-bold text-black border-2 bg-white hover:bg-gray-300 items-center justify-center text-sm sm:py-2 sm:px-6 px-3 rounded-lg leading-tight cursor-pointer transition duration-200 ease-in-out',
-                ]"
-                @click="
-                  if (store.teacherPagination > 1) {
-                    store.teacherPagination -= 1;
-                    getHistory(store.teacherPagination);
-                  }
-                "
-              >
-                <i
-                  class="md:hidden font-bold text-black text-2xl bx bx-chevron-left"
-                ></i>
-                <span class="hidden md:block">Oldingi</span>
-              </li>
-            </ul>
-
-            <!-- Sahifa raqami -->
-            <span class="text-sm font-normal text-center">
-              Sahifa
-              <span class="font-semibold">
-                <span>{{ store.teacherPage[0] * 15 - 14 }}</span> -
-                <span v-if="store.teacherPage[0] * 15 < store.teacherPage[1]">{{
-                  store.teacherPage[0] * 15
-                }}</span
-                ><span v-else>{{ store.teacherPage[1] }}</span>
-              </span>
-              dan
-              <span class="font-semibold">{{ store.teacherPage[1] }}</span>
-            </span>
-
-            <!-- Keyingi sahifa tugmasi -->
-            <ul class="flex items-center">
-              <li
-                :class="[
-                  store.teacherPage[0] * 15 >= store.teacherPage[1]
-                    ? 'pointer-events-none opacity-50'
-                    : '',
-                  'flex font-bold text-black border-2 bg-white hover:bg-gray-300 items-center justify-center text-sm sm:py-2 sm:px-6 px-3 rounded-lg leading-tight cursor-pointer transition duration-200 ease-in-out',
-                ]"
-                @click="
-                  if (store.teacherPage[0] * 15 < store.teacherPage[1]) {
-                    store.teacherPagination += 1;
-                    getHistory(store.teacherPagination);
-                  }
-                "
-              >
-                <span class="hidden md:block">Keyingi</span>
-                <i
-                  class="md:hidden font-bold text-black text-2xl bx bx-chevron-right"
-                ></i>
-              </li>
-            </ul>
-          </nav>
         </div>
       </div>
     </section>
@@ -2494,11 +2583,19 @@ const deleteSalaryFunc = (id) => {
 const historyDayModal = () => {
   history.dayModal = true;
   history.monthModal = false;
+  history.groupMonthModal = false;
 };
 
 const historyMonthModal = () => {
   history.dayModal = false;
   history.monthModal = true;
+  history.groupMonthModal = false;
+};
+
+const historyGroupMonthModal = () => {
+  history.groupMonthModal = true;
+  history.dayModal = false;
+  history.monthModal = false;
 };
 
 const historyModal = () => {
@@ -2520,6 +2617,7 @@ const history = reactive({
   modal: false,
   dayModal: true,
   monthModal: false,
+  groupMonthModal: false,
   filter_show: false,
   filter: "",
   selectLamp: false,
@@ -2585,14 +2683,11 @@ const chekDateFormat = (date) => {
 
 const getStatistic = () => {
   axios
-    .get(
-      `/statistic/finance/${localStorage.getItem("school_id")}`,
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      }
-    )
+    .get(`/statistic/finance/${localStorage.getItem("school_id")}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    })
     .then((res) => {
       store.statistic = res.data;
     })
@@ -2751,7 +2846,9 @@ const getHistory = (page) => {
   if (history.dayModal) {
     url = `/payment/employeeDay/${schoolId}/${id}/${history.year}/${history.month}/${history.day}/page?page=${page}`;
   } else if (history.monthModal) {
-    url = `/payment/month/${schoolId}/${history.group_id}/${history.year}/${history.month}/page?page=${page}`;
+    url = `/payment/employeeMonth/${schoolId}/${id}/${history.year}/${history.month}/page?page=${page}`;
+  } else if (history.groupMonthModal) {
+    url = `/payment/groupMonth/${schoolId}/${history.group_id}/${history.year}/${history.month}/all/page?page=${page}`;
   } else {
     return;
   }
@@ -2818,6 +2915,29 @@ const getGroups = async () => {
     } catch (error) {
       console.error("Xodim va guruh ma'lumotlarini olishda xato:", error);
     }
+  }
+};
+
+const getTeacherSalary = async (page) => {
+  try {
+    const res = await axios.get(
+      `/salary/teacherSalary/${localStorage.getItem("school_id")}/${localStorage.getItem("id")}/${salaryHistory.year}/${
+        salaryHistory.month
+      }/page?page=${page}`,
+      {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      }
+    );
+
+    store.SalaryPageProduct = res.data?.data?.records;
+    store.salaryPage = [
+      res.data?.data?.pagination.currentPage,
+      res.data?.data?.pagination.total_count,
+    ];
+    store.error = false;
+  } catch (error) {
+    store.SalaryPageProduct = error.response.data.message;
+    store.error = true;
   }
 };
 
@@ -3005,7 +3125,7 @@ const deleteSalary = async () => {
 
 onMounted(() => {
   if (store.guard) {
-    getStatistic()
+    getStatistic();
     getCostCategory();
     getCost(store.costPagination);
     getSalary(store.salaryPagination);
@@ -3014,6 +3134,7 @@ onMounted(() => {
   } else {
     getHistory(store.teacherPagination);
     getGroups();
+    getTeacherSalary(store.salaryPagination)
   }
   for (let i = 0; i < 5; i++) {
     let list = {
