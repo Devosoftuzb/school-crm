@@ -178,6 +178,13 @@
                   <div
                     class="w-full flex flex-col gap-5 justify-center border-t pt-5 mt-5"
                   >
+                    <button
+                      @click="exportToExcel"
+                      type="button"
+                      class="btnAdd3 text-white inline-flex items-center justify-center bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                    >
+                      Excelga yuklab olish
+                    </button>
                     <div class="w-full flex items-center justify-between">
                       <button
                         @click="historyModal"
@@ -248,11 +255,17 @@
                         <option value="12">Dekabr</option>
                       </select>
                     </div>
-                   
                   </div>
                   <div
                     class="w-full flex flex-col gap-5 justify-center border-t pt-5 mt-5"
                   >
+                    <button
+                      @click="exportToExcel"
+                      type="button"
+                      class="btnAdd3 text-white inline-flex items-center justify-center bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                    >
+                      Excelga yuklab olish
+                    </button>
                     <div class="w-full flex items-center justify-between">
                       <button
                         @click="historyModal"
@@ -408,6 +421,13 @@
                   <div
                     class="w-full flex flex-col gap-5 justify-center border-t pt-5 mt-5"
                   >
+                    <button
+                      @click="exportToExcel"
+                      type="button"
+                      class="btnAdd3 text-white inline-flex items-center justify-center bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                    >
+                      Excelga yuklab olish
+                    </button>
                     <div class="w-full flex items-center justify-between">
                       <button
                         @click="historyModal"
@@ -551,6 +571,7 @@
               </div>
             </div>
           </div>
+          
           <div
             v-show="store.modalGroup"
             class="relative shadow-md rounded-lg overflow-hidden m-5"
@@ -748,9 +769,7 @@
               v-show="history.monthModal"
               class="sm:text-lg text-sm text-blue-700"
             >
-              Oylik to'lov tarixi - {{ history.year }}/{{
-                history.month
-              }}
+              Oylik to'lov tarixi - {{ history.year }}/{{ history.month }}
             </h2>
             <h2
               v-show="history.groupMonthModal"
@@ -798,6 +817,9 @@
                     </th>
                     <th scope="col" class="text-center py-3 whitespace-nowrap">
                       To'lov sanasi
+                    </th>
+                    <th scope="col" class="text-center py-3 whitespace-nowrap">
+                      Izoh
                     </th>
                   </tr>
                 </thead>
@@ -860,6 +882,25 @@
                       >
                         {{ formatDateToNumeric(new Date(i.createdAt)) }}
                       </p>
+                    </td>
+                    <td class="text-center font-medium px-8 py-2 relative">
+                      <div class="group relative w-40 inline-block">
+                        <p class="truncate w-40 p-1 rounded-[5px]">
+                          {{
+                            !i.description || i.description.trim() === ""
+                              ? "Izoh yo'q"
+                              : i.description.split(" ").length > 3
+                              ? i.description.split(" ").slice(0, 3).join(" ") +
+                                "..."
+                              : i.description
+                          }}
+                        </p>
+                        <span
+                          class="absolute left-1/2 -translate-x-1/2 bottom-full mb-1 hidden w-max max-w-xs bg-blue-100 text-blue-800 text-sm p-2 rounded-md shadow-lg group-hover:block"
+                        >
+                          {{ !i.description ? "Izoh yo'q" : i.description }}
+                        </span>
+                      </div>
                     </td>
                   </tr>
                 </tbody>
@@ -951,7 +992,11 @@ import { useNavStore } from "../../stores/toggle";
 import axios from "../../services/axios";
 import { Placeholder2 } from "../../components";
 import Chart from "chart.js/auto";
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
+import { useNotificationStore } from "../../stores/notification";
 
+const notification = useNotificationStore();
 const navbar = useNavStore();
 const router = useRouter();
 const hozirgiSana = new Date();
@@ -977,6 +1022,7 @@ const store = reactive({
   PageProduct: "",
   page: [],
   pagination: 1,
+  teacher_name: ""
 });
 
 const info = reactive({
@@ -1059,6 +1105,7 @@ const history = reactive({
   searchList: [],
   dayList: [],
   monthList: [],
+  groupMonthList: [],
   dayPay: 0,
 });
 
@@ -1134,6 +1181,7 @@ const getEmployee = async () => {
     const employeeData = await fetchData(`/employee/${schoolId}/${id}`);
     store.data = employeeData;
     date.value = store.data.createdAt.split("T")[0];
+    store.teacher_name = store.data.full_name
 
     // Use a single promise array for both groups and payments
     const promises = [
@@ -1338,7 +1386,6 @@ const getHistory = (page) => {
       if (records.length !== 0) {
         history.group_name = records[0].group_name;
       }
-      console.log(records)
       // history.dayPay = res.data?.data?.total_sum
       store.PageProduct = records;
       const pagination = res.data?.data?.pagination;
@@ -1348,6 +1395,161 @@ const getHistory = (page) => {
     .catch((error) => {
       store.PageProduct = error.response?.data?.message;
     });
+};
+
+const getAllHistoryForExport = async () => {
+  const id = router.currentRoute.value.params.id;
+  const schoolId = localStorage.getItem("school_id");
+  const token = localStorage.getItem("token");
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  let urlBase;
+  if (history.dayModal) {
+    urlBase = `/payment/employeeDay/${schoolId}/${id}/${history.year}/${history.month}/${history.day}/page`;
+    // getStatistic(`${history.year}-${history.month}-${history.day}`);
+  } else if (history.monthModal) {
+    urlBase = `/payment/employeeMonth/${schoolId}/${id}/${history.year}/${history.month}/page`;
+    // getStatistic(`${history.year}-${history.month}`);
+  } else if (history.groupMonthModal) {
+    urlBase = `/payment/groupMonth/${schoolId}/${history.group_id}/${history.year}/${history.month}/all/page`;
+    // getStatistic(`${history.year}-${history.month}`);
+  } else {
+    return;
+  }
+
+  let allData = [];
+  let page = 1;
+  let hasMore = true;
+
+  while (hasMore) {
+    try {
+      const res = await axios.get(`${urlBase}?page=${page}`, config);
+      const records = res.data?.data?.records || [];
+      if (records.length > 0) {
+        allData = allData.concat(records);
+        page++;
+        hasMore = records.length === 15;
+      } else {
+        hasMore = false;
+      }
+    } catch (err) {
+      console.error("Export uchun malumotlarni olishda xatolik:", err);
+      hasMore = false;
+    }
+  }
+
+  if (history.dayModal) {
+    history.dayList = allData;
+  } else if (history.monthModal) {
+    history.monthList = allData;
+  } else if (history.groupMonthModal) {
+    history.groupMonthList = allData;
+  }
+};
+
+const exportToExcel = async () => {
+  await getAllHistoryForExport();
+
+  const rawData = history.dayModal
+    ? history.dayList
+    : history.monthModal
+    ? history.monthList
+    : history.groupMonthList;
+
+  if (!rawData || rawData.length === 0) {
+    notification.warning("Yuklash uchun ma'lumot topilmadi");
+    return;
+  }
+
+  const dataToExport = rawData.map((item) => ({
+    "O'quvchi (F . I . O)": item.student_name,
+    // "O'qituvchi (F . I . O)": item.teacher_name,
+    "Guruh nomi": item.group_name,
+    "Guruh narxi": Number(item.group_price).toLocaleString("uz-UZ") + " so'm",
+    "To'lov turi": item.method,
+    "To'langan summa": Number(item.price).toLocaleString("uz-UZ") + " so'm",
+    "Chegirma (%)": item.discount + " %",
+    Oy: monthNames(item.month),
+    "To'lov sanasi": formatDateToNumeric(new Date(item.createdAt)),
+    Izoh: item.description,
+    Holati:
+      item.status === "delete"
+        ? "O'chirilgan"
+        : item.status === "update"
+        ? "O'zgartirilgan"
+        : "Tasdiqlangan",
+  }));
+
+  const ws = XLSX.utils.json_to_sheet(dataToExport, { origin: "A1" });
+
+  const lastRow = dataToExport.length + 1;
+
+  if (false) {
+    const startRow = lastRow + 4;
+
+    ws[`A${startRow}`] = { t: "s", v: "To'lov turi" };
+    ws[`B${startRow}`] = { t: "s", v: "To'lovlar soni" };
+    ws[`C${startRow}`] = { t: "s", v: "Jami summa" };
+
+    store.statistic.statistics.forEach((stat, idx) => {
+      const row = startRow + idx + 1;
+      ws[`A${row}`] = { t: "s", v: stat.method };
+      ws[`B${row}`] = {
+        t: "s",
+        v: Number(stat.count).toLocaleString("uz-UZ") + " ta",
+      };
+      ws[`C${row}`] = {
+        t: "s",
+        v: Number(stat.sum).toLocaleString("uz-UZ") + " so'm",
+      };
+    });
+
+    const numColumns = Object.keys(dataToExport[0]).length;
+    const maxRow = startRow + store.statistic.statistics.length;
+    ws["!ref"] = XLSX.utils.encode_range({
+      s: { c: 0, r: 0 },
+      e: { c: numColumns - 1, r: maxRow - 1 },
+    });
+  } else {
+    const numColumns = Object.keys(dataToExport[0]).length;
+    ws["!ref"] = XLSX.utils.encode_range({
+      s: { c: 0, r: 0 },
+      e: { c: numColumns - 1, r: dataToExport.length },
+    });
+  }
+
+  ws["!cols"] = [
+    { wpx: 180 },
+    { wpx: 180 },
+    { wpx: 200 },
+    { wpx: 120 },
+    { wpx: 120 },
+    { wpx: 130 },
+    { wpx: 110 },
+    { wpx: 90 },
+    { wpx: 160 },
+    { wpx: 90 },
+  ];
+
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, "To'lov Tarixi");
+
+  const fileName = history.dayModal
+    ? `kunlik_tolov_tarixi_${store.teacher_name}-${history.year}-${history.month}-${history.day}.xlsx`
+    : history.monthModal
+    ? `oylik_tolov_tarixi_${store.teacher_name}-${history.year}-${history.month}.xlsx`
+    : `guruhni_oylik_tolov_tarixi_${store.teacher_name}-${history.year}-${history.month}-${history.group_name}.xlsx`;
+
+  const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+  const blob = new Blob([excelBuffer], { type: "application/octet-stream" });
+  saveAs(blob, fileName);
+  // location.reload();
+  notification.success("Excel fayl yuklab olindi!");
+  history.modal = !history.modal;
 };
 
 watch(
@@ -1442,5 +1644,9 @@ onMounted(() => {
 }
 .btn {
   background-image: linear-gradient(to right, white -450%, #4141eb);
+}
+
+.btnAdd3 {
+  background-image: linear-gradient(to right, white -450%, #ff9800);
 }
 </style>

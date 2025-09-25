@@ -1277,6 +1277,13 @@
                 <div
                   class="w-full flex flex-col gap-5 justify-center border-t pt-5 mt-5"
                 >
+                  <button
+                    @click="exportToExcel"
+                    type="button"
+                    class="btnAdd3 text-white inline-flex items-center justify-center bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                  >
+                    Excelga yuklab olish
+                  </button>
                   <div class="w-full flex items-center justify-between">
                     <button
                       @click="historyModal"
@@ -1349,6 +1356,13 @@
                 <div
                   class="w-full flex flex-col gap-5 justify-center border-t pt-5 mt-5"
                 >
+                <button
+                      @click="exportToExcel"
+                      type="button"
+                      class="btnAdd3 text-white inline-flex items-center justify-center bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                    >
+                      Excelga yuklab olish
+                    </button>
                   <div class="w-full flex items-center justify-between">
                     <button
                       @click="historyModal"
@@ -1502,6 +1516,13 @@
                 <div
                   class="w-full flex flex-col gap-5 justify-center border-t pt-5 mt-5"
                 >
+                <button
+                      @click="exportToExcel"
+                      type="button"
+                      class="btnAdd3 text-white inline-flex items-center justify-center bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                    >
+                      Excelga yuklab olish
+                    </button>
                   <div class="w-full flex items-center justify-between">
                     <button
                       @click="historyModal"
@@ -1939,9 +1960,7 @@
             v-show="history.monthModal"
             class="text-gray-600 font-bold sm:text-md text-sm pl-4 pb-2"
           >
-            Oylik to'lov tarixi - {{ history.year }}/{{
-              history.month
-            }}
+            Oylik to'lov tarixi - {{ history.year }}/{{ history.month }}
           </h2>
           <h2
             v-show="history.groupMonthModal"
@@ -2342,7 +2361,7 @@
                       </p>
                     </td>
                     <td
-                    v-show="store.guard"
+                      v-show="store.guard"
                       class="text-center whitespace-nowrap font-medium pr-5 py-4"
                     >
                       <i
@@ -2450,7 +2469,8 @@ import { useNavStore } from "../../stores/toggle";
 import { Placeholder2 } from "../../components";
 import axios from "@/services/axios";
 import { useNotificationStore } from "../../stores/notification";
-import { storeToRefs } from "pinia";
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
 
 const notification = useNotificationStore();
 const navbar = useNavStore();
@@ -2482,6 +2502,7 @@ const store = reactive({
   groupList: [],
   curentYil: [],
   statistic: "",
+  teacher_name: ""
 });
 
 const cost = reactive({
@@ -2624,6 +2645,7 @@ const history = reactive({
   searchList: [],
   dayList: [],
   monthList: [],
+  groupMonthList: [],
   dayPay: 0,
 });
 
@@ -2897,6 +2919,8 @@ const getGroups = async () => {
       });
       const employeeData = employeeRes.data;
 
+      store.teacher_name = employeeData.full_name
+
       const groupPromises = employeeData.group.map(async (group) => {
         const groupRes = await axios.get(
           `/group/${schoolId}/${group.group_id}/not`,
@@ -2921,7 +2945,9 @@ const getGroups = async () => {
 const getTeacherSalary = async (page) => {
   try {
     const res = await axios.get(
-      `/salary/teacherSalary/${localStorage.getItem("school_id")}/${localStorage.getItem("id")}/${salaryHistory.year}/${
+      `/salary/teacherSalary/${localStorage.getItem(
+        "school_id"
+      )}/${localStorage.getItem("id")}/${salaryHistory.year}/${
         salaryHistory.month
       }/page?page=${page}`,
       {
@@ -2939,6 +2965,161 @@ const getTeacherSalary = async (page) => {
     store.SalaryPageProduct = error.response.data.message;
     store.error = true;
   }
+};
+
+const getAllHistoryForExport = async () => {
+  const id = localStorage.getItem("id");
+  const schoolId = localStorage.getItem("school_id");
+  const token = localStorage.getItem("token");
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  let urlBase;
+  if (history.dayModal) {
+    urlBase = `/payment/employeeDay/${schoolId}/${id}/${history.year}/${history.month}/${history.day}/page`;
+    // getStatistic(`${history.year}-${history.month}-${history.day}`);
+  } else if (history.monthModal) {
+    urlBase = `/payment/employeeMonth/${schoolId}/${id}/${history.year}/${history.month}/page`;
+    // getStatistic(`${history.year}-${history.month}`);
+  } else if (history.groupMonthModal) {
+    urlBase = `/payment/groupMonth/${schoolId}/${history.group_id}/${history.year}/${history.month}/all/page`;
+    // getStatistic(`${history.year}-${history.month}`);
+  } else {
+    return;
+  }
+
+  let allData = [];
+  let page = 1;
+  let hasMore = true;
+
+  while (hasMore) {
+    try {
+      const res = await axios.get(`${urlBase}?page=${page}`, config);
+      const records = res.data?.data?.records || [];
+      if (records.length > 0) {
+        allData = allData.concat(records);
+        page++;
+        hasMore = records.length === 15;
+      } else {
+        hasMore = false;
+      }
+    } catch (err) {
+      console.error("Export uchun malumotlarni olishda xatolik:", err);
+      hasMore = false;
+    }
+  }
+
+  if (history.dayModal) {
+    history.dayList = allData;
+  } else if (history.monthModal) {
+    history.monthList = allData;
+  } else if (history.groupMonthModal) {
+    history.groupMonthList = allData;
+  }
+};
+
+const exportToExcel = async () => {
+  await getAllHistoryForExport();
+
+  const rawData = history.dayModal
+    ? history.dayList
+    : history.monthModal
+    ? history.monthList
+    : history.groupMonthList;
+
+  if (!rawData || rawData.length === 0) {
+    notification.warning("Yuklash uchun ma'lumot topilmadi");
+    return;
+  }
+
+  const dataToExport = rawData.map((item) => ({
+    "O'quvchi (F . I . O)": item.student_name,
+    // "O'qituvchi (F . I . O)": item.teacher_name,
+    "Guruh nomi": item.group_name,
+    "Guruh narxi": Number(item.group_price).toLocaleString("uz-UZ") + " so'm",
+    "To'lov turi": item.method,
+    "To'langan summa": Number(item.price).toLocaleString("uz-UZ") + " so'm",
+    "Chegirma (%)": item.discount + " %",
+    Oy: monthNames(item.month),
+    "To'lov sanasi": chekDateFormat(new Date(item.createdAt)),
+    Izoh: item.description,
+    Holati:
+      item.status === "delete"
+        ? "O'chirilgan"
+        : item.status === "update"
+        ? "O'zgartirilgan"
+        : "Tasdiqlangan",
+  }));
+
+  const ws = XLSX.utils.json_to_sheet(dataToExport, { origin: "A1" });
+
+  const lastRow = dataToExport.length + 1;
+
+  if (false) {
+    const startRow = lastRow + 4;
+
+    ws[`A${startRow}`] = { t: "s", v: "To'lov turi" };
+    ws[`B${startRow}`] = { t: "s", v: "To'lovlar soni" };
+    ws[`C${startRow}`] = { t: "s", v: "Jami summa" };
+
+    store.statistic.statistics.forEach((stat, idx) => {
+      const row = startRow + idx + 1;
+      ws[`A${row}`] = { t: "s", v: stat.method };
+      ws[`B${row}`] = {
+        t: "s",
+        v: Number(stat.count).toLocaleString("uz-UZ") + " ta",
+      };
+      ws[`C${row}`] = {
+        t: "s",
+        v: Number(stat.sum).toLocaleString("uz-UZ") + " so'm",
+      };
+    });
+
+    const numColumns = Object.keys(dataToExport[0]).length;
+    const maxRow = startRow + store.statistic.statistics.length;
+    ws["!ref"] = XLSX.utils.encode_range({
+      s: { c: 0, r: 0 },
+      e: { c: numColumns - 1, r: maxRow - 1 },
+    });
+  } else {
+    const numColumns = Object.keys(dataToExport[0]).length;
+    ws["!ref"] = XLSX.utils.encode_range({
+      s: { c: 0, r: 0 },
+      e: { c: numColumns - 1, r: dataToExport.length },
+    });
+  }
+
+  ws["!cols"] = [
+    { wpx: 180 },
+    { wpx: 180 },
+    { wpx: 200 },
+    { wpx: 120 },
+    { wpx: 120 },
+    { wpx: 130 },
+    { wpx: 110 },
+    { wpx: 90 },
+    { wpx: 160 },
+    { wpx: 90 },
+  ];
+
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, "To'lov Tarixi");
+
+  const fileName = history.dayModal
+    ? `kunlik_tolov_tarixi_${store.teacher_name}-${history.year}-${history.month}-${history.day}.xlsx`
+    : history.monthModal
+    ? `oylik_tolov_tarixi_${store.teacher_name}-${history.year}-${history.month}.xlsx`
+    : `guruhni_oylik_tolov_tarixi_${store.teacher_name}-${history.year}-${history.month}-${history.group_name}.xlsx`;
+
+  const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+  const blob = new Blob([excelBuffer], { type: "application/octet-stream" });
+  saveAs(blob, fileName);
+  // location.reload();
+  notification.success("Excel fayl yuklab olindi!");
+  history.modal = !history.modal;
 };
 
 // ------------ axios post ------------- //
@@ -3134,7 +3315,7 @@ onMounted(() => {
   } else {
     getHistory(store.teacherPagination);
     getGroups();
-    getTeacherSalary(store.salaryPagination)
+    getTeacherSalary(store.salaryPagination);
   }
   for (let i = 0; i < 5; i++) {
     let list = {
@@ -3153,6 +3334,10 @@ onMounted(() => {
 
 .btnAdd2 {
   background-image: linear-gradient(to right, white -450%, red);
+}
+
+.btnAdd3 {
+  background-image: linear-gradient(to right, white -450%, #ff9800);
 }
 
 .darkForm {

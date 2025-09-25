@@ -2817,8 +2817,9 @@ const exportToExcel = async () => {
     "To'lov turi": item.method,
     "To'langan summa": Number(item.price).toLocaleString("uz-UZ") + " so'm",
     "Chegirma (%)": item.discount + " %",
-    Oy: monthNames(item.month),
+    "Oy": monthNames(item.month),
     "To'lov sanasi": chekDateFormat(new Date(item.createdAt)),
+    "Izoh" : item.description,
     "Holati": item.status === 'delete' ? "O'chirilgan" : item.status === 'update' ? "O'zgartirilgan" : "Tasdiqlangan"
   }));
 
@@ -2872,7 +2873,8 @@ const exportToExcel = async () => {
 
   const fileName = history.dayModal
     ? `kunlik_tolov_tarixi_${history.year}-${history.month}-${history.day}.xlsx`
-    : `oylik_tolov_tarixi_${history.year}-${history.month}-${history.group_name}.xlsx`;
+    : history.monthModal ? `oylik_tolov_tarixi_${history.year}-${history.month}.xlsx`
+    : `guruhni_oylik_tolov_tarixi_${history.year}-${history.month}-${history.group_name}.xlsx`;
 
   const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
   const blob = new Blob([excelBuffer], { type: "application/octet-stream" });
