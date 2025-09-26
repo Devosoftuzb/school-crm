@@ -42,6 +42,7 @@ const routes = [
         "silverstudy",
         "sayyimov_academy",
         "business_club",
+        "anoreducation"
       ],
       title: "Home",
     },
@@ -62,6 +63,7 @@ const routes = [
             "silverstudy",
             "sayyimov_academy",
             "business_club",
+            "anoreducation"
           ],
           title: "Asosiy",
         },
@@ -82,6 +84,7 @@ const routes = [
             "silverstudy",
             "sayyimov_academy",
             "business_club",
+            "anoreducation"
           ],
           title: "Xodimlar",
         },
@@ -102,6 +105,7 @@ const routes = [
             "silverstudy",
             "sayyimov_academy",
             "business_club",
+            "anoreducation"
           ],
           title: "Xodim Sahifasi",
         },
@@ -122,6 +126,7 @@ const routes = [
             "silverstudy",
             "sayyimov_academy",
             "business_club",
+            "anoreducation"
           ],
           title: "O'quvchilar",
         },
@@ -142,6 +147,7 @@ const routes = [
             "silverstudy",
             "sayyimov_academy",
             "business_club",
+            "anoreducation"
           ],
           title: "Arxiv o'quvchilar",
         },
@@ -162,6 +168,7 @@ const routes = [
             "silverstudy",
             "sayyimov_academy",
             "business_club",
+            "anoreducation"
           ],
           title: "O'quvchi Sahifasi",
         },
@@ -182,6 +189,7 @@ const routes = [
             "silverstudy",
             "sayyimov_academy",
             "business_club",
+            "anoreducation"
           ],
           title: "Mijozlar",
         },
@@ -200,6 +208,7 @@ const routes = [
             "silverstudy",
             "sayyimov_academy",
             "business_club",
+            "anoreducation"
           ],
           title: "Testlar",
         },
@@ -220,6 +229,7 @@ const routes = [
             "silverstudy",
             "sayyimov_academy",
             "business_club",
+            "anoreducation"
           ],
           title: "Fanlar",
         },
@@ -240,6 +250,7 @@ const routes = [
             "silverstudy",
             "sayyimov_academy",
             "business_club",
+            "anoreducation"
           ],
           title: "To'lovlar",
         },
@@ -260,6 +271,7 @@ const routes = [
             "silverstudy",
             "sayyimov_academy",
             "business_club",
+            "anoreducation"
           ],
           title: "Davomat",
         },
@@ -280,6 +292,7 @@ const routes = [
             "silverstudy",
             "sayyimov_academy",
             "business_club",
+            "anoreducation"
           ],
           title: "SMS",
         },
@@ -300,6 +313,7 @@ const routes = [
             "silverstudy",
             "sayyimov_academy",
             "business_club",
+            "anoreducation"
           ],
           title: "Moliya",
         },
@@ -318,6 +332,7 @@ const routes = [
             "silverstudy",
             "sayyimov_academy",
             "business_club",
+            "anoreducation"
           ],
           title: "Natijalar",
         },
@@ -336,6 +351,7 @@ const routes = [
             "silverstudy",
             "sayyimov_academy",
             "business_club",
+            "anoreducation"
           ],
           title: "Natijalar Sahifasi",
         },
@@ -356,6 +372,7 @@ const routes = [
             "silverstudy",
             "sayyimov_academy",
             "business_club",
+            "anoreducation"
           ],
           title: "Guruhlar",
         },
@@ -376,6 +393,7 @@ const routes = [
             "silverstudy",
             "sayyimov_academy",
             "business_club",
+            "anoreducation"
           ],
           title: "Guruh Sahifasi",
         },
@@ -394,6 +412,7 @@ const routes = [
             "silverstudy",
             "sayyimov_academy",
             "business_club",
+            "anoreducation"
           ],
           title: "Savollar Sahifasi",
         },
@@ -414,6 +433,7 @@ const routes = [
             "silverstudy",
             "sayyimov_academy",
             "business_club",
+            "anoreducation"
           ],
           title: "Sozlamalar",
         },

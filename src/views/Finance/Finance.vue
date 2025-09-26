@@ -1356,13 +1356,13 @@
                 <div
                   class="w-full flex flex-col gap-5 justify-center border-t pt-5 mt-5"
                 >
-                <button
-                      @click="exportToExcel"
-                      type="button"
-                      class="btnAdd3 text-white inline-flex items-center justify-center bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-                    >
-                      Excelga yuklab olish
-                    </button>
+                  <button
+                    @click="exportToExcel"
+                    type="button"
+                    class="btnAdd3 text-white inline-flex items-center justify-center bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                  >
+                    Excelga yuklab olish
+                  </button>
                   <div class="w-full flex items-center justify-between">
                     <button
                       @click="historyModal"
@@ -1516,13 +1516,13 @@
                 <div
                   class="w-full flex flex-col gap-5 justify-center border-t pt-5 mt-5"
                 >
-                <button
-                      @click="exportToExcel"
-                      type="button"
-                      class="btnAdd3 text-white inline-flex items-center justify-center bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-                    >
-                      Excelga yuklab olish
-                    </button>
+                  <button
+                    @click="exportToExcel"
+                    type="button"
+                    class="btnAdd3 text-white inline-flex items-center justify-center bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                  >
+                    Excelga yuklab olish
+                  </button>
                   <div class="w-full flex items-center justify-between">
                     <button
                       @click="historyModal"
@@ -2002,6 +2002,9 @@
                   <th scope="col" class="text-center py-3 whitespace-nowrap">
                     To'lov sanasi
                   </th>
+                  <th scope="col" class="text-center py-3 whitespace-nowrap">
+                    Izoh
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -2061,6 +2064,25 @@
                     >
                       {{ chekDateFormat(new Date(i.createdAt)) }}
                     </p>
+                  </td>
+                  <td class="text-center font-medium px-8 py-2 relative">
+                    <div class="group relative w-40 inline-block">
+                      <p class="truncate w-40 p-1 rounded-[5px]">
+                        {{
+                          !i.description || i.description.trim() === ""
+                            ? "Izoh yo'q"
+                            : i.description.split(" ").length > 3
+                            ? i.description.split(" ").slice(0, 3).join(" ") +
+                              "..."
+                            : i.description
+                        }}
+                      </p>
+                      <span
+                        class="absolute left-1/2 -translate-x-1/2 bottom-full mb-1 hidden w-max max-w-xs bg-blue-100 text-blue-800 text-sm p-2 rounded-md shadow-lg group-hover:block"
+                      >
+                        {{ !i.description ? "Izoh yo'q" : i.description }}
+                      </span>
+                    </div>
                   </td>
                 </tr>
               </tbody>
@@ -2502,7 +2524,7 @@ const store = reactive({
   groupList: [],
   curentYil: [],
   statistic: "",
-  teacher_name: ""
+  teacher_name: "",
 });
 
 const cost = reactive({
@@ -2919,7 +2941,7 @@ const getGroups = async () => {
       });
       const employeeData = employeeRes.data;
 
-      store.teacher_name = employeeData.full_name
+      store.teacher_name = employeeData.full_name;
 
       const groupPromises = employeeData.group.map(async (group) => {
         const groupRes = await axios.get(
