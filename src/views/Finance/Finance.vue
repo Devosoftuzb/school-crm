@@ -33,12 +33,12 @@
                   :class="navbar.userNav ? 'text-white' : 'text-black'"
                 >
                   <h3 class="font-semibold leading-normal sm:text-md text-sm">
-                    {{ j.name }}
+                    {{ store.guard ? j.name : j.method }} ({{ j.count }})
                   </h3>
                   <h5
                     class="font-bold bg-blue-100 text-blue-700 p-1 px-3 rounded-lg sm:text-md text-sm"
                   >
-                    {{ j.sum?.toLocaleString("uz-UZ") }} so'm
+                    {{ Number(j.sum)?.toLocaleString("uz-UZ") }} so'm
                   </h5>
                 </div>
               </div>
@@ -1608,16 +1608,12 @@
           </div>
         </div>
 
-        <div
-          v-show="store.guard"
-          class="rounded-lg p-5 mb-10"
-          :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
-        >
+        <div v-show="store.guard" class="rounded-lg mb-10">
           <div
             class="flex w-full lg:flex-row flex-col lg:items-center justify-between gap-x-20"
           >
             <h1
-              class="font-bold 2xl:text-lg lg:text-xl sm:text-xl text-md whitespace-nowrap mb-3"
+              class="font-bold text-blue-700 2xl:text-lg lg:text-xl sm:text-xl text-md whitespace-nowrap mb-3"
             >
               Chiqimlar ro'yxati
             </h1>
@@ -1635,7 +1631,7 @@
                     <select
                       v-model="costHistory.year"
                       id="name"
-                      class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-[7px]"
+                      class="bg-white border text-black border-blue-600 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-[7px]"
                       required
                     >
                       <option value="" disabled selected>Yilni tanlang</option>
@@ -1652,7 +1648,7 @@
                     <select
                       v-model="costHistory.month"
                       id="month"
-                      class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-[7px]"
+                      class="bg-white border text-black border-blue-600 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-[7px]"
                       required
                     >
                       <option value="" disabled selected>Oyni tanlang</option>
@@ -1703,7 +1699,7 @@
                       "
                       type="search"
                       id="simple-search"
-                      class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-[9px]"
+                      class="bg-gray-50 border border-blue-600 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-[9px]"
                       placeholder="Kategoriyani tanlang yoki qidirish..."
                     />
                     <ul
@@ -1747,12 +1743,21 @@
                     </ul>
                   </div>
                 </div>
-                <button
-                  type="submit"
-                  class="btnAdd w-full sm:max-w-fit text-white items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-                >
-                  Ko'rish
-                </button>
+                <div class="w-full flex items-center gap-3">
+                  <button
+                    type="submit"
+                    class="btnAdd w-full sm:max-w-fit text-white items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                  >
+                    Ko'rish
+                  </button>
+                  <button
+                    @click="exportToExcelCost"
+                    type="button"
+                    class="btnAdd3 w-full text-white inline-flex whitespace-nowrap items-center justify-center bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                  >
+                    Excelga yuklash
+                  </button>
+                </div>
               </div>
             </form>
           </div>
@@ -2162,15 +2167,12 @@
           </nav>
         </div>
 
-        <div
-          class="rounded-lg p-5 mb-28"
-          :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
-        >
+        <div class="rounded-lg mb-28">
           <div
             class="flex w-full lg:flex-row flex-col lg:items-center justify-between gap-x-20"
           >
             <h1
-              class="font-bold 2xl:text-lg lg:text-xl sm:text-xl text-md whitespace-nowrap mb-3"
+              class="font-bold text-blue-700 2xl:text-lg lg:text-xl sm:text-xl text-md whitespace-nowrap mb-3"
             >
               Berilgan maoshlar ro'yxati
             </h1>
@@ -2188,7 +2190,7 @@
                     <select
                       v-model="salaryHistory.year"
                       id="name"
-                      class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-[7px]"
+                      class="bg-white border text-black border-blue-600 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-[7px]"
                       required
                     >
                       <option value="" disabled selected>Yilni tanlang</option>
@@ -2205,7 +2207,7 @@
                     <select
                       v-model="salaryHistory.month"
                       id="month"
-                      class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-[7px]"
+                      class="bg-white border text-black border-blue-600 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-[7px]"
                       required
                     >
                       <option value="" disabled selected>Oyni tanlang</option>
@@ -2256,7 +2258,7 @@
                       "
                       type="search"
                       id="simple-search"
-                      class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-[9px]"
+                      class="bg-gray-50 border border-blue-600 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-[9px]"
                       placeholder="O'qituvchini tanlang yoki qidirish..."
                     />
                     <ul
@@ -2302,12 +2304,21 @@
                     </ul>
                   </div>
                 </div>
-                <button
-                  type="submit"
-                  class="btnAdd w-full sm:max-w-fit text-white items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-                >
-                  Ko'rish
-                </button>
+                <div class="w-full flex items-center gap-3">
+                  <button
+                    type="submit"
+                    class="btnAdd w-full sm:max-w-fit text-white items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                  >
+                    Ko'rish
+                  </button>
+                  <button
+                    @click="exportToExcelSalary"
+                    type="button"
+                    class="btnAdd3 w-full text-white inline-flex whitespace-nowrap items-center justify-center bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                  >
+                    Excelga yuklash
+                  </button>
+                </div>
               </div>
             </form>
           </div>
@@ -2564,12 +2575,14 @@ const salaryHistory = reactive({
   year: hozirgiYil,
   month: hozirgiOy,
   teacher_name: "",
+  salaryList: "",
 });
 
 const costHistory = reactive({
   year: hozirgiYil,
   month: hozirgiOy,
   category_name: "",
+  costList: "",
 });
 
 const costCategoryModal = () => {
@@ -2793,6 +2806,7 @@ const getStatisticTeacher = async (teacher_id, date) => {
     )
     .then((res) => {
       store.statisticTeacher = res.data;
+      store.statistic = res.data;
     })
     .catch((error) => {});
 };
@@ -2811,6 +2825,7 @@ const getStatisticGroup = async (group_id, date) => {
     )
     .then((res) => {
       store.statisticTeacher = res.data;
+      store.statistic = res.data;
     })
     .catch((error) => {});
 };
@@ -2979,10 +2994,19 @@ const getHistory = async (page) => {
   let url;
   if (history.dayModal) {
     url = `/payment/employeeDay/${schoolId}/${id}/${history.year}/${history.month}/${history.day}/page?page=${page}`;
+    await getStatisticTeacher(
+      id,
+      `${history.year}-${history.month}-${history.day}`
+    );
   } else if (history.monthModal) {
     url = `/payment/employeeMonth/${schoolId}/${id}/${history.year}/${history.month}/page?page=${page}`;
+    await getStatisticTeacher(id, `${history.year}-${history.month}`);
   } else if (history.groupMonthModal) {
     url = `/payment/groupMonth/${schoolId}/${history.group_id}/${history.year}/${history.month}/all/page?page=${page}`;
+    await getStatisticGroup(
+      history.group_id,
+      `${history.year}-${history.month}`
+    );
   } else {
     return;
   }
@@ -3092,13 +3116,19 @@ const getAllHistoryForExport = async () => {
   let urlBase;
   if (history.dayModal) {
     urlBase = `/payment/employeeDay/${schoolId}/${id}/${history.year}/${history.month}/${history.day}/page`;
-    await getStatisticTeacher(id, `${history.year}-${history.month}-${history.day}`);
+    await getStatisticTeacher(
+      id,
+      `${history.year}-${history.month}-${history.day}`
+    );
   } else if (history.monthModal) {
     urlBase = `/payment/employeeMonth/${schoolId}/${id}/${history.year}/${history.month}/page`;
     await getStatisticTeacher(id, `${history.year}-${history.month}`);
   } else if (history.groupMonthModal) {
     urlBase = `/payment/groupMonth/${schoolId}/${history.group_id}/${history.year}/${history.month}/all/page`;
-    await getStatisticGroup(history.group_id, `${history.year}-${history.month}`);
+    await getStatisticGroup(
+      history.group_id,
+      `${history.year}-${history.month}`
+    );
   } else {
     return;
   }
@@ -3149,7 +3179,6 @@ const exportToExcel = async () => {
 
   const dataToExport = rawData.map((item) => ({
     "O'quvchi (F . I . O)": item.student_name,
-    // "O'qituvchi (F . I . O)": item.teacher_name,
     "Guruh nomi": item.group_name,
     "Guruh narxi": Number(item.group_price).toLocaleString("uz-UZ") + " so'm",
     "To'lov turi": item.method,
@@ -3237,6 +3266,274 @@ const exportToExcel = async () => {
   history.modal = !history.modal;
 };
 
+const getAllHistoryForExportCost = async () => {
+  const schoolId = localStorage.getItem("school_id");
+  const token = localStorage.getItem("token");
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  let urlBase;
+  if (history.category_id && history.category_id !== "") {
+    urlBase = `/cost/${schoolId}/${costHistory.year}/${costHistory.month}/${history.category_id}/page`;
+  } else {
+    urlBase = `/cost/${schoolId}/${costHistory.year}/${costHistory.month}/page`;
+  }
+
+  let allData = [];
+  let page = 1;
+  let hasMore = true;
+
+  while (hasMore) {
+    try {
+      const res = await axios.get(`${urlBase}?page=${page}`, config);
+      const records = res.data?.data?.records || [];
+      if (records.length > 0) {
+        allData = allData.concat(records);
+        page++;
+        hasMore = records.length === 15;
+      } else {
+        hasMore = false;
+      }
+    } catch (err) {
+      console.error("Export uchun malumotlarni olishda xatolik:", err);
+      hasMore = false;
+    }
+  }
+
+  costHistory.costList = allData;
+};
+
+const exportToExcelCost = async () => {
+  await getAllHistoryForExportCost();
+
+  const rawData = costHistory.costList;
+
+  if (!rawData || rawData.length === 0) {
+    notification.warning("Yuklash uchun ma'lumot topilmadi");
+    return;
+  }
+
+  const dataToExport = rawData.map((item) => ({
+    Kategoriya: item.costCategory.name,
+    Suma: item.price,
+    "To'lov turi": item.method,
+    Oy: monthNames(item.month),
+    Izoh: item.description,
+    "To'lov sanasi": chekDateFormat(new Date(item.createdAt)),
+  }));
+
+  const ws = XLSX.utils.json_to_sheet(dataToExport, { origin: "A1" });
+
+  // const lastRow = dataToExport.length + 1;
+
+  // if (
+  //   store.statisticTeacher.statistics &&
+  //   store.statisticTeacher.statistics.length > 0
+  // ) {
+  //   const startRow = lastRow + 4;
+
+  //   ws[`A${startRow}`] = { t: "s", v: "To'lov turi" };
+  //   ws[`B${startRow}`] = { t: "s", v: "To'lovlar soni" };
+  //   ws[`C${startRow}`] = { t: "s", v: "Jami summa" };
+
+  //   store.statisticTeacher.statistics.forEach((stat, idx) => {
+  //     const row = startRow + idx + 1;
+  //     ws[`A${row}`] = { t: "s", v: stat.method };
+  //     ws[`B${row}`] = {
+  //       t: "s",
+  //       v: Number(stat.count).toLocaleString("uz-UZ") + " ta",
+  //     };
+  //     ws[`C${row}`] = {
+  //       t: "s",
+  //       v: Number(stat.sum).toLocaleString("uz-UZ") + " so'm",
+  //     };
+  //   });
+
+  //   const numColumns = Object.keys(dataToExport[0]).length;
+  //   const maxRow = startRow + store.statisticTeacher.statistics.length;
+  //   ws["!ref"] = XLSX.utils.encode_range({
+  //     s: { c: 0, r: 0 },
+  //     e: { c: numColumns - 1, r: maxRow - 1 },
+  //   });
+  // } else {
+  //   const numColumns = Object.keys(dataToExport[0]).length;
+  //   ws["!ref"] = XLSX.utils.encode_range({
+  //     s: { c: 0, r: 0 },
+  //     e: { c: numColumns - 1, r: dataToExport.length },
+  //   });
+  // }
+
+  const numColumns = Object.keys(dataToExport[0]).length;
+  ws["!ref"] = XLSX.utils.encode_range({
+    s: { c: 0, r: 0 },
+    e: { c: numColumns - 1, r: dataToExport.length },
+  });
+
+  ws["!cols"] = [
+    { wpx: 180 },
+    { wpx: 180 },
+    { wpx: 200 },
+    { wpx: 120 },
+    { wpx: 120 },
+    { wpx: 130 },
+    { wpx: 110 },
+    { wpx: 90 },
+    { wpx: 160 },
+    { wpx: 90 },
+  ];
+
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, "Chiqim Tarixi");
+
+  const fileName =
+    history.category_id && history.category_id !== ""
+      ? `kategoriya_oylik_chiqim_tarixi_${costHistory.year}-${costHistory.month}-${history.category_name}.xlsx`
+      : `oylik_chiqim_tarixi_${costHistory.year}-${costHistory.month}.xlsx`;
+
+  const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+  const blob = new Blob([excelBuffer], { type: "application/octet-stream" });
+  saveAs(blob, fileName);
+  // location.reload();
+  notification.success("Excel fayl yuklab olindi!");
+};
+
+const getAllHistoryForExportSalary = async () => {
+  const schoolId = localStorage.getItem("school_id");
+  const token = localStorage.getItem("token");
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  let urlBase;
+  if (history.teacher_id && history.teacher_id !== "") {
+    urlBase = `/salary/teacherSalary/${schoolId}/${history.teacher_id}/${salaryHistory.year}/${salaryHistory.month}/page`;
+  } else {
+    urlBase = `/salary/${schoolId}/${salaryHistory.year}/${salaryHistory.month}/page`;
+  }
+
+  let allData = [];
+  let page = 1;
+  let hasMore = true;
+
+  while (hasMore) {
+    try {
+      const res = await axios.get(`${urlBase}?page=${page}`, config);
+      const records = res.data?.data?.records || [];
+      if (records.length > 0) {
+        allData = allData.concat(records);
+        page++;
+        hasMore = records.length === 15;
+      } else {
+        hasMore = false;
+      }
+    } catch (err) {
+      console.error("Export uchun malumotlarni olishda xatolik:", err);
+      hasMore = false;
+    }
+  }
+
+  salaryHistory.salaryList = allData;
+};
+
+const exportToExcelSalary = async () => {
+  await getAllHistoryForExportSalary();
+
+  const rawData = salaryHistory.salaryList;
+
+  if (!rawData || rawData.length === 0) {
+    notification.warning("Yuklash uchun ma'lumot topilmadi");
+    return;
+  }
+
+  const dataToExport = rawData.map((item) => ({
+    "O'qituvchi (F . I . O)": item.teacher.full_name,
+    Suma: item.price,
+    "To'lov turi": item.method,
+    Oy: monthNames(item.month),
+    // Izoh: item.description,
+    "To'lov sanasi": chekDateFormat(new Date(item.createdAt)),
+  }));
+
+  const ws = XLSX.utils.json_to_sheet(dataToExport, { origin: "A1" });
+
+  // const lastRow = dataToExport.length + 1;
+
+  // if (
+  //   store.statisticTeacher.statistics &&
+  //   store.statisticTeacher.statistics.length > 0
+  // ) {
+  //   const startRow = lastRow + 4;
+
+  //   ws[`A${startRow}`] = { t: "s", v: "To'lov turi" };
+  //   ws[`B${startRow}`] = { t: "s", v: "To'lovlar soni" };
+  //   ws[`C${startRow}`] = { t: "s", v: "Jami summa" };
+
+  //   store.statisticTeacher.statistics.forEach((stat, idx) => {
+  //     const row = startRow + idx + 1;
+  //     ws[`A${row}`] = { t: "s", v: stat.method };
+  //     ws[`B${row}`] = {
+  //       t: "s",
+  //       v: Number(stat.count).toLocaleString("uz-UZ") + " ta",
+  //     };
+  //     ws[`C${row}`] = {
+  //       t: "s",
+  //       v: Number(stat.sum).toLocaleString("uz-UZ") + " so'm",
+  //     };
+  //   });
+
+  //   const numColumns = Object.keys(dataToExport[0]).length;
+  //   const maxRow = startRow + store.statisticTeacher.statistics.length;
+  //   ws["!ref"] = XLSX.utils.encode_range({
+  //     s: { c: 0, r: 0 },
+  //     e: { c: numColumns - 1, r: maxRow - 1 },
+  //   });
+  // } else {
+  //   const numColumns = Object.keys(dataToExport[0]).length;
+  //   ws["!ref"] = XLSX.utils.encode_range({
+  //     s: { c: 0, r: 0 },
+  //     e: { c: numColumns - 1, r: dataToExport.length },
+  //   });
+  // }
+
+  const numColumns = Object.keys(dataToExport[0]).length;
+  ws["!ref"] = XLSX.utils.encode_range({
+    s: { c: 0, r: 0 },
+    e: { c: numColumns - 1, r: dataToExport.length },
+  });
+
+  ws["!cols"] = [
+    { wpx: 180 },
+    { wpx: 180 },
+    { wpx: 200 },
+    { wpx: 120 },
+    { wpx: 120 },
+    { wpx: 130 },
+    { wpx: 110 },
+    { wpx: 90 },
+    { wpx: 160 },
+    { wpx: 90 },
+  ];
+
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, "Maoshlar Tarixi");
+
+  const fileName =
+    history.teacher_id && history.teacher_id !== ""
+      ? `xodimning_oylik_maosh_tarixi_${salaryHistory.year}-${salaryHistory.month}-${history.teacher_name}.xlsx`
+      : `oylik_maosh_tarixi_${salaryHistory.year}-${salaryHistory.month}.xlsx`;
+
+  const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+  const blob = new Blob([excelBuffer], { type: "application/octet-stream" });
+  saveAs(blob, fileName);
+  // location.reload();
+  notification.success("Excel fayl yuklab olindi!");
+};
+
 // ------------ axios post ------------- //
 
 const createCostCategory = async () => {
@@ -3251,6 +3548,7 @@ const createCostCategory = async () => {
     notification.success("Kategoriya kiritildi");
     getCostCategory();
     costCategoryModal();
+    getStatistic()
   } catch (error) {
     notification.warning(
       "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
@@ -3274,6 +3572,7 @@ const createCost = async () => {
     notification.success("Chiqim kiritildi");
 
     await getCost(store.costPagination);
+    getStatistic()
     costModal();
   } catch (error) {
     notification.warning(
@@ -3298,6 +3597,7 @@ const createSalary = async () => {
     notification.success("Maosh kiritildi");
 
     await getSalary(store.salaryPagination);
+    getStatistic()
     salaryModal();
   } catch (error) {
     notification.warning(
@@ -3328,6 +3628,7 @@ const updateCost = async () => {
     notification.success("Chiqim o'zgartirildi");
 
     await getCost(store.costPagination);
+    getStatistic()
     costUpdateModal();
   } catch (error) {
     notification.warning(
@@ -3355,6 +3656,7 @@ const updateSalary = async () => {
     notification.success("Berilgan maosh o'zgartirildi");
 
     await getSalary(store.costPagination);
+    getStatistic()
     salaryUpdateModal();
   } catch (error) {
     notification.warning(
@@ -3375,6 +3677,7 @@ const deleteCostCategory = async () => {
     );
     costCategory.remove = false;
     getCostCategory();
+    getStatistic()
     notification.success("Kategoriya o'chirildi");
   } catch (error) {
     notification.warning(
@@ -3393,6 +3696,7 @@ const deleteCost = async () => {
     );
     cost.remove = false;
     getCost(store.costPagination);
+    getStatistic()
     notification.success("Chiqim o'chirildi");
   } catch (error) {
     notification.warning(
@@ -3411,6 +3715,7 @@ const deleteSalary = async () => {
     );
     salary.remove = false;
     getSalary(store.salaryPagination);
+    getStatistic()
     notification.success("Berilgan maosh o'chirildi");
   } catch (error) {
     notification.warning(
