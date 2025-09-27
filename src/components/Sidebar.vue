@@ -9,16 +9,20 @@
       :class="{ 'bg-[#1e293b]': navbar.userNav, 'bg-white': !navbar.userNav }"
     >
       <ul class="space-y-2 font-medium mt-[70px]">
-        <li v-for="i in header" v-show="checkRole(i.role) && checkSchool(i.school)" :key="i.id">
+        <li v-for="i in header" :key="i.id" v-show="showMenu(i)">
           <router-link
-            class="flex items-center text-lg p-2 cursor-pointer duration-500 hover:bg-gray-400 rounded-lg gap-2"
-            :class="{ 'text-white': navbar.userNav }"
             :to="i.link"
+            class="flex items-center text-lg p-2 cursor-pointer duration-500 hover:bg-gray-400 rounded-lg gap-2"
+            :class="[
+              { 'text-white': navbar.userNav },
+              { 'bg-blue-600 text-white': isActive(i.link) }   // ✅ ACTIVE CLASS
+            ]"
           >
             <i :class="i.icon"></i><span>{{ i.title }}</span>
           </router-link>
         </li>
       </ul>
+
       <button
         @click="Logout"
         title="Chiqish"
@@ -43,9 +47,12 @@ import { header } from "../constants/sidebar";
 import { useNavStore } from "../stores/toggle";
 import { useSidebarStore } from "../stores/sidebar.js";
 import { reactive } from "vue";
+import { useRouter, useRoute } from "vue-router";
 
 const sidebar = useSidebarStore();
 const navbar = useNavStore();
+const router = useRouter();
+const route = useRoute();
 
 const store = reactive({
   school: localStorage.getItem("school_name"),
@@ -71,24 +78,29 @@ const Logout = () => {
   router.push("/login");
 };
 
-const checkRole = (roles) => {
-  const roleArray = roles.split(", ");
-  return roleArray.includes(store.guard);
+
+const showMenu = (item) => {
+  if (
+    item.link === "/" &&
+    store.guard === "_ad_sch_" &&
+    store.school === "sayyimov_academy"
+  ) {
+    return false;
+  }
+  const roleArray = item.role.split(",").map((r) => r.trim());
+  const schoolArray = item.school.split(",").map((s) => s.trim());
+  return roleArray.includes(store.guard) && schoolArray.includes(store.school);
 };
 
-const checkSchool = (school) => {
-  const schoolArray = school.split(", ");
-  return schoolArray.includes(store.school);
+
+const isActive = (link) => {
+  if (link === "/") return route.path === "/";
+  return route.path.startsWith(link);
 };
 </script>
 
-<style lang="scss" scoped>
-.router-link-exact-active {
-  background: transparent;
-}
-
-.router-link-exact-active {
+<style scoped>
+.bg-blue-600 {
   background: #4141eb;
-  color: white;
 }
 </style>

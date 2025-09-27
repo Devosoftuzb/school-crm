@@ -785,7 +785,7 @@
               </tbody>
             </table>
             <div
-              v-show="!store.PageProduct"
+              v-show="!store.PageProduct || store.PageProduct.length === 0"
               class="w-full max-w-screen text-center p-20 text-2xl font-medium"
             >
               <h1>Mijozlar ro'yhati bo'sh</h1>

@@ -42,11 +42,25 @@ const routes = [
         "silverstudy",
         "sayyimov_academy",
         "business_club",
-        "anoreducation"
+        "anoreducation",
       ],
       title: "Home",
     },
     children: [
+      {
+        path: "", // ✅ Root bo‘sh child
+        name: "root-redirect",
+        beforeEnter: (to, from, next) => {
+          const role = localStorage.getItem("role");
+          const schoolName = localStorage.getItem("school_name");
+
+          if (role === "_ad_sch_" && schoolName === "sayyimov_academy") {
+            return next({ name: "customers" }); 
+          }
+
+          return next({ name: "dashboard" }); 
+        },
+      },
       {
         path: "",
         name: "dashboard",
@@ -61,9 +75,9 @@ const routes = [
             "sophie's",
             "zafar_azimov_school",
             "silverstudy",
-            "sayyimov_academy",
+            "sayyimov_academy", // qoladi, chunki boshqa rollar uchun ruxsat
             "business_club",
-            "anoreducation"
+            "anoreducation",
           ],
           title: "Asosiy",
         },
@@ -84,7 +98,7 @@ const routes = [
             "silverstudy",
             "sayyimov_academy",
             "business_club",
-            "anoreducation"
+            "anoreducation",
           ],
           title: "Xodimlar",
         },
@@ -105,7 +119,7 @@ const routes = [
             "silverstudy",
             "sayyimov_academy",
             "business_club",
-            "anoreducation"
+            "anoreducation",
           ],
           title: "Xodim Sahifasi",
         },
@@ -126,7 +140,7 @@ const routes = [
             "silverstudy",
             "sayyimov_academy",
             "business_club",
-            "anoreducation"
+            "anoreducation",
           ],
           title: "O'quvchilar",
         },
@@ -147,7 +161,7 @@ const routes = [
             "silverstudy",
             "sayyimov_academy",
             "business_club",
-            "anoreducation"
+            "anoreducation",
           ],
           title: "Arxiv o'quvchilar",
         },
@@ -168,7 +182,7 @@ const routes = [
             "silverstudy",
             "sayyimov_academy",
             "business_club",
-            "anoreducation"
+            "anoreducation",
           ],
           title: "O'quvchi Sahifasi",
         },
@@ -189,7 +203,7 @@ const routes = [
             "silverstudy",
             "sayyimov_academy",
             "business_club",
-            "anoreducation"
+            "anoreducation",
           ],
           title: "Mijozlar",
         },
@@ -208,7 +222,7 @@ const routes = [
             "silverstudy",
             "sayyimov_academy",
             "business_club",
-            "anoreducation"
+            "anoreducation",
           ],
           title: "Testlar",
         },
@@ -229,7 +243,7 @@ const routes = [
             "silverstudy",
             "sayyimov_academy",
             "business_club",
-            "anoreducation"
+            "anoreducation",
           ],
           title: "Fanlar",
         },
@@ -250,7 +264,7 @@ const routes = [
             "silverstudy",
             "sayyimov_academy",
             "business_club",
-            "anoreducation"
+            "anoreducation",
           ],
           title: "To'lovlar",
         },
@@ -271,7 +285,7 @@ const routes = [
             "silverstudy",
             "sayyimov_academy",
             "business_club",
-            "anoreducation"
+            "anoreducation",
           ],
           title: "Davomat",
         },
@@ -292,7 +306,7 @@ const routes = [
             "silverstudy",
             "sayyimov_academy",
             "business_club",
-            "anoreducation"
+            "anoreducation",
           ],
           title: "SMS",
         },
@@ -313,7 +327,7 @@ const routes = [
             "silverstudy",
             "sayyimov_academy",
             "business_club",
-            "anoreducation"
+            "anoreducation",
           ],
           title: "Moliya",
         },
@@ -332,7 +346,7 @@ const routes = [
             "silverstudy",
             "sayyimov_academy",
             "business_club",
-            "anoreducation"
+            "anoreducation",
           ],
           title: "Natijalar",
         },
@@ -351,7 +365,7 @@ const routes = [
             "silverstudy",
             "sayyimov_academy",
             "business_club",
-            "anoreducation"
+            "anoreducation",
           ],
           title: "Natijalar Sahifasi",
         },
@@ -372,7 +386,7 @@ const routes = [
             "silverstudy",
             "sayyimov_academy",
             "business_club",
-            "anoreducation"
+            "anoreducation",
           ],
           title: "Guruhlar",
         },
@@ -393,7 +407,7 @@ const routes = [
             "silverstudy",
             "sayyimov_academy",
             "business_club",
-            "anoreducation"
+            "anoreducation",
           ],
           title: "Guruh Sahifasi",
         },
@@ -412,7 +426,7 @@ const routes = [
             "silverstudy",
             "sayyimov_academy",
             "business_club",
-            "anoreducation"
+            "anoreducation",
           ],
           title: "Savollar Sahifasi",
         },
@@ -433,7 +447,7 @@ const routes = [
             "silverstudy",
             "sayyimov_academy",
             "business_club",
-            "anoreducation"
+            "anoreducation",
           ],
           title: "Sozlamalar",
         },
@@ -476,7 +490,16 @@ router.beforeEach((to, from, next) => {
   }
 
   if (token && to.name === "login") {
-    return next({ name: "home" });
+    return next({ name: "dashboard" });
+  }
+
+  // ✅ Rootni tekshirish (asosiy layout)
+  const isRoot = to.matched.length === 1 && to.matched[0].name === "home";
+  if (isRoot) {
+    if (role === "_ad_sch_" && schoolName === "sayyimov_academy") {
+      return next({ name: "customers" }); // sayyimov admin uchun
+    }
+    return next({ name: "dashboard" }); // boshqalar uchun
   }
 
   if (to.meta.roles && !to.meta.roles.includes(role)) {
@@ -484,6 +507,14 @@ router.beforeEach((to, from, next) => {
   }
 
   if (to.meta.schools && !to.meta.schools.includes(schoolName)) {
+    return next({ name: "error" });
+  }
+
+  if (
+    to.name === "dashboard" &&
+    role === "_ad_sch_" &&
+    schoolName === "sayyimov_academy"
+  ) {
     return next({ name: "error" });
   }
 

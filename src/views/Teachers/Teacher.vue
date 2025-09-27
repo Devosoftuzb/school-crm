@@ -1221,10 +1221,10 @@
               </tbody>
             </table>
             <div
-              v-show="store.PageProduct && store.error"
+              v-show="store.PageProduct.length === 0 || store.error"
               class="w-full max-w-screen text-center p-20 text-2xl font-medium"
             >
-              <h1>Ro'yhat bo'sh</h1>
+              <h1>Xodimlar ro'yhat bo'sh</h1>
             </div>
           </div>
 
