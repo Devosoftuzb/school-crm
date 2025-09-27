@@ -2769,13 +2769,13 @@ const getAllHistoryForExport = async () => {
   let urlBase;
   if (history.dayModal) {
     urlBase = `/payment/day/${schoolId}/${history.year}/${history.month}/${history.day}/all/page`;
-    getStatistic(`${history.year}-${history.month}-${history.day}`);
+    await getStatistic(`${history.year}-${history.month}-${history.day}`);
   } else if (history.monthModal) {
     urlBase = `/payment/month/${schoolId}/${history.year}/${history.month}/all/page`;
-    getStatistic(`${history.year}-${history.month}`);
+    await getStatistic(`${history.year}-${history.month}`);
   } else if (history.groupMonthModal) {
     urlBase = `/payment/groupMonth/${schoolId}/${history.group_id}/${history.year}/${history.month}/all/page`;
-    getStatisticGroup(history.group_id, `${history.year}-${history.month}`);
+    await getStatisticGroup(history.group_id, `${history.year}-${history.month}`);
   } else {
     return;
   }
@@ -2943,8 +2943,8 @@ const getAllStudent = () => {
     });
 };
 
-const getStatistic = (date) => {
-  axios
+const getStatistic = async (date) => {
+  await axios
     .get(
       `/statistic/payment-day/${localStorage.getItem("school_id")}/${date}`,
       {
@@ -2959,8 +2959,8 @@ const getStatistic = (date) => {
     .catch((error) => {});
 };
 
-const getStatisticGroup = (group_id, date) => {
-  axios
+const getStatisticGroup = async (group_id, date) => {
+  await axios
     .get(
       `/statistic/payment-day/${localStorage.getItem("school_id")}/${group_id}/${date}`,
       {

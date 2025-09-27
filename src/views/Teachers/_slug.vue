@@ -1252,8 +1252,8 @@ const getStudentPayments = async () => {
   }
 };
 
-const getStatistic = (teacher_id, date) => {
-  axios
+const getStatistic = async (teacher_id, date) => {
+  await axios
     .get(
       `/statistic/payment-day-employee/${localStorage.getItem("school_id")}/${teacher_id}/${date}`,
       {
@@ -1268,8 +1268,8 @@ const getStatistic = (teacher_id, date) => {
     .catch((error) => {});
 };
 
-const getStatisticGroup = (group_id, date) => {
-  axios
+const getStatisticGroup = async (group_id, date) => {
+  await axios
     .get(
       `/statistic/payment-day/${localStorage.getItem("school_id")}/${group_id}/${date}`,
       {
@@ -1391,7 +1391,7 @@ const createStudentPaymentChart = () => {
   });
 };
 
-const getHistory = (page) => {
+const getHistory = async (page) => {
   const id = router.currentRoute.value.params.id;
   const schoolId = localStorage.getItem("school_id");
   const token = localStorage.getItem("token");
@@ -1412,7 +1412,7 @@ const getHistory = (page) => {
     return;
   }
 
-  axios
+  await axios
     .get(url, config)
     .then((res) => {
       const records = res.data?.data?.records;
@@ -1443,13 +1443,13 @@ const getAllHistoryForExport = async () => {
   let urlBase;
   if (history.dayModal) {
     urlBase = `/payment/employeeDay/${schoolId}/${id}/${history.year}/${history.month}/${history.day}/page`;
-    getStatistic(id, `${history.year}-${history.month}-${history.day}`);
+    await getStatistic(id, `${history.year}-${history.month}-${history.day}`);
   } else if (history.monthModal) {
     urlBase = `/payment/employeeMonth/${schoolId}/${id}/${history.year}/${history.month}/page`;
-    getStatistic(id, `${history.year}-${history.month}`);
+    await getStatistic(id, `${history.year}-${history.month}`);
   } else if (history.groupMonthModal) {
     urlBase = `/payment/groupMonth/${schoolId}/${history.group_id}/${history.year}/${history.month}/all/page`;
-    getStatisticGroup(history.group_id, `${history.year}-${history.month}`);
+    await getStatisticGroup(history.group_id, `${history.year}-${history.month}`);
   } else {
     return;
   }

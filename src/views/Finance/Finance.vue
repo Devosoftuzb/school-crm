@@ -2766,8 +2766,8 @@ const chekDateFormat = (date) => {
 
 // ------------ axios get ------------- //
 
-const getStatistic = () => {
-  axios
+const getStatistic = async () => {
+  await axios
     .get(`/statistic/finance/${localStorage.getItem("school_id")}`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -2779,8 +2779,8 @@ const getStatistic = () => {
     .catch((error) => {});
 };
 
-const getStatisticTeacher = (teacher_id, date) => {
-  axios
+const getStatisticTeacher = async (teacher_id, date) => {
+  await axios
     .get(
       `/statistic/payment-day-employee/${localStorage.getItem(
         "school_id"
@@ -2797,8 +2797,8 @@ const getStatisticTeacher = (teacher_id, date) => {
     .catch((error) => {});
 };
 
-const getStatisticGroup = (group_id, date) => {
-  axios
+const getStatisticGroup = async (group_id, date) => {
+  await axios
     .get(
       `/statistic/payment-day/${localStorage.getItem(
         "school_id"
@@ -2966,7 +2966,7 @@ const getOneSalary = async (id) => {
   }
 };
 
-const getHistory = (page) => {
+const getHistory = async (page) => {
   const id = localStorage.getItem("id");
   const schoolId = localStorage.getItem("school_id");
   const token = localStorage.getItem("token");
@@ -2987,7 +2987,7 @@ const getHistory = (page) => {
     return;
   }
 
-  axios
+  await axios
     .get(url, config)
     .then((res) => {
       const records = res.data.data.records;
@@ -3092,13 +3092,13 @@ const getAllHistoryForExport = async () => {
   let urlBase;
   if (history.dayModal) {
     urlBase = `/payment/employeeDay/${schoolId}/${id}/${history.year}/${history.month}/${history.day}/page`;
-    getStatisticTeacher(id, `${history.year}-${history.month}-${history.day}`);
+    await getStatisticTeacher(id, `${history.year}-${history.month}-${history.day}`);
   } else if (history.monthModal) {
     urlBase = `/payment/employeeMonth/${schoolId}/${id}/${history.year}/${history.month}/page`;
-    getStatisticTeacher(id, `${history.year}-${history.month}`);
+    await getStatisticTeacher(id, `${history.year}-${history.month}`);
   } else if (history.groupMonthModal) {
     urlBase = `/payment/groupMonth/${schoolId}/${history.group_id}/${history.year}/${history.month}/all/page`;
-    getStatisticGroup(history.group_id, `${history.year}-${history.month}`);
+    await getStatisticGroup(history.group_id, `${history.year}-${history.month}`);
   } else {
     return;
   }
