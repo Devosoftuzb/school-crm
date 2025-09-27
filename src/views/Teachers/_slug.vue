@@ -1022,7 +1022,8 @@ const store = reactive({
   PageProduct: "",
   page: [],
   pagination: 1,
-  teacher_name: ""
+  teacher_name: "",
+  statistic: "",
 });
 
 const info = reactive({
@@ -1251,6 +1252,38 @@ const getStudentPayments = async () => {
   }
 };
 
+const getStatistic = (teacher_id, date) => {
+  axios
+    .get(
+      `/statistic/payment-day-employee/${localStorage.getItem("school_id")}/${teacher_id}/${date}`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    )
+    .then((res) => {
+      store.statistic = res.data;
+    })
+    .catch((error) => {});
+};
+
+const getStatisticGroup = (group_id, date) => {
+  axios
+    .get(
+      `/statistic/payment-day/${localStorage.getItem("school_id")}/${group_id}/${date}`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    )
+    .then((res) => {
+      store.statistic = res.data;
+    })
+    .catch((error) => {});
+};
+
 let paymentChart = null;
 const createPaymentChart = () => {
   const ctx = document.getElementById("paymentChart").getContext("2d");
@@ -1410,13 +1443,13 @@ const getAllHistoryForExport = async () => {
   let urlBase;
   if (history.dayModal) {
     urlBase = `/payment/employeeDay/${schoolId}/${id}/${history.year}/${history.month}/${history.day}/page`;
-    // getStatistic(`${history.year}-${history.month}-${history.day}`);
+    getStatistic(id, `${history.year}-${history.month}-${history.day}`);
   } else if (history.monthModal) {
     urlBase = `/payment/employeeMonth/${schoolId}/${id}/${history.year}/${history.month}/page`;
-    // getStatistic(`${history.year}-${history.month}`);
+    getStatistic(id, `${history.year}-${history.month}`);
   } else if (history.groupMonthModal) {
     urlBase = `/payment/groupMonth/${schoolId}/${history.group_id}/${history.year}/${history.month}/all/page`;
-    // getStatistic(`${history.year}-${history.month}`);
+    getStatisticGroup(history.group_id, `${history.year}-${history.month}`);
   } else {
     return;
   }
@@ -1471,7 +1504,7 @@ const exportToExcel = async () => {
     "Guruh nomi": item.group_name,
     "Guruh narxi": Number(item.group_price).toLocaleString("uz-UZ") + " so'm",
     "To'lov turi": item.method,
-    "To'langan summa": Number(item.price).toLocaleString("uz-UZ") + " so'm",
+    "To'langan summa": Number(item.price),
     "Chegirma (%)": item.discount + " %",
     Oy: monthNames(item.month),
     "To'lov sanasi": formatDateToNumeric(new Date(item.createdAt)),
@@ -1487,8 +1520,8 @@ const exportToExcel = async () => {
   const ws = XLSX.utils.json_to_sheet(dataToExport, { origin: "A1" });
 
   const lastRow = dataToExport.length + 1;
-
-  if (false) {
+  
+  if (store.statistic.statistics && store.statistic.statistics.length > 0) {
     const startRow = lastRow + 4;
 
     ws[`A${startRow}`] = { t: "s", v: "To'lov turi" };

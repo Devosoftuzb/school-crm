@@ -1671,7 +1671,7 @@
                     </select>
                   </div>
                 </div>
-                <!-- <div class="w-full">
+                <div class="w-full">
                   <div class="relative w-full text-black">
                     <div
                       class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"
@@ -1691,15 +1691,15 @@
                       </svg>
                     </div>
                     <input
-                      v-model="history.filter"
-                      @focus="history.selectLamp = true"
+                      v-model="history.filter_cost"
+                      @focus="history.selectLamp_cost = true"
                       @blur="
-                        history.selectLamp = false;
-                        history.filter_show = false;
+                        history.selectLamp_cost = false;
+                        history.filter_show_cost = false;
                       "
                       @input="
-                        history.filter_show = true;
-                        searchHistoryFunc();
+                        history.filter_show_cost = true;
+                        searchHistoryCostFunc();
                       "
                       type="search"
                       id="simple-search"
@@ -1708,44 +1708,45 @@
                     />
                     <ul
                       v-show="
-                        history.filter_show && history.searchList.length > 0
+                        history.filter_show_cost &&
+                        history.searchList_cost.length > 0
                       "
                       class="absolute z-10 max-h-80 overflow-y-auto overflow-hidden py-1 text-gray-600 rounded bg-white w-full bottom-full"
                     >
                       <li
                         class="hover:bg-blue-600 hover:text-white cursor-pointer pl-2"
-                        v-for="(i, index) in history.searchList"
+                        v-for="(i, index) in history.searchList_cost"
                         :key="index"
                         @mousedown.prevent="
-                          history.group_id = i.id;
-                          history.group_name = i.name;
-                          history.filter_show = false;
-                          history.filter = i.name;
+                          history.category_id = i.id;
+                          history.category_name = i.name;
+                          history.filter_show_cost = false;
+                          history.filter_cost = i.name;
                         "
                       >
                         {{ i.name }}
                       </li>
                     </ul>
                     <ul
-                      v-show="history.selectLamp && !history.filter"
+                      v-show="history.selectLamp_cost && !history.filter_cost"
                       class="absolute z-10 max-h-80 overflow-y-auto overflow-hidden py-1 text-gray-600 rounded bg-white w-full bottom-full"
                     >
                       <li
                         class="hover:bg-blue-600 hover:text-white whitespace-nowrap cursor-pointer pl-2"
-                        v-for="(i, index) in store.group"
+                        v-for="(i, index) in store.costCategory"
                         :key="index"
                         @mousedown.prevent="
-                          history.group_id = i.id;  
-                          history.group_name = i.name;
-                          history.selectLamp = false;
-                          history.filter = i.name;
+                          history.category_id = i.id;
+                          history.category_name = i.name;
+                          history.selectLamp_cost = false;
+                          history.filter_cost = i.name;
                         "
                       >
                         {{ i.name }}
                       </li>
                     </ul>
                   </div>
-                </div> -->
+                </div>
                 <button
                   type="submit"
                   class="btnAdd w-full sm:max-w-fit text-white items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
@@ -2223,7 +2224,7 @@
                     </select>
                   </div>
                 </div>
-                <!-- <div class="w-full">
+                <div v-show="store.guard" class="w-full">
                   <div class="relative w-full text-black">
                     <div
                       class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"
@@ -2243,15 +2244,15 @@
                       </svg>
                     </div>
                     <input
-                      v-model="history.filter"
-                      @focus="history.selectLamp = true"
+                      v-model="history.filter_teacher"
+                      @focus="history.selectLamp_teacher = true"
                       @blur="
-                        history.selectLamp = false;
-                        history.filter_show = false;
+                        history.selectLamp_teacher = false;
+                        history.filter_show_teacher = false;
                       "
                       @input="
-                        history.filter_show = true;
-                        searchHistoryFunc();
+                        history.filter_show_teacher = true;
+                        searchHistoryTeacherFunc();
                       "
                       type="search"
                       id="simple-search"
@@ -2260,44 +2261,47 @@
                     />
                     <ul
                       v-show="
-                        history.filter_show && history.searchList.length > 0
+                        history.filter_show_teacher &&
+                        history.searchList_teacher.length > 0
                       "
                       class="absolute z-10 max-h-80 overflow-y-auto overflow-hidden py-1 text-gray-600 rounded bg-white w-full bottom-full"
                     >
                       <li
                         class="hover:bg-blue-600 hover:text-white cursor-pointer pl-2"
-                        v-for="(i, index) in history.searchList"
+                        v-for="(i, index) in history.searchList_teacher"
                         :key="index"
                         @mousedown.prevent="
-                          history.group_id = i.id;
-                          history.group_name = i.name;
-                          history.filter_show = false;
-                          history.filter = i.name;
+                          history.teacher_id = i.id;
+                          history.teacher_name = i.full_name;
+                          history.filter_show_teacher = false;
+                          history.filter_teacher = i.full_name;
                         "
                       >
-                        {{ i.name }}
+                        {{ i.full_name }}
                       </li>
                     </ul>
                     <ul
-                      v-show="history.selectLamp && !history.filter"
+                      v-show="
+                        history.selectLamp_teacher && !history.filter_teacher
+                      "
                       class="absolute z-10 max-h-80 overflow-y-auto overflow-hidden py-1 text-gray-600 rounded bg-white w-full bottom-full"
                     >
                       <li
                         class="hover:bg-blue-600 hover:text-white whitespace-nowrap cursor-pointer pl-2"
-                        v-for="(i, index) in store.group"
+                        v-for="(i, index) in store.employee"
                         :key="index"
                         @mousedown.prevent="
-                          history.group_id = i.id;
-                          history.group_name = i.name;
-                          history.selectLamp = false;
-                          history.filter = i.name;
+                          history.teacher_id = i.id;
+                          history.teacher_name = i.full_name;
+                          history.selectLamp_teacher = false;
+                          history.filter_teacher = i.full_name;
                         "
                       >
-                        {{ i.name }}
+                        {{ i.full_name }}
                       </li>
                     </ul>
                   </div>
-                </div> -->
+                </div>
                 <button
                   type="submit"
                   class="btnAdd w-full sm:max-w-fit text-white items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
@@ -2525,6 +2529,7 @@ const store = reactive({
   curentYil: [],
   statistic: "",
   teacher_name: "",
+  statisticTeacher: "",
 });
 
 const cost = reactive({
@@ -2657,6 +2662,10 @@ const history = reactive({
   day: hozirgiKun,
   group_id: "",
   group_name: "",
+  teacher_id: "",
+  teacher_name: "",
+  category_id: "",
+  category_name: "",
   modal: false,
   dayModal: true,
   monthModal: false,
@@ -2665,6 +2674,14 @@ const history = reactive({
   filter: "",
   selectLamp: false,
   searchList: [],
+  filter_show_teacher: false,
+  filter_teacher: "",
+  selectLamp_teacher: false,
+  searchList_teacher: [],
+  filter_show_cost: false,
+  filter_cost: "",
+  selectLamp_cost: false,
+  searchList_cost: [],
   dayList: [],
   monthList: [],
   groupMonthList: [],
@@ -2713,6 +2730,30 @@ function searchHistoryFunc() {
   }
 }
 
+function searchHistoryTeacherFunc() {
+  history.searchList_teacher = [];
+  if (history.filter_teacher) {
+    for (let i of store.employee) {
+      if (
+        i.full_name.toLowerCase().includes(history.filter_teacher.toLowerCase())
+      ) {
+        history.searchList_teacher.push(i);
+      }
+    }
+  }
+}
+
+function searchHistoryCostFunc() {
+  history.searchList_cost = [];
+  if (history.filter_cost) {
+    for (let i of store.costCategory) {
+      if (i.name.toLowerCase().includes(history.filter_cost.toLowerCase())) {
+        history.searchList_cost.push(i);
+      }
+    }
+  }
+}
+
 const chekDateFormat = (date) => {
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, "0");
@@ -2738,6 +2779,42 @@ const getStatistic = () => {
     .catch((error) => {});
 };
 
+const getStatisticTeacher = (teacher_id, date) => {
+  axios
+    .get(
+      `/statistic/payment-day-employee/${localStorage.getItem(
+        "school_id"
+      )}/${teacher_id}/${date}`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    )
+    .then((res) => {
+      store.statisticTeacher = res.data;
+    })
+    .catch((error) => {});
+};
+
+const getStatisticGroup = (group_id, date) => {
+  axios
+    .get(
+      `/statistic/payment-day/${localStorage.getItem(
+        "school_id"
+      )}/${group_id}/${date}`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    )
+    .then((res) => {
+      store.statisticTeacher = res.data;
+    })
+    .catch((error) => {});
+};
+
 const getCostCategory = async () => {
   await axios
     .get(`/cost-category/${localStorage.getItem("school_id")}`, {
@@ -2755,14 +2832,20 @@ const getCostCategory = async () => {
 
 const getCost = async (page) => {
   try {
-    const res = await axios.get(
-      `/cost/${localStorage.getItem("school_id")}/${costHistory.year}/${
+    let url;
+    if (history.category_id && history.category_id !== "") {
+      url = `/cost/${localStorage.getItem("school_id")}/${costHistory.year}/${
         costHistory.month
-      }/page?page=${page}`,
-      {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      }
-    );
+      }/${history.category_id}/page?page=${page}`;
+    } else {
+      url = `/cost/${localStorage.getItem("school_id")}/${costHistory.year}/${
+        costHistory.month
+      }/page?page=${page}`;
+    }
+
+    const res = await axios.get(url, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    });
     store.CostPageProduct = res.data?.data?.records;
     store.costPage = [
       res.data?.data?.pagination.currentPage,
@@ -2771,6 +2854,7 @@ const getCost = async (page) => {
 
     store.error = false;
   } catch (error) {
+    console.log(error);
     store.CostPageProduct = error.response.data.message;
     store.error = true;
   }
@@ -2778,14 +2862,20 @@ const getCost = async (page) => {
 
 const getSalary = async (page) => {
   try {
-    const res = await axios.get(
-      `/salary/${localStorage.getItem("school_id")}/${salaryHistory.year}/${
-        salaryHistory.month
-      }/page?page=${page}`,
-      {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      }
-    );
+    let url;
+    if (history.teacher_id && history.teacher_id !== "") {
+      url = `/salary/teacherSalary/${localStorage.getItem("school_id")}/${
+        history.teacher_id
+      }/${salaryHistory.year}/${salaryHistory.month}/page?page=${page}`;
+    } else {
+      url = `/salary/${localStorage.getItem("school_id")}/${
+        salaryHistory.year
+      }/${salaryHistory.month}/page?page=${page}`;
+    }
+
+    const res = await axios.get(url, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    });
 
     store.SalaryPageProduct = res.data?.data?.records;
     store.salaryPage = [
@@ -2794,7 +2884,7 @@ const getSalary = async (page) => {
     ];
     store.error = false;
   } catch (error) {
-    store.SalaryPageProduct = error.response.data.message;
+    store.SalaryPageProduct = error.response?.data?.message || error.message;
     store.error = true;
   }
 };
@@ -3002,13 +3092,13 @@ const getAllHistoryForExport = async () => {
   let urlBase;
   if (history.dayModal) {
     urlBase = `/payment/employeeDay/${schoolId}/${id}/${history.year}/${history.month}/${history.day}/page`;
-    // getStatistic(`${history.year}-${history.month}-${history.day}`);
+    getStatisticTeacher(id, `${history.year}-${history.month}-${history.day}`);
   } else if (history.monthModal) {
     urlBase = `/payment/employeeMonth/${schoolId}/${id}/${history.year}/${history.month}/page`;
-    // getStatistic(`${history.year}-${history.month}`);
+    getStatisticTeacher(id, `${history.year}-${history.month}`);
   } else if (history.groupMonthModal) {
     urlBase = `/payment/groupMonth/${schoolId}/${history.group_id}/${history.year}/${history.month}/all/page`;
-    // getStatistic(`${history.year}-${history.month}`);
+    getStatisticGroup(history.group_id, `${history.year}-${history.month}`);
   } else {
     return;
   }
@@ -3063,7 +3153,7 @@ const exportToExcel = async () => {
     "Guruh nomi": item.group_name,
     "Guruh narxi": Number(item.group_price).toLocaleString("uz-UZ") + " so'm",
     "To'lov turi": item.method,
-    "To'langan summa": Number(item.price).toLocaleString("uz-UZ") + " so'm",
+    "To'langan summa": Number(item.price),
     "Chegirma (%)": item.discount + " %",
     Oy: monthNames(item.month),
     "To'lov sanasi": chekDateFormat(new Date(item.createdAt)),
@@ -3080,14 +3170,17 @@ const exportToExcel = async () => {
 
   const lastRow = dataToExport.length + 1;
 
-  if (false) {
+  if (
+    store.statisticTeacher.statistics &&
+    store.statisticTeacher.statistics.length > 0
+  ) {
     const startRow = lastRow + 4;
 
     ws[`A${startRow}`] = { t: "s", v: "To'lov turi" };
     ws[`B${startRow}`] = { t: "s", v: "To'lovlar soni" };
     ws[`C${startRow}`] = { t: "s", v: "Jami summa" };
 
-    store.statistic.statistics.forEach((stat, idx) => {
+    store.statisticTeacher.statistics.forEach((stat, idx) => {
       const row = startRow + idx + 1;
       ws[`A${row}`] = { t: "s", v: stat.method };
       ws[`B${row}`] = {
@@ -3101,7 +3194,7 @@ const exportToExcel = async () => {
     });
 
     const numColumns = Object.keys(dataToExport[0]).length;
-    const maxRow = startRow + store.statistic.statistics.length;
+    const maxRow = startRow + store.statisticTeacher.statistics.length;
     ws["!ref"] = XLSX.utils.encode_range({
       s: { c: 0, r: 0 },
       e: { c: numColumns - 1, r: maxRow - 1 },
@@ -3202,7 +3295,7 @@ const createSalary = async () => {
     await axios.post("/salary", data, {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     });
-    notification.success("Chiqim kiritildi");
+    notification.success("Maosh kiritildi");
 
     await getSalary(store.salaryPagination);
     salaryModal();

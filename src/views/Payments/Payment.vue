@@ -356,6 +356,7 @@
                         id="price"
                         class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full py-3 p-2.5"
                         placeholder="To'lov sumani kiriting"
+                        :max="store.price"
                         required
                       />
                     </div>
@@ -668,7 +669,9 @@
                         id="price"
                         class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full py-3 p-2.5"
                         placeholder="To'lov sumani kiriting"
+                        :max="store.price"
                         required
+                        @input="onInput"
                       />
                     </div>
                     <div class="">
@@ -2492,6 +2495,14 @@ function cancelFunc() {
   modal.value = false;
 }
 
+// const onInput = (e) => {
+//   let val = Number(e.target.value);
+//   if (val > store.price) val = store.price;
+//   if (val < 0) val = 0;
+//   form.price = val;
+//   store.pay_price = val;
+// };
+
 // ---------------------------- search ------------------------------------
 function searchFunc() {
   store.searchList = [];
@@ -2764,7 +2775,7 @@ const getAllHistoryForExport = async () => {
     getStatistic(`${history.year}-${history.month}`);
   } else if (history.groupMonthModal) {
     urlBase = `/payment/groupMonth/${schoolId}/${history.group_id}/${history.year}/${history.month}/all/page`;
-    // getStatistic(`${history.year}-${history.month}`);
+    getStatisticGroup(history.group_id, `${history.year}-${history.month}`);
   } else {
     return;
   }
@@ -2815,7 +2826,7 @@ const exportToExcel = async () => {
     "Guruh nomi": item.group_name,
     "Guruh narxi": Number(item.group_price).toLocaleString("uz-UZ") + " so'm",
     "To'lov turi": item.method,
-    "To'langan summa": Number(item.price).toLocaleString("uz-UZ") + " so'm",
+    "To'langan summa": item.price,
     "Chegirma (%)": item.discount + " %",
     "Oy": monthNames(item.month),
     "To'lov sanasi": chekDateFormat(new Date(item.createdAt)),
@@ -2827,7 +2838,7 @@ const exportToExcel = async () => {
 
   const lastRow = dataToExport.length + 1; 
 
-  if (!history.groupMonthModal && store.statistic.statistics && store.statistic.statistics.length > 0) {
+  if (store.statistic.statistics && store.statistic.statistics.length > 0) {
     const startRow = lastRow + 4;
 
     ws[`A${startRow}`] = { t: 's', v: "To'lov turi" };
@@ -2936,6 +2947,22 @@ const getStatistic = (date) => {
   axios
     .get(
       `/statistic/payment-day/${localStorage.getItem("school_id")}/${date}`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    )
+    .then((res) => {
+      store.statistic = res.data;
+    })
+    .catch((error) => {});
+};
+
+const getStatisticGroup = (group_id, date) => {
+  axios
+    .get(
+      `/statistic/payment-day/${localStorage.getItem("school_id")}/${group_id}/${date}`,
       {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -3269,7 +3296,7 @@ const getHistory = (page) => {
     getStatistic(`${history.year}-${history.month}`);
   } else if (history.groupMonthModal) {
     url = `/payment/groupMonth/${schoolId}/${history.group_id}/${history.year}/${history.month}/${history.status}/page?page=${page}`;
-    // getStatistic(`${history.year}-${history.month}`);
+    getStatisticGroup(history.group_id, `${history.year}-${history.month}`);
   } else {
     return;
   }
@@ -3281,6 +3308,7 @@ const getHistory = (page) => {
       if (records.length !== 0) {
         history.group_name = records[0].group_name;
       }
+      console.log(records.id)
       store.studentGroups = false;
       statusCount.payment = res.data?.data?.summary.paymentCount;
       statusCount.halfPayment = res.data?.data?.summary.halfPaymentCount;
