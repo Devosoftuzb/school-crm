@@ -669,9 +669,7 @@
                         id="price"
                         class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full py-3 p-2.5"
                         placeholder="To'lov sumani kiriting"
-                        :max="store.price"
                         required
-                        @input="onInput"
                       />
                     </div>
                     <div class="">
@@ -2494,14 +2492,6 @@ function cancelFunc() {
   form.discount = 0;
   modal.value = false;
 }
-
-// const onInput = (e) => {
-//   let val = Number(e.target.value);
-//   if (val > store.price) val = store.price;
-//   if (val < 0) val = 0;
-//   form.price = val;
-//   store.pay_price = val;
-// };
 
 // ---------------------------- search ------------------------------------
 function searchFunc() {
