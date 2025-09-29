@@ -2495,13 +2495,13 @@ function cancelFunc() {
   modal.value = false;
 }
 
-// const onInput = (e) => {
-//   let val = Number(e.target.value);
-//   if (val > store.price) val = store.price;
-//   if (val < 0) val = 0;
-//   form.price = val;
-//   store.pay_price = val;
-// };
+const onInput = (e) => {
+  let val = Number(e.target.value);
+  if (val > store.price) val = store.price;
+  if (val < 0) val = 0;
+  form.price = val;
+  store.pay_price = val;
+};
 
 // ---------------------------- search ------------------------------------
 function searchFunc() {
