@@ -356,7 +356,6 @@
                         id="price"
                         class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full py-3 p-2.5"
                         placeholder="To'lov sumani kiriting"
-                        :max="store.price"
                         required
                       />
                     </div>
