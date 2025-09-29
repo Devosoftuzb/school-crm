@@ -3413,7 +3413,13 @@ const getAllHistoryForExportSalary = async () => {
   if (history.teacher_id && history.teacher_id !== "") {
     urlBase = `/salary/teacherSalary/${schoolId}/${history.teacher_id}/${salaryHistory.year}/${salaryHistory.month}/page`;
   } else {
-    urlBase = `/salary/${schoolId}/${salaryHistory.year}/${salaryHistory.month}/page`;
+    if (store.guard) {
+      urlBase = `/salary/${schoolId}/${salaryHistory.year}/${salaryHistory.month}/page`;
+    } else {
+      urlBase = `/salary/teacherSalary/${schoolId}/${localStorage.getItem(
+        "id"
+      )}/${salaryHistory.year}/${salaryHistory.month}/page`;
+    }
   }
 
   let allData = [];
@@ -3548,7 +3554,7 @@ const createCostCategory = async () => {
     notification.success("Kategoriya kiritildi");
     getCostCategory();
     costCategoryModal();
-    getStatistic()
+    getStatistic();
   } catch (error) {
     notification.warning(
       "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
@@ -3572,7 +3578,7 @@ const createCost = async () => {
     notification.success("Chiqim kiritildi");
 
     await getCost(store.costPagination);
-    getStatistic()
+    getStatistic();
     costModal();
   } catch (error) {
     notification.warning(
@@ -3597,7 +3603,7 @@ const createSalary = async () => {
     notification.success("Maosh kiritildi");
 
     await getSalary(store.salaryPagination);
-    getStatistic()
+    getStatistic();
     salaryModal();
   } catch (error) {
     notification.warning(
@@ -3628,7 +3634,7 @@ const updateCost = async () => {
     notification.success("Chiqim o'zgartirildi");
 
     await getCost(store.costPagination);
-    getStatistic()
+    getStatistic();
     costUpdateModal();
   } catch (error) {
     notification.warning(
@@ -3656,7 +3662,7 @@ const updateSalary = async () => {
     notification.success("Berilgan maosh o'zgartirildi");
 
     await getSalary(store.costPagination);
-    getStatistic()
+    getStatistic();
     salaryUpdateModal();
   } catch (error) {
     notification.warning(
@@ -3677,7 +3683,7 @@ const deleteCostCategory = async () => {
     );
     costCategory.remove = false;
     getCostCategory();
-    getStatistic()
+    getStatistic();
     notification.success("Kategoriya o'chirildi");
   } catch (error) {
     notification.warning(
@@ -3696,7 +3702,7 @@ const deleteCost = async () => {
     );
     cost.remove = false;
     getCost(store.costPagination);
-    getStatistic()
+    getStatistic();
     notification.success("Chiqim o'chirildi");
   } catch (error) {
     notification.warning(
@@ -3715,7 +3721,7 @@ const deleteSalary = async () => {
     );
     salary.remove = false;
     getSalary(store.salaryPagination);
-    getStatistic()
+    getStatistic();
     notification.success("Berilgan maosh o'chirildi");
   } catch (error) {
     notification.warning(

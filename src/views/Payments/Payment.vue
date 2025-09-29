@@ -2492,6 +2492,7 @@ function cancelFunc() {
   modal.value = false;
 }
 
+
 // ---------------------------- search ------------------------------------
 function searchFunc() {
   store.searchList = [];
