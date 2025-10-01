@@ -6,6 +6,8 @@
       <div class="mt-10" v-show="!store.loading">
         <Placeholder2 />
       </div>
+
+      <PageLoader :loading="loading.excel" text="Excel tayyorlanmoqda..." />
       <div
         v-show="store.loading"
         class="mt-10 rounded-lg p-[15px] mb-10 sm:mb-28"
@@ -73,33 +75,37 @@
                       <span class="sr-only">Close modal</span>
                     </button>
                   </div>
-                  <div
-                    class="flex w-full items-center justify-between sm:w-auto"
-                    id="navbar-sticky"
-                  >
+                  <div class="w-full rounded-lg" id="navbar-sticky">
                     <ul
-                      class="font-medium w-full flex flex-col sm:flex-row items-center gap-5 text-white"
+                      class="font-medium w-full grid lg:grid-cols-4 grid-cols-2 gap-3 text-white"
                     >
                       <li
-                        class="cursor-pointer w-full sm:max-w-fit text-center bg-gray-600 hover:bg-gray-500 p-2 px-5 sm:text-md text-sm rounded-lg"
+                        class="cursor-pointer w-full h-[100%] whitespace-nowrap text-center bg-gray-600 hover:bg-gray-500 p-2 px-5 sm:text-md text-sm rounded-lg"
                         :class="history.dayModal ? 'btn' : 'bg-gray-600'"
                         @click="historyDayModal"
                       >
-                        <span>Kun bo'yicha ko'rish</span>
+                        <span>Kun bo'yicha</span>
                       </li>
                       <li
-                        class="cursor-pointer w-full sm:max-w-fit text-center bg-gray-600 hover:bg-gray-500 p-2 px-5 sm:text-md text-sm rounded-lg"
+                        class="cursor-pointer w-full h-[100%] whitespace-nowrap text-center bg-gray-600 hover:bg-gray-500 p-2 px-5 sm:text-md text-sm rounded-lg"
                         :class="history.monthModal ? 'btn' : 'bg-gray-600'"
                         @click="historyMonthModal"
                       >
-                        <span>Oy bo'yicha ko'rish</span>
+                        <span>Oy bo'yicha</span>
                       </li>
                       <li
-                        class="cursor-pointer w-full sm:max-w-fit text-center bg-gray-600 hover:bg-gray-500 p-2 px-5 sm:text-md text-sm rounded-lg"
+                        class="cursor-pointer w-full h-[100%] whitespace-nowrap text-center bg-gray-600 hover:bg-gray-500 p-2 px-5 sm:text-md text-sm rounded-lg"
                         :class="history.groupMonthModal ? 'btn' : 'bg-gray-600'"
                         @click="historyGroupMonthModal"
                       >
-                        <span>Guruh bo'yicha ko'rish</span>
+                        <span>Guruh bo'yicha</span>
+                      </li>
+                      <li
+                        class="cursor-pointer w-full h-[100%] whitespace-nowrap text-center bg-gray-600 hover:bg-gray-500 p-2 px-5 sm:text-md text-sm rounded-lg"
+                        :class="history.yearModal ? 'btn' : 'bg-gray-600'"
+                        @click="historyYearModal"
+                      >
+                        <span>Barchasini</span>
                       </li>
                     </ul>
                   </div>
@@ -167,7 +173,7 @@
                         v-model="history.day"
                         id="day"
                         type="number"
-                        class="bg-white text-black border border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full py-2.5 pl-3"
+                        class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full py-2.5 pl-3"
                         placeholder="Kuni kiriting.."
                         min="1"
                         max="31"
@@ -178,13 +184,14 @@
                   <div
                     class="w-full flex flex-col gap-5 justify-center border-t pt-5 mt-5"
                   >
-                    <button
+                    <ButtonLoader
+                      :loading="loading.excel"
                       @click="exportToExcel"
                       type="button"
                       class="btnAdd3 text-white inline-flex items-center justify-center bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                     >
                       Excelga yuklab olish
-                    </button>
+                    </ButtonLoader>
                     <div class="w-full flex items-center justify-between">
                       <button
                         @click="historyModal"
@@ -193,12 +200,13 @@
                       >
                         Bekor qilish
                       </button>
-                      <button
+                      <ButtonLoader
+                        :loading="loading.view"
                         type="submit"
                         class="btn text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                       >
                         Ko'rish
-                      </button>
+                      </ButtonLoader>
                     </div>
                   </div>
                 </form>
@@ -259,13 +267,14 @@
                   <div
                     class="w-full flex flex-col gap-5 justify-center border-t pt-5 mt-5"
                   >
-                    <button
+                    <ButtonLoader
+                      :loading="loading.excel"
                       @click="exportToExcel"
                       type="button"
                       class="btnAdd3 text-white inline-flex items-center justify-center bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                     >
                       Excelga yuklab olish
-                    </button>
+                    </ButtonLoader>
                     <div class="w-full flex items-center justify-between">
                       <button
                         @click="historyModal"
@@ -274,12 +283,13 @@
                       >
                         Bekor qilish
                       </button>
-                      <button
+                      <ButtonLoader
+                        :loading="loading.view"
                         type="submit"
                         class="btn text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                       >
                         Ko'rish
-                      </button>
+                      </ButtonLoader>
                     </div>
                   </div>
                 </form>
@@ -403,7 +413,7 @@
                         >
                           <li
                             class="hover:bg-blue-600 hover:text-white whitespace-nowrap cursor-pointer pl-2"
-                            v-for="(i, index) in store.group"
+                            v-for="(i, index) in store.groupAllProducts"
                             :key="index"
                             @mousedown.prevent="
                               history.group_id = i.id;
@@ -421,13 +431,14 @@
                   <div
                     class="w-full flex flex-col gap-5 justify-center border-t pt-5 mt-5"
                   >
-                    <button
+                    <ButtonLoader
+                      :loading="loading.excel"
                       @click="exportToExcel"
                       type="button"
                       class="btnAdd3 text-white inline-flex items-center justify-center bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                     >
                       Excelga yuklab olish
-                    </button>
+                    </ButtonLoader>
                     <div class="w-full flex items-center justify-between">
                       <button
                         @click="historyModal"
@@ -436,12 +447,71 @@
                       >
                         Bekor qilish
                       </button>
-                      <button
+                      <ButtonLoader
+                        :loading="loading.view"
                         type="submit"
                         class="btn text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                       >
                         Ko'rish
+                      </ButtonLoader>
+                    </div>
+                  </div>
+                </form>
+                <form
+                  v-show="history.yearModal"
+                  @submit.prevent="getHistory(store.pagination)"
+                  :class="{ darkForm: navbar.userNav }"
+                >
+                  <div class="grid font-medium gap-4 mb-4">
+                    <div>
+                      <label for="year" class="block mb-2 text-sm"
+                        >Yilni tanlang</label
+                      >
+                      <select
+                        v-model="history.year"
+                        id="name"
+                        class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                        required
+                      >
+                        <option value="" disabled selected>
+                          Yilni tanlang
+                        </option>
+                        <option
+                          v-for="i in store.curentYil"
+                          :key="i.id"
+                          :value="i.name"
+                        >
+                          {{ i.name }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                  <div
+                    class="w-full flex flex-col gap-5 justify-center border-t pt-5 mt-5"
+                  >
+                    <ButtonLoader
+                      :loading="loading.excel"
+                      @click="exportToExcel"
+                      type="button"
+                      class="btnAdd3 text-white inline-flex items-center justify-center bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                    >
+                      Excelga yuklab olish
+                    </ButtonLoader>
+                    <div class="w-full flex items-center justify-between">
+                      <button
+                        @click="historyModal"
+                        type="button"
+                        class="border inline-flex items-center hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                      >
+                        Bekor qilish
                       </button>
+                      <ButtonLoader
+                        :loading="loading.view"
+                        type="submit"
+                        class="btn text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                      >
+                        Ko'rish
+                      </ButtonLoader>
                     </div>
                   </div>
                 </form>
@@ -571,7 +641,7 @@
               </div>
             </div>
           </div>
-          
+
           <div
             v-show="store.modalGroup"
             class="relative shadow-md rounded-lg overflow-hidden m-5"
@@ -779,6 +849,12 @@
                 history.month
               }}/{{ history.group_name }}
             </h2>
+            <h2
+              v-show="history.yearModal"
+              class="sm:text-lg text-sm text-blue-700"
+            >
+              Barcha to'lov tarixi - {{ history.year }}
+            </h2>
             <button
               @click="history.modal = true"
               type="button"
@@ -828,9 +904,11 @@
                     v-for="i in store.PageProduct"
                     :key="i"
                     class="border-b"
-                    :class="
-                      navbar.userNav ? 'hover:bg-gray-700' : 'hover:bg-gray-50'
-                    "
+                    :class="[
+                      navbar.userNav ? 'hover:bg-gray-700' : 'hover:bg-gray-50',
+                      i.status === 'update' ? 'btnAdd3' : '',
+                      i.status === 'delete' ? 'btnAdd2' : '',
+                    ]"
                   >
                     <th
                       scope="row"
@@ -995,6 +1073,8 @@ import Chart from "chart.js/auto";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import { useNotificationStore } from "../../stores/notification";
+import { ButtonLoader } from "../../components";
+import { PageLoader } from "../../components";
 
 const notification = useNotificationStore();
 const navbar = useNavStore();
@@ -1005,6 +1085,11 @@ const orqaYil = hozirgiSana.getFullYear() - 2;
 let hozirgiOy = hozirgiSana.getMonth() + 1;
 hozirgiOy = hozirgiOy.toString().padStart(2, "0");
 let hozirgiKun = hozirgiSana.getDate();
+
+const loading = reactive({
+  view: false,
+  excel: false,
+});
 
 const store = reactive({
   data: "",
@@ -1066,18 +1151,28 @@ const historyDayModal = () => {
   history.dayModal = true;
   history.monthModal = false;
   history.groupMonthModal = false;
+  history.yearModal = false;
 };
 
 const historyMonthModal = () => {
   history.dayModal = false;
   history.monthModal = true;
   history.groupMonthModal = false;
+  history.yearModal = false;
 };
 
 const historyGroupMonthModal = () => {
+  history.groupMonthModal = true;
   history.dayModal = false;
   history.monthModal = false;
-  history.groupMonthModal = true;
+  history.yearModal = false;
+};
+
+const historyYearModal = () => {
+  history.yearModal = true;
+  history.dayModal = false;
+  history.monthModal = false;
+  history.groupMonthModal = false;
 };
 
 const historyModal = () => {
@@ -1099,6 +1194,7 @@ const history = reactive({
   modal: false,
   dayModal: true,
   monthModal: false,
+  yearModal: false,
   groupMonthModal: false,
   filter_show: false,
   filter: "",
@@ -1106,6 +1202,7 @@ const history = reactive({
   searchList: [],
   dayList: [],
   monthList: [],
+  yearList: [],
   groupMonthList: [],
   dayPay: 0,
 });
@@ -1182,7 +1279,7 @@ const getEmployee = async () => {
     const employeeData = await fetchData(`/employee/${schoolId}/${id}`);
     store.data = employeeData;
     date.value = store.data.createdAt.split("T")[0];
-    store.teacher_name = store.data.full_name
+    store.teacher_name = store.data.full_name;
 
     // Use a single promise array for both groups and payments
     const promises = [
@@ -1255,7 +1352,9 @@ const getStudentPayments = async () => {
 const getStatistic = async (teacher_id, date) => {
   await axios
     .get(
-      `/statistic/payment-day-employee/${localStorage.getItem("school_id")}/${teacher_id}/${date}`,
+      `/statistic/payment-day-employee/${localStorage.getItem(
+        "school_id"
+      )}/${teacher_id}/${date}`,
       {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -1271,7 +1370,9 @@ const getStatistic = async (teacher_id, date) => {
 const getStatisticGroup = async (group_id, date) => {
   await axios
     .get(
-      `/statistic/payment-day/${localStorage.getItem("school_id")}/${group_id}/${date}`,
+      `/statistic/payment-day/${localStorage.getItem(
+        "school_id"
+      )}/${group_id}/${date}`,
       {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -1392,6 +1493,7 @@ const createStudentPaymentChart = () => {
 };
 
 const getHistory = async (page) => {
+  loading.view = true;
   const id = router.currentRoute.value.params.id;
   const schoolId = localStorage.getItem("school_id");
   const token = localStorage.getItem("token");
@@ -1408,6 +1510,8 @@ const getHistory = async (page) => {
     url = `/payment/employeeMonth/${schoolId}/${id}/${history.year}/${history.month}/page?page=${page}`;
   } else if (history.groupMonthModal) {
     url = `/payment/groupMonth/${schoolId}/${history.group_id}/${history.year}/${history.month}/all/page?page=${page}`;
+  } else if (history.yearModal) {
+    url = `/payment/employeeYear/${schoolId}/${id}/${history.year}/page?page=${page}`;
   } else {
     return;
   }
@@ -1423,9 +1527,11 @@ const getHistory = async (page) => {
       store.PageProduct = records;
       const pagination = res.data?.data?.pagination;
       store.page = [pagination.currentPage, pagination.total_count];
+      loading.view = false;
       history.modal = false;
     })
     .catch((error) => {
+      loading.view = false;
       store.PageProduct = error.response?.data?.message;
     });
 };
@@ -1449,7 +1555,12 @@ const getAllHistoryForExport = async () => {
     await getStatistic(id, `${history.year}-${history.month}`);
   } else if (history.groupMonthModal) {
     urlBase = `/payment/groupMonth/${schoolId}/${history.group_id}/${history.year}/${history.month}/all/page`;
-    await getStatisticGroup(history.group_id, `${history.year}-${history.month}`);
+    await getStatisticGroup(
+      history.group_id,
+      `${history.year}-${history.month}`
+    );
+  } else if (history.yearModal) {
+    urlBase = `/payment/employeeYear/${schoolId}/${id}/${history.year}/page`;
   } else {
     return;
   }
@@ -1481,19 +1592,25 @@ const getAllHistoryForExport = async () => {
     history.monthList = allData;
   } else if (history.groupMonthModal) {
     history.groupMonthList = allData;
+  } else if (history.yearModal){
+    history.yearList = allData;
   }
 };
 
 const exportToExcel = async () => {
+  loading.excel = true;
   await getAllHistoryForExport();
 
   const rawData = history.dayModal
     ? history.dayList
     : history.monthModal
     ? history.monthList
-    : history.groupMonthList;
+    : history.groupMonthModal
+    ? history.groupMonthList
+    : history.yearList;
 
   if (!rawData || rawData.length === 0) {
+    loading.excel = false;
     notification.warning("Yuklash uchun ma'lumot topilmadi");
     return;
   }
@@ -1520,8 +1637,8 @@ const exportToExcel = async () => {
   const ws = XLSX.utils.json_to_sheet(dataToExport, { origin: "A1" });
 
   const lastRow = dataToExport.length + 1;
-  
-  if (store.statistic.statistics && store.statistic.statistics.length > 0) {
+
+  if (!history.yearModal && store.statistic.statistics && store.statistic.statistics.length > 0) {
     const startRow = lastRow + 4;
 
     ws[`A${startRow}`] = { t: "s", v: "To'lov turi" };
@@ -1575,14 +1692,16 @@ const exportToExcel = async () => {
     ? `kunlik_tolov_tarixi_${store.teacher_name}-${history.year}-${history.month}-${history.day}.xlsx`
     : history.monthModal
     ? `oylik_tolov_tarixi_${store.teacher_name}-${history.year}-${history.month}.xlsx`
-    : `guruhni_oylik_tolov_tarixi_${store.teacher_name}-${history.year}-${history.month}-${history.group_name}.xlsx`;
+    : history.groupMonthModal
+    ? `guruhni_oylik_tolov_tarixi_${store.teacher_name}-${history.year}-${history.month}-${history.group_name}.xlsx`
+    : `barcha_tolov_tarixi_${store.teacher_name}-${history.year}.xlsx`;
 
   const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
   const blob = new Blob([excelBuffer], { type: "application/octet-stream" });
   saveAs(blob, fileName);
-  // location.reload();
-  notification.success("Excel fayl yuklab olindi!");
+  loading.excel = false;
   history.modal = !history.modal;
+  notification.success("Excel fayl yuklab olindi!");
 };
 
 watch(
