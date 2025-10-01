@@ -6,6 +6,8 @@ import Placeholder1 from './Placeholder1.vue';
 import Placeholder2 from './Placeholder2.vue';
 import Placeholder3 from './Placeholder3.vue';
 import Timer from './Timer.vue';
+import ButtonLoader from './ButtonLoader.vue'
+import PageLoader from './PageLoader.vue'
 
 export {
     ChartLine,
@@ -16,4 +18,6 @@ export {
     Placeholder2,
     Placeholder3,
     Timer,
+    ButtonLoader,
+    PageLoader,
 }

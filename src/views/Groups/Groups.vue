@@ -813,7 +813,7 @@
               </tbody>
             </table>
             <div
-              v-if="isEmpty(store.PageProduct) || isEmpty(store.allProducts)"
+              v-if="isEmpty(store.PageProduct) && isEmpty(store.allProducts)"
               class="w-full max-w-screen text-center p-20 text-2xl font-medium"
             >
               <h1>Guruhlar ro'yhati bo'sh</h1>

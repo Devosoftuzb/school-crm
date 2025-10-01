@@ -11,6 +11,8 @@
         <Placeholder2 />
       </div>
 
+      <PageLoader :loading="loading.excel" text="Excel tayyorlanmoqda..." />
+
       <!-- ---------------------------------------- Statistic ------------------------------------- -->
 
       <div
@@ -33,7 +35,7 @@
                   :class="navbar.userNav ? 'text-white' : 'text-black'"
                 >
                   <h3 class="font-semibold leading-normal sm:text-md text-sm">
-                    {{ store.guard ? j.name : j.method }} ({{ j.count }})
+                    {{ store.guard ? j.name : j.method }} ({{ j.count || 0 }})
                   </h3>
                   <h5
                     class="font-bold bg-blue-100 text-blue-700 p-1 px-3 rounded-lg sm:text-md text-sm"
@@ -1172,35 +1174,39 @@
                     <span class="sr-only">Close modal</span>
                   </button>
                 </div>
-                <div
-                  class="flex w-full items-center justify-between sm:w-auto"
-                  id="navbar-sticky"
-                >
+                <div class="w-full rounded-lg" id="navbar-sticky">
                   <ul
-                    class="font-medium w-full flex flex-col sm:flex-row items-center gap-5 text-white"
+                    class="font-medium w-full grid lg:grid-cols-4 grid-cols-2 gap-3 text-white"
                   >
                     <li
-                      class="cursor-pointer w-full sm:max-w-fit text-center bg-gray-600 hover:bg-gray-500 p-2 px-5 sm:text-md text-sm rounded-lg"
+                      class="cursor-pointer w-full h-[100%] whitespace-nowrap text-center bg-gray-600 hover:bg-gray-500 p-2 px-5 sm:text-md text-sm rounded-lg"
                       :class="history.dayModal ? 'btnAdd' : 'bg-gray-600'"
                       @click="historyDayModal"
                     >
-                      <span>Kun bo'yicha ko'rish</span>
+                      <span>Kun bo'yicha</span>
                     </li>
                     <li
-                      class="cursor-pointer w-full sm:max-w-fit text-center bg-gray-600 hover:bg-gray-500 p-2 px-5 sm:text-md text-sm rounded-lg"
+                      class="cursor-pointer w-full h-[100%] whitespace-nowrap text-center bg-gray-600 hover:bg-gray-500 p-2 px-5 sm:text-md text-sm rounded-lg"
                       :class="history.monthModal ? 'btnAdd' : 'bg-gray-600'"
                       @click="historyMonthModal"
                     >
-                      <span>Oy bo'yicha ko'rish</span>
+                      <span>Oy bo'yicha</span>
                     </li>
                     <li
-                      class="cursor-pointer w-full sm:max-w-fit text-center bg-gray-600 hover:bg-gray-500 p-2 px-5 sm:text-md text-sm rounded-lg"
+                      class="cursor-pointer w-full h-[100%] whitespace-nowrap text-center bg-gray-600 hover:bg-gray-500 p-2 px-5 sm:text-md text-sm rounded-lg"
                       :class="
                         history.groupMonthModal ? 'btnAdd' : 'bg-gray-600'
                       "
                       @click="historyGroupMonthModal"
                     >
-                      <span>Guruh bo'yicha ko'rish</span>
+                      <span>Guruh bo'yicha</span>
+                    </li>
+                    <li
+                      class="cursor-pointer w-full h-[100%] whitespace-nowrap text-center bg-gray-600 hover:bg-gray-500 p-2 px-5 sm:text-md text-sm rounded-lg"
+                      :class="history.yearModal ? 'btnAdd' : 'bg-gray-600'"
+                      @click="historyYearModal"
+                    >
+                      <span>Barchasini</span>
                     </li>
                   </ul>
                 </div>
@@ -1266,7 +1272,7 @@
                       v-model="history.day"
                       id="day"
                       type="number"
-                      class="bg-white text-black border border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full py-2.5 pl-3"
+                      class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full py-2.5 pl-3"
                       placeholder="Kuni kiriting.."
                       min="1"
                       max="31"
@@ -1277,27 +1283,29 @@
                 <div
                   class="w-full flex flex-col gap-5 justify-center border-t pt-5 mt-5"
                 >
-                  <button
+                  <ButtonLoader
+                    :loading="loading.excel"
                     @click="exportToExcel"
                     type="button"
                     class="btnAdd3 text-white inline-flex items-center justify-center bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                   >
                     Excelga yuklab olish
-                  </button>
+                  </ButtonLoader>
                   <div class="w-full flex items-center justify-between">
                     <button
                       @click="historyModal"
                       type="button"
-                      class="border inline-flex items-center hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                      class="border inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                     >
                       Bekor qilish
                     </button>
-                    <button
+                    <ButtonLoader
+                      :loading="loading.view"
                       type="submit"
                       class="btnAdd text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                     >
                       Ko'rish
-                    </button>
+                    </ButtonLoader>
                   </div>
                 </div>
               </form>
@@ -1356,27 +1364,29 @@
                 <div
                   class="w-full flex flex-col gap-5 justify-center border-t pt-5 mt-5"
                 >
-                  <button
+                  <ButtonLoader
+                    :loading="loading.excel"
                     @click="exportToExcel"
                     type="button"
                     class="btnAdd3 text-white inline-flex items-center justify-center bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                   >
                     Excelga yuklab olish
-                  </button>
+                  </ButtonLoader>
                   <div class="w-full flex items-center justify-between">
                     <button
                       @click="historyModal"
                       type="button"
-                      class="border inline-flex items-center hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                      class="border inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                     >
                       Bekor qilish
                     </button>
-                    <button
+                    <ButtonLoader
+                      :loading="loading.view"
                       type="submit"
                       class="btnAdd text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                     >
                       Ko'rish
-                    </button>
+                    </ButtonLoader>
                   </div>
                 </div>
               </form>
@@ -1516,27 +1526,85 @@
                 <div
                   class="w-full flex flex-col gap-5 justify-center border-t pt-5 mt-5"
                 >
-                  <button
+                  <ButtonLoader
+                    :loading="loading.excel"
                     @click="exportToExcel"
                     type="button"
                     class="btnAdd3 text-white inline-flex items-center justify-center bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                   >
                     Excelga yuklab olish
-                  </button>
+                  </ButtonLoader>
                   <div class="w-full flex items-center justify-between">
                     <button
                       @click="historyModal"
                       type="button"
-                      class="border inline-flex items-center hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                      class="border inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                     >
                       Bekor qilish
                     </button>
-                    <button
+                    <ButtonLoader
+                      :loading="loading.view"
                       type="submit"
                       class="btnAdd text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                     >
                       Ko'rish
+                    </ButtonLoader>
+                  </div>
+                </div>
+              </form>
+              <form
+                v-show="history.yearModal"
+                @submit.prevent="getHistory(store.teacherPagination)"
+                :class="{ darkForm: navbar.userNav }"
+              >
+                <div class="grid font-medium gap-4 mb-4">
+                  <div>
+                    <label for="year" class="block mb-2 text-sm"
+                      >Yilni tanlang</label
+                    >
+                    <select
+                      v-model="history.year"
+                      id="name"
+                      class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                      required
+                    >
+                      <option value="" disabled selected>Yilni tanlang</option>
+                      <option
+                        v-for="i in store.curentYil"
+                        :key="i.id"
+                        :value="i.name"
+                      >
+                        {{ i.name }}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                <div
+                  class="w-full flex flex-col gap-5 justify-center border-t pt-5 mt-5"
+                >
+                  <ButtonLoader
+                    :loading="loading.excel"
+                    @click="exportToExcel"
+                    type="button"
+                    class="btnAdd3 text-white inline-flex items-center justify-center bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                  >
+                    Excelga yuklab olish
+                  </ButtonLoader>
+                  <div class="w-full flex items-center justify-between">
+                    <button
+                      @click="historyModal"
+                      type="button"
+                      class="border inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                    >
+                      Bekor qilish
                     </button>
+                    <ButtonLoader
+                      :loading="loading.view"
+                      type="submit"
+                      class="btnAdd text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                    >
+                      Ko'rish
+                    </ButtonLoader>
                   </div>
                 </div>
               </form>
@@ -2018,9 +2086,11 @@
                   v-for="i in store.PageProduct"
                   :key="i"
                   class="border-b"
-                  :class="
-                    navbar.userNav ? 'hover:bg-gray-700' : 'hover:bg-gray-50'
-                  "
+                  :class="[
+                    navbar.userNav ? 'hover:bg-gray-700' : 'hover:bg-gray-50',
+                    i.status === 'update' ? 'btnAdd3' : '',
+                    i.status === 'delete' ? 'btnAdd2' : '',
+                  ]"
                 >
                   <th
                     scope="row"
@@ -2348,6 +2418,12 @@
                       scope="col"
                       class="text-center px-8 py-3 whitespace-nowrap"
                     >
+                      Izoh
+                    </th>
+                    <th
+                      scope="col"
+                      class="text-center px-8 py-3 whitespace-nowrap"
+                    >
                       To'lov sanasi
                     </th>
                     <th v-show="store.guard"></th>
@@ -2390,6 +2466,25 @@
                         {{ monthNames(i.month) }}
                       </p>
                     </td>
+                    <td class="text-center font-medium px-8 py-2 relative">
+                      <div class="group relative w-40 inline-block">
+                        <p class="truncate w-40 p-1 rounded-[5px]">
+                          {{
+                            !i.description || i.description.trim() === ""
+                              ? "Izoh yo'q"
+                              : i.description.split(" ").length > 3
+                              ? i.description.split(" ").slice(0, 3).join(" ") +
+                                "..."
+                              : i.description
+                          }}
+                        </p>
+                        <span
+                          class="absolute left-1/2 -translate-x-1/2 bottom-full mb-1 hidden w-max max-w-xs bg-blue-100 text-blue-800 text-sm p-2 rounded-md shadow-lg group-hover:block"
+                        >
+                          {{ !i.description ? "Izoh yo'q" : i.description }}
+                        </span>
+                      </div>
+                    </td>
                     <td
                       class="text-center font-medium whitespace-nowrap text-blue-800 px-8 py-4"
                     >
@@ -2397,6 +2492,7 @@
                         {{ chekDateFormat(new Date(i.createdAt)) }}
                       </p>
                     </td>
+
                     <td
                       v-show="store.guard"
                       class="text-center whitespace-nowrap font-medium pr-5 py-4"
@@ -2508,6 +2604,8 @@ import axios from "@/services/axios";
 import { useNotificationStore } from "../../stores/notification";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
+import { ButtonLoader } from "../../components";
+import { PageLoader } from "../../components";
 
 const notification = useNotificationStore();
 const navbar = useNavStore();
@@ -2519,6 +2617,12 @@ hozirgiOy = hozirgiOy.toString().padStart(2, "0");
 let hozirgiKun = hozirgiSana.getDate();
 
 const userRole = localStorage.getItem("role");
+
+const loading = reactive({
+  view: false,
+  excel: false,
+});
+
 const store = reactive({
   PageProduct: "",
   allProducts: true,
@@ -2645,18 +2749,28 @@ const historyDayModal = () => {
   history.dayModal = true;
   history.monthModal = false;
   history.groupMonthModal = false;
+  history.yearModal = false;
 };
 
 const historyMonthModal = () => {
   history.dayModal = false;
   history.monthModal = true;
   history.groupMonthModal = false;
+  history.yearModal = false;
 };
 
 const historyGroupMonthModal = () => {
   history.groupMonthModal = true;
   history.dayModal = false;
   history.monthModal = false;
+  history.yearModal = false;
+};
+
+const historyYearModal = () => {
+  history.yearModal = true;
+  history.dayModal = false;
+  history.monthModal = false;
+  history.groupMonthModal = false;
 };
 
 const historyModal = () => {
@@ -2682,6 +2796,7 @@ const history = reactive({
   modal: false,
   dayModal: true,
   monthModal: false,
+  yearModal: false,
   groupMonthModal: false,
   filter_show: false,
   filter: "",
@@ -2697,6 +2812,7 @@ const history = reactive({
   searchList_cost: [],
   dayList: [],
   monthList: [],
+  yearList: [],
   groupMonthList: [],
   dayPay: 0,
 });
@@ -2982,6 +3098,7 @@ const getOneSalary = async (id) => {
 };
 
 const getHistory = async (page) => {
+  loading.view = true;
   const id = localStorage.getItem("id");
   const schoolId = localStorage.getItem("school_id");
   const token = localStorage.getItem("token");
@@ -3007,6 +3124,8 @@ const getHistory = async (page) => {
       history.group_id,
       `${history.year}-${history.month}`
     );
+  } else if (history.yearModal) {
+    url = `/payment/employeeYear/${schoolId}/${id}/${history.year}/page?page=${page}`;
   } else {
     return;
   }
@@ -3022,9 +3141,11 @@ const getHistory = async (page) => {
       store.PageProduct = records;
       const pagination = res.data?.data?.pagination;
       store.teacherPage = [pagination.currentPage, pagination.total_count];
+      loading.view = false;
       history.modal = false;
     })
     .catch((error) => {
+      loading.view = false;
       store.PageProduct = error.response?.data?.message;
     });
 };
@@ -3129,6 +3250,8 @@ const getAllHistoryForExport = async () => {
       history.group_id,
       `${history.year}-${history.month}`
     );
+  } else if (history.yearModal) {
+    urlBase = `/payment/employeeYear/${schoolId}/${id}/${history.year}/page`;
   } else {
     return;
   }
@@ -3160,19 +3283,25 @@ const getAllHistoryForExport = async () => {
     history.monthList = allData;
   } else if (history.groupMonthModal) {
     history.groupMonthList = allData;
+  } else if (history.yearModal) {
+    history.yearList = allData;
   }
 };
 
 const exportToExcel = async () => {
+  loading.excel = true;
   await getAllHistoryForExport();
 
   const rawData = history.dayModal
     ? history.dayList
     : history.monthModal
     ? history.monthList
-    : history.groupMonthList;
+    : history.groupMonthModal
+    ? history.groupMonthList
+    : history.yearList;
 
   if (!rawData || rawData.length === 0) {
+    loading.excel = false;
     notification.warning("Yuklash uchun ma'lumot topilmadi");
     return;
   }
@@ -3200,6 +3329,7 @@ const exportToExcel = async () => {
   const lastRow = dataToExport.length + 1;
 
   if (
+    !history.yearModal &&
     store.statisticTeacher.statistics &&
     store.statisticTeacher.statistics.length > 0
   ) {
@@ -3256,14 +3386,16 @@ const exportToExcel = async () => {
     ? `kunlik_tolov_tarixi_${store.teacher_name}-${history.year}-${history.month}-${history.day}.xlsx`
     : history.monthModal
     ? `oylik_tolov_tarixi_${store.teacher_name}-${history.year}-${history.month}.xlsx`
-    : `guruhni_oylik_tolov_tarixi_${store.teacher_name}-${history.year}-${history.month}-${history.group_name}.xlsx`;
+    : history.groupMonthModal
+    ? `guruhni_oylik_tolov_tarixi_${store.teacher_name}-${history.year}-${history.month}-${history.group_name}.xlsx`
+    : `barcha_tolov_tarixi_${store.teacher_name}-${history.year}.xlsx`;
 
   const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
   const blob = new Blob([excelBuffer], { type: "application/octet-stream" });
   saveAs(blob, fileName);
-  // location.reload();
-  notification.success("Excel fayl yuklab olindi!");
+  loading.excel = false;
   history.modal = !history.modal;
+  notification.success("Excel fayl yuklab olindi!");
 };
 
 const getAllHistoryForExportCost = async () => {
