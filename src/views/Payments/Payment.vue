@@ -369,6 +369,8 @@
                           placeholder="To'lov sumani kiriting"
                           :max="store.price"
                           required
+                           @input="onInput"
+
                         />
                       </div>
                       <div class="">
