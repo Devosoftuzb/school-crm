@@ -237,67 +237,12 @@
                       >
                     </span>
                   </div>
-
-                  <div class="grid gap-4 sm:grid-cols-3">
-                    <div class="">
-                      <label for="price" class="block mb-2 text-sm">Narx</label>
-                      <input
-                        v-model="store.pay_price"
-                        type="number"
-                        name="price"
-                        id="price"
-                        class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full py-3 p-2.5"
-                        placeholder="To'lov sumani kiriting"
-                        required
-                      />
-                    </div>
-                    <div class="">
-                      <label for="price" class="block mb-2 text-sm"
-                        >Chegirma (%)</label
-                      >
-                      <input
-                        v-model="form.discount"
-                        type="number"
-                        name="price"
-                        id="price"
-                        class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full py-3 p-2.5"
-                        placeholder="Chegirma % kiriting"
-                        required
-                      />
-                    </div>
-                    <div>
-                      <label
-                        for="name"
-                        class="block mb-2 text-sm whitespace-nowrap"
-                        :class="navbar.userNav ? 'text-white' : 'text-black'"
-                        >To'lov turi tanlang</label
-                      >
-                      <select
-                        v-model="form.method"
-                        id="name"
-                        class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
-                        required
-                      >
-                        <option value="" disabled selected>
-                          To'lov turini tanlang
-                        </option>
-                        <option
-                          v-for="i in store.method"
-                          :key="i.id"
-                          :value="i.name"
-                        >
-                          {{ i.name }}
-                        </option>
-                      </select>
-                    </div>
-
                   <div
                     v-if="form.discount !== 0 && form.discount !== ''"
                     class="item flex justify-between border-b border-dashed border-black py-1 text-sm"
                   >
                     <span class="font-semibold">Chegirma:</span>
                     <span id="teacher">{{ form.discount }}%</span>
-
                   </div>
                   <div
                     class="item flex justify-between border-b border-dashed border-black py-1 text-sm"
@@ -422,7 +367,6 @@
                           id="price"
                           class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full py-3 p-2.5"
                           placeholder="To'lov sumani kiriting"
-                          :max="store.price"
                           required
                         />
                       </div>
@@ -502,7 +446,6 @@
                 </form>
               </div>
             </div>
-          </div>
           </div>
         </transition>
       </div>
@@ -748,9 +691,7 @@
                           id="price"
                           class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full py-3 p-2.5"
                           placeholder="To'lov sumani kiriting"
-                          :max="store.price"
                           required
-                          @input="onInput"
                         />
                       </div>
                       <div class="">
@@ -2687,7 +2628,6 @@ function cancelFunc() {
   form.discount = 0;
   modal.value = false;
 }
-
 
 // ---------------------------- search ------------------------------------
 function searchFunc() {
