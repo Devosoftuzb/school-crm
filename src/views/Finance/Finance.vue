@@ -150,12 +150,13 @@
                     >
                       Bekor qilish
                     </button>
-                    <button
+                    <ButtonLoader
+                    :loading="loading.view"
                       type="submit"
                       class="btnAdd text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                     >
                       Qo'shish
-                    </button>
+                    </ButtonLoader>
                   </div>
                 </div>
               </form>
@@ -232,12 +233,13 @@
                   >
                     Bekor qilish
                   </button>
-                  <button
+                  <ButtonLoader
+                  :loading="loading.view"
                     @click="deleteCostCategory"
                     class="btnAdd cursor-pointer text-white inline-flex items-center bg-[#4141eb] hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-500 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                   >
                     O'chirish
-                  </button>
+                  </ButtonLoader>
                 </div>
               </div>
             </div>
@@ -416,12 +418,13 @@
                     >
                       Bekor qilish
                     </button>
-                    <button
+                    <ButtonLoader
+                    :loading="loading.view"
                       type="submit"
                       class="btnAdd text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                     >
                       Qo'shish
-                    </button>
+                    </ButtonLoader>
                   </div>
                 </div>
               </form>
@@ -602,12 +605,13 @@
                     >
                       Bekor qilish
                     </button>
-                    <button
+                    <ButtonLoader
+                    :loading="loading.view"
                       type="submit"
                       class="btnAdd text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                     >
                       O'zgartirish
-                    </button>
+                    </ButtonLoader>
                   </div>
                 </div>
               </form>
@@ -684,12 +688,13 @@
                   >
                     Bekor qilish
                   </button>
-                  <button
+                  <ButtonLoader
+                  :loading="loading.view"
                     @click="deleteCost"
                     class="btnAdd cursor-pointer text-white inline-flex items-center bg-[#4141eb] hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-500 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                   >
                     O'chirish
-                  </button>
+                  </ButtonLoader>
                 </div>
               </div>
             </div>
@@ -844,6 +849,19 @@
                       <option value="12">Dekabr</option>
                     </select>
                   </div>
+                  <div>
+                    <label for="description" class="block mb-2 text-sm"
+                      >Izoh kiriting</label
+                    >
+
+                    <textarea
+                      v-model="salary.description"
+                      name="description"
+                      id="description"
+                      class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full py-2.5 pl-3 h-32"
+                      placeholder="Izoh.."
+                    ></textarea>
+                  </div>
                 </div>
                 <div
                   class="w-full flex flex-col gap-5 justify-center border-t pt-5 mt-5"
@@ -856,12 +874,13 @@
                     >
                       Bekor qilish
                     </button>
-                    <button
+                    <ButtonLoader
+                    :loading="loading.view"
                       type="submit"
                       class="btnAdd text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                     >
                       Qo'shish
-                    </button>
+                    </ButtonLoader>
                   </div>
                 </div>
               </form>
@@ -1016,6 +1035,19 @@
                       <option value="11">Noyabr</option>
                       <option value="12">Dekabr</option>
                     </select>
+                  </div>
+                  <div>
+                    <label for="description" class="block mb-2 text-sm"
+                      >Izoh kiriting</label
+                    >
+
+                    <textarea
+                      v-model="salary.description"
+                      name="description"
+                      id="description"
+                      class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full py-2.5 pl-3 h-32"
+                      placeholder="Izoh.."
+                    ></textarea>
                   </div>
                 </div>
                 <div
@@ -2673,6 +2705,7 @@ const salary = reactive({
   price: "",
   method: "",
   month: hozirgiOy,
+  description: "",
 });
 
 const salaryHistory = reactive({
@@ -3089,6 +3122,7 @@ const getOneSalary = async (id) => {
     salary.price = res.data.price;
     salary.method = res.data.method;
     salary.month = res.data.month;
+    salary.description = res.data.description;
     salary.updateModal = true;
   } catch (error) {
     notification.warning(
@@ -3782,6 +3816,7 @@ const updateSalary = async () => {
     price: salary.price,
     method: salary.method,
     month: salary.month,
+    description: salary.description,
   };
   try {
     await axios.put(
