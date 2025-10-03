@@ -758,13 +758,7 @@ const getAllProduct = () => {
       },
     })
     .then((res) => {
-      const localSchoolId = Number(localStorage.getItem("school_id"));
-
-      const filteredProducts = res.data.filter(
-        (item) => item.subject?.school_id === localSchoolId
-      );
-
-      store.allProducts = filteredProducts;
+      store.allProducts = res.data;
       store.error = false;
     })
     .catch((error) => {
@@ -784,17 +778,9 @@ const getProduct = (page) => {
       },
     })
     .then((res) => {
-      const localSchoolId = Number(localStorage.getItem("school_id"));
-
-      const allRecords = res.data?.data?.records || [];
-
-      const filteredProducts = allRecords.filter(
-        (item) => item.subject?.school_id === localSchoolId
-      );
-
-      store.PageProduct = filteredProducts;
-      store.page = [];
-      store.page.push(page, filteredProducts.length);
+      store.PageProduct = res.data?.data.records;
+      const pagination = res.data?.data?.pagination;
+      store.page = [pagination.currentPage, pagination.total_count];
 
       store.error = false;
     })

@@ -257,9 +257,12 @@
                 <tbody>
                   <tr
                     class="border-b"
-                    :class="
-                      navbar.userNav ? 'hover:bg-gray-700' : 'hover:bg-gray-50'
-                    "
+                 
+                    :class="[
+                      navbar.userNav ? 'hover:bg-gray-700' : 'hover:bg-gray-50',
+                      i.status === 'update' ? 'btnAdd3' : '',
+                      i.status === 'delete' ? 'btnAdd2' : '',
+                    ]"
                     v-for="i in store.payment"
                     :key="i.id"
                   >
@@ -477,4 +480,13 @@ onMounted(() => {
 .btn {
   background-image: linear-gradient(to right, white -450%, #4141eb);
 }
+
+.btnAdd2 {
+  background-image: linear-gradient(to right, white -450%, red);
+}
+
+.btnAdd3 {
+  background-image: linear-gradient(to right, white -450%, #ff9800);
+}
+
 </style>

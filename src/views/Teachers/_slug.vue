@@ -413,7 +413,7 @@
                         >
                           <li
                             class="hover:bg-blue-600 hover:text-white whitespace-nowrap cursor-pointer pl-2"
-                            v-for="(i, index) in store.groupAllProducts"
+                            v-for="(i, index) in store.group"
                             :key="index"
                             @mousedown.prevent="
                               history.group_id = i.id;
@@ -1254,7 +1254,6 @@ const monthNames = (month) => {
 
 // API chaqiruvlarini umumiy qilish uchun yordamchi funksiya
 const fetchData = async (url, params = {}) => {
-  const schoolId = localStorage.getItem("school_id");
   const token = localStorage.getItem("token");
 
   try {
@@ -1281,14 +1280,12 @@ const getEmployee = async () => {
     date.value = store.data.createdAt.split("T")[0];
     store.teacher_name = store.data.full_name;
 
-    // Use a single promise array for both groups and payments
     const promises = [
       ...employeeData.group.map((group) =>
         getGroup(group.group_id, group.createdAt)
       ),
     ];
 
-    // Await all promises concurrently
     await Promise.all(promises);
     store.loading = true;
   } catch (error) {
@@ -1592,7 +1589,7 @@ const getAllHistoryForExport = async () => {
     history.monthList = allData;
   } else if (history.groupMonthModal) {
     history.groupMonthList = allData;
-  } else if (history.yearModal){
+  } else if (history.yearModal) {
     history.yearList = allData;
   }
 };
@@ -1638,7 +1635,11 @@ const exportToExcel = async () => {
 
   const lastRow = dataToExport.length + 1;
 
-  if (!history.yearModal && store.statistic.statistics && store.statistic.statistics.length > 0) {
+  if (
+    !history.yearModal &&
+    store.statistic.statistics &&
+    store.statistic.statistics.length > 0
+  ) {
     const startRow = lastRow + 4;
 
     ws[`A${startRow}`] = { t: "s", v: "To'lov turi" };
@@ -1796,6 +1797,10 @@ onMounted(() => {
 }
 .btn {
   background-image: linear-gradient(to right, white -450%, #4141eb);
+}
+
+.btnAdd2 {
+  background-image: linear-gradient(to right, white -450%, red);
 }
 
 .btnAdd3 {
