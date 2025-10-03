@@ -1621,7 +1621,7 @@ const exportToExcel = async () => {
     "To'langan summa": Number(item.price),
     "Chegirma (%)": item.discount + " %",
     Oy: monthNames(item.month),
-    "To'lov sanasi": formatDateToNumeric(new Date(item.createdAt)),
+    "To'lov sanasi": monthNames(String(new Date(item.createdAt).getMonth() + 1).padStart(2, "0")),
     Izoh: item.description,
     Holati:
       item.status === "delete"
