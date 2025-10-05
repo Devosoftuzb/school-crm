@@ -18,7 +18,7 @@
       <div
         v-for="i in store.statistic"
         :key="i"
-        class="cards flex flex-wrap items-center justify-center mb-5 gap-x-5 gap-y-5"
+        class="flex flex-wrap items-center justify-center mb-5 cards gap-x-5 gap-y-5"
       >
         <div class="card sm:w-[295px] w-full" v-for="j in i" :key="j">
           <div
@@ -34,11 +34,11 @@
                   class="flex items-center justify-between w-full px-3"
                   :class="navbar.userNav ? 'text-white' : 'text-black'"
                 >
-                  <h3 class="font-semibold leading-normal sm:text-md text-sm">
+                  <h3 class="text-sm font-semibold leading-normal sm:text-md">
                     {{ store.guard ? j.name : j.method }} ({{ j.count || 0 }})
                   </h3>
                   <h5
-                    class="font-bold bg-blue-100 text-blue-700 p-1 px-3 rounded-lg sm:text-md text-sm"
+                    class="p-1 px-3 text-sm font-bold text-blue-700 bg-blue-100 rounded-lg sm:text-md"
                   >
                     {{ Number(j.sum)?.toLocaleString("uz-UZ") }} so'm
                   </h5>
@@ -61,7 +61,7 @@
         "
       >
         <transition name="modal-fade">
-          <div class="relative p-4 w-full max-w-xl h-auto">
+          <div class="relative w-full h-auto max-w-xl p-4">
             <!-- Modal content -->
             <div
               class="relative p-4 rounded-lg shadow sm:p-5"
@@ -69,7 +69,7 @@
             >
               <!-- Modal header -->
               <div
-                class="flex flex-col items-center gap-5 pb-4 mb-4 rounded-t border-b sm:mb-5"
+                class="flex flex-col items-center gap-5 pb-4 mb-4 border-b rounded-t sm:mb-5"
               >
                 <div class="flex items-center justify-between w-full">
                   <h3
@@ -107,7 +107,7 @@
                 @submit.prevent="createCostCategory"
                 :class="{ darkForm: navbar.userNav }"
               >
-                <div class="grid font-medium gap-4 mb-4">
+                <div class="grid gap-4 mb-4 font-medium">
                   <div>
                     <label for="name" class="block mb-2 text-sm"
                       >Nomini kiriting</label
@@ -140,9 +140,9 @@
                   </div>
                 </div>
                 <div
-                  class="w-full flex flex-col gap-5 justify-center border-t pt-5 mt-5"
+                  class="flex flex-col justify-center w-full gap-5 pt-5 mt-5 border-t"
                 >
-                  <div class="w-full flex items-center justify-between">
+                  <div class="flex items-center justify-between w-full">
                     <button
                       @click="costCategoryModal"
                       type="button"
@@ -151,7 +151,7 @@
                       Bekor qilish
                     </button>
                     <ButtonLoader
-                    :loading="loading.view"
+                      :loading="loading.view"
                       type="submit"
                       class="btnAdd text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                     >
@@ -182,7 +182,7 @@
           >
             <!-- Modal header -->
             <div
-              class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5"
+              class="flex items-center justify-between pb-4 mb-4 border-b rounded-t sm:mb-5"
             >
               <h3
                 class="text-lg"
@@ -213,7 +213,7 @@
             </div>
             <!-- Modal body -->
             <div :class="{ darkForm: navbar.userNav }">
-              <div class="grid font-medium gap-4 mb-4 grid-cols-1">
+              <div class="grid grid-cols-1 gap-4 mb-4 font-medium">
                 <div>
                   <div></div>
                   <h1
@@ -224,7 +224,7 @@
                   </h1>
                 </div>
                 <div
-                  class="w-full flex items-center justify-between border-t pt-5 mt-5"
+                  class="flex items-center justify-between w-full pt-5 mt-5 border-t"
                 >
                   <button
                     @click="costCategory.remove = false"
@@ -234,7 +234,7 @@
                     Bekor qilish
                   </button>
                   <ButtonLoader
-                  :loading="loading.view"
+                    :loading="loading.view"
                     @click="deleteCostCategory"
                     class="btnAdd cursor-pointer text-white inline-flex items-center bg-[#4141eb] hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-500 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                   >
@@ -258,7 +258,7 @@
         "
       >
         <transition name="modal-fade">
-          <div class="relative p-4 w-full max-w-xl h-auto">
+          <div class="relative w-full h-auto max-w-xl p-4">
             <!-- Modal content -->
             <div
               class="relative p-4 rounded-lg shadow sm:p-5"
@@ -266,7 +266,7 @@
             >
               <!-- Modal header -->
               <div
-                class="flex flex-col items-center gap-5 pb-4 mb-4 rounded-t border-b sm:mb-5"
+                class="flex flex-col items-center gap-5 pb-4 mb-4 border-b rounded-t sm:mb-5"
               >
                 <div class="flex items-center justify-between w-full">
                   <h3
@@ -304,7 +304,7 @@
                 @submit.prevent="createCost"
                 :class="{ darkForm: navbar.userNav }"
               >
-                <div class="grid font-medium gap-4 mb-4">
+                <div class="grid gap-4 mb-4 font-medium">
                   <div>
                     <label for="price" class="block mb-2 text-sm"
                       >Sumani kiriting</label
@@ -408,9 +408,9 @@
                   </div>
                 </div>
                 <div
-                  class="w-full flex flex-col gap-5 justify-center border-t pt-5 mt-5"
+                  class="flex flex-col justify-center w-full gap-5 pt-5 mt-5 border-t"
                 >
-                  <div class="w-full flex items-center justify-between">
+                  <div class="flex items-center justify-between w-full">
                     <button
                       @click="costModal"
                       type="button"
@@ -419,7 +419,7 @@
                       Bekor qilish
                     </button>
                     <ButtonLoader
-                    :loading="loading.view"
+                      :loading="loading.view"
                       type="submit"
                       class="btnAdd text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                     >
@@ -444,7 +444,7 @@
         "
       >
         <transition name="modal-fade">
-          <div class="relative p-4 w-full max-w-xl h-auto">
+          <div class="relative w-full h-auto max-w-xl p-4">
             <!-- Modal content -->
             <div
               class="relative p-4 rounded-lg shadow sm:p-5"
@@ -452,7 +452,7 @@
             >
               <!-- Modal header -->
               <div
-                class="flex flex-col items-center gap-5 pb-4 mb-4 rounded-t border-b sm:mb-5"
+                class="flex flex-col items-center gap-5 pb-4 mb-4 border-b rounded-t sm:mb-5"
               >
                 <div class="flex items-center justify-between w-full">
                   <h3
@@ -490,7 +490,7 @@
                 @submit.prevent="updateCost"
                 :class="{ darkForm: navbar.userNav }"
               >
-                <div class="grid font-medium gap-4 mb-4">
+                <div class="grid gap-4 mb-4 font-medium">
                   <div>
                     <label for="price" class="block mb-2 text-sm"
                       >Sumani kiriting</label
@@ -595,9 +595,9 @@
                   </div>
                 </div>
                 <div
-                  class="w-full flex flex-col gap-5 justify-center border-t pt-5 mt-5"
+                  class="flex flex-col justify-center w-full gap-5 pt-5 mt-5 border-t"
                 >
-                  <div class="w-full flex items-center justify-between">
+                  <div class="flex items-center justify-between w-full">
                     <button
                       @click="costUpdateModal"
                       type="button"
@@ -606,7 +606,7 @@
                       Bekor qilish
                     </button>
                     <ButtonLoader
-                    :loading="loading.view"
+                      :loading="loading.view"
                       type="submit"
                       class="btnAdd text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                     >
@@ -637,7 +637,7 @@
           >
             <!-- Modal header -->
             <div
-              class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5"
+              class="flex items-center justify-between pb-4 mb-4 border-b rounded-t sm:mb-5"
             >
               <h3
                 class="text-lg"
@@ -668,7 +668,7 @@
             </div>
             <!-- Modal body -->
             <div :class="{ darkForm: navbar.userNav }">
-              <div class="grid font-medium gap-4 mb-4 grid-cols-1">
+              <div class="grid grid-cols-1 gap-4 mb-4 font-medium">
                 <div>
                   <div></div>
                   <h1
@@ -679,7 +679,7 @@
                   </h1>
                 </div>
                 <div
-                  class="w-full flex items-center justify-between border-t pt-5 mt-5"
+                  class="flex items-center justify-between w-full pt-5 mt-5 border-t"
                 >
                   <button
                     @click="cost.remove = false"
@@ -689,7 +689,7 @@
                     Bekor qilish
                   </button>
                   <ButtonLoader
-                  :loading="loading.view"
+                    :loading="loading.view"
                     @click="deleteCost"
                     class="btnAdd cursor-pointer text-white inline-flex items-center bg-[#4141eb] hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-500 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                   >
@@ -713,7 +713,7 @@
         "
       >
         <transition name="modal-fade">
-          <div class="relative p-4 w-full max-w-xl h-auto">
+          <div class="relative w-full h-auto max-w-xl p-4">
             <!-- Modal content -->
             <div
               class="relative p-4 rounded-lg shadow sm:p-5"
@@ -721,7 +721,7 @@
             >
               <!-- Modal header -->
               <div
-                class="flex flex-col items-center gap-5 pb-4 mb-4 rounded-t border-b sm:mb-5"
+                class="flex flex-col items-center gap-5 pb-4 mb-4 border-b rounded-t sm:mb-5"
               >
                 <div class="flex items-center justify-between w-full">
                   <h3
@@ -759,7 +759,7 @@
                 @submit.prevent="createSalary"
                 :class="{ darkForm: navbar.userNav }"
               >
-                <div class="grid font-medium gap-4 mb-4">
+                <div class="grid gap-4 mb-4 font-medium">
                   <div>
                     <label
                       for="teacher"
@@ -864,9 +864,9 @@
                   </div>
                 </div>
                 <div
-                  class="w-full flex flex-col gap-5 justify-center border-t pt-5 mt-5"
+                  class="flex flex-col justify-center w-full gap-5 pt-5 mt-5 border-t"
                 >
-                  <div class="w-full flex items-center justify-between">
+                  <div class="flex items-center justify-between w-full">
                     <button
                       @click="salaryModal"
                       type="button"
@@ -875,7 +875,7 @@
                       Bekor qilish
                     </button>
                     <ButtonLoader
-                    :loading="loading.view"
+                      :loading="loading.view"
                       type="submit"
                       class="btnAdd text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                     >
@@ -900,7 +900,7 @@
         "
       >
         <transition name="modal-fade">
-          <div class="relative p-4 w-full max-w-xl h-auto">
+          <div class="relative w-full h-auto max-w-xl p-4">
             <!-- Modal content -->
             <div
               class="relative p-4 rounded-lg shadow sm:p-5"
@@ -908,7 +908,7 @@
             >
               <!-- Modal header -->
               <div
-                class="flex flex-col items-center gap-5 pb-4 mb-4 rounded-t border-b sm:mb-5"
+                class="flex flex-col items-center gap-5 pb-4 mb-4 border-b rounded-t sm:mb-5"
               >
                 <div class="flex items-center justify-between w-full">
                   <h3
@@ -946,7 +946,7 @@
                 @submit.prevent="updateSalary"
                 :class="{ darkForm: navbar.userNav }"
               >
-                <div class="grid font-medium gap-4 mb-4">
+                <div class="grid gap-4 mb-4 font-medium">
                   <div>
                     <label
                       for="teacher"
@@ -1051,9 +1051,9 @@
                   </div>
                 </div>
                 <div
-                  class="w-full flex flex-col gap-5 justify-center border-t pt-5 mt-5"
+                  class="flex flex-col justify-center w-full gap-5 pt-5 mt-5 border-t"
                 >
-                  <div class="w-full flex items-center justify-between">
+                  <div class="flex items-center justify-between w-full">
                     <button
                       @click="salaryUpdateModal"
                       type="button"
@@ -1092,7 +1092,7 @@
           >
             <!-- Modal header -->
             <div
-              class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5"
+              class="flex items-center justify-between pb-4 mb-4 border-b rounded-t sm:mb-5"
             >
               <h3
                 class="text-lg"
@@ -1123,7 +1123,7 @@
             </div>
             <!-- Modal body -->
             <div :class="{ darkForm: navbar.userNav }">
-              <div class="grid font-medium gap-4 mb-4 grid-cols-1">
+              <div class="grid grid-cols-1 gap-4 mb-4 font-medium">
                 <div>
                   <div></div>
                   <h1
@@ -1134,7 +1134,7 @@
                   </h1>
                 </div>
                 <div
-                  class="w-full flex items-center justify-between border-t pt-5 mt-5"
+                  class="flex items-center justify-between w-full pt-5 mt-5 border-t"
                 >
                   <button
                     @click="salary.remove = false"
@@ -1167,7 +1167,7 @@
         "
       >
         <transition name="modal-fade">
-          <div class="relative p-4 w-full max-w-2xl h-auto">
+          <div class="relative w-full h-auto max-w-2xl p-4">
             <!-- Modal content -->
             <div
               class="relative p-4 rounded-lg shadow sm:p-5"
@@ -1175,7 +1175,7 @@
             >
               <!-- Modal header -->
               <div
-                class="flex flex-col items-center gap-5 pb-4 mb-4 rounded-t border-b sm:mb-5"
+                class="flex flex-col items-center gap-5 pb-4 mb-4 border-b rounded-t sm:mb-5"
               >
                 <div class="flex items-center justify-between w-full">
                   <h3
@@ -1208,7 +1208,7 @@
                 </div>
                 <div class="w-full rounded-lg" id="navbar-sticky">
                   <ul
-                    class="font-medium w-full grid lg:grid-cols-4 grid-cols-2 gap-3 text-white"
+                    class="grid w-full grid-cols-2 gap-3 font-medium text-white lg:grid-cols-4"
                   >
                     <li
                       class="cursor-pointer w-full h-[100%] whitespace-nowrap text-center bg-gray-600 hover:bg-gray-500 p-2 px-5 sm:text-md text-sm rounded-lg"
@@ -1250,7 +1250,7 @@
                 @submit.prevent="getHistory(store.teacherPagination)"
                 :class="{ darkForm: navbar.userNav }"
               >
-                <div class="grid font-medium gap-4 mb-4">
+                <div class="grid gap-4 mb-4 font-medium">
                   <div>
                     <label for="year" class="block mb-2 text-sm"
                       >Yilni tanlang</label
@@ -1313,7 +1313,7 @@
                   </div>
                 </div>
                 <div
-                  class="w-full flex flex-col gap-5 justify-center border-t pt-5 mt-5"
+                  class="flex flex-col justify-center w-full gap-5 pt-5 mt-5 border-t"
                 >
                   <ButtonLoader
                     :loading="loading.excel"
@@ -1323,7 +1323,7 @@
                   >
                     Excelga yuklab olish
                   </ButtonLoader>
-                  <div class="w-full flex items-center justify-between">
+                  <div class="flex items-center justify-between w-full">
                     <button
                       @click="historyModal"
                       type="button"
@@ -1346,7 +1346,7 @@
                 @submit.prevent="getHistory(store.teacherPagination)"
                 :class="{ darkForm: navbar.userNav }"
               >
-                <div class="grid font-medium gap-4 mb-4">
+                <div class="grid gap-4 mb-4 font-medium">
                   <div>
                     <label for="year" class="block mb-2 text-sm"
                       >Yilni tanlang</label
@@ -1394,7 +1394,7 @@
                   </div>
                 </div>
                 <div
-                  class="w-full flex flex-col gap-5 justify-center border-t pt-5 mt-5"
+                  class="flex flex-col justify-center w-full gap-5 pt-5 mt-5 border-t"
                 >
                   <ButtonLoader
                     :loading="loading.excel"
@@ -1404,7 +1404,7 @@
                   >
                     Excelga yuklab olish
                   </ButtonLoader>
-                  <div class="w-full flex items-center justify-between">
+                  <div class="flex items-center justify-between w-full">
                     <button
                       @click="historyModal"
                       type="button"
@@ -1427,7 +1427,7 @@
                 @submit.prevent="getHistory(store.teacherPagination)"
                 :class="{ darkForm: navbar.userNav }"
               >
-                <div class="grid font-medium gap-4 mb-4">
+                <div class="grid gap-4 mb-4 font-medium">
                   <div>
                     <label for="year" class="block mb-2 text-sm"
                       >Yilni tanlang</label
@@ -1511,17 +1511,17 @@
                         "
                         type="search"
                         id="simple-search"
-                        class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2"
+                        class="block w-full p-2 pl-10 text-sm border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
                         placeholder="Guruhni tanlang yoki qidirish..."
                       />
                       <ul
                         v-show="
                           history.filter_show && history.searchList.length > 0
                         "
-                        class="absolute z-10 max-h-80 overflow-y-auto overflow-hidden py-1 text-gray-600 rounded bg-white w-full bottom-full"
+                        class="absolute z-10 w-full py-1 overflow-hidden overflow-y-auto text-gray-600 bg-white rounded max-h-80 bottom-full"
                       >
                         <li
-                          class="hover:bg-blue-600 hover:text-white cursor-pointer pl-2"
+                          class="pl-2 cursor-pointer hover:bg-blue-600 hover:text-white"
                           v-for="(i, index) in history.searchList"
                           :key="index"
                           @mousedown.prevent="
@@ -1536,10 +1536,10 @@
                       </ul>
                       <ul
                         v-show="history.selectLamp && !history.filter"
-                        class="absolute z-10 max-h-80 overflow-y-auto overflow-hidden py-1 text-gray-600 rounded bg-white w-full bottom-full"
+                        class="absolute z-10 w-full py-1 overflow-hidden overflow-y-auto text-gray-600 bg-white rounded max-h-80 bottom-full"
                       >
                         <li
-                          class="hover:bg-blue-600 hover:text-white whitespace-nowrap cursor-pointer pl-2"
+                          class="pl-2 cursor-pointer hover:bg-blue-600 hover:text-white whitespace-nowrap"
                           v-for="(i, index) in store.group"
                           :key="index"
                           @mousedown.prevent="
@@ -1556,7 +1556,7 @@
                   </div>
                 </div>
                 <div
-                  class="w-full flex flex-col gap-5 justify-center border-t pt-5 mt-5"
+                  class="flex flex-col justify-center w-full gap-5 pt-5 mt-5 border-t"
                 >
                   <ButtonLoader
                     :loading="loading.excel"
@@ -1566,7 +1566,7 @@
                   >
                     Excelga yuklab olish
                   </ButtonLoader>
-                  <div class="w-full flex items-center justify-between">
+                  <div class="flex items-center justify-between w-full">
                     <button
                       @click="historyModal"
                       type="button"
@@ -1589,7 +1589,7 @@
                 @submit.prevent="getHistory(store.teacherPagination)"
                 :class="{ darkForm: navbar.userNav }"
               >
-                <div class="grid font-medium gap-4 mb-4">
+                <div class="grid gap-4 mb-4 font-medium">
                   <div>
                     <label for="year" class="block mb-2 text-sm"
                       >Yilni tanlang</label
@@ -1612,7 +1612,7 @@
                   </div>
                 </div>
                 <div
-                  class="w-full flex flex-col gap-5 justify-center border-t pt-5 mt-5"
+                  class="flex flex-col justify-center w-full gap-5 pt-5 mt-5 border-t"
                 >
                   <ButtonLoader
                     :loading="loading.excel"
@@ -1622,7 +1622,7 @@
                   >
                     Excelga yuklab olish
                   </ButtonLoader>
-                  <div class="w-full flex items-center justify-between">
+                  <div class="flex items-center justify-between w-full">
                     <button
                       @click="historyModal"
                       type="button"
@@ -1657,13 +1657,13 @@
         <!------------------------------------------- Search ------------------------------------------->
 
         <div
-          class="shadow rounded-xl flex flex-col lg:flex-row items-center justify-between lg:space-x-4 p-4 gap-3 mb-4"
+          class="flex flex-col items-center justify-between gap-3 p-4 mb-4 shadow rounded-xl lg:flex-row lg:space-x-4"
           :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
         >
           <div
-            class="w-full lg:w-auto flex sm:flex-row flex-col items-center justify-between gap-3"
+            class="flex flex-col items-center justify-between w-full gap-3 lg:w-auto sm:flex-row"
           >
-            <h1 class="text-blue-700 font-bold text-lg w-full">
+            <h1 class="w-full text-lg font-bold text-blue-700">
               Moliyaviy hisobot
             </h1>
 
@@ -1678,7 +1678,7 @@
           </div>
 
           <div
-            class="w-full lg:w-auto flex flex-row space-y-0 items-stretch md:items-center justify-end space-x-3"
+            class="flex flex-row items-stretch justify-end w-full space-x-3 space-y-0 lg:w-auto md:items-center"
           >
             <button
               v-show="store.guard"
@@ -1708,12 +1708,12 @@
           </div>
         </div>
 
-        <div v-show="store.guard" class="rounded-lg mb-10">
+        <div v-show="store.guard" class="mb-10 rounded-lg">
           <div
-            class="flex w-full lg:flex-row flex-col lg:items-center justify-between gap-x-20"
+            class="flex flex-col justify-between w-full lg:flex-row lg:items-center gap-x-20"
           >
             <h1
-              class="font-bold text-blue-700 2xl:text-lg lg:text-xl sm:text-xl text-md whitespace-nowrap mb-3"
+              class="mb-3 font-bold text-blue-700 2xl:text-lg lg:text-xl sm:text-xl text-md whitespace-nowrap"
             >
               Chiqimlar ro'yxati
             </h1>
@@ -1724,9 +1724,9 @@
               :class="{ darkForm: navbar.userNav }"
             >
               <div
-                class="flex sm:flex-row flex-col items-center justify-end gap-3 font-medium mb-4 w-full"
+                class="flex flex-col items-center justify-end w-full gap-3 mb-4 font-medium sm:flex-row"
               >
-                <div class="flex items-center justify-between gap-3 w-full">
+                <div class="flex items-center justify-between w-full gap-3">
                   <div class="w-full">
                     <select
                       v-model="costHistory.year"
@@ -1749,7 +1749,7 @@
                       v-model="costHistory.month"
                       id="month"
                       class="bg-white border text-black border-blue-600 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-[7px]"
-                      required
+                   
                     >
                       <option value="" disabled selected>Oyni tanlang</option>
                       <option value="01">Yanvar</option>
@@ -1807,10 +1807,10 @@
                         history.filter_show_cost &&
                         history.searchList_cost.length > 0
                       "
-                      class="absolute z-10 max-h-80 overflow-y-auto overflow-hidden py-1 text-gray-600 rounded bg-white w-full bottom-full"
+                      class="absolute z-10 w-full py-1 overflow-hidden overflow-y-auto text-gray-600 bg-white rounded max-h-80 bottom-full"
                     >
                       <li
-                        class="hover:bg-blue-600 hover:text-white cursor-pointer pl-2"
+                        class="pl-2 cursor-pointer hover:bg-blue-600 hover:text-white"
                         v-for="(i, index) in history.searchList_cost"
                         :key="index"
                         @mousedown.prevent="
@@ -1825,10 +1825,10 @@
                     </ul>
                     <ul
                       v-show="history.selectLamp_cost && !history.filter_cost"
-                      class="absolute z-10 max-h-80 overflow-y-auto overflow-hidden py-1 text-gray-600 rounded bg-white w-full bottom-full"
+                      class="absolute z-10 w-full py-1 overflow-hidden overflow-y-auto text-gray-600 bg-white rounded max-h-80 bottom-full"
                     >
                       <li
-                        class="hover:bg-blue-600 hover:text-white whitespace-nowrap cursor-pointer pl-2"
+                        class="pl-2 cursor-pointer hover:bg-blue-600 hover:text-white whitespace-nowrap"
                         v-for="(i, index) in store.costCategory"
                         :key="index"
                         @mousedown.prevent="
@@ -1843,47 +1843,49 @@
                     </ul>
                   </div>
                 </div>
-                <div class="w-full flex items-center gap-3">
-                  <button
+                <div class="flex items-center w-full gap-3">
+                  <ButtonLoader
+                    :loading="loading.view"
                     type="submit"
                     class="btnAdd w-full sm:max-w-fit text-white items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                   >
                     Ko'rish
-                  </button>
-                  <button
+                  </ButtonLoader>
+                  <ButtonLoader
+                    :loading="loading.excel"
                     @click="exportToExcelCost"
                     type="button"
                     class="btnAdd3 w-full text-white inline-flex whitespace-nowrap items-center justify-center bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                   >
                     Excelga yuklash
-                  </button>
+                  </ButtonLoader>
                 </div>
               </div>
             </form>
           </div>
           <div
-            class="relative shadow-md rounded-lg overflow-hidden"
+            class="relative overflow-hidden rounded-lg shadow-md"
             :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
           >
             <div class="overflow-x-auto">
               <table class="w-full text-sm text-left">
-                <thead class="btnAdd text-white text-xs rounded-lg uppercase">
+                <thead class="text-xs text-white uppercase rounded-lg btnAdd">
                   <tr>
-                    <th scope="col" class="text-center px-8 py-3">
+                    <th scope="col" class="px-8 py-3 text-center">
                       Kategoriya
                     </th>
-                    <th scope="col" class="text-center px-8 py-3">Suma</th>
+                    <th scope="col" class="px-8 py-3 text-center">Suma</th>
                     <th
                       scope="col"
-                      class="text-center px-8 py-3 whitespace-nowrap"
+                      class="px-8 py-3 text-center whitespace-nowrap"
                     >
                       To'lov turi
                     </th>
-                    <th scope="col" class="text-center px-8 py-3">Oy</th>
-                    <th scope="col" class="text-center px-8 py-3">Izoh</th>
+                    <th scope="col" class="px-8 py-3 text-center">Oy</th>
+                    <th scope="col" class="px-8 py-3 text-center">Izoh</th>
                     <th
                       scope="col"
-                      class="text-center px-8 py-3 whitespace-nowrap"
+                      class="px-8 py-3 text-center whitespace-nowrap"
                     >
                       To'lov sanasi
                     </th>
@@ -1900,83 +1902,85 @@
                     :key="i.id"
                   >
                     <td
-                      class="text-center font-medium whitespace-nowrap text-blue-800 px-8 py-4"
+                      class="px-8 py-4 font-medium text-center text-blue-800 whitespace-nowrap"
                     >
                       <p class="bg-blue-100 rounded-[5px] p-1">
                         {{ i.costCategory.name }}
                       </p>
                     </td>
                     <td
-                      class="text-center font-medium whitespace-nowrap text-red-800 px-8 py-4"
+                      class="px-8 py-4 font-medium text-center text-red-800 whitespace-nowrap"
                     >
                       <p class="bg-red-100 rounded-[5px] p-1">
                         {{ i.price.toLocaleString("uz-UZ") }} so'm
                       </p>
                     </td>
                     <td
-                      class="text-center font-medium whitespace-nowrap text-blue-800 px-8 py-4"
+                      class="px-8 py-4 font-medium text-center text-blue-800 whitespace-nowrap"
                     >
                       <p class="bg-blue-100 rounded-[5px] p-1">
                         {{ i.method }}
                       </p>
                     </td>
                     <td
-                      class="text-center font-medium whitespace-nowrap text-red-800 px-8 py-4"
+                      class="px-8 py-4 font-medium text-center text-red-800 whitespace-nowrap"
                     >
                       <p class="bg-red-100 rounded-[5px] p-1">
                         {{ monthNames(i.month) }}
                       </p>
                     </td>
 
-                    <td class="text-center font-medium px-8 py-2 relative">
-                      <div class="group relative w-40 inline-block">
+                    <td class="relative px-8 py-2 font-medium text-center">
+                      <div class="relative inline-block w-40 group">
                         <p class="truncate w-40 p-1 rounded-[5px]">
                           {{
-                            i.description && i.description.split(" ").length > 3
+                            !i.description || i.description.trim() === ""
+                              ? "Izoh yo'q"
+                              : i.description.split(" ").length > 3
                               ? i.description.split(" ").slice(0, 3).join(" ") +
                                 "..."
                               : i.description
                           }}
                         </p>
                         <span
-                          class="absolute left-1/2 -translate-x-1/2 bottom-full mb-1 hidden w-max max-w-xs bg-blue-100 text-blue-800 text-sm p-2 rounded-md shadow-lg group-hover:block"
+                          class="absolute hidden max-w-xs p-2 mb-1 text-sm text-blue-800 -translate-x-1/2 bg-blue-100 rounded-md shadow-lg left-1/2 bottom-full w-max group-hover:block"
                         >
-                          {{ i.description }}
+                          {{ !i.description ? "Izoh yo'q" : i.description }}
                         </span>
                       </div>
                     </td>
                     <td
-                      class="text-center font-medium whitespace-nowrap text-blue-800 px-8 py-4"
+                      class="px-8 py-4 font-medium text-center text-blue-800 whitespace-nowrap"
                     >
                       <p class="bg-blue-100 rounded-[5px] p-1">
                         {{ chekDateFormat(new Date(i.createdAt)) }}
                       </p>
                     </td>
                     <td
-                      class="text-center whitespace-nowrap font-medium pr-5 py-4"
+                      class="py-4 pr-5 font-medium text-center whitespace-nowrap"
                     >
                       <i
                         @click="getOneCost(i.id)"
-                        class="bx bxs-pencil bg-blue-300 text-blue-600 rounded-lg p-2 mr-3 cursor-pointer focus:ring-2"
+                        class="p-2 mr-3 text-blue-600 bg-blue-300 rounded-lg cursor-pointer bx bxs-pencil focus:ring-2"
                       >
                       </i>
                       <i
                         @click="deleteCostFunc(i.id)"
-                        class="bx bxs-trash bg-red-300 cursor-pointer text-red-600 rounded-lg p-2 focus:ring-2"
+                        class="p-2 text-red-600 bg-red-300 rounded-lg cursor-pointer bx bxs-trash focus:ring-2"
                       >
                       </i>
                     </td>
                   </tr>
                 </tbody>
               </table>
-              <div v-show="store.error" class="flex w-full justify-center">
+              <div v-show="store.error" class="flex justify-center w-full">
                 <h1 class="p-20 text-2xl font-medium">
                   {{ store.CostPageProduct }}
                 </h1>
               </div>
               <div
                 v-show="store.CostPageProduct.length == 0"
-                class="flex w-full justify-center"
+                class="flex justify-center w-full"
               >
                 <h1 class="p-20 text-2xl font-medium">
                   Chiqimlar ro'yhati bo'sh
@@ -1984,7 +1988,7 @@
               </div>
             </div>
             <nav
-              class="flex flex-row justify-between items-center space-y-0 p-4"
+              class="flex flex-row items-center justify-between p-4 space-y-0"
               aria-label="Table navigation"
             >
               <!-- Oldingi sahifa tugmasi -->
@@ -2004,7 +2008,7 @@
                   "
                 >
                   <i
-                    class="md:hidden font-bold text-black text-2xl bx bx-chevron-left"
+                    class="text-2xl font-bold text-black md:hidden bx bx-chevron-left"
                   ></i>
                   <span class="hidden md:block">Oldingi</span>
                 </li>
@@ -2042,7 +2046,7 @@
                 >
                   <span class="hidden md:block">Keyingi</span>
                   <i
-                    class="md:hidden font-bold text-black text-2xl bx bx-chevron-right"
+                    class="text-2xl font-bold text-black md:hidden bx bx-chevron-right"
                   ></i>
                 </li>
               </ul>
@@ -2052,11 +2056,11 @@
 
         <div
           v-show="!store.guard"
-          class="flex sm:flex-row flex-col justify-between sm:items-center gap-4 font-bold"
+          class="flex flex-col justify-between gap-4 font-bold sm:flex-row sm:items-center"
         >
           <h2
             v-show="history.dayModal"
-            class="text-gray-600 font-bold sm:text-md text-sm pl-4 pb-2"
+            class="pb-2 pl-4 text-sm font-bold text-gray-600 sm:text-md"
           >
             Kunlik to'lov tarixi - {{ history.year }}/{{ history.month }}/{{
               history.day
@@ -2064,51 +2068,57 @@
           </h2>
           <h2
             v-show="history.monthModal"
-            class="text-gray-600 font-bold sm:text-md text-sm pl-4 pb-2"
+            class="pb-2 pl-4 text-sm font-bold text-gray-600 sm:text-md"
           >
             Oylik to'lov tarixi - {{ history.year }}/{{ history.month }}
           </h2>
           <h2
             v-show="history.groupMonthModal"
-            class="text-gray-600 font-bold sm:text-md text-sm pl-4 pb-2"
+            class="pb-2 pl-4 text-sm font-bold text-gray-600 sm:text-md"
           >
             Guruhni oylik to'lov tarixi - {{ history.year }}/{{
               history.month
             }}/{{ history.group_name }}
           </h2>
+          <h2
+            v-show="history.yearModal"
+            class="pb-2 pl-4 text-sm font-bold text-gray-600 sm:text-md"
+          >
+            Barcha to'lov tarixi - {{ history.year }}
+          </h2>
         </div>
 
         <div
           v-show="!store.guard"
-          class="relative shadow-md rounded-lg overflow-hidden mb-10"
+          class="relative mb-10 overflow-hidden rounded-lg shadow-md"
           :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
         >
           <div class="overflow-x-auto">
             <table class="w-full text-sm text-left">
-              <thead class="btnAdd text-white text-xs rounded-lg uppercase">
+              <thead class="text-xs text-white uppercase rounded-lg btnAdd">
                 <tr>
-                  <th scope="col" class="text-center py-3 whitespace-nowrap">
+                  <th scope="col" class="py-3 text-center whitespace-nowrap">
                     O'quvchi (F . I . O)
                   </th>
-                  <th scope="col" class="text-center py-3 whitespace-nowrap">
+                  <th scope="col" class="py-3 text-center whitespace-nowrap">
                     Guruh
                   </th>
-                  <th scope="col" class="text-center py-3 whitespace-nowrap">
+                  <th scope="col" class="py-3 text-center whitespace-nowrap">
                     Kurs narxi
                   </th>
-                  <th scope="col" class="text-center py-3 whitespace-nowrap">
+                  <th scope="col" class="py-3 text-center whitespace-nowrap">
                     To'lov turi
                   </th>
-                  <th scope="col" class="text-center py-3 whitespace-nowrap">
+                  <th scope="col" class="py-3 text-center whitespace-nowrap">
                     To'lov narxi
                   </th>
-                  <th scope="col" class="text-center py-3 whitespace-nowrap">
+                  <th scope="col" class="py-3 text-center whitespace-nowrap">
                     Oy
                   </th>
-                  <th scope="col" class="text-center py-3 whitespace-nowrap">
+                  <th scope="col" class="py-3 text-center whitespace-nowrap">
                     To'lov sanasi
                   </th>
-                  <th scope="col" class="text-center py-3 whitespace-nowrap">
+                  <th scope="col" class="py-3 text-center whitespace-nowrap">
                     Izoh
                   </th>
                 </tr>
@@ -2126,55 +2136,55 @@
                 >
                   <th
                     scope="row"
-                    class="text-center px-8 py-4 font-medium whitespace-nowrap"
+                    class="px-8 py-4 font-medium text-center whitespace-nowrap"
                   >
                     <span>{{ i.student_name }}</span>
                   </th>
 
-                  <td class="text-center font-medium text-blue-800 px-8 py-4">
+                  <td class="px-8 py-4 font-medium text-center text-blue-800">
                     <p
                       class="bg-blue-100 rounded-[5px] p-1 px-3 whitespace-nowrap"
                     >
                       {{ i.group_name }}
                     </p>
                   </td>
-                  <td class="text-center font-medium text-red-800 px-8 py-4">
+                  <td class="px-8 py-4 font-medium text-center text-red-800">
                     <p
                       class="bg-red-100 rounded-[5px] p-1 px-3 whitespace-nowrap"
                     >
                       {{ Number(i.group_price).toLocaleString("uz-UZ") }} so'm
                     </p>
                   </td>
-                  <td class="text-center font-medium text-blue-800 px-8 py-4">
+                  <td class="px-8 py-4 font-medium text-center text-blue-800">
                     <p
                       class="bg-blue-100 rounded-[5px] p-1 px-3 whitespace-nowrap"
                     >
                       {{ i.method }}
                     </p>
                   </td>
-                  <td class="text-center font-medium text-green-700 px-8 py-4">
+                  <td class="px-8 py-4 font-medium text-center text-green-700">
                     <p
                       class="bg-green-100 rounded-[5px] p-1 px-3 whitespace-nowrap"
                     >
                       {{ i.price.toLocaleString("uz-UZ") }} so'm
                     </p>
                   </td>
-                  <td class="text-center font-medium text-blue-800 px-8 py-4">
+                  <td class="px-8 py-4 font-medium text-center text-blue-800">
                     <p
                       class="bg-blue-100 rounded-[5px] p-1 px-3 whitespace-nowrap"
                     >
                       {{ monthNames(i.month) }}
                     </p>
                   </td>
-                  <td class="text-center font-medium text-blue-800 px-8 py-4">
+                  <td class="px-8 py-4 font-medium text-center text-blue-800">
                     <p
                       class="bg-blue-100 rounded-[5px] p-1 px-3 whitespace-nowrap"
                     >
                       {{ chekDateFormat(new Date(i.createdAt)) }}
                     </p>
                   </td>
-                  <td class="text-center font-medium px-8 py-2 relative">
-                    <div class="group relative w-40 inline-block">
+                  <td class="relative px-8 py-2 font-medium text-center">
+                    <div class="relative inline-block w-40 group">
                       <p class="truncate w-40 p-1 rounded-[5px]">
                         {{
                           !i.description || i.description.trim() === ""
@@ -2186,7 +2196,7 @@
                         }}
                       </p>
                       <span
-                        class="absolute left-1/2 -translate-x-1/2 bottom-full mb-1 hidden w-max max-w-xs bg-blue-100 text-blue-800 text-sm p-2 rounded-md shadow-lg group-hover:block"
+                        class="absolute hidden max-w-xs p-2 mb-1 text-sm text-blue-800 -translate-x-1/2 bg-blue-100 rounded-md shadow-lg left-1/2 bottom-full w-max group-hover:block"
                       >
                         {{ !i.description ? "Izoh yo'q" : i.description }}
                       </span>
@@ -2198,13 +2208,13 @@
 
             <div
               v-show="store.PageProduct && store.PageProduct.length == 0"
-              class="w-full max-w-screen text-center p-20 text-2xl font-medium"
+              class="w-full p-20 text-2xl font-medium text-center max-w-screen"
             >
               <h1>To'lov ro'yhati bo'sh</h1>
             </div>
           </div>
           <nav
-            class="flex flex-row justify-between items-center space-y-0 p-4"
+            class="flex flex-row items-center justify-between p-4 space-y-0"
             aria-label="Table navigation"
           >
             <!-- Oldingi sahifa tugmasi -->
@@ -2224,7 +2234,7 @@
                 "
               >
                 <i
-                  class="md:hidden font-bold text-black text-2xl bx bx-chevron-left"
+                  class="text-2xl font-bold text-black md:hidden bx bx-chevron-left"
                 ></i>
                 <span class="hidden md:block">Oldingi</span>
               </li>
@@ -2262,7 +2272,7 @@
               >
                 <span class="hidden md:block">Keyingi</span>
                 <i
-                  class="md:hidden font-bold text-black text-2xl bx bx-chevron-right"
+                  class="text-2xl font-bold text-black md:hidden bx bx-chevron-right"
                 ></i>
               </li>
             </ul>
@@ -2271,10 +2281,10 @@
 
         <div class="rounded-lg mb-28">
           <div
-            class="flex w-full lg:flex-row flex-col lg:items-center justify-between gap-x-20"
+            class="flex flex-col justify-between w-full lg:flex-row lg:items-center gap-x-20"
           >
             <h1
-              class="font-bold text-blue-700 2xl:text-lg lg:text-xl sm:text-xl text-md whitespace-nowrap mb-3"
+              class="mb-3 font-bold text-blue-700 2xl:text-lg lg:text-xl sm:text-xl text-md whitespace-nowrap"
             >
               Berilgan maoshlar ro'yxati
             </h1>
@@ -2285,9 +2295,9 @@
               :class="{ darkForm: navbar.userNav }"
             >
               <div
-                class="flex sm:flex-row flex-col items-center justify-end gap-3 font-medium mb-4 w-full"
+                class="flex flex-col items-center justify-end w-full gap-3 mb-4 font-medium sm:flex-row"
               >
-                <div class="flex items-center justify-between gap-3 w-full">
+                <div class="flex items-center justify-between w-full gap-3">
                   <div class="w-full">
                     <select
                       v-model="salaryHistory.year"
@@ -2310,7 +2320,7 @@
                       v-model="salaryHistory.month"
                       id="month"
                       class="bg-white border text-black border-blue-600 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-[7px]"
-                      required
+                     
                     >
                       <option value="" disabled selected>Oyni tanlang</option>
                       <option value="01">Yanvar</option>
@@ -2368,10 +2378,10 @@
                         history.filter_show_teacher &&
                         history.searchList_teacher.length > 0
                       "
-                      class="absolute z-10 max-h-80 overflow-y-auto overflow-hidden py-1 text-gray-600 rounded bg-white w-full bottom-full"
+                      class="absolute z-10 w-full py-1 overflow-hidden overflow-y-auto text-gray-600 bg-white rounded max-h-80 bottom-full"
                     >
                       <li
-                        class="hover:bg-blue-600 hover:text-white cursor-pointer pl-2"
+                        class="pl-2 cursor-pointer hover:bg-blue-600 hover:text-white"
                         v-for="(i, index) in history.searchList_teacher"
                         :key="index"
                         @mousedown.prevent="
@@ -2388,10 +2398,10 @@
                       v-show="
                         history.selectLamp_teacher && !history.filter_teacher
                       "
-                      class="absolute z-10 max-h-80 overflow-y-auto overflow-hidden py-1 text-gray-600 rounded bg-white w-full bottom-full"
+                      class="absolute z-10 w-full py-1 overflow-hidden overflow-y-auto text-gray-600 bg-white rounded max-h-80 bottom-full"
                     >
                       <li
-                        class="hover:bg-blue-600 hover:text-white whitespace-nowrap cursor-pointer pl-2"
+                        class="pl-2 cursor-pointer hover:bg-blue-600 hover:text-white whitespace-nowrap"
                         v-for="(i, index) in store.employee"
                         :key="index"
                         @mousedown.prevent="
@@ -2406,55 +2416,57 @@
                     </ul>
                   </div>
                 </div>
-                <div class="w-full flex items-center gap-3">
-                  <button
+                <div class="flex items-center w-full gap-3">
+                  <ButtonLoader
+                    :loading="loading.view"
                     type="submit"
                     class="btnAdd w-full sm:max-w-fit text-white items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                   >
                     Ko'rish
-                  </button>
-                  <button
+                  </ButtonLoader>
+                  <ButtonLoader
+                    :loading="loading.excel"
                     @click="exportToExcelSalary"
                     type="button"
                     class="btnAdd3 w-full text-white inline-flex whitespace-nowrap items-center justify-center bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                   >
                     Excelga yuklash
-                  </button>
+                  </ButtonLoader>
                 </div>
               </div>
             </form>
           </div>
           <div
-            class="relative shadow-md rounded-lg overflow-hidden"
+            class="relative overflow-hidden rounded-lg shadow-md"
             :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
           >
             <div class="overflow-x-auto">
               <table class="w-full text-sm text-left">
-                <thead class="btnAdd text-white text-xs rounded-lg uppercase">
+                <thead class="text-xs text-white uppercase rounded-lg btnAdd">
                   <tr>
                     <th
                       scope="col"
-                      class="text-center px-8 py-3 whitespace-nowrap"
+                      class="px-8 py-3 text-center whitespace-nowrap"
                     >
                       O'qituvchi (F . I . O)
                     </th>
-                    <th scope="col" class="text-center px-8 py-3">Suma</th>
+                    <th scope="col" class="px-8 py-3 text-center">Suma</th>
                     <th
                       scope="col"
-                      class="text-center px-8 py-3 whitespace-nowrap"
+                      class="px-8 py-3 text-center whitespace-nowrap"
                     >
                       To'lov turi
                     </th>
-                    <th scope="col" class="text-center px-8 py-3">Oy</th>
+                    <th scope="col" class="px-8 py-3 text-center">Oy</th>
                     <th
                       scope="col"
-                      class="text-center px-8 py-3 whitespace-nowrap"
+                      class="px-8 py-3 text-center whitespace-nowrap"
                     >
                       Izoh
                     </th>
                     <th
                       scope="col"
-                      class="text-center px-8 py-3 whitespace-nowrap"
+                      class="px-8 py-3 text-center whitespace-nowrap"
                     >
                       To'lov sanasi
                     </th>
@@ -2471,35 +2483,35 @@
                     :key="i.id"
                   >
                     <td
-                      class="text-center font-medium whitespace-nowrap text-blue-800 px-8 py-4"
+                      class="px-8 py-4 font-medium text-center text-blue-800 whitespace-nowrap"
                     >
                       <p class="bg-blue-100 rounded-[5px] p-1">
                         {{ i.teacher.full_name }}
                       </p>
                     </td>
                     <td
-                      class="text-center font-medium whitespace-nowrap text-red-800 px-8 py-4"
+                      class="px-8 py-4 font-medium text-center text-red-800 whitespace-nowrap"
                     >
                       <p class="bg-red-100 rounded-[5px] p-1">
                         {{ i.price.toLocaleString("uz-UZ") }} so'm
                       </p>
                     </td>
                     <td
-                      class="text-center font-medium whitespace-nowrap text-blue-800 px-8 py-4"
+                      class="px-8 py-4 font-medium text-center text-blue-800 whitespace-nowrap"
                     >
                       <p class="bg-blue-100 rounded-[5px] p-1">
                         {{ i.method }}
                       </p>
                     </td>
                     <td
-                      class="text-center font-medium whitespace-nowrap text-red-800 px-8 py-4"
+                      class="px-8 py-4 font-medium text-center text-red-800 whitespace-nowrap"
                     >
                       <p class="bg-red-100 rounded-[5px] p-1">
                         {{ monthNames(i.month) }}
                       </p>
                     </td>
-                    <td class="text-center font-medium px-8 py-2 relative">
-                      <div class="group relative w-40 inline-block">
+                    <td class="relative px-8 py-2 font-medium text-center">
+                      <div class="relative inline-block w-40 group">
                         <p class="truncate w-40 p-1 rounded-[5px]">
                           {{
                             !i.description || i.description.trim() === ""
@@ -2511,14 +2523,14 @@
                           }}
                         </p>
                         <span
-                          class="absolute left-1/2 -translate-x-1/2 bottom-full mb-1 hidden w-max max-w-xs bg-blue-100 text-blue-800 text-sm p-2 rounded-md shadow-lg group-hover:block"
+                          class="absolute hidden max-w-xs p-2 mb-1 text-sm text-blue-800 -translate-x-1/2 bg-blue-100 rounded-md shadow-lg left-1/2 bottom-full w-max group-hover:block"
                         >
                           {{ !i.description ? "Izoh yo'q" : i.description }}
                         </span>
                       </div>
                     </td>
                     <td
-                      class="text-center font-medium whitespace-nowrap text-blue-800 px-8 py-4"
+                      class="px-8 py-4 font-medium text-center text-blue-800 whitespace-nowrap"
                     >
                       <p class="bg-blue-100 rounded-[5px] p-1">
                         {{ chekDateFormat(new Date(i.createdAt)) }}
@@ -2527,30 +2539,30 @@
 
                     <td
                       v-show="store.guard"
-                      class="text-center whitespace-nowrap font-medium pr-5 py-4"
+                      class="py-4 pr-5 font-medium text-center whitespace-nowrap"
                     >
                       <i
                         @click="getOneSalary(i.id)"
-                        class="bx bxs-pencil bg-blue-300 text-blue-600 rounded-lg p-2 mr-3 cursor-pointer focus:ring-2"
+                        class="p-2 mr-3 text-blue-600 bg-blue-300 rounded-lg cursor-pointer bx bxs-pencil focus:ring-2"
                       >
                       </i>
                       <i
                         @click="deleteSalaryFunc(i.id)"
-                        class="bx bxs-trash bg-red-300 cursor-pointer text-red-600 rounded-lg p-2 focus:ring-2"
+                        class="p-2 text-red-600 bg-red-300 rounded-lg cursor-pointer bx bxs-trash focus:ring-2"
                       >
                       </i>
                     </td>
                   </tr>
                 </tbody>
               </table>
-              <div v-show="store.error" class="flex w-full justify-center">
+              <div v-show="store.error" class="flex justify-center w-full">
                 <h1 class="p-20 text-2xl font-medium">
                   {{ store.SalaryPageProduct }}
                 </h1>
               </div>
               <div
                 v-show="store.SalaryPageProduct.length == 0"
-                class="flex w-full justify-center"
+                class="flex justify-center w-full"
               >
                 <h1 class="p-20 text-2xl font-medium">
                   Maoshlar ro'yhati bo'sh
@@ -2558,7 +2570,7 @@
               </div>
             </div>
             <nav
-              class="flex flex-row justify-between items-center space-y-0 p-4"
+              class="flex flex-row items-center justify-between p-4 space-y-0"
               aria-label="Table navigation"
             >
               <!-- Oldingi sahifa tugmasi -->
@@ -2578,7 +2590,7 @@
                   "
                 >
                   <i
-                    class="md:hidden font-bold text-black text-2xl bx bx-chevron-left"
+                    class="text-2xl font-bold text-black md:hidden bx bx-chevron-left"
                   ></i>
                   <span class="hidden md:block">Oldingi</span>
                 </li>
@@ -2616,7 +2628,7 @@
                 >
                   <span class="hidden md:block">Keyingi</span>
                   <i
-                    class="md:hidden font-bold text-black text-2xl bx bx-chevron-right"
+                    class="text-2xl font-bold text-black md:hidden bx bx-chevron-right"
                   ></i>
                 </li>
               </ul>
@@ -2710,14 +2722,14 @@ const salary = reactive({
 
 const salaryHistory = reactive({
   year: hozirgiYil,
-  month: hozirgiOy,
+  month: "",
   teacher_name: "",
   salaryList: "",
 });
 
 const costHistory = reactive({
   year: hozirgiYil,
-  month: hozirgiOy,
+  month: "",
   category_name: "",
   costList: "",
 });
@@ -2995,15 +3007,20 @@ const getCostCategory = async () => {
 };
 
 const getCost = async (page) => {
+  loading.view = true;
   try {
     let url;
     if (history.category_id && history.category_id !== "") {
       url = `/cost/${localStorage.getItem("school_id")}/${costHistory.year}/${
         costHistory.month
       }/${history.category_id}/page?page=${page}`;
-    } else {
+    } else if (costHistory.month && costHistory.month !== "") {
       url = `/cost/${localStorage.getItem("school_id")}/${costHistory.year}/${
         costHistory.month
+      }/page?page=${page}`;
+    } else {
+      url = `/cost/${localStorage.getItem("school_id")}/${
+        costHistory.year
       }/page?page=${page}`;
     }
 
@@ -3015,26 +3032,32 @@ const getCost = async (page) => {
       res.data?.data?.pagination.currentPage,
       res.data?.data?.pagination.total_count,
     ];
-
+    loading.view = false;
     store.error = false;
   } catch (error) {
     console.log(error);
+    loading.view = false;
     store.CostPageProduct = error.response.data.message;
     store.error = true;
   }
 };
 
 const getSalary = async (page) => {
+  loading.view = true;
   try {
     let url;
     if (history.teacher_id && history.teacher_id !== "") {
       url = `/salary/teacherSalary/${localStorage.getItem("school_id")}/${
         history.teacher_id
       }/${salaryHistory.year}/${salaryHistory.month}/page?page=${page}`;
-    } else {
+    } else if (salaryHistory.month && salaryHistory.month !== "") {
       url = `/salary/${localStorage.getItem("school_id")}/${
         salaryHistory.year
       }/${salaryHistory.month}/page?page=${page}`;
+    } else {
+      url = `/salary/${localStorage.getItem("school_id")}/${
+        salaryHistory.year
+      }/page?page=${page}`;
     }
 
     const res = await axios.get(url, {
@@ -3046,8 +3069,10 @@ const getSalary = async (page) => {
       res.data?.data?.pagination.currentPage,
       res.data?.data?.pagination.total_count,
     ];
+    loading.view = false;
     store.error = false;
   } catch (error) {
+    loading.view = false;
     store.SalaryPageProduct = error.response?.data?.message || error.message;
     store.error = true;
   }
@@ -3444,8 +3469,10 @@ const getAllHistoryForExportCost = async () => {
   let urlBase;
   if (history.category_id && history.category_id !== "") {
     urlBase = `/cost/${schoolId}/${costHistory.year}/${costHistory.month}/${history.category_id}/page`;
-  } else {
+  } else if (costHistory.month && costHistory.month !== "") {
     urlBase = `/cost/${schoolId}/${costHistory.year}/${costHistory.month}/page`;
+  } else {
+     urlBase = `/cost/${schoolId}/${costHistory.year}/page`;
   }
 
   let allData = [];
@@ -3473,11 +3500,13 @@ const getAllHistoryForExportCost = async () => {
 };
 
 const exportToExcelCost = async () => {
+  loading.excel = true;
   await getAllHistoryForExportCost();
 
   const rawData = costHistory.costList;
 
   if (!rawData || rawData.length === 0) {
+    loading.excel = false;
     notification.warning("Yuklash uchun ma'lumot topilmadi");
     return;
   }
@@ -3557,12 +3586,14 @@ const exportToExcelCost = async () => {
   const fileName =
     history.category_id && history.category_id !== ""
       ? `kategoriya_oylik_chiqim_tarixi_${costHistory.year}-${costHistory.month}-${history.category_name}.xlsx`
-      : `oylik_chiqim_tarixi_${costHistory.year}-${costHistory.month}.xlsx`;
+      : costHistory.month && costHistory.month !== ""
+      ? `oylik_chiqim_tarixi_${costHistory.year}-${costHistory.month}.xlsx`
+      : `oylik_chiqim_tarixi_${costHistory.year}.xlsx`
 
   const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
   const blob = new Blob([excelBuffer], { type: "application/octet-stream" });
   saveAs(blob, fileName);
-  // location.reload();
+  loading.excel = false;
   notification.success("Excel fayl yuklab olindi!");
 };
 
@@ -3578,13 +3609,21 @@ const getAllHistoryForExportSalary = async () => {
   let urlBase;
   if (history.teacher_id && history.teacher_id !== "") {
     urlBase = `/salary/teacherSalary/${schoolId}/${history.teacher_id}/${salaryHistory.year}/${salaryHistory.month}/page`;
-  } else {
+  } else if (salaryHistory.month && salaryHistory.month !== "") {
     if (store.guard) {
       urlBase = `/salary/${schoolId}/${salaryHistory.year}/${salaryHistory.month}/page`;
     } else {
       urlBase = `/salary/teacherSalary/${schoolId}/${localStorage.getItem(
         "id"
       )}/${salaryHistory.year}/${salaryHistory.month}/page`;
+    }
+  } else {
+    if (store.guard){
+      urlBase = `/salary/${schoolId}/${salaryHistory.year}/page`;
+    } else {
+      urlBase = `/salary/teacherSalary/${schoolId}/${localStorage.getItem(
+        "id"
+      )}/${salaryHistory.year}/page`;
     }
   }
 
@@ -3613,11 +3652,13 @@ const getAllHistoryForExportSalary = async () => {
 };
 
 const exportToExcelSalary = async () => {
+  loading.excel = true;
   await getAllHistoryForExportSalary();
 
   const rawData = salaryHistory.salaryList;
 
   if (!rawData || rawData.length === 0) {
+    loading.excel = false;
     notification.warning("Yuklash uchun ma'lumot topilmadi");
     return;
   }
@@ -3627,7 +3668,7 @@ const exportToExcelSalary = async () => {
     Suma: item.price,
     "To'lov turi": item.method,
     Oy: monthNames(item.month),
-    // Izoh: item.description,
+    Izoh: item.description,
     "To'lov sanasi": chekDateFormat(new Date(item.createdAt)),
   }));
 
@@ -3697,12 +3738,14 @@ const exportToExcelSalary = async () => {
   const fileName =
     history.teacher_id && history.teacher_id !== ""
       ? `xodimning_oylik_maosh_tarixi_${salaryHistory.year}-${salaryHistory.month}-${history.teacher_name}.xlsx`
-      : `oylik_maosh_tarixi_${salaryHistory.year}-${salaryHistory.month}.xlsx`;
+      : salaryHistory.month && salaryHistory.month !== ""
+      ? `oylik_maosh_tarixi_${salaryHistory.year}-${salaryHistory.month}.xlsx`
+      : `oylik_maosh_tarixi_${salaryHistory.year}.xlsx`;
 
   const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
   const blob = new Blob([excelBuffer], { type: "application/octet-stream" });
   saveAs(blob, fileName);
-  // location.reload();
+ loading.excel = false;
   notification.success("Excel fayl yuklab olindi!");
 };
 
