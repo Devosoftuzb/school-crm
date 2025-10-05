@@ -1749,7 +1749,6 @@
                       v-model="costHistory.month"
                       id="month"
                       class="bg-white border text-black border-blue-600 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-[7px]"
-                      required
                     >
                       <option value="" disabled selected>Oyni tanlang</option>
                       <option value="01">Yanvar</option>
@@ -1844,19 +1843,21 @@
                   </div>
                 </div>
                 <div class="flex items-center w-full gap-3">
-                  <button
+                  <ButtonLoader
+                    :loading="loading.view"
                     type="submit"
                     class="btnAdd w-full sm:max-w-fit text-white items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                   >
                     Ko'rish
-                  </button>
-                  <button
+                  </ButtonLoader>
+                  <ButtonLoader
+                    :loading="loading.excel"
                     @click="exportToExcelCost"
                     type="button"
                     class="btnAdd3 w-full text-white inline-flex whitespace-nowrap items-center justify-center bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                   >
                     Excelga yuklash
-                  </button>
+                  </ButtonLoader>
                 </div>
               </div>
             </form>
@@ -1932,7 +1933,9 @@
                       <div class="relative inline-block w-40 group">
                         <p class="truncate w-40 p-1 rounded-[5px]">
                           {{
-                            i.description && i.description.split(" ").length > 3
+                            !i.description || i.description.trim() === ""
+                              ? "Izoh yo'q"
+                              : i.description.split(" ").length > 3
                               ? i.description.split(" ").slice(0, 3).join(" ") +
                                 "..."
                               : i.description
@@ -1941,7 +1944,7 @@
                         <span
                           class="absolute hidden max-w-xs p-2 mb-1 text-sm text-blue-800 -translate-x-1/2 bg-blue-100 rounded-md shadow-lg left-1/2 bottom-full w-max group-hover:block"
                         >
-                          {{ i.description }}
+                          {{ !i.description ? "Izoh yo'q" : i.description }}
                         </span>
                       </div>
                     </td>
@@ -2075,6 +2078,12 @@
             Guruhni oylik to'lov tarixi - {{ history.year }}/{{
               history.month
             }}/{{ history.group_name }}
+          </h2>
+          <h2
+            v-show="history.yearModal"
+            class="pb-2 pl-4 text-sm font-bold text-gray-600 sm:text-md"
+          >
+            Barcha to'lov tarixi - {{ history.year }}
           </h2>
         </div>
 
@@ -2310,7 +2319,6 @@
                       v-model="salaryHistory.month"
                       id="month"
                       class="bg-white border text-black border-blue-600 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-[7px]"
-                      required
                     >
                       <option value="" disabled selected>Oyni tanlang</option>
                       <option value="01">Yanvar</option>
@@ -2407,19 +2415,21 @@
                   </div>
                 </div>
                 <div class="flex items-center w-full gap-3">
-                  <button
+                  <ButtonLoader
+                    :loading="loading.view"
                     type="submit"
                     class="btnAdd w-full sm:max-w-fit text-white items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                   >
                     Ko'rish
-                  </button>
-                  <button
+                  </ButtonLoader>
+                  <ButtonLoader
+                    :loading="loading.excel"
                     @click="exportToExcelSalary"
                     type="button"
                     class="btnAdd3 w-full text-white inline-flex whitespace-nowrap items-center justify-center bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                   >
                     Excelga yuklash
-                  </button>
+                  </ButtonLoader>
                 </div>
               </div>
             </form>
@@ -2710,14 +2720,14 @@ const salary = reactive({
 
 const salaryHistory = reactive({
   year: hozirgiYil,
-  month: hozirgiOy,
+  month: "",
   teacher_name: "",
   salaryList: "",
 });
 
 const costHistory = reactive({
   year: hozirgiYil,
-  month: hozirgiOy,
+  month: "",
   category_name: "",
   costList: "",
 });
@@ -2995,15 +3005,20 @@ const getCostCategory = async () => {
 };
 
 const getCost = async (page) => {
+  loading.view = true;
   try {
     let url;
     if (history.category_id && history.category_id !== "") {
       url = `/cost/${localStorage.getItem("school_id")}/${costHistory.year}/${
         costHistory.month
       }/${history.category_id}/page?page=${page}`;
-    } else {
+    } else if (costHistory.month && costHistory.month !== "") {
       url = `/cost/${localStorage.getItem("school_id")}/${costHistory.year}/${
         costHistory.month
+      }/page?page=${page}`;
+    } else {
+      url = `/cost/${localStorage.getItem("school_id")}/${
+        costHistory.year
       }/page?page=${page}`;
     }
 
@@ -3015,26 +3030,32 @@ const getCost = async (page) => {
       res.data?.data?.pagination.currentPage,
       res.data?.data?.pagination.total_count,
     ];
-
+    loading.view = false;
     store.error = false;
   } catch (error) {
     console.log(error);
+    loading.view = false;
     store.CostPageProduct = error.response.data.message;
     store.error = true;
   }
 };
 
 const getSalary = async (page) => {
+  loading.view = true;
   try {
     let url;
     if (history.teacher_id && history.teacher_id !== "") {
       url = `/salary/teacherSalary/${localStorage.getItem("school_id")}/${
         history.teacher_id
       }/${salaryHistory.year}/${salaryHistory.month}/page?page=${page}`;
-    } else {
+    } else if (salaryHistory.month && salaryHistory.month !== "") {
       url = `/salary/${localStorage.getItem("school_id")}/${
         salaryHistory.year
       }/${salaryHistory.month}/page?page=${page}`;
+    } else {
+      url = `/salary/${localStorage.getItem("school_id")}/${
+        salaryHistory.year
+      }/page?page=${page}`;
     }
 
     const res = await axios.get(url, {
@@ -3046,8 +3067,10 @@ const getSalary = async (page) => {
       res.data?.data?.pagination.currentPage,
       res.data?.data?.pagination.total_count,
     ];
+    loading.view = false;
     store.error = false;
   } catch (error) {
+    loading.view = false;
     store.SalaryPageProduct = error.response?.data?.message || error.message;
     store.error = true;
   }
@@ -3448,8 +3471,10 @@ const getAllHistoryForExportCost = async () => {
   let urlBase;
   if (history.category_id && history.category_id !== "") {
     urlBase = `/cost/${schoolId}/${costHistory.year}/${costHistory.month}/${history.category_id}/page`;
-  } else {
+  } else if (costHistory.month && costHistory.month !== "") {
     urlBase = `/cost/${schoolId}/${costHistory.year}/${costHistory.month}/page`;
+  } else {
+    urlBase = `/cost/${schoolId}/${costHistory.year}/page`;
   }
 
   let allData = [];
@@ -3477,11 +3502,13 @@ const getAllHistoryForExportCost = async () => {
 };
 
 const exportToExcelCost = async () => {
+  loading.excel = true;
   await getAllHistoryForExportCost();
 
   const rawData = costHistory.costList;
 
   if (!rawData || rawData.length === 0) {
+    loading.excel = false;
     notification.warning("Yuklash uchun ma'lumot topilmadi");
     return;
   }
@@ -3561,12 +3588,14 @@ const exportToExcelCost = async () => {
   const fileName =
     history.category_id && history.category_id !== ""
       ? `kategoriya_oylik_chiqim_tarixi_${costHistory.year}-${costHistory.month}-${history.category_name}.xlsx`
-      : `oylik_chiqim_tarixi_${costHistory.year}-${costHistory.month}.xlsx`;
+      : costHistory.month && costHistory.month !== ""
+      ? `oylik_chiqim_tarixi_${costHistory.year}-${costHistory.month}.xlsx`
+      : `oylik_chiqim_tarixi_${costHistory.year}.xlsx`;
 
   const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
   const blob = new Blob([excelBuffer], { type: "application/octet-stream" });
   saveAs(blob, fileName);
-  // location.reload();
+  loading.excel = false;
   notification.success("Excel fayl yuklab olindi!");
 };
 
@@ -3582,13 +3611,21 @@ const getAllHistoryForExportSalary = async () => {
   let urlBase;
   if (history.teacher_id && history.teacher_id !== "") {
     urlBase = `/salary/teacherSalary/${schoolId}/${history.teacher_id}/${salaryHistory.year}/${salaryHistory.month}/page`;
-  } else {
+  } else if (salaryHistory.month && salaryHistory.month !== "") {
     if (store.guard) {
       urlBase = `/salary/${schoolId}/${salaryHistory.year}/${salaryHistory.month}/page`;
     } else {
       urlBase = `/salary/teacherSalary/${schoolId}/${localStorage.getItem(
         "id"
       )}/${salaryHistory.year}/${salaryHistory.month}/page`;
+    }
+  } else {
+    if (store.guard) {
+      urlBase = `/salary/${schoolId}/${salaryHistory.year}/page`;
+    } else {
+      urlBase = `/salary/teacherSalary/${schoolId}/${localStorage.getItem(
+        "id"
+      )}/${salaryHistory.year}/page`;
     }
   }
 
@@ -3617,11 +3654,13 @@ const getAllHistoryForExportSalary = async () => {
 };
 
 const exportToExcelSalary = async () => {
+  loading.excel = true;
   await getAllHistoryForExportSalary();
 
   const rawData = salaryHistory.salaryList;
 
   if (!rawData || rawData.length === 0) {
+    loading.excel = false;
     notification.warning("Yuklash uchun ma'lumot topilmadi");
     return;
   }
@@ -3631,7 +3670,7 @@ const exportToExcelSalary = async () => {
     Suma: item.price,
     "To'lov turi": item.method,
     Oy: monthNames(item.month),
-    // Izoh: item.description,
+    Izoh: item.description,
     "To'lov sanasi": chekDateFormat(new Date(item.createdAt)),
   }));
 
@@ -3701,12 +3740,14 @@ const exportToExcelSalary = async () => {
   const fileName =
     history.teacher_id && history.teacher_id !== ""
       ? `xodimning_oylik_maosh_tarixi_${salaryHistory.year}-${salaryHistory.month}-${history.teacher_name}.xlsx`
-      : `oylik_maosh_tarixi_${salaryHistory.year}-${salaryHistory.month}.xlsx`;
+      : salaryHistory.month && salaryHistory.month !== ""
+      ? `oylik_maosh_tarixi_${salaryHistory.year}-${salaryHistory.month}.xlsx`
+      : `oylik_maosh_tarixi_${salaryHistory.year}.xlsx`;
 
   const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
   const blob = new Blob([excelBuffer], { type: "application/octet-stream" });
   saveAs(blob, fileName);
-  // location.reload();
+  loading.excel = false;
   notification.success("Excel fayl yuklab olindi!");
 };
 
