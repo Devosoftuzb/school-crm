@@ -2985,7 +2985,8 @@ const exportToExcel = async () => {
     "To'langan summa": item.price,
     "Chegirma (%)": item.discount + " %",
     Oy: monthNames(item.month),
-    "To'lov sanasi": monthNames(String(new Date(item.createdAt).getMonth() + 1).padStart(2, "0")),
+    "To'lov sanasi (Oy)": monthNames(String(new Date(item.createdAt).getMonth() + 1).padStart(2, "0")),
+    "To'lov sanasi": chekDateFormat(new Date(item.createdAt)),
     Izoh: item.description,
     Holati:
       item.status === "delete"
@@ -3041,13 +3042,14 @@ const exportToExcel = async () => {
     { wpx: 180 },
     { wpx: 180 },
     { wpx: 200 },
+    { wpx: 100 },
+    { wpx: 100 },
+    { wpx: 100 },
+    { wpx: 100 },
+    { wpx: 100 },
     { wpx: 120 },
-    { wpx: 120 },
-    { wpx: 130 },
-    { wpx: 110 },
-    { wpx: 90 },
     { wpx: 160 },
-    { wpx: 90 },
+    { wpx: 100 },
   ];
 
   const wb = XLSX.utils.book_new();
