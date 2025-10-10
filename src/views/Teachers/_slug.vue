@@ -1598,7 +1598,7 @@ const exportToExcel = async () => {
   loading.excel = true;
   await getAllHistoryForExport();
 
-  const rawData = history.dayModal
+  const list = history.dayModal
     ? history.dayList
     : history.monthModal
     ? history.monthList
@@ -1606,11 +1606,13 @@ const exportToExcel = async () => {
     ? history.groupMonthList
     : history.yearList;
 
-  if (!rawData || rawData.length === 0) {
+  if (!list || list.length === 0) {
     loading.excel = false;
     notification.warning("Yuklash uchun ma'lumot topilmadi");
     return;
   }
+
+  const rawData = list.filter(item => item.status !== 'delete');
 
   const dataToExport = rawData.map((item) => ({
     "O'quvchi (F . I . O)": item.student_name,

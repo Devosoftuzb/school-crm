@@ -16,6 +16,10 @@
       <!-- ---------------------------------------- Statistic ------------------------------------- -->
 
       <div
+        v-show="
+          (store.CostPageProduct && store.SalaryPageProduct) ||
+          store.PageProduct
+        "
         v-for="i in store.statistic"
         :key="i"
         class="flex flex-wrap items-center justify-center mb-5 cards gap-x-5 gap-y-5"
@@ -3258,17 +3262,33 @@ const getGroups = async () => {
 
 const getTeacherSalary = async (page) => {
   try {
-    const res = await axios.get(
-      `/salary/teacherSalary/${localStorage.getItem(
-        "school_id"
-      )}/${localStorage.getItem("id")}/${salaryHistory.year}/${
-        salaryHistory.month
-      }/page?page=${page}`,
-      {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      }
-    );
+    let res;
 
+    if (salaryHistory.month && salaryHistory.month !== "") {
+      res = await axios.get(
+        `/salary/teacherSalary/${localStorage.getItem(
+          "school_id"
+        )}/${localStorage.getItem("id")}/${salaryHistory.year}/${
+          salaryHistory.month
+        }/page?page=${page}`,
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        }
+      );
+    } else {
+      res = await axios.get(
+        `/salary/teacherSalary/${localStorage.getItem(
+          "school_id"
+        )}/${localStorage.getItem("id")}/${
+          salaryHistory.year
+        }/page?page=${page}`,
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        }
+      );
+    }
+
+    // Endi res mavjud
     store.SalaryPageProduct = res.data?.data?.records;
     store.salaryPage = [
       res.data?.data?.pagination.currentPage,
@@ -3276,7 +3296,8 @@ const getTeacherSalary = async (page) => {
     ];
     store.error = false;
   } catch (error) {
-    store.SalaryPageProduct = error.response.data.message;
+    store.SalaryPageProduct =
+      error.response?.data?.message || "Xatolik yuz berdi";
     store.error = true;
   }
 };
@@ -3349,7 +3370,7 @@ const exportToExcel = async () => {
   loading.excel = true;
   await getAllHistoryForExport();
 
-  const rawData = history.dayModal
+  const list = history.dayModal
     ? history.dayList
     : history.monthModal
     ? history.monthList
@@ -3357,11 +3378,16 @@ const exportToExcel = async () => {
     ? history.groupMonthList
     : history.yearList;
 
-  if (!rawData || rawData.length === 0) {
+  if (!list || list.length === 0) {
     loading.excel = false;
     notification.warning("Yuklash uchun ma'lumot topilmadi");
     return;
   }
+  
+  
+  const rawData = list.filter(item => item.status !== 'delete');
+
+
 
   const dataToExport = rawData.map((item) => ({
     "O'quvchi (F . I . O)": item.student_name,
