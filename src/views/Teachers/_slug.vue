@@ -13,8 +13,8 @@
         class="mt-10 rounded-lg p-[15px] mb-10 sm:mb-28"
         :class="navbar.userNav ? 'bg-[#1e293b] text-white' : 'bg-white'"
       >
-        <div class="flex justify-between items-center font-bold mb-5">
-          <h1 class="sm:text-lg text-sm text-blue-700">
+        <div class="flex items-center justify-between mb-5 font-bold">
+          <h1 class="text-sm text-blue-700 sm:text-lg">
             <span v-show="store.modalInfo">Xodimning ma'lumotlari</span>
             <span v-show="store.modalGroup">Xodimning guruhlari</span>
             <span v-show="store.modalPayment">Xodimning oylik hisoboti</span>
@@ -36,7 +36,7 @@
           "
         >
           <transition name="modal-fade">
-            <div class="relative p-4 w-full max-w-2xl h-auto">
+            <div class="relative w-full h-auto max-w-2xl p-4">
               <!-- Modal content -->
               <div
                 class="relative p-4 rounded-lg shadow sm:p-5"
@@ -44,7 +44,7 @@
               >
                 <!-- Modal header -->
                 <div
-                  class="flex flex-col items-center gap-5 pb-4 mb-4 rounded-t border-b sm:mb-5"
+                  class="flex flex-col items-center gap-5 pb-4 mb-4 border-b rounded-t sm:mb-5"
                 >
                   <div class="flex items-center justify-between w-full">
                     <h3
@@ -77,7 +77,7 @@
                   </div>
                   <div class="w-full rounded-lg" id="navbar-sticky">
                     <ul
-                      class="font-medium w-full grid lg:grid-cols-4 grid-cols-2 gap-3 text-white"
+                      class="grid w-full grid-cols-2 gap-3 font-medium text-white lg:grid-cols-4"
                     >
                       <li
                         class="cursor-pointer w-full h-[100%] whitespace-nowrap text-center bg-gray-600 hover:bg-gray-500 p-2 px-5 sm:text-md text-sm rounded-lg"
@@ -117,7 +117,7 @@
                   @submit.prevent="getHistory(store.pagination)"
                   :class="{ darkForm: navbar.userNav }"
                 >
-                  <div class="grid font-medium gap-4 mb-4">
+                  <div class="grid gap-4 mb-4 font-medium">
                     <div>
                       <label for="year" class="block mb-2 text-sm"
                         >Yilni tanlang</label
@@ -182,7 +182,7 @@
                     </div>
                   </div>
                   <div
-                    class="w-full flex flex-col gap-5 justify-center border-t pt-5 mt-5"
+                    class="flex flex-col justify-center w-full gap-5 pt-5 mt-5 border-t"
                   >
                     <ButtonLoader
                       :loading="loading.excel"
@@ -192,7 +192,7 @@
                     >
                       Excelga yuklab olish
                     </ButtonLoader>
-                    <div class="w-full flex items-center justify-between">
+                    <div class="flex items-center justify-between w-full">
                       <button
                         @click="historyModal"
                         type="button"
@@ -215,7 +215,7 @@
                   @submit.prevent="getHistory(store.pagination)"
                   :class="{ darkForm: navbar.userNav }"
                 >
-                  <div class="grid font-medium gap-4 mb-4">
+                  <div class="grid gap-4 mb-4 font-medium">
                     <div>
                       <label for="year" class="block mb-2 text-sm"
                         >Yilni tanlang</label
@@ -265,7 +265,7 @@
                     </div>
                   </div>
                   <div
-                    class="w-full flex flex-col gap-5 justify-center border-t pt-5 mt-5"
+                    class="flex flex-col justify-center w-full gap-5 pt-5 mt-5 border-t"
                   >
                     <ButtonLoader
                       :loading="loading.excel"
@@ -275,7 +275,7 @@
                     >
                       Excelga yuklab olish
                     </ButtonLoader>
-                    <div class="w-full flex items-center justify-between">
+                    <div class="flex items-center justify-between w-full">
                       <button
                         @click="historyModal"
                         type="button"
@@ -298,7 +298,7 @@
                   @submit.prevent="getHistory(store.pagination)"
                   :class="{ darkForm: navbar.userNav }"
                 >
-                  <div class="grid font-medium gap-4 mb-4">
+                  <div class="grid gap-4 mb-4 font-medium">
                     <div>
                       <label for="year" class="block mb-2 text-sm"
                         >Yilni tanlang</label
@@ -384,17 +384,17 @@
                           "
                           type="search"
                           id="simple-search"
-                          class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2"
+                          class="block w-full p-2 pl-10 text-sm border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
                           placeholder="Guruhni tanlang yoki qidirish..."
                         />
                         <ul
                           v-show="
                             history.filter_show && history.searchList.length > 0
                           "
-                          class="absolute z-10 max-h-80 overflow-y-auto overflow-hidden py-1 text-gray-600 rounded bg-white w-full bottom-full"
+                          class="absolute z-10 w-full py-1 overflow-hidden overflow-y-auto text-gray-600 bg-white rounded max-h-80 bottom-full"
                         >
                           <li
-                            class="hover:bg-blue-600 hover:text-white cursor-pointer pl-2"
+                            class="pl-2 cursor-pointer hover:bg-blue-600 hover:text-white"
                             v-for="(i, index) in history.searchList"
                             :key="index"
                             @mousedown.prevent="
@@ -409,10 +409,10 @@
                         </ul>
                         <ul
                           v-show="history.selectLamp && !history.filter"
-                          class="absolute z-10 max-h-80 overflow-y-auto overflow-hidden py-1 text-gray-600 rounded bg-white w-full bottom-full"
+                          class="absolute z-10 w-full py-1 overflow-hidden overflow-y-auto text-gray-600 bg-white rounded max-h-80 bottom-full"
                         >
                           <li
-                            class="hover:bg-blue-600 hover:text-white whitespace-nowrap cursor-pointer pl-2"
+                            class="pl-2 cursor-pointer hover:bg-blue-600 hover:text-white whitespace-nowrap"
                             v-for="(i, index) in store.group"
                             :key="index"
                             @mousedown.prevent="
@@ -429,7 +429,7 @@
                     </div>
                   </div>
                   <div
-                    class="w-full flex flex-col gap-5 justify-center border-t pt-5 mt-5"
+                    class="flex flex-col justify-center w-full gap-5 pt-5 mt-5 border-t"
                   >
                     <ButtonLoader
                       :loading="loading.excel"
@@ -439,7 +439,7 @@
                     >
                       Excelga yuklab olish
                     </ButtonLoader>
-                    <div class="w-full flex items-center justify-between">
+                    <div class="flex items-center justify-between w-full">
                       <button
                         @click="historyModal"
                         type="button"
@@ -462,7 +462,7 @@
                   @submit.prevent="getHistory(store.pagination)"
                   :class="{ darkForm: navbar.userNav }"
                 >
-                  <div class="grid font-medium gap-4 mb-4">
+                  <div class="grid gap-4 mb-4 font-medium">
                     <div>
                       <label for="year" class="block mb-2 text-sm"
                         >Yilni tanlang</label
@@ -487,7 +487,7 @@
                     </div>
                   </div>
                   <div
-                    class="w-full flex flex-col gap-5 justify-center border-t pt-5 mt-5"
+                    class="flex flex-col justify-center w-full gap-5 pt-5 mt-5 border-t"
                   >
                     <ButtonLoader
                       :loading="loading.excel"
@@ -497,7 +497,7 @@
                     >
                       Excelga yuklab olish
                     </ButtonLoader>
-                    <div class="w-full flex items-center justify-between">
+                    <div class="flex items-center justify-between w-full">
                       <button
                         @click="historyModal"
                         type="button"
@@ -578,11 +578,11 @@
               role="tabpanel"
               aria-labelledby="about-tab"
             >
-              <div class="flex flex-col lg:flex-row gap-10">
+              <div class="flex flex-col gap-10 lg:flex-row">
                 <img
                   src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
                   alt=""
-                  class="w-56 h-56 2xl:w-80 2xl:h-80 rounded-full object-cover mx-auto"
+                  class="object-cover w-56 h-56 mx-auto rounded-full 2xl:w-80 2xl:h-80"
                 />
                 <div
                   class="w-full lg:border-l border-[#4141eb] p-5 flex flex-col gap-3"
@@ -644,23 +644,23 @@
 
           <div
             v-show="store.modalGroup"
-            class="relative shadow-md rounded-lg overflow-hidden m-5"
+            class="relative m-5 overflow-hidden rounded-lg shadow-md"
             :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
           >
             <div class="overflow-x-auto">
               <table class="w-full text-sm text-left">
-                <thead class="btn text-white text-xs rounded-lg uppercase">
+                <thead class="text-xs text-white uppercase rounded-lg btn">
                   <tr>
-                    <th scope="col" class="text-center py-3">Nomi</th>
-                    <th scope="col" class="text-center py-3">Fani</th>
-                    <th scope="col" class="text-center py-3">Narxi</th>
-                    <th scope="col" class="text-center py-3">
+                    <th scope="col" class="py-3 text-center">Nomi</th>
+                    <th scope="col" class="py-3 text-center">Fani</th>
+                    <th scope="col" class="py-3 text-center">Narxi</th>
+                    <th scope="col" class="py-3 text-center">
                       Boshlanish sanasi
                     </th>
-                    <th scope="col" class="text-center py-3">
+                    <th scope="col" class="py-3 text-center">
                       Qo'shilgan sanasi
                     </th>
-                    <th scope="col" class="text-center py-3">To'liq</th>
+                    <th scope="col" class="py-3 text-center">To'liq</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -674,12 +674,12 @@
                   >
                     <td
                       scope="row"
-                      class="text-center px-8 py-4 font-medium whitespace-nowrap"
+                      class="px-8 py-4 font-medium text-center whitespace-nowrap"
                     >
                       {{ i.name }}
                     </td>
                     <td
-                      class="text-center font-medium whitespace-nowrap text-blue-800 px-8 py-4"
+                      class="px-8 py-4 font-medium text-center text-blue-800 whitespace-nowrap"
                     >
                       <p class="bg-blue-100 rounded-[5px] p-1">
                         <span v-for="fan in i.subject" :key="fan.id"
@@ -688,27 +688,27 @@
                       </p>
                     </td>
                     <td
-                      class="text-center font-medium whitespace-nowrap text-red-800 px-8 py-4"
+                      class="px-8 py-4 font-medium text-center text-red-800 whitespace-nowrap"
                     >
                       <p class="bg-red-100 rounded-[5px] p-1">
                         {{ Number(i.price).toLocaleString("uz-UZ") }} so'm
                       </p>
                     </td>
                     <td
-                      class="text-center font-medium whitespace-nowrap text-blue-800 px-8 py-4"
+                      class="px-8 py-4 font-medium text-center text-blue-800 whitespace-nowrap"
                     >
                       <p class="bg-blue-100 rounded-[5px] p-1">
                         {{ i.start_date }}
                       </p>
                     </td>
                     <td
-                      class="text-center font-medium whitespace-nowrap text-blue-800 px-8 py-4"
+                      class="px-8 py-4 font-medium text-center text-blue-800 whitespace-nowrap"
                     >
                       <p class="bg-blue-100 rounded-[5px] p-1">
                         {{ i.student_date }}
                       </p>
                     </td>
-                    <td class="text-center font-medium px-8 py-4">
+                    <td class="px-8 py-4 font-medium text-center">
                       <button
                         @click="enterSlug(i.id, i.name.toLowerCase())"
                         class="btn bg-blue-600 rounded-lg px-5 py-2.5 text-white focus:ring-2"
@@ -721,7 +721,7 @@
               </table>
               <div
                 v-show="store.group.length == 0"
-                class="w-full max-w-screen text-center p-20 text-2xl font-medium"
+                class="w-full p-20 text-2xl font-medium text-center max-w-screen"
               >
                 <h1>Guruhlar ro'yhati bo'sh</h1>
               </div>
@@ -730,17 +730,17 @@
 
           <div
             v-show="store.modalPayment"
-            class="w-full grid lg:grid-cols-2 2xl:gap-5 gap-3 p-5"
+            class="grid w-full gap-3 p-5 lg:grid-cols-2 2xl:gap-5"
           >
             <div
-              class="chart-container mt-8 shadow-md rounded-lg p-6 border border-blue-700"
+              class="p-6 mt-8 border border-blue-700 rounded-lg shadow-md chart-container"
               :class="{
                 'bg-[#1e293b] text-white': navbar.userNav,
                 'bg-white text-gray-700': !navbar.userNav,
               }"
             >
-              <div class="w-full flex items-center justify-between">
-                <h2 class="2xl:text-xl text-md font-semibold">
+              <div class="flex items-center justify-between w-full">
+                <h2 class="font-semibold 2xl:text-xl text-md">
                   Tushum Statistikasi ({{ store.year }})
                 </h2>
                 <form
@@ -776,14 +776,14 @@
 
             <!-- O'quvchilar To'lov Statistikasi -->
             <div
-              class="chart-container2 mt-8 shadow-md rounded-lg p-6 border border-blue-700"
+              class="p-6 mt-8 border border-blue-700 rounded-lg shadow-md chart-container2"
               :class="{
                 'bg-[#1e293b] text-white': navbar.userNav,
                 'bg-white text-gray-700': !navbar.userNav,
               }"
             >
-              <div class="w-full flex items-center justify-between">
-                <h2 class="2xl:text-xl text-md font-semibold">
+              <div class="flex items-center justify-between w-full">
+                <h2 class="font-semibold 2xl:text-xl text-md">
                   O'quvchilari Statistikasi ({{ monthNames(store.month) }})
                 </h2>
                 <form
@@ -825,11 +825,11 @@
 
           <div
             v-show="store.modalPayment"
-            class="flex sm:flex-row flex-col justify-between sm:items-center gap-4 font-bold p-5 border-t border-blue-700"
+            class="flex flex-col justify-between gap-4 p-5 font-bold border-t border-blue-700 sm:flex-row sm:items-center"
           >
             <h2
               v-show="history.dayModal"
-              class="sm:text-lg text-sm text-blue-700"
+              class="text-sm text-blue-700 sm:text-lg"
             >
               Kunlik to'lov tarixi - {{ history.year }}/{{ history.month }}/{{
                 history.day
@@ -837,13 +837,13 @@
             </h2>
             <h2
               v-show="history.monthModal"
-              class="sm:text-lg text-sm text-blue-700"
+              class="text-sm text-blue-700 sm:text-lg"
             >
               Oylik to'lov tarixi - {{ history.year }}/{{ history.month }}
             </h2>
             <h2
               v-show="history.groupMonthModal"
-              class="sm:text-lg text-sm text-blue-700"
+              class="text-sm text-blue-700 sm:text-lg"
             >
               Guruhni oylik to'lov tarixi - {{ history.year }}/{{
                 history.month
@@ -851,7 +851,7 @@
             </h2>
             <h2
               v-show="history.yearModal"
-              class="sm:text-lg text-sm text-blue-700"
+              class="text-sm text-blue-700 sm:text-lg"
             >
               Barcha to'lov tarixi - {{ history.year }}
             </h2>
@@ -866,35 +866,35 @@
 
           <div
             v-show="store.modalPayment"
-            class="relative shadow-md rounded-lg overflow-hidden m-5"
+            class="relative m-5 overflow-hidden rounded-lg shadow-md"
             :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
           >
             <div class="overflow-x-auto">
               <table class="w-full text-sm text-left">
-                <thead class="btn text-white text-xs rounded-lg uppercase">
+                <thead class="text-xs text-white uppercase rounded-lg btn">
                   <tr>
-                    <th scope="col" class="text-center py-3 whitespace-nowrap">
+                    <th scope="col" class="py-3 text-center whitespace-nowrap">
                       O'quvchi (F . I . O)
                     </th>
-                    <th scope="col" class="text-center py-3 whitespace-nowrap">
+                    <th scope="col" class="py-3 text-center whitespace-nowrap">
                       Guruh
                     </th>
-                    <th scope="col" class="text-center py-3 whitespace-nowrap">
+                    <th scope="col" class="py-3 text-center whitespace-nowrap">
                       Kurs narxi
                     </th>
-                    <th scope="col" class="text-center py-3 whitespace-nowrap">
+                    <th scope="col" class="py-3 text-center whitespace-nowrap">
                       To'lov turi
                     </th>
-                    <th scope="col" class="text-center py-3 whitespace-nowrap">
+                    <th scope="col" class="py-3 text-center whitespace-nowrap">
                       To'lov narxi
                     </th>
-                    <th scope="col" class="text-center py-3 whitespace-nowrap">
+                    <th scope="col" class="py-3 text-center whitespace-nowrap">
                       Oy
                     </th>
-                    <th scope="col" class="text-center py-3 whitespace-nowrap">
+                    <th scope="col" class="py-3 text-center whitespace-nowrap">
                       To'lov sanasi
                     </th>
-                    <th scope="col" class="text-center py-3 whitespace-nowrap">
+                    <th scope="col" class="py-3 text-center whitespace-nowrap">
                       Izoh
                     </th>
                   </tr>
@@ -912,26 +912,26 @@
                   >
                     <th
                       scope="row"
-                      class="text-center px-8 py-4 font-medium whitespace-nowrap"
+                      class="px-8 py-4 font-medium text-center whitespace-nowrap"
                     >
                       <span>{{ i.student_name }}</span>
                     </th>
 
-                    <td class="text-center font-medium text-blue-800 px-8 py-4">
+                    <td class="px-8 py-4 font-medium text-center text-blue-800">
                       <p
                         class="bg-blue-100 rounded-[5px] p-1 px-3 whitespace-nowrap"
                       >
                         {{ i.group_name }}
                       </p>
                     </td>
-                    <td class="text-center font-medium text-red-800 px-8 py-4">
+                    <td class="px-8 py-4 font-medium text-center text-red-800">
                       <p
                         class="bg-red-100 rounded-[5px] p-1 px-3 whitespace-nowrap"
                       >
                         {{ Number(i.group_price).toLocaleString("uz-UZ") }} so'm
                       </p>
                     </td>
-                    <td class="text-center font-medium text-blue-800 px-8 py-4">
+                    <td class="px-8 py-4 font-medium text-center text-blue-800">
                       <p
                         class="bg-blue-100 rounded-[5px] p-1 px-3 whitespace-nowrap"
                       >
@@ -939,7 +939,7 @@
                       </p>
                     </td>
                     <td
-                      class="text-center font-medium text-green-700 px-8 py-4"
+                      class="px-8 py-4 font-medium text-center text-green-700"
                     >
                       <p
                         class="bg-green-100 rounded-[5px] p-1 px-3 whitespace-nowrap"
@@ -947,22 +947,22 @@
                         {{ i.price.toLocaleString("uz-UZ") }} so'm
                       </p>
                     </td>
-                    <td class="text-center font-medium text-blue-800 px-8 py-4">
+                    <td class="px-8 py-4 font-medium text-center text-blue-800">
                       <p
                         class="bg-blue-100 rounded-[5px] p-1 px-3 whitespace-nowrap"
                       >
                         {{ monthNames(i.month) }}
                       </p>
                     </td>
-                    <td class="text-center font-medium text-blue-800 px-8 py-4">
+                    <td class="px-8 py-4 font-medium text-center text-blue-800">
                       <p
                         class="bg-blue-100 rounded-[5px] p-1 px-3 whitespace-nowrap"
                       >
                         {{ formatDateToNumeric(new Date(i.createdAt)) }}
                       </p>
                     </td>
-                    <td class="text-center font-medium px-8 py-2 relative">
-                      <div class="group relative w-40 inline-block">
+                    <td class="relative px-8 py-2 font-medium text-center">
+                      <div class="relative inline-block w-40 group">
                         <p class="truncate w-40 p-1 rounded-[5px]">
                           {{
                             !i.description || i.description.trim() === ""
@@ -974,7 +974,7 @@
                           }}
                         </p>
                         <span
-                          class="absolute left-1/2 -translate-x-1/2 bottom-full mb-1 hidden w-max max-w-xs bg-blue-100 text-blue-800 text-sm p-2 rounded-md shadow-lg group-hover:block"
+                          class="absolute hidden max-w-xs p-2 mb-1 text-sm text-blue-800 -translate-x-1/2 bg-blue-100 rounded-md shadow-lg left-1/2 bottom-full w-max group-hover:block"
                         >
                           {{ !i.description ? "Izoh yo'q" : i.description }}
                         </span>
@@ -986,13 +986,13 @@
 
               <div
                 v-show="store.PageProduct && store.PageProduct.length == 0"
-                class="w-full max-w-screen text-center p-20 text-2xl font-medium"
+                class="w-full p-20 text-2xl font-medium text-center max-w-screen"
               >
                 <h1>To'lov ro'yhati bo'sh</h1>
               </div>
             </div>
             <nav
-              class="flex flex-row justify-between items-center space-y-0 p-4"
+              class="flex flex-row items-center justify-between p-4 space-y-0"
               aria-label="Table navigation"
             >
               <!-- Oldingi sahifa tugmasi -->
@@ -1012,7 +1012,7 @@
                   "
                 >
                   <i
-                    class="md:hidden font-bold text-black text-2xl bx bx-chevron-left"
+                    class="text-2xl font-bold text-black md:hidden bx bx-chevron-left"
                   ></i>
                   <span class="hidden md:block">Oldingi</span>
                 </li>
@@ -1050,7 +1050,7 @@
                 >
                   <span class="hidden md:block">Keyingi</span>
                   <i
-                    class="md:hidden font-bold text-black text-2xl bx bx-chevron-right"
+                    class="text-2xl font-bold text-black md:hidden bx bx-chevron-right"
                   ></i>
                 </li>
               </ul>
@@ -1598,7 +1598,7 @@ const exportToExcel = async () => {
   loading.excel = true;
   await getAllHistoryForExport();
 
-  const rawData = history.dayModal
+  const list = history.dayModal
     ? history.dayList
     : history.monthModal
     ? history.monthList
@@ -1606,11 +1606,13 @@ const exportToExcel = async () => {
     ? history.groupMonthList
     : history.yearList;
 
-  if (!rawData || rawData.length === 0) {
+  if (!list || list.length === 0) {
     loading.excel = false;
     notification.warning("Yuklash uchun ma'lumot topilmadi");
     return;
   }
+
+  const rawData = list.filter(item => item.status !== 'delete');
 
   const dataToExport = rawData.map((item) => ({
     "O'quvchi (F . I . O)": item.student_name,
