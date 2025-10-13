@@ -5,7 +5,7 @@ export const header = [
     link: "/",
     icon: "bx bxs-dashboard",
     role: "_sp_am_, _ow_sch_, _ad_sch_, _tch_sch_",
-    school: "dev_school, camelot, it_park, element, sophie's, zafar_azimov_school, silverstudy, sayyimov_academy, business_club, anoreducation",
+    school: "dev_school, camelot, it_park, element, sophie's, zafar_azimov_school, silverstudy, sayyimov_academy, business_club, anoreducation, gulistan_academy",
   },
   {
     id: 2,
@@ -13,7 +13,7 @@ export const header = [
     link: "/customer",
     icon: "bx bx-body",
     role: "_ad_sch_",
-    school: "dev_school, camelot, it_park, element, sophie's, zafar_azimov_school, silverstudy, sayyimov_academy, business_club, anoreducation",
+    school: "dev_school, camelot, it_park, element, sophie's, zafar_azimov_school, silverstudy, sayyimov_academy, business_club, anoreducation, gulistan_academy",
   },
   {
     id: 3,
@@ -21,7 +21,7 @@ export const header = [
     link: "/employees",
     icon: "bx bxs-user-rectangle",
     role: "_ow_sch_, _ad_sch_",
-    school: "dev_school, camelot, it_park, element, sophie's, zafar_azimov_school, silverstudy, sayyimov_academy, business_club, anoreducation",
+    school: "dev_school, camelot, it_park, element, sophie's, zafar_azimov_school, silverstudy, sayyimov_academy, business_club, anoreducation, gulistan_academy",
   },
   {
     id: 4,
@@ -29,7 +29,7 @@ export const header = [
     link: "/students",
     icon: "bx bxs-user",
     role: "_ad_sch_, _tch_sch_",
-    school: "dev_school, camelot, it_park, element, sophie's, zafar_azimov_school, silverstudy, sayyimov_academy, business_club, anoreducation",
+    school: "dev_school, camelot, it_park, element, sophie's, zafar_azimov_school, silverstudy, sayyimov_academy, business_club, anoreducation, gulistan_academy",
   },
   {
     id: 5,
@@ -37,7 +37,7 @@ export const header = [
     link: "/groups",
     icon: "bx bxs-group",
     role: "_ad_sch_, _tch_sch_",
-    school: "dev_school, camelot, it_park, element, sophie's, zafar_azimov_school, silverstudy, sayyimov_academy, business_club, anoreducation",
+    school: "dev_school, camelot, it_park, element, sophie's, zafar_azimov_school, silverstudy, sayyimov_academy, business_club, anoreducation, gulistan_academy",
   },
   {
     id: 6,
@@ -45,7 +45,7 @@ export const header = [
     link: "/subjects",
     icon: "bx bxs-book-bookmark",
     role: "_ad_sch_",
-    school: "dev_school, camelot, it_park, element, sophie's, zafar_azimov_school, silverstudy, sayyimov_academy, business_club, anoreducation",
+    school: "dev_school, camelot, it_park, element, sophie's, zafar_azimov_school, silverstudy, sayyimov_academy, business_club, anoreducation, gulistan_academy",
   },
   {
     id: 7,
@@ -53,7 +53,7 @@ export const header = [
     link: "/attendance",
     icon: "bx bx-user-check",
     role: "_ad_sch_, _tch_sch_",
-    school: "dev_school, camelot, it_park, element, sophie's, zafar_azimov_school, silverstudy, sayyimov_academy, business_club, anoreducation",
+    school: "dev_school, camelot, it_park, element, sophie's, zafar_azimov_school, silverstudy, sayyimov_academy, business_club, anoreducation, gulistan_academy",
   },
   {
     id: 8,
@@ -61,7 +61,7 @@ export const header = [
     link: "/payment",
     icon: "bx bxs-credit-card",
     role: "_ad_sch_",
-    school: "dev_school, camelot, it_park, element, sophie's, zafar_azimov_school, silverstudy, sayyimov_academy, business_club, anoreducation",
+    school: "dev_school, camelot, it_park, element, sophie's, zafar_azimov_school, silverstudy, sayyimov_academy, business_club, anoreducation, gulistan_academy",
   },
   {
     id: 9,
@@ -69,7 +69,7 @@ export const header = [
     link: "/sms",
     icon: "bx bxs-message-rounded-dots",
     role: "_ad_sch_",
-    school: "dev_school, camelot, it_park, element, sophie's, zafar_azimov_school, silverstudy, sayyimov_academy, business_club, anoreducation",
+    school: "dev_school, camelot, it_park, element, sophie's, zafar_azimov_school, silverstudy, sayyimov_academy, business_club, anoreducation, gulistan_academy",
   },
    {
     id: 10,
@@ -77,7 +77,7 @@ export const header = [
     link: "/finance",
     icon: "bx  bx-dollar-circle",
     role: "_ad_sch_, _ow_sch_, _tch_sch_",
-    school: "dev_school, camelot, it_park, element, sophie's, zafar_azimov_school, silverstudy, sayyimov_academy, business_club, anoreducation",
+    school: "dev_school, camelot, it_park, element, sophie's, zafar_azimov_school, silverstudy, sayyimov_academy, business_club, anoreducation, gulistan_academy",
   },
   {
     id: 11,
@@ -85,7 +85,7 @@ export const header = [
     link: "/tests",
     icon: "bx bx-credit-card-front",
     role: "_ad_sch_",
-    school: "dev_school, camelot, element, zafar_azimov_school, silverstudy, sayyimov_academy, business_club, anoreducation",
+    school: "dev_school, camelot, element, zafar_azimov_school, silverstudy, sayyimov_academy, business_club, anoreducation, gulistan_academy",
   },
   {
     id: 12,
@@ -93,7 +93,7 @@ export const header = [
     link: "/results",
     icon: "bx bxs-pie-chart-alt-2",
     role: "_ad_sch_",
-    school: "dev_school, camelot, element, zafar_azimov_school, silverstudy, sayyimov_academy, business_club, anoreducation",
+    school: "dev_school, camelot, element, zafar_azimov_school, silverstudy, sayyimov_academy, business_club, anoreducation, gulistan_academy",
   },
   {
     id: 13,
@@ -101,6 +101,6 @@ export const header = [
     link: "/settings",
     icon: "bx bxs-cog",
     role: "_sp_am_, _ow_sch_, _ad_sch_, _tch_sch_",
-    school: "dev_school, camelot, it_park, element, sophie's, zafar_azimov_school, silverstudy, sayyimov_academy, business_club, anoreducation",
+    school: "dev_school, camelot, it_park, element, sophie's, zafar_azimov_school, silverstudy, sayyimov_academy, business_club, anoreducation, gulistan_academy",
   },
 ];

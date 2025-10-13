@@ -43,6 +43,7 @@ const routes = [
         "sayyimov_academy",
         "business_club",
         "anoreducation",
+        "gulistan_academy"
       ],
       title: "Home",
     },
@@ -78,6 +79,7 @@ const routes = [
             "sayyimov_academy", // qoladi, chunki boshqa rollar uchun ruxsat
             "business_club",
             "anoreducation",
+            "gulistan_academy"
           ],
           title: "Asosiy",
         },
@@ -99,6 +101,7 @@ const routes = [
             "sayyimov_academy",
             "business_club",
             "anoreducation",
+            "gulistan_academy"
           ],
           title: "Xodimlar",
         },
@@ -120,6 +123,7 @@ const routes = [
             "sayyimov_academy",
             "business_club",
             "anoreducation",
+            "gulistan_academy"
           ],
           title: "Xodim Sahifasi",
         },
@@ -141,6 +145,7 @@ const routes = [
             "sayyimov_academy",
             "business_club",
             "anoreducation",
+            "gulistan_academy"
           ],
           title: "O'quvchilar",
         },
@@ -162,6 +167,7 @@ const routes = [
             "sayyimov_academy",
             "business_club",
             "anoreducation",
+            "gulistan_academy"
           ],
           title: "Arxiv o'quvchilar",
         },
@@ -183,6 +189,7 @@ const routes = [
             "sayyimov_academy",
             "business_club",
             "anoreducation",
+            "gulistan_academy"
           ],
           title: "O'quvchi Sahifasi",
         },
@@ -204,6 +211,7 @@ const routes = [
             "sayyimov_academy",
             "business_club",
             "anoreducation",
+            "gulistan_academy"
           ],
           title: "Mijozlar",
         },
@@ -223,6 +231,7 @@ const routes = [
             "sayyimov_academy",
             "business_club",
             "anoreducation",
+            "gulistan_academy"
           ],
           title: "Testlar",
         },
@@ -244,6 +253,7 @@ const routes = [
             "sayyimov_academy",
             "business_club",
             "anoreducation",
+            "gulistan_academy"
           ],
           title: "Fanlar",
         },
@@ -265,6 +275,7 @@ const routes = [
             "sayyimov_academy",
             "business_club",
             "anoreducation",
+            "gulistan_academy"
           ],
           title: "To'lovlar",
         },
@@ -286,6 +297,7 @@ const routes = [
             "sayyimov_academy",
             "business_club",
             "anoreducation",
+            "gulistan_academy"
           ],
           title: "Davomat",
         },
@@ -307,6 +319,7 @@ const routes = [
             "sayyimov_academy",
             "business_club",
             "anoreducation",
+            "gulistan_academy"
           ],
           title: "SMS",
         },
@@ -328,6 +341,7 @@ const routes = [
             "sayyimov_academy",
             "business_club",
             "anoreducation",
+            "gulistan_academy"
           ],
           title: "Moliya",
         },
@@ -347,6 +361,7 @@ const routes = [
             "sayyimov_academy",
             "business_club",
             "anoreducation",
+            "gulistan_academy"
           ],
           title: "Natijalar",
         },
@@ -366,6 +381,7 @@ const routes = [
             "sayyimov_academy",
             "business_club",
             "anoreducation",
+            "gulistan_academy"
           ],
           title: "Natijalar Sahifasi",
         },
@@ -387,6 +403,7 @@ const routes = [
             "sayyimov_academy",
             "business_club",
             "anoreducation",
+            "gulistan_academy"
           ],
           title: "Guruhlar",
         },
@@ -408,6 +425,7 @@ const routes = [
             "sayyimov_academy",
             "business_club",
             "anoreducation",
+            "gulistan_academy"
           ],
           title: "Guruh Sahifasi",
         },
@@ -427,6 +445,7 @@ const routes = [
             "sayyimov_academy",
             "business_club",
             "anoreducation",
+            "gulistan_academy"
           ],
           title: "Savollar Sahifasi",
         },
@@ -448,6 +467,7 @@ const routes = [
             "sayyimov_academy",
             "business_club",
             "anoreducation",
+            "gulistan_academy"
           ],
           title: "Sozlamalar",
         },
