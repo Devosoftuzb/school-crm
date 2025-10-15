@@ -3432,12 +3432,12 @@ const addPayment = async () => {
     return;
   }
 
-  if (!checkOldPay) {
-    notification.warning(
-      "To'lov qilmoqchi bo'lgan sanaga oldin to'lov qilingan"
-    );
-    return;
-  }
+  // if (!checkOldPay) {
+  //   notification.warning(
+  //     "To'lov qilmoqchi bo'lgan sanaga oldin to'lov qilingan"
+  //   );
+  //   return;
+  // }
 
   try {
     const res = await axios.post("/payment", data, {
