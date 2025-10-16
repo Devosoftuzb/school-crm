@@ -1777,23 +1777,34 @@
                     </select>
                   </div>
                 </div>
+                
                 <div
-                  class="flex items-center justify-between w-full pt-5 mt-5 border-t"
+                  class="flex flex-col justify-center w-full gap-5 pt-5 mt-5 border-t"
                 >
-                  <button
-                    @click="debtorModal"
-                    type="button"
-                    class="border inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-                  >
-                    Bekor qilish
-                  </button>
                   <ButtonLoader
-                    :loading="loading.view"
-                    type="submit"
-                    class="btnAdd text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                    :loading="loading.excel"
+                    @click="exportToExcelDebtor"
+                    type="button"
+                    class="btnAdd3 text-white inline-flex items-center justify-center bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                   >
-                    Ko'rish
+                    Excelga yuklab olish
                   </ButtonLoader>
+                  <div class="flex items-center justify-between w-full">
+                    <button
+                      @click="debtorModal"
+                      type="button"
+                      class="border inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                    >
+                      Bekor qilish
+                    </button>
+                    <ButtonLoader
+                      :loading="loading.view"
+                      type="submit"
+                      class="btnAdd text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                    >
+                      Ko'rish
+                    </ButtonLoader>
+                  </div>
                 </div>
               </form>
               <form
@@ -1930,22 +1941,32 @@
                   </div>
                 </div>
                 <div
-                  class="flex items-center justify-between w-full pt-5 mt-5 border-t"
+                  class="flex flex-col justify-center w-full gap-5 pt-5 mt-5 border-t"
                 >
-                  <button
-                    @click="debtorModal"
-                    type="button"
-                    class="border inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-                  >
-                    Bekor qilish
-                  </button>
                   <ButtonLoader
-                    :loading="loading.view"
-                    type="submit"
-                    class="btnAdd text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                    :loading="loading.excel"
+                    @click="exportToExcelDebtor"
+                    type="button"
+                    class="btnAdd3 text-white inline-flex items-center justify-center bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                   >
-                    Ko'rish
+                    Excelga yuklab olish
                   </ButtonLoader>
+                  <div class="flex items-center justify-between w-full">
+                    <button
+                      @click="debtorModal"
+                      type="button"
+                      class="border inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                    >
+                      Bekor qilish
+                    </button>
+                    <ButtonLoader
+                      :loading="loading.view"
+                      type="submit"
+                      class="btnAdd text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                    >
+                      Ko'rish
+                    </ButtonLoader>
+                  </div>
                 </div>
               </form>
             </div>
@@ -3297,28 +3318,6 @@ const historyModal = () => {
   getHistory(store.teacherPagination);
 };
 
-// function paymentDebtor(
-//   id,
-//   name,
-//   group_id,
-//   group_price,
-//   debtorPay,
-//   teacher_name,
-//   group_name
-// ) {
-//   getSchool();
-//   modal.value = !modal.value;
-//   form.year = hozirgiYil;
-//   form.month = hozirgiOy;
-//   form.price = debtorPay;
-//   store.price = group_price;
-//   store.teacher_name = teacher_name;
-//   store.group_name = group_name;
-//   form.group_id = group_id;
-//   form.id = id;
-//   store.student_name = name;
-// }
-
 const history = reactive({
   year: hozirgiYil,
   month: hozirgiOy,
@@ -3387,6 +3386,7 @@ const debtor = reactive({
   selectLamp: false,
   searchList: [],
   isTable: false,
+  exportList: "",
 });
 
 const monthNames = (month) => {
@@ -4349,6 +4349,99 @@ const getDebtor = (page) => {
       store.PageProduct = error.response?.data?.message;
       store.error = true;
     });
+};
+
+const getAllHistoryForExportDebtor = async () => {
+  const id = localStorage.getItem("id");
+  const schoolId = localStorage.getItem("school_id");
+  const token = localStorage.getItem("token");
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  let urlBase;
+  if (debtor.dayModal) {
+    urlBase = `/payment/employee-debtor/${schoolId}/${id}/${debtor.year}/${debtor.month}/page`;
+  } else if (debtor.monthModal) {
+    urlBase = `/payment/debtor-group/${schoolId}/${debtor.group_id}/${debtor.year}/${debtor.month}/page`;
+  } else {
+    return;
+  }
+
+  let allData = [];
+  let page = 1;
+  let hasMore = true;
+
+  while (hasMore) {
+    try {
+      const res = await axios.get(`${urlBase}?page=${page}`, config);
+      const records = res.data?.data?.records || [];
+      if (records.length > 0) {
+        allData = allData.concat(records);
+        page++;
+        hasMore = records.length === 15;
+      } else {
+        hasMore = false;
+      }
+    } catch (err) {
+      console.error("Export uchun malumotlarni olishda xatolik:", err);
+      hasMore = false;
+    }
+  }
+  debtor.exportList = allData;
+};
+
+const exportToExcelDebtor = async () => {
+  loading.excel = true;
+  await getAllHistoryForExportDebtor();
+
+  const rawData = debtor.exportList;
+
+  if (!rawData || rawData.length === 0) {
+    loading.excel = false;
+    notification.warning("Yuklash uchun ma'lumot topilmadi");
+    return;
+  }
+
+  const dataToExport = rawData.map((item) => ({
+    "O'quvchi (F . I . O)": item.student_name,
+    "O'qituvchi (F . I . O)": item.teacher_name,
+    "Guruh nomi": item.group_name,
+    "Guruh narxi": Number(item.group_price).toLocaleString("uz-UZ") + " so'm",
+    "Qarzdorlik suma": Number(item.debt),
+  }));
+
+  const ws = XLSX.utils.json_to_sheet(dataToExport, { origin: "A1" });
+
+  const numColumns = Object.keys(dataToExport[0]).length;
+  ws["!ref"] = XLSX.utils.encode_range({
+    s: { c: 0, r: 0 },
+    e: { c: numColumns - 1, r: dataToExport.length },
+  });
+
+  ws["!cols"] = [
+    { wpx: 180 },
+    { wpx: 180 },
+    { wpx: 180 },
+    { wpx: 200 },
+    { wpx: 120 },
+  ];
+
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, "Qarzdorlar Tarixi");
+
+  const fileName = debtor.dayModal
+    ? `qarzdorlar_tarixi_${debtor.year}-${debtor.month}.xlsx`
+    : `guruhni_qarzdorlar_tarixi_${debtor.year}-${debtor.month}-${debtor.group_name}.xlsx`;
+
+  const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+  const blob = new Blob([excelBuffer], { type: "application/octet-stream" });
+  saveAs(blob, fileName);
+  loading.excel = false;
+  debtor.modal = !debtor.modal;
+  notification.success("Excel fayl yuklab olindi!");
 };
 
 // ------------ axios post ------------- //
