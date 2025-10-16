@@ -2987,7 +2987,7 @@ const exportToExcel = async () => {
     return;
   }
 
-  const rawData = list.filter(item => item.status !== 'delete');
+  const rawData = list.filter((item) => item.status !== "delete");
 
   const dataToExport = rawData.map((item) => ({
     "O'quvchi (F . I . O)": item.student_name,

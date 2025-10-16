@@ -36,10 +36,7 @@ const routes = [
         "dev_school",
         "camelot",
         "it_park",
-        "element",
-        "sophie's",
         "zafar_azimov_school",
-        "silverstudy",
         "sayyimov_academy",
         "business_club",
         "anoreducation",
@@ -72,10 +69,10 @@ const routes = [
             "dev_school",
             "camelot",
             "it_park",
-            "element",
-            "sophie's",
+  
+  
             "zafar_azimov_school",
-            "silverstudy",
+  
             "sayyimov_academy", // qoladi, chunki boshqa rollar uchun ruxsat
             "business_club",
             "anoreducation",
@@ -94,10 +91,10 @@ const routes = [
             "dev_school",
             "camelot",
             "it_park",
-            "element",
-            "sophie's",
+  
+  
             "zafar_azimov_school",
-            "silverstudy",
+  
             "sayyimov_academy",
             "business_club",
             "anoreducation",
@@ -116,10 +113,10 @@ const routes = [
             "dev_school",
             "camelot",
             "it_park",
-            "element",
-            "sophie's",
+  
+  
             "zafar_azimov_school",
-            "silverstudy",
+  
             "sayyimov_academy",
             "business_club",
             "anoreducation",
@@ -138,10 +135,10 @@ const routes = [
             "dev_school",
             "camelot",
             "it_park",
-            "element",
-            "sophie's",
+  
+  
             "zafar_azimov_school",
-            "silverstudy",
+  
             "sayyimov_academy",
             "business_club",
             "anoreducation",
@@ -160,10 +157,10 @@ const routes = [
             "dev_school",
             "camelot",
             "it_park",
-            "element",
-            "sophie's",
+  
+  
             "zafar_azimov_school",
-            "silverstudy",
+  
             "sayyimov_academy",
             "business_club",
             "anoreducation",
@@ -182,10 +179,10 @@ const routes = [
             "dev_school",
             "camelot",
             "it_park",
-            "element",
-            "sophie's",
+  
+  
             "zafar_azimov_school",
-            "silverstudy",
+  
             "sayyimov_academy",
             "business_club",
             "anoreducation",
@@ -204,10 +201,10 @@ const routes = [
             "dev_school",
             "camelot",
             "it_park",
-            "element",
-            "sophie's",
+  
+  
             "zafar_azimov_school",
-            "silverstudy",
+  
             "sayyimov_academy",
             "business_club",
             "anoreducation",
@@ -225,9 +222,9 @@ const routes = [
           schools: [
             "dev_school",
             "camelot",
-            "element",
+  
             "zafar_azimov_school",
-            "silverstudy",
+  
             "sayyimov_academy",
             "business_club",
             "anoreducation",
@@ -246,10 +243,10 @@ const routes = [
             "dev_school",
             "camelot",
             "it_park",
-            "element",
-            "sophie's",
+  
+  
             "zafar_azimov_school",
-            "silverstudy",
+  
             "sayyimov_academy",
             "business_club",
             "anoreducation",
@@ -268,10 +265,10 @@ const routes = [
             "dev_school",
             "camelot",
             "it_park",
-            "element",
-            "sophie's",
+  
+  
             "zafar_azimov_school",
-            "silverstudy",
+  
             "sayyimov_academy",
             "business_club",
             "anoreducation",
@@ -290,10 +287,10 @@ const routes = [
             "dev_school",
             "camelot",
             "it_park",
-            "element",
-            "sophie's",
+  
+  
             "zafar_azimov_school",
-            "silverstudy",
+  
             "sayyimov_academy",
             "business_club",
             "anoreducation",
@@ -312,10 +309,10 @@ const routes = [
             "dev_school",
             "camelot",
             "it_park",
-            "element",
-            "sophie's",
+  
+  
             "zafar_azimov_school",
-            "silverstudy",
+  
             "sayyimov_academy",
             "business_club",
             "anoreducation",
@@ -334,10 +331,10 @@ const routes = [
             "dev_school",
             "camelot",
             "it_park",
-            "element",
-            "sophie's",
+  
+  
             "zafar_azimov_school",
-            "silverstudy",
+  
             "sayyimov_academy",
             "business_club",
             "anoreducation",
@@ -355,9 +352,9 @@ const routes = [
           schools: [
             "dev_school",
             "camelot",
-            "element",
+  
             "zafar_azimov_school",
-            "silverstudy",
+  
             "sayyimov_academy",
             "business_club",
             "anoreducation",
@@ -375,9 +372,9 @@ const routes = [
           schools: [
             "dev_school",
             "camelot",
-            "element",
+  
             "zafar_azimov_school",
-            "silverstudy",
+  
             "sayyimov_academy",
             "business_club",
             "anoreducation",
@@ -396,10 +393,10 @@ const routes = [
             "dev_school",
             "camelot",
             "it_park",
-            "element",
-            "sophie's",
+  
+  
             "zafar_azimov_school",
-            "silverstudy",
+  
             "sayyimov_academy",
             "business_club",
             "anoreducation",
@@ -418,10 +415,10 @@ const routes = [
             "dev_school",
             "camelot",
             "it_park",
-            "element",
-            "sophie's",
+  
+  
             "zafar_azimov_school",
-            "silverstudy",
+  
             "sayyimov_academy",
             "business_club",
             "anoreducation",
@@ -439,9 +436,9 @@ const routes = [
           schools: [
             "dev_school",
             "camelot",
-            "element",
+  
             "zafar_azimov_school",
-            "silverstudy",
+  
             "sayyimov_academy",
             "business_club",
             "anoreducation",
@@ -460,10 +457,10 @@ const routes = [
             "dev_school",
             "camelot",
             "it_park",
-            "element",
-            "sophie's",
+  
+  
             "zafar_azimov_school",
-            "silverstudy",
+  
             "sayyimov_academy",
             "business_club",
             "anoreducation",
