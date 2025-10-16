@@ -1649,6 +1649,331 @@
         </transition>
       </div>
       <!-- ----------------------------------------- teacher payment hsitory modal end ---------------------------------------- -->
+
+      <!-- ------------------------------------------- debtor modal ----------------------------------------------------- -->
+      <div
+        @click.self="debtorModal"
+        :class="
+          debtor.modal
+            ? 'fixed overflow-y-auto flex bg-[rgba(0,0,0,0.5)] overflow-x-hidden z-50 justify-center items-center w-full inset-0 h-full'
+            : 'hidden'
+        "
+      >
+        <transition name="modal-fade">
+          <div class="relative w-full h-auto max-w-xl p-4">
+            <!-- Modal content -->
+            <div
+              class="relative p-4 rounded-lg shadow sm:p-5"
+              :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
+            >
+              <!-- Modal header -->
+              <div
+                class="flex flex-col items-center gap-5 pb-4 mb-4 border-b rounded-t sm:mb-5"
+              >
+                <div class="flex items-center justify-between w-full">
+                  <h3
+                    class="text-lg"
+                    :class="navbar.userNav ? 'text-white' : 'text-black'"
+                  >
+                    Qarzdorlar tarixini ko'rish
+                  </h3>
+                  <button
+                    @click="debtorModal"
+                    type="button"
+                    class="bg-transparent hover:bg-gray-200 hover rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+                    :class="{ 'text-white': navbar.userNav }"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      class="w-5 h-5"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                        clip-rule="evenodd"
+                      ></path>
+                    </svg>
+                    <span class="sr-only">Close modal</span>
+                  </button>
+                </div>
+                <div
+                  class="flex items-center justify-between w-full sm:w-auto"
+                  id="navbar-sticky"
+                >
+                  <ul
+                    class="flex flex-col items-center w-full gap-5 font-medium text-white sm:flex-row"
+                  >
+                    <li
+                      class="w-full p-2 px-5 text-sm text-center bg-gray-600 rounded-lg cursor-pointer sm:max-w-fit hover:bg-gray-500 sm:text-md"
+                      :class="debtor.dayModal ? 'btnAdd' : 'bg-gray-600'"
+                      @click="debtorDayModal"
+                    >
+                      <span>Oy bo'yicha ko'rish</span>
+                    </li>
+                    <li
+                      class="w-full p-2 px-5 text-sm text-center bg-gray-600 rounded-lg cursor-pointer sm:max-w-fit hover:bg-gray-500 sm:text-md"
+                      :class="debtor.monthModal ? 'btnAdd' : 'bg-gray-600'"
+                      @click="debtorMonthModal"
+                    >
+                      <span>Guruh bo'yicha ko'rish</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <!-- Modal body -->
+              <form
+                v-show="debtor.dayModal"
+                @submit.prevent="getDebtor(store.debtorPagination)"
+                :class="{ darkForm: navbar.userNav }"
+              >
+                <div class="grid gap-4 mb-4 font-medium">
+                  <div>
+                    <label for="year" class="block mb-2 text-sm"
+                      >Yilni tanlang</label
+                    >
+                    <select
+                      v-model="debtor.year"
+                      id="name"
+                      class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                      required
+                    >
+                      <option value="" disabled selected>Yilni tanlang</option>
+                      <option
+                        v-for="i in store.curentYil"
+                        :key="i.id"
+                        :value="i.name"
+                      >
+                        {{ i.name }}
+                      </option>
+                    </select>
+                  </div>
+                  <div>
+                    <label for="month" class="block mb-2 text-sm"
+                      >Oyni tanlang</label
+                    >
+                    <select
+                      v-model="debtor.month"
+                      id="month"
+                      class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                      required
+                    >
+                      <option value="" disabled selected>Oyni tanlang</option>
+                      <option value="01">Yanvar</option>
+                      <option value="02">Fevral</option>
+                      <option value="03">Mart</option>
+                      <option value="04">Aprel</option>
+                      <option value="05">May</option>
+                      <option value="06">Iyun</option>
+                      <option value="07">Iyul</option>
+                      <option value="08">Avgust</option>
+                      <option value="09">Sentabr</option>
+                      <option value="10">Oktabr</option>
+                      <option value="11">Noyabr</option>
+                      <option value="12">Dekabr</option>
+                    </select>
+                  </div>
+                </div>
+                
+                <div
+                  class="flex flex-col justify-center w-full gap-5 pt-5 mt-5 border-t"
+                >
+                  <ButtonLoader
+                    :loading="loading.excel"
+                    @click="exportToExcelDebtor"
+                    type="button"
+                    class="btnAdd3 text-white inline-flex items-center justify-center bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                  >
+                    Excelga yuklab olish
+                  </ButtonLoader>
+                  <div class="flex items-center justify-between w-full">
+                    <button
+                      @click="debtorModal"
+                      type="button"
+                      class="border inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                    >
+                      Bekor qilish
+                    </button>
+                    <ButtonLoader
+                      :loading="loading.view"
+                      type="submit"
+                      class="btnAdd text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                    >
+                      Ko'rish
+                    </ButtonLoader>
+                  </div>
+                </div>
+              </form>
+              <form
+                v-show="debtor.monthModal"
+                @submit.prevent="getDebtor(store.debtorPagination)"
+                :class="{ darkForm: navbar.userNav }"
+              >
+                <div class="grid gap-4 mb-4 font-medium">
+                  <div>
+                    <label for="year" class="block mb-2 text-sm"
+                      >Yilni tanlang</label
+                    >
+                    <select
+                      v-model="debtor.year"
+                      id="name"
+                      class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                      required
+                    >
+                      <option value="" disabled selected>Yilni tanlang</option>
+                      <option
+                        v-for="i in store.curentYil"
+                        :key="i.id"
+                        :value="i.name"
+                      >
+                        {{ i.name }}
+                      </option>
+                    </select>
+                  </div>
+                  <div>
+                    <label for="month" class="block mb-2 text-sm"
+                      >Oyni tanlang</label
+                    >
+                    <select
+                      v-model="debtor.month"
+                      id="month"
+                      class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                      required
+                    >
+                      <option value="" disabled selected>Oyni tanlang</option>
+                      <option value="01">Yanvar</option>
+                      <option value="02">Fevral</option>
+                      <option value="03">Mart</option>
+                      <option value="04">Aprel</option>
+                      <option value="05">May</option>
+                      <option value="06">Iyun</option>
+                      <option value="07">Iyul</option>
+                      <option value="08">Avgust</option>
+                      <option value="09">Sentabr</option>
+                      <option value="10">Oktabr</option>
+                      <option value="11">Noyabr</option>
+                      <option value="12">Dekabr</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label
+                      for="name"
+                      class="block mb-2 text-sm"
+                      :class="navbar.userNav ? 'text-white' : 'text-black'"
+                      >Guruhni tanlang</label
+                    >
+                    <div class="relative w-full">
+                      <div
+                        class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"
+                      >
+                        <svg
+                          aria-hidden="true"
+                          class="w-5 h-5"
+                          fill="currentColor"
+                          viewbox="0 0 20 20"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            fill-rule="evenodd"
+                            d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                            clip-rule="evenodd"
+                          />
+                        </svg>
+                      </div>
+                      <input
+                        v-model="debtor.filter"
+                        @focus="debtor.selectLamp = true"
+                        @blur="
+                          debtor.selectLamp = false;
+                          debtor.filter_show = false;
+                        "
+                        @input="
+                          debtor.filter_show = true;
+                          searchDebtorFunc();
+                        "
+                        type="search"
+                        id="simple-search"
+                        class="block w-full p-2 pl-10 text-sm border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="Guruhni tanlang yoki qidirish..."
+                      />
+                      <ul
+                        v-show="
+                          debtor.filter_show && debtor.searchList.length > 0
+                        "
+                        class="absolute z-10 w-full py-1 overflow-hidden overflow-y-auto text-gray-600 bg-white rounded max-h-80 bottom-full"
+                      >
+                        <li
+                          class="pl-2 cursor-pointer hover:bg-blue-600 hover:text-white"
+                          v-for="(i, index) in debtor.searchList"
+                          :key="index"
+                          @mousedown.prevent="
+                            debtor.group_id = i.id;
+                            debtor.group_name = i.name;
+                            debtor.filter_show = false;
+                            debtor.filter = i.name;
+                          "
+                        >
+                          {{ i.name }}
+                        </li>
+                      </ul>
+                      <ul
+                        v-show="debtor.selectLamp && !debtor.filter"
+                        class="absolute z-10 w-full py-1 overflow-hidden overflow-y-auto text-gray-600 bg-white rounded max-h-80 bottom-full"
+                      >
+                        <li
+                          class="pl-2 cursor-pointer hover:bg-blue-600 hover:text-white whitespace-nowrap"
+                          v-for="(i, index) in store.group"
+                          :key="index"
+                          @mousedown.prevent="
+                            debtor.group_id = i.id;
+                            debtor.group_name = i.name;
+                            debtor.selectLamp = false;
+                            debtor.filter = i.name;
+                          "
+                        >
+                          {{ i.name }}
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="flex flex-col justify-center w-full gap-5 pt-5 mt-5 border-t"
+                >
+                  <ButtonLoader
+                    :loading="loading.excel"
+                    @click="exportToExcelDebtor"
+                    type="button"
+                    class="btnAdd3 text-white inline-flex items-center justify-center bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                  >
+                    Excelga yuklab olish
+                  </ButtonLoader>
+                  <div class="flex items-center justify-between w-full">
+                    <button
+                      @click="debtorModal"
+                      type="button"
+                      class="border inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                    >
+                      Bekor qilish
+                    </button>
+                    <ButtonLoader
+                      :loading="loading.view"
+                      type="submit"
+                      class="btnAdd text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                    >
+                      Ko'rish
+                    </ButtonLoader>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </transition>
+      </div>
+      <!-- ------------------------------------------- debtor modal end ------------------------------------------------- -->
       <div
         v-show="
           (store.CostPageProduct && store.SalaryPageProduct) ||
@@ -1708,6 +2033,15 @@
               class="btnAdd flex items-center w-full sm:max-w-fit justify-center whitespace-nowrap text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2.5"
             >
               <span class="">To'lov tarixi</span>
+            </button>
+
+            <button
+              v-show="!store.guard"
+              @click="debtor.modal = true"
+              type="button"
+              class="btnAdd2 flex items-center w-full sm:max-w-fit justify-center whitespace-nowrap text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-4 py-2.5"
+            >
+              <span class="">Qarzdorlar tarixi</span>
             </button>
           </div>
         </div>
@@ -1915,7 +2249,7 @@
                       class="px-8 py-4 font-medium text-center text-red-800 whitespace-nowrap"
                     >
                       <p class="bg-red-100 rounded-[5px] p-1">
-                        {{ i.price.toLocaleString("uz-UZ") }} so'm
+                        {{ i.price?.toLocaleString("uz-UZ") }} so'm
                       </p>
                     </td>
                     <td
@@ -2058,7 +2392,7 @@
         </div>
 
         <div
-          v-show="!store.guard"
+          v-show="!store.guard && !debtor.isTable"
           class="flex flex-col justify-between gap-4 font-bold sm:flex-row sm:items-center"
         >
           <h2
@@ -2092,7 +2426,7 @@
         </div>
 
         <div
-          v-show="!store.guard"
+          v-show="!store.guard && !debtor.isTable"
           class="relative mb-10 overflow-hidden rounded-lg shadow-md"
           :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
         >
@@ -2155,7 +2489,7 @@
                     <p
                       class="bg-red-100 rounded-[5px] p-1 px-3 whitespace-nowrap"
                     >
-                      {{ Number(i.group_price).toLocaleString("uz-UZ") }} so'm
+                      {{ Number(i.group_price)?.toLocaleString("uz-UZ") }} so'm
                     </p>
                   </td>
                   <td class="px-8 py-4 font-medium text-center text-blue-800">
@@ -2169,7 +2503,7 @@
                     <p
                       class="bg-green-100 rounded-[5px] p-1 px-3 whitespace-nowrap"
                     >
-                      {{ i.price.toLocaleString("uz-UZ") }} so'm
+                      {{ i.price?.toLocaleString("uz-UZ") }} so'm
                     </p>
                   </td>
                   <td class="px-8 py-4 font-medium text-center text-blue-800">
@@ -2270,6 +2604,158 @@
                   if (store.teacherPage[0] * 15 < store.teacherPage[1]) {
                     store.teacherPagination += 1;
                     getHistory(store.teacherPagination);
+                  }
+                "
+              >
+                <span class="hidden md:block">Keyingi</span>
+                <i
+                  class="text-2xl font-bold text-black md:hidden bx bx-chevron-right"
+                ></i>
+              </li>
+            </ul>
+          </nav>
+        </div>
+
+        <div
+          v-show="!store.guard && debtor.isTable"
+          class="relative mb-10 overflow-hidden rounded-lg shadow-md"
+          :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
+        >
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm text-left">
+              <thead
+                class="text-xs text-white uppercase rounded-lg btnAdd whitespace-nowrap"
+              >
+                <tr>
+                  <th scope="col" class="py-3 text-center whitespace-nowrap">
+                    O'quvchi (F . I . O)
+                  </th>
+                  <th scope="col" class="py-3 text-center whitespace-nowrap">
+                    O'qituvchi (F . I . O)
+                  </th>
+                  <th scope="col" class="py-3 text-center whitespace-nowrap">
+                    Guruh
+                  </th>
+                  <th scope="col" class="py-3 text-center whitespace-nowrap">
+                    Kurs narxi
+                  </th>
+                  <th scope="col" class="py-3 text-center whitespace-nowrap">
+                    Qarzdorlik
+                  </th>
+                </tr>
+              </thead>
+              <tbody v-show="!store.error">
+                <tr
+                  v-for="i in store.PageProduct"
+                  :key="i"
+                  class="border-b"
+                  :class="
+                    navbar.userNav ? 'hover:bg-gray-700' : 'hover:bg-gray-50'
+                  "
+                >
+                  <th
+                    scope="row"
+                    class="px-8 py-4 font-medium text-center whitespace-nowrap"
+                  >
+                    <span>{{ i.student_name }}</span>
+                  </th>
+                  <td class="px-8 py-4 font-medium text-center text-red-800">
+                    <p
+                      class="bg-red-100 rounded-[5px] p-1 px-3 whitespace-nowrap"
+                    >
+                      {{ i.teacher_name }}
+                    </p>
+                  </td>
+
+                  <td class="px-8 py-4 font-medium text-center text-blue-800">
+                    <p
+                      class="bg-blue-100 rounded-[5px] p-1 px-3 whitespace-nowrap"
+                    >
+                      {{ i.group_name }}
+                    </p>
+                  </td>
+                  <td class="px-8 py-4 font-medium text-center text-green-800">
+                    <p
+                      class="bg-green-100 rounded-[5px] p-1 px-3 whitespace-nowrap"
+                    >
+                      {{ i.group_price?.toLocaleString("uz-UZ") }} so'm
+                    </p>
+                  </td>
+                  <td class="px-8 py-4 font-medium text-center text-red-800">
+                    <p
+                      class="bg-red-100 rounded-[5px] p-1 px-3 whitespace-nowrap"
+                    >
+                      {{ i.debt?.toLocaleString("uz-UZ") }} so'm
+                    </p>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div
+              v-show="
+                (store.PageProduct && store.error) ||
+                store.PageProduct.length == 0
+              "
+              class="w-full p-20 text-2xl font-medium text-center max-w-screen"
+            >
+              <h1>Qarzdorlar ro'yhati bo'sh</h1>
+            </div>
+          </div>
+          <nav
+            class="flex flex-row items-center justify-between p-4 space-y-0"
+            aria-label="Table navigation"
+          >
+            <!-- Oldingi sahifa tugmasi -->
+            <ul class="flex items-center">
+              <li
+                :class="[
+                  store.debtorPagination === 1
+                    ? 'pointer-events-none opacity-50'
+                    : '',
+                  'flex font-bold text-black border-2 bg-white hover:bg-gray-300 items-center justify-center text-sm sm:py-2 sm:px-6 px-3 rounded-lg leading-tight cursor-pointer transition duration-200 ease-in-out',
+                ]"
+                @click="
+                  if (store.debtorPagination > 1) {
+                    store.debtorPagination -= 1;
+                    getDebtor(store.debtorPagination);
+                  }
+                "
+              >
+                <i
+                  class="text-2xl font-bold text-black md:hidden bx bx-chevron-left"
+                ></i>
+                <span class="hidden md:block">Oldingi</span>
+              </li>
+            </ul>
+
+            <!-- Sahifa raqami -->
+            <span class="text-sm font-normal text-center">
+              Sahifa
+              <span class="font-semibold">
+                <span>{{ store.debtorPage[0] * 15 - 14 }}</span> -
+                <span v-if="store.debtorPage[0] * 15 < store.debtorPage[1]">{{
+                  store.debtorPage[0] * 15
+                }}</span
+                ><span v-else>{{ store.debtorPage[1] }}</span>
+              </span>
+              dan
+              <span class="font-semibold">{{ store.debtorPage[1] }}</span>
+            </span>
+
+            <!-- Keyingi sahifa tugmasi -->
+            <ul class="flex items-center">
+              <li
+                :class="[
+                  store.debtorPage[0] * 15 >= store.debtorPage[1]
+                    ? 'pointer-events-none opacity-50'
+                    : '',
+                  'flex font-bold text-black border-2 bg-white hover:bg-gray-300 items-center justify-center text-sm sm:py-2 sm:px-6 px-3 rounded-lg leading-tight cursor-pointer transition duration-200 ease-in-out',
+                ]"
+                @click="
+                  if (store.debtorPage[0] * 15 < store.debtorPage[1]) {
+                    store.debtorPagination += 1;
+                    getDebtor(store.debtorPagination);
                   }
                 "
               >
@@ -2495,7 +2981,7 @@
                       class="px-8 py-4 font-medium text-center text-red-800 whitespace-nowrap"
                     >
                       <p class="bg-red-100 rounded-[5px] p-1">
-                        {{ i.price.toLocaleString("uz-UZ") }} so'm
+                        {{ i.price?.toLocaleString("uz-UZ") }} so'm
                       </p>
                     </td>
                     <td
@@ -2683,6 +3169,8 @@ const store = reactive({
   costPagination: 1,
   teacherPage: [],
   teacherPagination: 1,
+  debtorPage: [],
+  debtorPagination: 1,
   error: false,
   guard: userRole == "_ow_sch_" || userRole == "_ad_sch_",
   group: "",
@@ -2864,6 +3352,43 @@ const history = reactive({
   dayPay: 0,
 });
 
+const debtorDayModal = () => {
+  debtor.dayModal = true;
+  debtor.monthModal = false;
+};
+
+const debtorMonthModal = () => {
+  debtor.dayModal = false;
+  debtor.monthModal = true;
+};
+
+const debtorModal = () => {
+  debtor.modal = !debtor.modal;
+  debtor.year = hozirgiYil;
+  debtor.month = hozirgiOy;
+  debtor.day = hozirgiKun;
+  debtor.group_id = "";
+  debtorDayModal();
+  getHistory(store.teacherPagination);
+};
+
+const debtor = reactive({
+  year: hozirgiYil,
+  month: hozirgiOy,
+  day: hozirgiKun,
+  group_id: "",
+  group_name: "",
+  modal: false,
+  dayModal: true,
+  monthModal: false,
+  filter_show: false,
+  filter: "",
+  selectLamp: false,
+  searchList: [],
+  isTable: false,
+  exportList: "",
+});
+
 const monthNames = (month) => {
   switch (month) {
     case "01":
@@ -2925,6 +3450,17 @@ function searchHistoryCostFunc() {
     for (let i of store.costCategory) {
       if (i.name.toLowerCase().includes(history.filter_cost.toLowerCase())) {
         history.searchList_cost.push(i);
+      }
+    }
+  }
+}
+
+function searchDebtorFunc() {
+  debtor.searchList = [];
+  if (debtor.filter) {
+    for (let i of store.group) {
+      if (i.name.toLowerCase().includes(debtor.filter.toLowerCase())) {
+        debtor.searchList.push(i);
       }
     }
   }
@@ -3160,6 +3696,7 @@ const getOneSalary = async (id) => {
 
 const getHistory = async (page) => {
   loading.view = true;
+  debtor.isTable = false;
   const id = localStorage.getItem("id");
   const schoolId = localStorage.getItem("school_id");
   const token = localStorage.getItem("token");
@@ -3383,11 +3920,8 @@ const exportToExcel = async () => {
     notification.warning("Yuklash uchun ma'lumot topilmadi");
     return;
   }
-  
-  
-  const rawData = list.filter(item => item.status !== 'delete');
 
-
+  const rawData = list.filter((item) => item.status !== "delete");
 
   const dataToExport = rawData.map((item) => ({
     "O'quvchi (F . I . O)": item.student_name,
@@ -3774,6 +4308,143 @@ const exportToExcelSalary = async () => {
   const blob = new Blob([excelBuffer], { type: "application/octet-stream" });
   saveAs(blob, fileName);
   loading.excel = false;
+  notification.success("Excel fayl yuklab olindi!");
+};
+
+const getDebtor = (page) => {
+  loading.view = true;
+  store.allProducts = false;
+  const id = localStorage.getItem("id");
+  const schoolId = localStorage.getItem("school_id");
+  const token = localStorage.getItem("token");
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  let url;
+  if (debtor.dayModal) {
+    url = `/payment/employee-debtor/${schoolId}/${id}/${debtor.year}/${debtor.month}/page?page=${page}`;
+  } else if (debtor.monthModal) {
+    url = `/payment/debtor-group/${schoolId}/${debtor.group_id}/${debtor.year}/${debtor.month}/page?page=${page}`;
+  } else {
+    return;
+  }
+
+  axios
+    .get(url, config)
+    .then((res) => {
+      const records = res.data?.data?.records;
+      if (records.length !== 0) {
+        history.group_name = records[0].group_name;
+      }
+
+      store.PageProduct = records;
+      const pagination = res.data?.data?.pagination;
+      store.debtorPage = [pagination.currentPage, pagination.total_count];
+      store.error = false;
+      debtor.isTable = true;
+      loading.view = false;
+      debtor.modal = false;
+    })
+    .catch((error) => {
+      loading.view = false;
+      store.PageProduct = error.response?.data?.message;
+      store.error = true;
+    });
+};
+
+const getAllHistoryForExportDebtor = async () => {
+  const id = localStorage.getItem("id");
+  const schoolId = localStorage.getItem("school_id");
+  const token = localStorage.getItem("token");
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  let urlBase;
+  if (debtor.dayModal) {
+    urlBase = `/payment/employee-debtor/${schoolId}/${id}/${debtor.year}/${debtor.month}/page`;
+  } else if (debtor.monthModal) {
+    urlBase = `/payment/debtor-group/${schoolId}/${debtor.group_id}/${debtor.year}/${debtor.month}/page`;
+  } else {
+    return;
+  }
+
+  let allData = [];
+  let page = 1;
+  let hasMore = true;
+
+  while (hasMore) {
+    try {
+      const res = await axios.get(`${urlBase}?page=${page}`, config);
+      const records = res.data?.data?.records || [];
+      if (records.length > 0) {
+        allData = allData.concat(records);
+        page++;
+        hasMore = records.length === 15;
+      } else {
+        hasMore = false;
+      }
+    } catch (err) {
+      console.error("Export uchun malumotlarni olishda xatolik:", err);
+      hasMore = false;
+    }
+  }
+  debtor.exportList = allData;
+};
+
+const exportToExcelDebtor = async () => {
+  loading.excel = true;
+  await getAllHistoryForExportDebtor();
+
+  const rawData = debtor.exportList;
+
+  if (!rawData || rawData.length === 0) {
+    loading.excel = false;
+    notification.warning("Yuklash uchun ma'lumot topilmadi");
+    return;
+  }
+
+  const dataToExport = rawData.map((item) => ({
+    "O'quvchi (F . I . O)": item.student_name,
+    "O'qituvchi (F . I . O)": item.teacher_name,
+    "Guruh nomi": item.group_name,
+    "Guruh narxi": Number(item.group_price).toLocaleString("uz-UZ") + " so'm",
+    "Qarzdorlik suma": Number(item.debt),
+  }));
+
+  const ws = XLSX.utils.json_to_sheet(dataToExport, { origin: "A1" });
+
+  const numColumns = Object.keys(dataToExport[0]).length;
+  ws["!ref"] = XLSX.utils.encode_range({
+    s: { c: 0, r: 0 },
+    e: { c: numColumns - 1, r: dataToExport.length },
+  });
+
+  ws["!cols"] = [
+    { wpx: 180 },
+    { wpx: 180 },
+    { wpx: 180 },
+    { wpx: 200 },
+    { wpx: 120 },
+  ];
+
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, "Qarzdorlar Tarixi");
+
+  const fileName = debtor.dayModal
+    ? `qarzdorlar_tarixi_${debtor.year}-${debtor.month}.xlsx`
+    : `guruhni_qarzdorlar_tarixi_${debtor.year}-${debtor.month}-${debtor.group_name}.xlsx`;
+
+  const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+  const blob = new Blob([excelBuffer], { type: "application/octet-stream" });
+  saveAs(blob, fileName);
+  loading.excel = false;
+  debtor.modal = !debtor.modal;
   notification.success("Excel fayl yuklab olindi!");
 };
 
