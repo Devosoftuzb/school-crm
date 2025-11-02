@@ -3697,6 +3697,23 @@ const getEditProduct = (id) => {
       },
     })
     .then((res) => {
+      const createdAt = res.data.createdAt ? new Date(res.data.createdAt) : null;
+      const today = new Date();
+
+      const sameDay =
+        createdAt &&
+        createdAt.getFullYear() === today.getFullYear() &&
+        createdAt.getMonth() === today.getMonth() &&
+        createdAt.getDate() === today.getDate();
+
+      if (!sameDay) {
+       notification.warning(
+  "O'zgartirib bo'lmaydi, bugungi sanaga mos emas. Faqat bugungi qilingan to‘lovlarni o‘zgartira olasiz."
+);
+
+        return; 
+      }
+
       edit.id = id;
       form.year = res.data.year;
       form.month = res.data.month;
@@ -3706,14 +3723,18 @@ const getEditProduct = (id) => {
       form.description = res.data.description;
       form.id = res.data.student.id;
       form.group_id = res.data.group.id;
-      formatDateToNumeric(new Date(res.data.createdAt));
+
+      formatDateToNumeric(createdAt);
+
       store.school_logo = res.data.school.image;
       store.school_name = res.data.school.name;
       store.student_name = res.data.student.full_name;
       store.group_name = res.data.group.name;
       store.price = res.data.group.price;
+
       const teacher = store.PageProduct.find((teacher) => teacher.id === id);
-      store.teacher_name = teacher.teacher_name;
+      store.teacher_name = teacher?.teacher_name || "";
+
       edit.modal = true;
     })
     .catch((error) => {
@@ -3722,6 +3743,7 @@ const getEditProduct = (id) => {
       );
     });
 };
+
 
 const editProduct = () => {
   const data = {
