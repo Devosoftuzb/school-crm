@@ -40,7 +40,8 @@ const routes = [
         "sayyimov_academy",
         "business_club",
         "anoreducation",
-        "gulistan_academy"
+        "gulistan_academy",
+        "hikorean",
       ],
       title: "Home",
     },
@@ -53,10 +54,10 @@ const routes = [
           const schoolName = localStorage.getItem("school_name");
 
           if (role === "_ad_sch_" && schoolName === "sayyimov_academy") {
-            return next({ name: "customers" }); 
+            return next({ name: "customers" });
           }
 
-          return next({ name: "dashboard" }); 
+          return next({ name: "dashboard" });
         },
       },
       {
@@ -69,14 +70,12 @@ const routes = [
             "dev_school",
             "camelot",
             "it_park",
-  
-  
             "zafar_azimov_school",
-  
             "sayyimov_academy", // qoladi, chunki boshqa rollar uchun ruxsat
             "business_club",
             "anoreducation",
-            "gulistan_academy"
+            "gulistan_academy",
+            "hikorean",
           ],
           title: "Asosiy",
         },
@@ -91,14 +90,12 @@ const routes = [
             "dev_school",
             "camelot",
             "it_park",
-  
-  
             "zafar_azimov_school",
-  
             "sayyimov_academy",
             "business_club",
             "anoreducation",
-            "gulistan_academy"
+            "gulistan_academy",
+            "hikorean",
           ],
           title: "Xodimlar",
         },
@@ -113,14 +110,12 @@ const routes = [
             "dev_school",
             "camelot",
             "it_park",
-  
-  
             "zafar_azimov_school",
-  
             "sayyimov_academy",
             "business_club",
             "anoreducation",
-            "gulistan_academy"
+            "gulistan_academy",
+            "hikorean",
           ],
           title: "Xodim Sahifasi",
         },
@@ -135,14 +130,12 @@ const routes = [
             "dev_school",
             "camelot",
             "it_park",
-  
-  
             "zafar_azimov_school",
-  
             "sayyimov_academy",
             "business_club",
             "anoreducation",
-            "gulistan_academy"
+            "gulistan_academy",
+            "hikorean",
           ],
           title: "O'quvchilar",
         },
@@ -157,14 +150,12 @@ const routes = [
             "dev_school",
             "camelot",
             "it_park",
-  
-  
             "zafar_azimov_school",
-  
             "sayyimov_academy",
             "business_club",
             "anoreducation",
-            "gulistan_academy"
+            "gulistan_academy",
+            "hikorean",
           ],
           title: "Arxiv o'quvchilar",
         },
@@ -179,14 +170,12 @@ const routes = [
             "dev_school",
             "camelot",
             "it_park",
-  
-  
             "zafar_azimov_school",
-  
             "sayyimov_academy",
             "business_club",
             "anoreducation",
-            "gulistan_academy"
+            "gulistan_academy",
+            "hikorean",
           ],
           title: "O'quvchi Sahifasi",
         },
@@ -201,14 +190,12 @@ const routes = [
             "dev_school",
             "camelot",
             "it_park",
-  
-  
             "zafar_azimov_school",
-  
             "sayyimov_academy",
             "business_club",
             "anoreducation",
-            "gulistan_academy"
+            "gulistan_academy",
+            "hikorean",
           ],
           title: "Mijozlar",
         },
@@ -222,13 +209,12 @@ const routes = [
           schools: [
             "dev_school",
             "camelot",
-  
             "zafar_azimov_school",
-  
             "sayyimov_academy",
             "business_club",
             "anoreducation",
-            "gulistan_academy"
+            "gulistan_academy",
+            "hikorean",
           ],
           title: "Testlar",
         },
@@ -243,14 +229,12 @@ const routes = [
             "dev_school",
             "camelot",
             "it_park",
-  
-  
             "zafar_azimov_school",
-  
             "sayyimov_academy",
             "business_club",
             "anoreducation",
-            "gulistan_academy"
+            "gulistan_academy",
+            "hikorean",
           ],
           title: "Fanlar",
         },
@@ -265,14 +249,12 @@ const routes = [
             "dev_school",
             "camelot",
             "it_park",
-  
-  
             "zafar_azimov_school",
-  
             "sayyimov_academy",
             "business_club",
             "anoreducation",
-            "gulistan_academy"
+            "gulistan_academy",
+            "hikorean",
           ],
           title: "To'lovlar",
         },
@@ -287,14 +269,12 @@ const routes = [
             "dev_school",
             "camelot",
             "it_park",
-  
-  
             "zafar_azimov_school",
-  
             "sayyimov_academy",
             "business_club",
             "anoreducation",
-            "gulistan_academy"
+            "gulistan_academy",
+            "hikorean",
           ],
           title: "Davomat",
         },
@@ -309,14 +289,12 @@ const routes = [
             "dev_school",
             "camelot",
             "it_park",
-  
-  
             "zafar_azimov_school",
-  
             "sayyimov_academy",
             "business_club",
             "anoreducation",
-            "gulistan_academy"
+            "gulistan_academy",
+            "hikorean",
           ],
           title: "SMS",
         },
@@ -331,14 +309,12 @@ const routes = [
             "dev_school",
             "camelot",
             "it_park",
-  
-  
             "zafar_azimov_school",
-  
             "sayyimov_academy",
             "business_club",
             "anoreducation",
-            "gulistan_academy"
+            "gulistan_academy",
+            "hikorean",
           ],
           title: "Moliya",
         },
@@ -352,13 +328,12 @@ const routes = [
           schools: [
             "dev_school",
             "camelot",
-  
             "zafar_azimov_school",
-  
             "sayyimov_academy",
             "business_club",
             "anoreducation",
-            "gulistan_academy"
+            "gulistan_academy",
+            "hikorean",
           ],
           title: "Natijalar",
         },
@@ -372,13 +347,12 @@ const routes = [
           schools: [
             "dev_school",
             "camelot",
-  
             "zafar_azimov_school",
-  
             "sayyimov_academy",
             "business_club",
             "anoreducation",
-            "gulistan_academy"
+            "gulistan_academy",
+            "hikorean",
           ],
           title: "Natijalar Sahifasi",
         },
@@ -393,14 +367,12 @@ const routes = [
             "dev_school",
             "camelot",
             "it_park",
-  
-  
             "zafar_azimov_school",
-  
             "sayyimov_academy",
             "business_club",
             "anoreducation",
-            "gulistan_academy"
+            "gulistan_academy",
+            "hikorean",
           ],
           title: "Guruhlar",
         },
@@ -415,14 +387,12 @@ const routes = [
             "dev_school",
             "camelot",
             "it_park",
-  
-  
             "zafar_azimov_school",
-  
             "sayyimov_academy",
             "business_club",
             "anoreducation",
-            "gulistan_academy"
+            "gulistan_academy",
+            "hikorean",
           ],
           title: "Guruh Sahifasi",
         },
@@ -436,13 +406,12 @@ const routes = [
           schools: [
             "dev_school",
             "camelot",
-  
             "zafar_azimov_school",
-  
             "sayyimov_academy",
             "business_club",
             "anoreducation",
-            "gulistan_academy"
+            "gulistan_academy",
+            "hikorean",
           ],
           title: "Savollar Sahifasi",
         },
@@ -457,14 +426,12 @@ const routes = [
             "dev_school",
             "camelot",
             "it_park",
-  
-  
             "zafar_azimov_school",
-  
             "sayyimov_academy",
             "business_club",
             "anoreducation",
-            "gulistan_academy"
+            "gulistan_academy",
+            "hikorean",
           ],
           title: "Sozlamalar",
         },
