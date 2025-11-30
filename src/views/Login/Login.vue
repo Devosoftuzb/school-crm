@@ -23,8 +23,8 @@
             required
           />
         </div>
-        <div class="mb-4 relative">
-          <label for="password" class="block mt-3 sm:mt-9 mb-2 font-semibold"
+        <div class="relative mb-4">
+          <label for="password" class="block mt-3 mb-2 font-semibold sm:mt-9"
             >Parol</label
           >
           <input
@@ -106,7 +106,6 @@ import { useNotificationStore } from "@/stores/notification";
 const notification = useNotificationStore();
 const router = useRouter();
 
-const school = ref([]);
 const showPassword = ref(false);
 
 const form = reactive({
@@ -154,27 +153,8 @@ const handleSubmit = async () => {
       });
 
       localStorage.setItem("school_id", userResponse.data.school[0].id);
-      localStorage.setItem(
-        "school_name",
-        userResponse.data.school[0].name
-          .trim()
-          .replace(/\s+/g, "_")
-          .toLowerCase()
-      );
     } else if (role === "_ad_sch_" || role === "_tch_sch_") {
       localStorage.setItem("school_id", user.school_id);
-      const schoolName = await axios.get(
-        `/school/${localStorage.getItem("school_id")}`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
-      localStorage.setItem(
-        "school_name",
-        schoolName.data.name.trim().replace(/\s+/g, "_").toLowerCase()
-      );
     }
 
     
