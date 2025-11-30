@@ -5,17 +5,17 @@
     @mousedown="sidebar.sidebar = true"
   >
     <div
-      class="h-full px-3 py-4 pb-4 overflow-y-auto flex flex-col justify-between gap-10"
+      class="flex flex-col justify-between h-full gap-10 px-3 py-4 pb-4 overflow-y-auto"
       :class="{ 'bg-[#1e293b]': navbar.userNav, 'bg-white': !navbar.userNav }"
     >
       <ul class="space-y-2 font-medium mt-[70px]">
         <li v-for="i in header" :key="i.id" v-show="showMenu(i)">
           <router-link
             :to="i.link"
-            class="flex items-center text-lg p-2 cursor-pointer duration-500 hover:bg-gray-400 rounded-lg gap-2"
+            class="flex items-center gap-2 p-2 text-lg duration-500 rounded-lg cursor-pointer hover:bg-gray-400"
             :class="[
               { 'text-white': navbar.userNav },
-              { 'bg-blue-600 text-white': isActive(i.link) }   // ✅ ACTIVE CLASS
+              { 'bg-blue-600 text-white': isActive(i.link) },
             ]"
           >
             <i :class="i.icon"></i><span>{{ i.title }}</span>
@@ -26,15 +26,15 @@
       <button
         @click="Logout"
         title="Chiqish"
-        class="bottom-5 w-full sm:mb-0 mb-20 flex items-center justify-between border-b border-blue-700 p-2 rounded-lg text-blue-700"
+        class="flex items-center justify-between w-full p-2 mb-20 text-blue-700 border-b border-blue-700 rounded-lg bottom-5 sm:mb-0"
       >
         <div class="flex items-center gap-3">
           <img
             src="https://static.vecteezy.com/system/resources/thumbnails/005/129/844/small_2x/profile-user-icon-isolated-on-white-background-eps10-free-vector.jpg"
             alt=""
-            class="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gray-800 cursor-pointer border-2 border-blue-700"
+            class="w-8 h-8 bg-gray-800 border-2 border-blue-700 rounded-full cursor-pointer sm:w-10 sm:h-10"
           />
-          <span class="text-md font-bold">{{ store.name }}</span>
+          <span class="font-bold text-md">{{ store.name }}</span>
         </div>
         <i class="bx bx-log-in text-[30px] mr-1 font-medium"></i>
       </button>
@@ -54,19 +54,21 @@ const navbar = useNavStore();
 const router = useRouter();
 const route = useRoute();
 
+const role = localStorage.getItem("role");
+const school_name = localStorage.getItem("school_name");
 const store = reactive({
-  school: localStorage.getItem("school_name"),
-  guard: localStorage.getItem("role"),
+  school: school_name,
+  guard: role,
   name:
-    localStorage.getItem("role") == "_ow_sch_"
-      ? "owner"
-      : localStorage.getItem("role") == "_ad_sch_"
-      ? "administrator"
-      : localStorage.getItem("role") == "_sp_am_"
-      ? "superadmin"
-      : localStorage.getItem("role") == "_tch_sch_"
-      ? "teacher"
-      : "admin",
+    role === "_ow_sch_"
+      ? "Owner"
+      : role === "_ad_sch_"
+      ? "Administrator"
+      : role === "_sp_am_"
+      ? "Superadmin"
+      : role === "_tch_sch_"
+      ? "Teacher"
+      : "Admin",
 });
 
 const Logout = () => {
@@ -74,24 +76,14 @@ const Logout = () => {
   localStorage.removeItem("role");
   localStorage.removeItem("token");
   localStorage.removeItem("school_id");
-  location.reload();
   router.push("/login");
 };
 
-
 const showMenu = (item) => {
-  if (
-    item.link === "/" &&
-    store.guard === "_ad_sch_" &&
-    store.school === "sayyimov_academy"
-  ) {
-    return false;
-  }
   const roleArray = item.role.split(",").map((r) => r.trim());
   const schoolArray = item.school.split(",").map((s) => s.trim());
   return roleArray.includes(store.guard) && schoolArray.includes(store.school);
 };
-
 
 const isActive = (link) => {
   if (link === "/") return route.path === "/";

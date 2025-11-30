@@ -34,10 +34,7 @@ const routes = [
       roles: ["_sp_am_", "_ow_sch_", "_ad_sch_", "_tch_sch_"],
       schools: [
         "dev_school",
-        "camelot",
         "it_park",
-        "zafar_azimov_school",
-        "sayyimov_academy",
         "business_club",
         "anoreducation",
         "gulistan_academy",
@@ -47,20 +44,6 @@ const routes = [
     },
     children: [
       {
-        path: "", // ✅ Root bo‘sh child
-        name: "root-redirect",
-        beforeEnter: (to, from, next) => {
-          const role = localStorage.getItem("role");
-          const schoolName = localStorage.getItem("school_name");
-
-          if (role === "_ad_sch_" && schoolName === "sayyimov_academy") {
-            return next({ name: "customers" });
-          }
-
-          return next({ name: "dashboard" });
-        },
-      },
-      {
         path: "",
         name: "dashboard",
         component: Dashboard,
@@ -68,10 +51,7 @@ const routes = [
           roles: ["_sp_am_", "_ow_sch_", "_ad_sch_", "_tch_sch_"],
           schools: [
             "dev_school",
-            "camelot",
             "it_park",
-            "zafar_azimov_school",
-            "sayyimov_academy", // qoladi, chunki boshqa rollar uchun ruxsat
             "business_club",
             "anoreducation",
             "gulistan_academy",
@@ -88,10 +68,7 @@ const routes = [
           roles: ["_ow_sch_", "_ad_sch_"],
           schools: [
             "dev_school",
-            "camelot",
             "it_park",
-            "zafar_azimov_school",
-            "sayyimov_academy",
             "business_club",
             "anoreducation",
             "gulistan_academy",
@@ -108,10 +85,7 @@ const routes = [
           roles: ["_ow_sch_", "_ad_sch_"],
           schools: [
             "dev_school",
-            "camelot",
             "it_park",
-            "zafar_azimov_school",
-            "sayyimov_academy",
             "business_club",
             "anoreducation",
             "gulistan_academy",
@@ -128,10 +102,7 @@ const routes = [
           roles: ["_ad_sch_", "_tch_sch_"],
           schools: [
             "dev_school",
-            "camelot",
             "it_park",
-            "zafar_azimov_school",
-            "sayyimov_academy",
             "business_club",
             "anoreducation",
             "gulistan_academy",
@@ -148,10 +119,7 @@ const routes = [
           roles: ["_ad_sch_", "_tch_sch_"],
           schools: [
             "dev_school",
-            "camelot",
             "it_park",
-            "zafar_azimov_school",
-            "sayyimov_academy",
             "business_club",
             "anoreducation",
             "gulistan_academy",
@@ -168,10 +136,7 @@ const routes = [
           roles: ["_ad_sch_", "_tch_sch_"],
           schools: [
             "dev_school",
-            "camelot",
             "it_park",
-            "zafar_azimov_school",
-            "sayyimov_academy",
             "business_club",
             "anoreducation",
             "gulistan_academy",
@@ -188,10 +153,7 @@ const routes = [
           roles: ["_ad_sch_"],
           schools: [
             "dev_school",
-            "camelot",
             "it_park",
-            "zafar_azimov_school",
-            "sayyimov_academy",
             "business_club",
             "anoreducation",
             "gulistan_academy",
@@ -208,9 +170,7 @@ const routes = [
           roles: ["_ad_sch_"],
           schools: [
             "dev_school",
-            "camelot",
-            "zafar_azimov_school",
-            "sayyimov_academy",
+            "it_park",
             "business_club",
             "anoreducation",
             "gulistan_academy",
@@ -227,10 +187,7 @@ const routes = [
           roles: ["_ad_sch_"],
           schools: [
             "dev_school",
-            "camelot",
             "it_park",
-            "zafar_azimov_school",
-            "sayyimov_academy",
             "business_club",
             "anoreducation",
             "gulistan_academy",
@@ -247,10 +204,7 @@ const routes = [
           roles: ["_ad_sch_"],
           schools: [
             "dev_school",
-            "camelot",
             "it_park",
-            "zafar_azimov_school",
-            "sayyimov_academy",
             "business_club",
             "anoreducation",
             "gulistan_academy",
@@ -267,10 +221,7 @@ const routes = [
           roles: ["_ad_sch_", "_tch_sch_"],
           schools: [
             "dev_school",
-            "camelot",
             "it_park",
-            "zafar_azimov_school",
-            "sayyimov_academy",
             "business_club",
             "anoreducation",
             "gulistan_academy",
@@ -287,10 +238,7 @@ const routes = [
           roles: ["_ad_sch_"],
           schools: [
             "dev_school",
-            "camelot",
             "it_park",
-            "zafar_azimov_school",
-            "sayyimov_academy",
             "business_club",
             "anoreducation",
             "gulistan_academy",
@@ -307,10 +255,7 @@ const routes = [
           roles: ["_ad_sch_", "_ow_sch_", "_tch_sch_"],
           schools: [
             "dev_school",
-            "camelot",
             "it_park",
-            "zafar_azimov_school",
-            "sayyimov_academy",
             "business_club",
             "anoreducation",
             "gulistan_academy",
@@ -327,9 +272,7 @@ const routes = [
           roles: ["_ad_sch_"],
           schools: [
             "dev_school",
-            "camelot",
-            "zafar_azimov_school",
-            "sayyimov_academy",
+            "it_park",
             "business_club",
             "anoreducation",
             "gulistan_academy",
@@ -346,9 +289,7 @@ const routes = [
           roles: ["_ad_sch_"],
           schools: [
             "dev_school",
-            "camelot",
-            "zafar_azimov_school",
-            "sayyimov_academy",
+            "it_park",
             "business_club",
             "anoreducation",
             "gulistan_academy",
@@ -365,10 +306,7 @@ const routes = [
           roles: ["_ad_sch_", "_tch_sch_"],
           schools: [
             "dev_school",
-            "camelot",
             "it_park",
-            "zafar_azimov_school",
-            "sayyimov_academy",
             "business_club",
             "anoreducation",
             "gulistan_academy",
@@ -385,10 +323,7 @@ const routes = [
           roles: ["_ad_sch_", "_tch_sch_"],
           schools: [
             "dev_school",
-            "camelot",
             "it_park",
-            "zafar_azimov_school",
-            "sayyimov_academy",
             "business_club",
             "anoreducation",
             "gulistan_academy",
@@ -405,9 +340,7 @@ const routes = [
           roles: ["_ad_sch_"],
           schools: [
             "dev_school",
-            "camelot",
-            "zafar_azimov_school",
-            "sayyimov_academy",
+            "it_park",
             "business_club",
             "anoreducation",
             "gulistan_academy",
@@ -424,10 +357,7 @@ const routes = [
           roles: ["_sp_am_", "_ow_sch_", "_ad_sch_", "_tch_sch_"],
           schools: [
             "dev_school",
-            "camelot",
             "it_park",
-            "zafar_azimov_school",
-            "sayyimov_academy",
             "business_club",
             "anoreducation",
             "gulistan_academy",
@@ -467,40 +397,12 @@ router.afterEach((to) => {
 router.beforeEach((to, from, next) => {
   const token = localStorage.getItem("token");
   const role = localStorage.getItem("role");
-  const schoolName = localStorage.getItem("school_name");
 
-  if (!token && to.name !== "login") {
-    return next({ name: "login" });
-  }
+  if (!token && to.name !== "login") return next({ name: "login" });
+  if (token && to.name === "login") return next({ name: "dashboard" });
 
-  if (token && to.name === "login") {
-    return next({ name: "dashboard" });
-  }
-
-  // ✅ Rootni tekshirish (asosiy layout)
-  const isRoot = to.matched.length === 1 && to.matched[0].name === "home";
-  if (isRoot) {
-    if (role === "_ad_sch_" && schoolName === "sayyimov_academy") {
-      return next({ name: "customers" }); // sayyimov admin uchun
-    }
-    return next({ name: "dashboard" }); // boshqalar uchun
-  }
-
-  if (to.meta.roles && !to.meta.roles.includes(role)) {
+  if (to.meta.roles && !to.meta.roles.includes(role))
     return next({ name: "error" });
-  }
-
-  if (to.meta.schools && !to.meta.schools.includes(schoolName)) {
-    return next({ name: "error" });
-  }
-
-  if (
-    to.name === "dashboard" &&
-    role === "_ad_sch_" &&
-    schoolName === "sayyimov_academy"
-  ) {
-    return next({ name: "error" });
-  }
 
   next();
 });
