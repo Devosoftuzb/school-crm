@@ -32,31 +32,20 @@ const routes = [
     component: HomeView,
     meta: {
       roles: ["_sp_am_", "_ow_sch_", "_ad_sch_", "_tch_sch_"],
-      schools: [
-        "dev_school",
-        "camelot",
-        "it_park",
-        "zafar_azimov_school",
-        "sayyimov_academy",
-        "business_club",
-        "anoreducation",
-        "gulistan_academy"
-      ],
       title: "Home",
     },
     children: [
       {
-        path: "", // ✅ Root bo‘sh child
+        path: "",
         name: "root-redirect",
         beforeEnter: (to, from, next) => {
           const role = localStorage.getItem("role");
-          const schoolName = localStorage.getItem("school_name");
 
-          if (role === "_ad_sch_" && schoolName === "sayyimov_academy") {
-            return next({ name: "customers" }); 
+          if (role === "_ad_sch_") {
+            return next({ name: "customers" });
           }
 
-          return next({ name: "dashboard" }); 
+          return next({ name: "dashboard" });
         },
       },
       {
@@ -65,19 +54,6 @@ const routes = [
         component: Dashboard,
         meta: {
           roles: ["_sp_am_", "_ow_sch_", "_ad_sch_", "_tch_sch_"],
-          schools: [
-            "dev_school",
-            "camelot",
-            "it_park",
-  
-  
-            "zafar_azimov_school",
-  
-            "sayyimov_academy", // qoladi, chunki boshqa rollar uchun ruxsat
-            "business_club",
-            "anoreducation",
-            "gulistan_academy"
-          ],
           title: "Asosiy",
         },
       },
@@ -87,19 +63,6 @@ const routes = [
         component: Teachers,
         meta: {
           roles: ["_ow_sch_", "_ad_sch_"],
-          schools: [
-            "dev_school",
-            "camelot",
-            "it_park",
-  
-  
-            "zafar_azimov_school",
-  
-            "sayyimov_academy",
-            "business_club",
-            "anoreducation",
-            "gulistan_academy"
-          ],
           title: "Xodimlar",
         },
       },
@@ -109,19 +72,6 @@ const routes = [
         component: SlugTeachers,
         meta: {
           roles: ["_ow_sch_", "_ad_sch_"],
-          schools: [
-            "dev_school",
-            "camelot",
-            "it_park",
-  
-  
-            "zafar_azimov_school",
-  
-            "sayyimov_academy",
-            "business_club",
-            "anoreducation",
-            "gulistan_academy"
-          ],
           title: "Xodim Sahifasi",
         },
       },
@@ -131,19 +81,6 @@ const routes = [
         component: Students,
         meta: {
           roles: ["_ad_sch_", "_tch_sch_"],
-          schools: [
-            "dev_school",
-            "camelot",
-            "it_park",
-  
-  
-            "zafar_azimov_school",
-  
-            "sayyimov_academy",
-            "business_club",
-            "anoreducation",
-            "gulistan_academy"
-          ],
           title: "O'quvchilar",
         },
       },
@@ -153,19 +90,6 @@ const routes = [
         component: StudentsArchive,
         meta: {
           roles: ["_ad_sch_", "_tch_sch_"],
-          schools: [
-            "dev_school",
-            "camelot",
-            "it_park",
-  
-  
-            "zafar_azimov_school",
-  
-            "sayyimov_academy",
-            "business_club",
-            "anoreducation",
-            "gulistan_academy"
-          ],
           title: "Arxiv o'quvchilar",
         },
       },
@@ -175,19 +99,6 @@ const routes = [
         component: SlugStudent,
         meta: {
           roles: ["_ad_sch_", "_tch_sch_"],
-          schools: [
-            "dev_school",
-            "camelot",
-            "it_park",
-  
-  
-            "zafar_azimov_school",
-  
-            "sayyimov_academy",
-            "business_club",
-            "anoreducation",
-            "gulistan_academy"
-          ],
           title: "O'quvchi Sahifasi",
         },
       },
@@ -197,19 +108,6 @@ const routes = [
         component: Customer,
         meta: {
           roles: ["_ad_sch_"],
-          schools: [
-            "dev_school",
-            "camelot",
-            "it_park",
-  
-  
-            "zafar_azimov_school",
-  
-            "sayyimov_academy",
-            "business_club",
-            "anoreducation",
-            "gulistan_academy"
-          ],
           title: "Mijozlar",
         },
       },
@@ -219,17 +117,6 @@ const routes = [
         component: Tests,
         meta: {
           roles: ["_ad_sch_"],
-          schools: [
-            "dev_school",
-            "camelot",
-  
-            "zafar_azimov_school",
-  
-            "sayyimov_academy",
-            "business_club",
-            "anoreducation",
-            "gulistan_academy"
-          ],
           title: "Testlar",
         },
       },
@@ -239,19 +126,6 @@ const routes = [
         component: Subjects,
         meta: {
           roles: ["_ad_sch_"],
-          schools: [
-            "dev_school",
-            "camelot",
-            "it_park",
-  
-  
-            "zafar_azimov_school",
-  
-            "sayyimov_academy",
-            "business_club",
-            "anoreducation",
-            "gulistan_academy"
-          ],
           title: "Fanlar",
         },
       },
@@ -261,19 +135,6 @@ const routes = [
         component: Payment,
         meta: {
           roles: ["_ad_sch_"],
-          schools: [
-            "dev_school",
-            "camelot",
-            "it_park",
-  
-  
-            "zafar_azimov_school",
-  
-            "sayyimov_academy",
-            "business_club",
-            "anoreducation",
-            "gulistan_academy"
-          ],
           title: "To'lovlar",
         },
       },
@@ -283,19 +144,6 @@ const routes = [
         component: Attendance,
         meta: {
           roles: ["_ad_sch_", "_tch_sch_"],
-          schools: [
-            "dev_school",
-            "camelot",
-            "it_park",
-  
-  
-            "zafar_azimov_school",
-  
-            "sayyimov_academy",
-            "business_club",
-            "anoreducation",
-            "gulistan_academy"
-          ],
           title: "Davomat",
         },
       },
@@ -305,19 +153,6 @@ const routes = [
         component: Sms,
         meta: {
           roles: ["_ad_sch_"],
-          schools: [
-            "dev_school",
-            "camelot",
-            "it_park",
-  
-  
-            "zafar_azimov_school",
-  
-            "sayyimov_academy",
-            "business_club",
-            "anoreducation",
-            "gulistan_academy"
-          ],
           title: "SMS",
         },
       },
@@ -327,19 +162,6 @@ const routes = [
         component: Finance,
         meta: {
           roles: ["_ad_sch_", "_ow_sch_", "_tch_sch_"],
-          schools: [
-            "dev_school",
-            "camelot",
-            "it_park",
-  
-  
-            "zafar_azimov_school",
-  
-            "sayyimov_academy",
-            "business_club",
-            "anoreducation",
-            "gulistan_academy"
-          ],
           title: "Moliya",
         },
       },
@@ -349,17 +171,6 @@ const routes = [
         component: Results,
         meta: {
           roles: ["_ad_sch_"],
-          schools: [
-            "dev_school",
-            "camelot",
-  
-            "zafar_azimov_school",
-  
-            "sayyimov_academy",
-            "business_club",
-            "anoreducation",
-            "gulistan_academy"
-          ],
           title: "Natijalar",
         },
       },
@@ -369,17 +180,6 @@ const routes = [
         component: SlugResults,
         meta: {
           roles: ["_ad_sch_"],
-          schools: [
-            "dev_school",
-            "camelot",
-  
-            "zafar_azimov_school",
-  
-            "sayyimov_academy",
-            "business_club",
-            "anoreducation",
-            "gulistan_academy"
-          ],
           title: "Natijalar Sahifasi",
         },
       },
@@ -389,19 +189,6 @@ const routes = [
         component: Groups,
         meta: {
           roles: ["_ad_sch_", "_tch_sch_"],
-          schools: [
-            "dev_school",
-            "camelot",
-            "it_park",
-  
-  
-            "zafar_azimov_school",
-  
-            "sayyimov_academy",
-            "business_club",
-            "anoreducation",
-            "gulistan_academy"
-          ],
           title: "Guruhlar",
         },
       },
@@ -411,19 +198,6 @@ const routes = [
         component: SlugGroups,
         meta: {
           roles: ["_ad_sch_", "_tch_sch_"],
-          schools: [
-            "dev_school",
-            "camelot",
-            "it_park",
-  
-  
-            "zafar_azimov_school",
-  
-            "sayyimov_academy",
-            "business_club",
-            "anoreducation",
-            "gulistan_academy"
-          ],
           title: "Guruh Sahifasi",
         },
       },
@@ -433,17 +207,6 @@ const routes = [
         component: SlugTests,
         meta: {
           roles: ["_ad_sch_"],
-          schools: [
-            "dev_school",
-            "camelot",
-  
-            "zafar_azimov_school",
-  
-            "sayyimov_academy",
-            "business_club",
-            "anoreducation",
-            "gulistan_academy"
-          ],
           title: "Savollar Sahifasi",
         },
       },
@@ -453,19 +216,6 @@ const routes = [
         component: Settings,
         meta: {
           roles: ["_sp_am_", "_ow_sch_", "_ad_sch_", "_tch_sch_"],
-          schools: [
-            "dev_school",
-            "camelot",
-            "it_park",
-  
-  
-            "zafar_azimov_school",
-  
-            "sayyimov_academy",
-            "business_club",
-            "anoreducation",
-            "gulistan_academy"
-          ],
           title: "Sozlamalar",
         },
       },
@@ -490,6 +240,7 @@ const router = createRouter({
   routes,
 });
 
+// Title update
 router.afterEach((to) => {
   const defaultTitle = "Devosfot";
   document.title = to.meta.title
@@ -497,10 +248,10 @@ router.afterEach((to) => {
     : defaultTitle;
 });
 
+// Role based navigation
 router.beforeEach((to, from, next) => {
   const token = localStorage.getItem("token");
   const role = localStorage.getItem("role");
-  const schoolName = localStorage.getItem("school_name");
 
   if (!token && to.name !== "login") {
     return next({ name: "login" });
@@ -510,28 +261,15 @@ router.beforeEach((to, from, next) => {
     return next({ name: "dashboard" });
   }
 
-  // ✅ Rootni tekshirish (asosiy layout)
   const isRoot = to.matched.length === 1 && to.matched[0].name === "home";
   if (isRoot) {
-    if (role === "_ad_sch_" && schoolName === "sayyimov_academy") {
-      return next({ name: "customers" }); // sayyimov admin uchun
+    if (role === "_ad_sch_") {
+      return next({ name: "customers" });
     }
-    return next({ name: "dashboard" }); // boshqalar uchun
+    return next({ name: "dashboard" });
   }
 
   if (to.meta.roles && !to.meta.roles.includes(role)) {
-    return next({ name: "error" });
-  }
-
-  if (to.meta.schools && !to.meta.schools.includes(schoolName)) {
-    return next({ name: "error" });
-  }
-
-  if (
-    to.name === "dashboard" &&
-    role === "_ad_sch_" &&
-    schoolName === "sayyimov_academy"
-  ) {
     return next({ name: "error" });
   }
 
