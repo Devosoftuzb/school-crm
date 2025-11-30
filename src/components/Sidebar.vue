@@ -81,8 +81,14 @@ const Logout = () => {
 
 const showMenu = (item) => {
   const roleArray = item.role.split(",").map((r) => r.trim());
-  const schoolArray = item.school.split(",").map((s) => s.trim());
-  return roleArray.includes(store.guard) && schoolArray.includes(store.school);
+  if (role === "_sp_am_") {
+    return roleArray.includes(store.guard);
+  } else {
+    const schoolArray = item.school.split(",").map((s) => s.trim());
+    return (
+      roleArray.includes(store.guard) && schoolArray.includes(store.school)
+    );
+  }
 };
 
 const isActive = (link) => {

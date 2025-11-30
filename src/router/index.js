@@ -23,6 +23,8 @@ import {
   Sms,
   StudentsArchive,
   Finance,
+  School,
+  Owner,
 } from "../views";
 
 const routes = [
@@ -45,10 +47,23 @@ const routes = [
     children: [
       {
         path: "",
+        name: "root-redirect",
+        beforeEnter: (to, from, next) => {
+          const role = localStorage.getItem("role");
+
+          if (role === "_sp_am_") {
+            return next({ name: "owner" });
+          }
+
+          return next({ name: "dashboard" });
+        },
+      },
+      {
+        path: "",
         name: "dashboard",
         component: Dashboard,
         meta: {
-          roles: ["_sp_am_", "_ow_sch_", "_ad_sch_", "_tch_sch_"],
+          roles: ["_ow_sch_", "_ad_sch_", "_tch_sch_"],
           schools: [
             "dev_school",
             "it_park",
@@ -350,6 +365,24 @@ const routes = [
         },
       },
       {
+        path: "/owner",
+        name: "owner",
+        component: Owner,
+        meta: {
+          roles: ["_sp_am_"],
+          title: "Mijozlar",
+        },
+      },
+      {
+        path: "/school",
+        name: "school",
+        component: School,
+        meta: {
+          roles: ["_sp_am_"],
+          title: "O'quv markazlar",
+        },
+      },
+      {
         path: "/settings",
         name: "settings",
         component: Settings,
@@ -400,6 +433,14 @@ router.beforeEach((to, from, next) => {
 
   if (!token && to.name !== "login") return next({ name: "login" });
   if (token && to.name === "login") return next({ name: "dashboard" });
+
+  const isRoot = to.matched.length === 1 && to.matched[0].name === "home";
+  if (isRoot) {
+    if (role === "_sp_am_") {
+      return next({ name: "owner" });
+    }
+    return next({ name: "dashboard" });
+  }
 
   if (to.meta.roles && !to.meta.roles.includes(role))
     return next({ name: "error" });
