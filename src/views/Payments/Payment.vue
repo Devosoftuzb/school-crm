@@ -2721,6 +2721,7 @@ const form = reactive({
   id: "",
   group_id: "",
   discount: 0,
+  discountSum: 0,
   description: "",
 });
 
@@ -3538,6 +3539,7 @@ const addPayment = async () => {
     month: form.month,
     method: form.method,
     discount: form.discount,
+    discountSum: 0,
     price: form.price,
     description: form.description,
   };
