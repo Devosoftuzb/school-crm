@@ -28,13 +28,13 @@
       <button
         @click="Logout"
         title="Chiqish"
-        class="flex items-center justify-between w-full p-2 mb-20 text-blue-700 border-b border-blue-700 rounded-lg sm:mb-0"
+        class="flex items-center justify-between w-full p-2 mb-20 text-blue-700 border-b border-blue-700 rounded-lg bottom-5 sm:mb-0"
       >
         <div class="flex items-center gap-3">
           <img
             src="https://static.vecteezy.com/system/resources/thumbnails/005/129/844/small_2x/profile-user-icon-isolated-on-white-background-eps10-free-vector.jpg"
-            alt="User"
-            class="w-8 h-8 bg-gray-800 border-2 border-blue-700 rounded-full sm:w-10 sm:h-10"
+            alt=""
+            class="w-8 h-8 bg-gray-800 border-2 border-blue-700 rounded-full cursor-pointer sm:w-10 sm:h-10"
           />
           <span class="font-bold text-md">{{ store.name }}</span>
         </div>
@@ -56,9 +56,10 @@ const navbar = useNavStore();
 const router = useRouter();
 const route = useRoute();
 
-// User info
 const role = localStorage.getItem("role");
+const school_name = localStorage.getItem("school_name");
 const store = reactive({
+  school: school_name,
   guard: role,
   name:
     role === "_ow_sch_"
@@ -87,7 +88,7 @@ const showMenu = (item) => {
   return roleArray.includes(store.guard);
 };
 
-// Check active route
+// Check active rout
 const isActive = (link) => {
   if (link === "/") return route.path === "/";
   return route.path === link || route.path.startsWith(link + "/");
