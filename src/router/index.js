@@ -46,6 +46,9 @@ const routes = [
           if (role === "_ad_sch_") {
             return next({ name: "customers" });
           }
+          if (role === "_sp_am_") {
+            return next({ name: "owner" });
+          }
 
           return next({ name: "dashboard" });
         },
@@ -280,6 +283,9 @@ router.beforeEach((to, from, next) => {
   if (isRoot) {
     if (role === "_ad_sch_") {
       return next({ name: "customers" });
+    }
+    if (role === "_sp_am_") {
+      return next({ name: "owner" });
     }
     return next({ name: "dashboard" });
   }
