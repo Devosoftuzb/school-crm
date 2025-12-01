@@ -4,21 +4,21 @@
     <div v-show="store.loader">
       <Placeholder1 />
     </div>
-    <div v-show="!store.loader" class="rounded-lg pt-4">
+    <div v-show="!store.loader" class="pt-4 rounded-lg">
       <!-- Cards -->
       <div
         v-show="store.guard"
-        class="cards grid xl:grid-cols-4 lg:grid-cols-2 sm:grid-cols-1 grid-cols-1 xl:mb-0 mb-5 2xl:gap-5 gap-3 px-2"
+        class="grid grid-cols-1 gap-3 px-2 mb-5 cards xl:grid-cols-4 lg:grid-cols-2 sm:grid-cols-1 xl:mb-0 2xl:gap-5"
       >
         <div class="card" v-for="(i, index) in 4" :key="index">
           <div
-            class="relative xl:mb-4 flex flex-col min-w-0 break-words shadow-soft-xl sm:h-28 rounded-xl bg-clip-border"
+            class="relative flex flex-col min-w-0 break-words xl:mb-4 shadow-soft-xl sm:h-28 rounded-xl bg-clip-border"
             :class="{
               'bg-[#1e293b]': navbar.userNav,
               'bg-white': !navbar.userNav,
             }"
           >
-            <div class="p-5 flex items-center justify-between">
+            <div class="flex items-center justify-between p-5">
               <p class="mb-0 font-semibold leading-normal 2xl:text-xl text-md">
                 {{ getCardTitle(index) }}
               </p>
@@ -36,17 +36,17 @@
 
       <div
         v-show="!store.guard"
-        class="cards grid xl:grid-cols-3 lg:grid-cols-3 sm:grid-cols-1 grid-cols-1 xl:mb-0 mb-5 2xl:gap-5 gap-3 px-2"
+        class="grid grid-cols-1 gap-3 px-2 mb-5 cards xl:grid-cols-3 lg:grid-cols-3 sm:grid-cols-1 xl:mb-0 2xl:gap-5"
       >
         <div class="card" v-for="(i, index) in 3" :key="index">
           <div
-            class="relative xl:mb-4 flex flex-col min-w-0 break-words shadow-soft-xl sm:h-28 rounded-xl bg-clip-border"
+            class="relative flex flex-col min-w-0 break-words xl:mb-4 shadow-soft-xl sm:h-28 rounded-xl bg-clip-border"
             :class="{
               'bg-[#1e293b]': navbar.userNav,
               'bg-white': !navbar.userNav,
             }"
           >
-            <div class="p-5 flex items-center justify-between">
+            <div class="flex items-center justify-between p-5">
               <p class="mb-0 font-semibold leading-normal 2xl:text-xl text-md">
                 {{ getCardTitle(index) }}
               </p>
@@ -65,17 +65,17 @@
       <!-- To'lov Statistikasi -->
       <div
         v-show="store.guard || userRole == '_tch_sch_'"
-        class="w-full grid lg:grid-cols-2 2xl:gap-5 gap-3 px-2"
+        class="grid w-full gap-3 px-2 lg:grid-cols-2 2xl:gap-5"
       >
         <div
-          class="chart-container mt-8 shadow-md rounded-lg p-6"
+          class="p-6 mt-8 rounded-lg shadow-md chart-container"
           :class="{
             'bg-[#1e293b] text-white': navbar.userNav,
             'bg-white text-gray-700': !navbar.userNav,
           }"
         >
-          <div class="w-full flex items-center justify-between">
-            <h2 class="2xl:text-xl text-md font-semibold">
+          <div class="flex items-center justify-between w-full">
+            <h2 class="font-semibold 2xl:text-xl text-md">
               To'lov Statistikasi ({{ store.year }})
             </h2>
             <form
@@ -111,14 +111,14 @@
 
         <!-- O'quvchilar To'lov Statistikasi -->
         <div
-          class="chart-container2 mt-8 shadow-md rounded-lg p-6"
+          class="p-6 mt-8 rounded-lg shadow-md chart-container2"
           :class="{
             'bg-[#1e293b] text-white': navbar.userNav,
             'bg-white text-gray-700': !navbar.userNav,
           }"
         >
-          <div class="w-full flex items-center justify-between">
-            <h2 class="2xl:text-xl text-md font-semibold">
+          <div class="flex items-center justify-between w-full">
+            <h2 class="font-semibold 2xl:text-xl text-md">
               O'quvchilar Statistikasi ({{ monthNames(store.month) }})
             </h2>
             <form
@@ -165,11 +165,9 @@
 import { onMounted, onBeforeMount, reactive, watch, computed } from "vue";
 import { useNavStore } from "../../stores/toggle";
 import axios from "../../services/axios";
-import { useRouter } from "vue-router";
 import Chart from "chart.js/auto";
 
 const userRole = localStorage.getItem("role");
-const router = useRouter();
 const navbar = useNavStore();
 const hozirgiSana = new Date();
 const orqaYil = hozirgiSana.getFullYear() - 2;

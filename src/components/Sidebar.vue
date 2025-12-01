@@ -58,7 +58,9 @@ const route = useRoute();
 
 // User info
 const role = localStorage.getItem("role");
+const school_name = localStorage.getItem("school_name");
 const store = reactive({
+  school: school_name,
   guard: role,
   name:
     role === "_ow_sch_"
@@ -87,7 +89,6 @@ const showMenu = (item) => {
   return roleArray.includes(store.guard);
 };
 
-// Check active route
 const isActive = (link) => {
   if (link === "/") return route.path === "/";
   return route.path === link || route.path.startsWith(link + "/");

@@ -10,12 +10,12 @@
 
         <!------------------------------------------- Search ------------------------------------------->
         <div
-          class="shadow rounded-xl flex flex-col lg:flex-row items-center justify-between lg:space-x-4 p-4 gap-3 mb-4"
+          class="flex flex-col items-center justify-between gap-3 p-4 mb-4 shadow rounded-xl lg:flex-row lg:space-x-4"
           :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
         >
-          <h1 class="text-blue-700 font-bold text-lg w-full">Sozlamalar</h1>
+          <h1 class="w-full text-lg font-bold text-blue-700">Sozlamalar</h1>
           <div
-            class="w-full lg:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center md:space-x-4"
+            class="flex flex-col items-stretch w-full space-y-2 lg:w-auto md:flex-row md:space-y-0 md:items-center md:space-x-4"
             :class="navbar.userNav ? 'text-white' : 'text-black'"
           >
             <button
@@ -77,7 +77,7 @@
 
         <!------------------------------------------- Search ------------------------------------------->
         <div
-          class="shadow rounded-xl flex flex-col justify-between p-4 gap-3 mb-4"
+          class="flex flex-col justify-between gap-3 p-4 mb-4 shadow rounded-xl"
           :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
         >
           <!----------------------------------------- User settings ------------------------------------>
@@ -90,7 +90,7 @@
             >
               <!-- Modal header -->
               <div
-                class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5"
+                class="flex items-center justify-between pb-4 mb-4 border-b rounded-t sm:mb-5"
               >
                 <h3
                   class="text-lg font-bold"
@@ -104,7 +104,7 @@
                 @submit.prevent="changeInfo(edit.id)"
                 :class="{ darkForm: navbar.userNav }"
               >
-                <div class="grid font-medium gap-4 mb-4 sm:grid-cols-3">
+                <div class="grid gap-4 mb-4 font-medium sm:grid-cols-3">
                   <div>
                     <label
                       for="name"
@@ -158,7 +158,7 @@
                   </div>
                 </div>
                 <div
-                  class="w-full flex items-center justify-end border-t pt-5 mt-5"
+                  class="flex items-center justify-end w-full pt-5 mt-5 border-t"
                 >
                   <button
                     type="submit"
@@ -181,7 +181,7 @@
             >
               <!-- Modal header -->
               <div
-                class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5"
+                class="flex items-center justify-between pb-4 mb-4 border-b rounded-t sm:mb-5"
               >
                 <h3
                   class="text-lg font-bold"
@@ -195,7 +195,7 @@
                 @submit.prevent="changePassword(edit.id)"
                 :class="{ darkForm: navbar.userNav }"
               >
-                <div class="grid font-medium gap-4 mb-4 sm:grid-cols-3">
+                <div class="grid gap-4 mb-4 font-medium sm:grid-cols-3">
                   <div class="relative">
                     <label
                       for="password"
@@ -399,7 +399,7 @@
                   </div>
                 </div>
                 <div
-                  class="w-full flex items-center justify-end border-t pt-5 mt-5"
+                  class="flex items-center justify-end w-full pt-5 mt-5 border-t"
                 >
                   <button
                     type="submit"
@@ -421,13 +421,13 @@
                 : 'hidden'
             "
           >
-            <div class="relative p-4 w-full max-w-lg h-auto">
+            <div class="relative w-full h-auto max-w-lg p-4">
               <div
                 class="relative p-4 rounded-lg shadow sm:p-5"
                 :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
               >
                 <div
-                  class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5"
+                  class="flex items-center justify-between pb-4 mb-4 border-b rounded-t sm:mb-5"
                 >
                   <h3
                     class="text-lg"
@@ -461,7 +461,7 @@
                   @submit.prevent="addSocialLink"
                   :class="{ darkForm: navbar.userNav }"
                 >
-                  <div class="grid font-medium gap-4 mb-4 grid-cols-1">
+                  <div class="grid grid-cols-1 gap-4 mb-4 font-medium">
                     <div>
                       <label for="socil_name" class="block mb-2 text-sm"
                         >Nomi</label
@@ -477,7 +477,7 @@
                     </div>
                   </div>
                   <div
-                    class="w-full flex items-center justify-between border-t pt-5 mt-5"
+                    class="flex items-center justify-between w-full pt-5 mt-5 border-t"
                   >
                     <button
                       @click="socialModal"
@@ -512,7 +512,7 @@
                 :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
               >
                 <div
-                  class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5"
+                  class="flex items-center justify-between pb-4 mb-4 border-b rounded-t sm:mb-5"
                 >
                   <h3
                     class="text-lg"
@@ -543,7 +543,7 @@
                 </div>
 
                 <div :class="{ darkForm: navbar.userNav }">
-                  <div class="grid font-medium gap-4 mb-4 grid-cols-1">
+                  <div class="grid grid-cols-1 gap-4 mb-4 font-medium">
                     <div>
                       <div></div>
                       <h1
@@ -554,7 +554,7 @@
                       </h1>
                     </div>
                     <div
-                      class="w-full flex items-center justify-between border-t pt-5 mt-5"
+                      class="flex items-center justify-between w-full pt-5 mt-5 border-t"
                     >
                       <button
                         @click="remove.toggle = false"
@@ -579,7 +579,7 @@
 
           <div :class="socialLink ? 'p-4 sm:p-5' : 'hidden'">
             <div
-              class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5"
+              class="flex items-center justify-between pb-4 mb-4 border-b rounded-t sm:mb-5"
             >
               <h3
                 class="text-lg font-bold"
@@ -588,21 +588,21 @@
                 Ijtimoiy tarmoqlar
               </h3>
               <div
-                class="lg:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3"
+                class="flex flex-col items-stretch justify-end space-y-2 lg:w-auto md:flex-row md:space-y-0 md:items-center md:space-x-3"
               >
                 <button
                   @click="socialModal"
                   id=""
                   type="button"
-                  class="btnAdd flex items-center max-w-fit justify-center whitespace-nowrap text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 sm:py-2"
+                  class="flex items-center justify-center px-4 text-sm font-medium text-white bg-blue-600 rounded-lg btnAdd max-w-fit whitespace-nowrap hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 sm:py-2"
                 >
-                  <span class="sm:block hidden">Link qo'shish</span>
-                  <i class="sm:hidden block bx bxs-user-plus text-lg"></i>
+                  <span class="hidden sm:block">Link qo'shish</span>
+                  <i class="block text-lg sm:hidden bx bxs-user-plus"></i>
                 </button>
               </div>
             </div>
             <div
-              class="relative border rounded-lg overflow-hidden"
+              class="relative overflow-hidden border rounded-lg"
               :class="
                 navbar.userNav
                   ? 'bg-[#1e293b] border-gray-700 text-white'
@@ -615,11 +615,11 @@
                     <tr>
                       <th
                         scope="col"
-                        class="text-center py-3 whitespace-nowrap text-white"
+                        class="py-3 text-center text-white whitespace-nowrap"
                       >
                         Nomi
                       </th>
-                      <th scope="col" class="text-center py-3 text-white">
+                      <th scope="col" class="py-3 text-center text-white">
                         O'chirish
                       </th>
                     </tr>
@@ -637,14 +637,14 @@
                     >
                       <th
                         scope="row"
-                        class="text-center px-8 py-3 font-medium whitespace-nowrap"
+                        class="px-8 py-3 font-medium text-center whitespace-nowrap"
                       >
                         <span>{{ i.name }}</span>
                       </th>
-                      <td class="text-center whitespace-nowrap font-medium">
+                      <td class="font-medium text-center whitespace-nowrap">
                         <i
                           @click="deleteFunc(i.id)"
-                          class="bx bxs-trash bg-red-300 cursor-pointer text-red-600 rounded-lg px-5 py-2 focus:ring-2"
+                          class="px-5 py-2 text-red-600 bg-red-300 rounded-lg cursor-pointer bx bxs-trash focus:ring-2"
                         >
                         </i>
                       </td>
@@ -653,7 +653,7 @@
                 </table>
                 <div
                   v-show="store.social_link == ''"
-                  class="w-full max-w-screen text-center p-20 text-2xl font-medium"
+                  class="w-full p-20 text-2xl font-medium text-center max-w-screen"
                 >
                   <h1>Ijtimoiy tarmoqlar ro'yhati bo'sh</h1>
                 </div>
@@ -670,13 +670,13 @@
                 : 'hidden'
             "
           >
-            <div class="relative p-4 w-full max-w-lg h-auto">
+            <div class="relative w-full h-auto max-w-lg p-4">
               <div
                 class="relative p-4 rounded-lg shadow sm:p-5"
                 :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
               >
                 <div
-                  class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5"
+                  class="flex items-center justify-between pb-4 mb-4 border-b rounded-t sm:mb-5"
                 >
                   <h3
                     class="text-lg"
@@ -710,7 +710,7 @@
                   @submit.prevent="addPaymentMethod"
                   :class="{ darkForm: navbar.userNav }"
                 >
-                  <div class="grid font-medium gap-4 mb-4 grid-cols-1">
+                  <div class="grid grid-cols-1 gap-4 mb-4 font-medium">
                     <div>
                       <label for="method_name" class="block mb-2 text-sm"
                         >Nomi</label
@@ -726,7 +726,7 @@
                     </div>
                   </div>
                   <div
-                    class="w-full flex items-center justify-between border-t pt-5 mt-5"
+                    class="flex items-center justify-between w-full pt-5 mt-5 border-t"
                   >
                     <button
                       @click="payModal"
@@ -761,7 +761,7 @@
                 :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
               >
                 <div
-                  class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5"
+                  class="flex items-center justify-between pb-4 mb-4 border-b rounded-t sm:mb-5"
                 >
                   <h3
                     class="text-lg"
@@ -792,7 +792,7 @@
                 </div>
 
                 <div :class="{ darkForm: navbar.userNav }">
-                  <div class="grid font-medium gap-4 mb-4 grid-cols-1">
+                  <div class="grid grid-cols-1 gap-4 mb-4 font-medium">
                     <div>
                       <div></div>
                       <h1
@@ -803,7 +803,7 @@
                       </h1>
                     </div>
                     <div
-                      class="w-full flex items-center justify-between border-t pt-5 mt-5"
+                      class="flex items-center justify-between w-full pt-5 mt-5 border-t"
                     >
                       <button
                         @click="remove.payment = false"
@@ -828,7 +828,7 @@
 
           <div :class="paymentMethod ? 'p-4 sm:p-5' : 'hidden'">
             <div
-              class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5"
+              class="flex items-center justify-between pb-4 mb-4 border-b rounded-t sm:mb-5"
             >
               <h3
                 class="text-lg font-bold"
@@ -837,21 +837,21 @@
                 To'lov turlari
               </h3>
               <div
-                class="lg:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3"
+                class="flex flex-col items-stretch justify-end space-y-2 lg:w-auto md:flex-row md:space-y-0 md:items-center md:space-x-3"
               >
                 <button
                   @click="payModal"
                   id=""
                   type="button"
-                  class="btnAdd flex items-center max-w-fit justify-center whitespace-nowrap text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 sm:py-2"
+                  class="flex items-center justify-center px-4 text-sm font-medium text-white bg-blue-600 rounded-lg btnAdd max-w-fit whitespace-nowrap hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 sm:py-2"
                 >
-                  <span class="sm:block hidden">To'lov turi qo'shish</span>
-                  <i class="sm:hidden block bx bxs-user-plus text-lg"></i>
+                  <span class="hidden sm:block">To'lov turi qo'shish</span>
+                  <i class="block text-lg sm:hidden bx bxs-user-plus"></i>
                 </button>
               </div>
             </div>
             <div
-              class="relative border rounded-lg overflow-hidden"
+              class="relative overflow-hidden border rounded-lg"
               :class="
                 navbar.userNav
                   ? 'bg-[#1e293b] border-gray-700 text-white'
@@ -864,11 +864,11 @@
                     <tr>
                       <th
                         scope="col"
-                        class="text-center py-3 whitespace-nowrap text-white"
+                        class="py-3 text-center text-white whitespace-nowrap"
                       >
                         Nomi
                       </th>
-                      <th scope="col" class="text-center py-3 text-white">
+                      <th scope="col" class="py-3 text-center text-white">
                         O'chirish
                       </th>
                     </tr>
@@ -886,14 +886,14 @@
                     >
                       <th
                         scope="row"
-                        class="text-center px-8 py-3 font-medium whitespace-nowrap"
+                        class="px-8 py-3 font-medium text-center whitespace-nowrap"
                       >
                         <span>{{ i.name }}</span>
                       </th>
-                      <td class="text-center whitespace-nowrap font-medium">
+                      <td class="font-medium text-center whitespace-nowrap">
                         <i
                           @click="deleteFuncPay(i.id)"
-                          class="bx bxs-trash bg-red-300 cursor-pointer text-red-600 rounded-lg px-5 py-2 focus:ring-2"
+                          class="px-5 py-2 text-red-600 bg-red-300 rounded-lg cursor-pointer bx bxs-trash focus:ring-2"
                         >
                         </i>
                       </td>
@@ -902,7 +902,7 @@
                 </table>
                 <div
                   v-show="store.payment_method == ''"
-                  class="w-full max-w-screen text-center p-20 text-2xl font-medium"
+                  class="w-full p-20 text-2xl font-medium text-center max-w-screen"
                 >
                   <h1>To'lov turi ro'yhati bo'sh</h1>
                 </div>
@@ -917,7 +917,6 @@
 
 <script setup>
 import { onMounted, ref, reactive } from "vue";
-import { useRouter } from "vue-router";
 import { useNavStore } from "../../stores/toggle";
 import { useNotificationStore } from "../../stores/notification";
 import axios from "@/services/axios";
@@ -925,7 +924,7 @@ import { Placeholder2 } from "../../components";
 
 const notification = useNotificationStore();
 const navbar = useNavStore();
-// const router = useRouter();
+const userRole = localStorage.getItem("role");
 
 const showOldPassword = ref(false);
 const showNewPassword = ref(false);
@@ -989,8 +988,6 @@ const payModal = () => {
   (pay.id = ""), (pay.name = "");
 };
 
-const userRole = localStorage.getItem("role");
-
 // ----------------------------------- forms -----------------------------------
 
 const edit = reactive({
@@ -1025,151 +1022,119 @@ const pay = reactive({
 // ----------------------------------- axios --------------------------------
 
 const getOneProduct = () => {
-  if (localStorage.getItem("role") == "_ad_sch_" || "_tch_sch_") {
-    axios
-      .get(
-        `/employee/${localStorage.getItem("school_id")}/${localStorage.getItem(
-          "id"
-        )}/not`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      )
-      .then((res) => {
-        store.PageProduct = res.data;
-        edit.id = res.data.id;
-        edit.full_name = res.data.full_name;
-        edit.phone_number = res.data.phone_number;
-        edit.login = res.data.login;
+  const school_id = localStorage.getItem("school_id");
+  const user_id = localStorage.getItem("id");
+  const token = localStorage.getItem("token");
+
+  // admin va teacher — employee API dan olinadi
+  const employeeRoles = ["_ad_sch_", "_tch_sch_"];
+
+  const url = employeeRoles.includes(userRole)
+    ? `/employee/${school_id}/${user_id}/not`
+    : `/user/${user_id}/not`;
+
+  axios
+    .get(url, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .then((res) => {
+      store.PageProduct = res.data;
+
+      edit.id = res.data.id;
+      edit.full_name = res.data.full_name;
+      edit.phone_number = res.data.phone_number;
+      edit.login = res.data.login;
+
+      // faqat employee roli bo‘lsa role qo‘shamiz
+      if (employeeRoles.includes(userRole)) {
         edit.role = res.data.role;
-      })
-      .catch((error) => {});
-  } else {
-    axios
-      .get(`/user/${localStorage.getItem("id")}/not`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      })
-      .then((res) => {
-        store.PageProduct = res.data;
-        edit.id = res.data.id;
-        edit.full_name = res.data.full_name;
-        edit.phone_number = res.data.phone_number;
-        edit.login = res.data.login;
-      })
-      .catch((error) => {});
-  }
+      }
+    })
+    .catch(() => {});
 };
 
 const changeInfo = (id) => {
+  const school_id = localStorage.getItem("school_id");
+  const token = localStorage.getItem("token");
+
+  const employeeRoles = ["_ad_sch_", "_tch_sch_"];
+
   const data = {
     full_name: edit.full_name,
     phone_number: edit.phone_number,
     login: edit.login,
   };
-  if (localStorage.getItem("role") == "_ad_sch_" || "_tch_sch_") {
-    data.school_id = Number(localStorage.getItem("school_id"));
-    data.role = edit.role;
-    axios
-      .put(`/employee/${localStorage.getItem("school_id")}/${id}`, data, {
-        headers: {  
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      })
-      .then((res) => {
-        notification.success("Ma'lumotlar tahrirlandi");
-        getOneProduct();
-      })
-      .catch((error) => {
-        console.log(error);
 
-        if (error.response.data.message.slice(0, 5) === "Login") {
-          notification.warning("Bunday login mavjud! Boshqa kiritib ko'ring");
-        } else {
-          notification.warning(
-            "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
-          );
-        }
-      });
-  } else {
-    axios
-      .put(`/user/${id}`, data, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      })
-      .then((res) => {
-        notification.success("Ma'lumotlar tahrirlandi");
-        getOneProduct();
-      })
-      .catch((error) => {
-        if (error.response.data.message.slice(0, 5) === "Login") {
-          notification.warning("Bunday login mavjud! Boshqa kiritib ko'ring");
-        } else {
-          notification.warning(
-            "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
-          );
-        }
-      });
+  if (employeeRoles.includes(userRole)) {
+    data.school_id = Number(school_id);
+    data.role = edit.role;
   }
+
+  const url = employeeRoles.includes(userRole)
+    ? `/employee/${school_id}/${id}`
+    : `/user/${id}`;
+
+  axios
+    .put(url, data, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+    .then(() => {
+      notification.success("Ma'lumotlar tahrirlandi");
+      getOneProduct();
+    })
+    .catch((error) => {
+      const msg = error?.response?.data?.message || "";
+
+      if (msg.startsWith("Login")) {
+        notification.warning("Bunday login mavjud! Boshqa kiritib ko'ring");
+      } else {
+        notification.warning(
+          "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
+        );
+      }
+    });
 };
 
 const changePassword = (id) => {
-  if (edit.newPassword === edit.confirmNewPassword) {
-    const data = {
-      old_password: edit.password,
-      new_password: edit.newPassword,
-    };
-    if (localStorage.getItem("role") == "_ad_sch_" || "_tch_sch_") {
-      axios
-        .post(
-          `/employee/change-password/${localStorage.getItem(
-            "school_id"
-          )}/${id}`,
-          data,
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          }
-        )
-        .then((res) => {
-          notification.success("Parol yangilandi!");
-          getOneProduct();
-        })
-        .catch((error) => {
-          notification.warning(error.response.data.message);
-        });
-    } else {
-      axios
-        .post(`/user/change-password/${id}`, data, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        })
-        .then((res) => {
-          notification.success("Parol yangilandi!");
-          getOneProduct();
-        })
-        .catch((error) => {
-          if (
-            error.response.data.message ===
-            "The current password did not match!"
-          ) {
-            notification.warning("Joriy parol mos kelmadi!");
-          } else {
-            notification.warning(
-              "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
-            );
-          }
-        });
-    }
-  } else {
-    notification.warning("Yangi kiritilgan parol tastiqlanmadi!");
+  if (edit.newPassword !== edit.confirmNewPassword) {
+    return notification.warning("Yangi kiritilgan parol tasdiqlanmadi!");
   }
+
+  const school_id = localStorage.getItem("school_id");
+  const token = localStorage.getItem("token");
+
+  const employeeRoles = ["_ad_sch_", "_tch_sch_"];
+
+  const data = {
+    old_password: edit.password,
+    new_password: edit.newPassword,
+  };
+
+  const url = employeeRoles.includes(userRole)
+    ? `/employee/change-password/${school_id}/${id}`
+    : `/user/change-password/${id}`;
+
+  axios
+    .post(url, data, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+    .then(() => {
+      notification.success("Parol yangilandi!");
+      getOneProduct();
+    })
+    .catch((error) => {
+      const message = error?.response?.data?.message || "";
+
+      if (message === "The current password did not match!") {
+        notification.warning("Joriy parol mos kelmadi!");
+      } else {
+        notification.warning(
+          "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
+        );
+      }
+    });
 };
 
 const getSocialLink = () => {
