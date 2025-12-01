@@ -4,7 +4,7 @@ export const header = [
     title: "Asosiy",
     link: "/",
     icon: "bx bxs-dashboard",
-    role: "_sp_am_, _ow_sch_, _tch_sch_",
+    role: "_ow_sch_, _ad_sch_, _tch_sch_",
   },
   {
     id: 2,
@@ -62,7 +62,7 @@ export const header = [
     icon: "bx bxs-message-rounded-dots",
     role: "_ad_sch_",
   },
-   {
+  {
     id: 10,
     title: "Moliya",
     link: "/finance",
@@ -85,6 +85,22 @@ export const header = [
   },
   {
     id: 13,
+    title: "Mijozlar",
+    link: "/owner",
+    icon: "bx bx-body",
+    role: "_sp_am_",
+    school: "",
+  },
+  {
+    id: 14,
+    title: "O'quv markazlar",
+    link: "/school",
+    icon: "bx  bxs-school",
+    role: "_sp_am_",
+    school: "",
+  },
+  {
+    id: 15,
     title: "Sozlamalar",
     link: "/settings",
     icon: "bx bxs-cog",

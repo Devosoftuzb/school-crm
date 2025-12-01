@@ -224,7 +224,7 @@
 
                     <span class="flex flex-col items-end">
                       <span
-                        v-if="form.discount !== 0 && form.discount !== ''"
+                        v-if="(form.discount !== 0 && form.discount !== '') || (form.discountSum !== 0 && form.discountSum !== '')"
                         class="text-[10px] line-through"
                         id="coursePrice"
                         >{{ store.price?.toLocaleString("uz-UZ") }} so'm</span
@@ -243,6 +243,13 @@
                   >
                     <span class="font-semibold">Chegirma:</span>
                     <span id="teacher">{{ form.discount }}%</span>
+                  </div>
+                  <div
+                    v-if="form.discountSum !== 0 && form.discountSum !== ''"
+                    class="flex justify-between py-1 text-sm border-b border-black border-dashed item"
+                  >
+                    <span class="font-semibold">Chegirma:</span>
+                    <span id="teacher">{{ form.discountSum.toLocaleString("uz-UZ") }} so'm</span>
                   </div>
                   <div
                     class="flex justify-between py-1 text-sm border-b border-black border-dashed item"
@@ -302,7 +309,7 @@
                   :class="{ darkForm: navbar.userNav }"
                 >
                   <div class="grid gap-4 mb-4 font-medium sm:grid-cols-1">
-                    <div class="grid gap-4 sm:grid-cols-2">
+                    <div class="grid gap-4 sm:grid-cols-3">
                       <div>
                         <label for="year" class="block mb-2 text-sm"
                           >Yilni tanlang</label
@@ -353,6 +360,31 @@
                           <option value="12">Dekabr</option>
                         </select>
                       </div>
+                      <div>
+                        <label
+                          for="name"
+                          class="block mb-2 text-sm whitespace-nowrap"
+                          :class="navbar.userNav ? 'text-white' : 'text-black'"
+                          >To'lov turi tanlang</label
+                        >
+                        <select
+                          v-model="form.method"
+                          id="name"
+                          class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                          required
+                        >
+                          <option value="" disabled selected>
+                            To'lov turini tanlang
+                          </option>
+                          <option
+                            v-for="i in store.method"
+                            :key="i.id"
+                            :value="i.name"
+                          >
+                            {{ i.name }}
+                          </option>
+                        </select>
+                      </div>
                     </div>
 
                     <div class="grid gap-4 sm:grid-cols-3">
@@ -385,31 +417,21 @@
                           required
                         />
                       </div>
-                      <div>
-                        <label
-                          for="name"
-                          class="block mb-2 text-sm whitespace-nowrap"
-                          :class="navbar.userNav ? 'text-white' : 'text-black'"
-                          >To'lov turi tanlang</label
+                      <div class="">
+                        <label for="price" class="block mb-2 text-sm"
+                          >Chegirma (sum)</label
                         >
-                        <select
-                          v-model="form.method"
-                          id="name"
-                          class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                        <input
+                          v-model="form.discountSum"
+                          type="number"
+                          name="price"
+                          id="price"
+                          class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full py-3 p-2.5"
+                          placeholder="Chegirma sum kiriting"
                           required
-                        >
-                          <option value="" disabled selected>
-                            To'lov turini tanlang
-                          </option>
-                          <option
-                            v-for="i in store.method"
-                            :key="i.id"
-                            :value="i.name"
-                          >
-                            {{ i.name }}
-                          </option>
-                        </select>
+                        />
                       </div>
+                      
                     </div>
                     <div>
                       <label for="description" class="block mb-2 text-sm"
@@ -549,7 +571,7 @@
 
                     <span class="flex flex-col items-end">
                       <span
-                        v-if="form.discount !== 0 && form.discount !== ''"
+                        v-if="(form.discount !== 0 && form.discount !== '') || (form.discountSum !== 0 && form.discountSum !== '')"
                         class="text-[10px] line-through"
                         id="coursePrice"
                         >{{ store.price?.toLocaleString("uz-UZ") }} so'm</span
@@ -568,6 +590,15 @@
                   >
                     <span class="font-semibold">Chegirma:</span>
                     <span id="teacher">{{ form.discount }}%</span>
+                  </div>
+                  <div
+                    v-if="form.discountSum !== 0 && form.discountSum !== ''"
+                    class="flex justify-between py-1 text-sm border-b border-black border-dashed item"
+                  >
+                    <span class="font-semibold">Chegirma:</span>
+                    <span id="teacher"
+                      >{{ form.discountSum.toLocaleString("uz-UZ") }} so'm</span
+                    >
                   </div>
                   <div
                     class="flex justify-between py-1 text-sm border-b border-black border-dashed item"
@@ -627,7 +658,7 @@
                   :class="{ darkForm: navbar.userNav }"
                 >
                   <div class="grid gap-4 mb-4 font-medium sm:grid-cols-1">
-                    <div class="grid gap-4 sm:grid-cols-2">
+                    <div class="grid gap-4 sm:grid-cols-3">
                       <div>
                         <label for="year" class="block mb-2 text-sm"
                           >Yilni tanlang</label
@@ -678,6 +709,32 @@
                           <option value="12">Dekabr</option>
                         </select>
                       </div>
+
+                      <div>
+                        <label
+                          for="name"
+                          class="block mb-2 text-sm whitespace-nowrap"
+                          :class="navbar.userNav ? 'text-white' : 'text-black'"
+                          >To'lov turi tanlang</label
+                        >
+                        <select
+                          v-model="form.method"
+                          id="name"
+                          class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                          required
+                        >
+                          <option value="" disabled selected>
+                            To'lov turini tanlang
+                          </option>
+                          <option
+                            v-for="i in store.method"
+                            :key="i.id"
+                            :value="i.name"
+                          >
+                            {{ i.name }}
+                          </option>
+                        </select>
+                      </div>
                     </div>
 
                     <div class="grid gap-4 sm:grid-cols-3">
@@ -709,30 +766,19 @@
                           required
                         />
                       </div>
-                      <div>
-                        <label
-                          for="name"
-                          class="block mb-2 text-sm whitespace-nowrap"
-                          :class="navbar.userNav ? 'text-white' : 'text-black'"
-                          >To'lov turi tanlang</label
+                      <div class="">
+                        <label for="price" class="block mb-2 text-sm"
+                          >Chegirma (sum)</label
                         >
-                        <select
-                          v-model="form.method"
-                          id="name"
-                          class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                        <input
+                          v-model="form.discountSum"
+                          type="number"
+                          name="price"
+                          id="price"
+                          class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full py-3 p-2.5"
+                          placeholder="Chegirma sum kiriting"
                           required
-                        >
-                          <option value="" disabled selected>
-                            To'lov turini tanlang
-                          </option>
-                          <option
-                            v-for="i in store.method"
-                            :key="i.id"
-                            :value="i.name"
-                          >
-                            {{ i.name }}
-                          </option>
-                        </select>
+                        />
                       </div>
                     </div>
                     <div>
@@ -1393,7 +1439,7 @@
                     </select>
                   </div>
                 </div>
-                 <div
+                <div
                   class="flex flex-col justify-center w-full gap-5 pt-5 mt-5 border-t"
                 >
                   <ButtonLoader
@@ -2590,6 +2636,7 @@ function toggleModal(id, name) {
   form.price = store.price;
   form.id = id;
   form.discount = 0;
+  form.discountSum = 0;
   store.student_name = name;
   formatDateToNumeric(new Date());
 }
@@ -2649,6 +2696,7 @@ function cancelFunc() {
   form.method = "";
   form.price = store.price;
   form.discount = 0;
+  form.discountSum = 0;
   modal.value = false;
 }
 
@@ -2710,6 +2758,7 @@ const form = reactive({
   id: "",
   group_id: "",
   discount: 0,
+  discountSum: 0,
   description: "",
 });
 
@@ -2905,8 +2954,16 @@ const monthNames = (month) => {
 // ----------------------------------- axios --------------------------------
 
 const discountedPrice = computed(() => {
-  const discountAmount = (store.price * form.discount) / 100;
-  form.price = store.price - discountAmount;
+  let discountAmount = 0;
+  if (form.discount !== 0 && form.discount !== "") {
+    discountAmount = (store.price * form.discount) / 100;
+    form.price = store.price - discountAmount;
+    store.pay_price = store.price - discountAmount;
+  } else if (form.discountSum !== 0 && form.discountSum !== "") {
+    discountAmount = form.discountSum;
+    form.price = store.price - discountAmount;
+    store.pay_price = store.price - discountAmount;
+  }
   return store.price - discountAmount;
 });
 
@@ -3288,8 +3345,15 @@ const calculatePaymentStatus = (paymentHistory, groupPrice) => {
     return `(${groupPrice}) so'm to'lanmagan`;
   }
 
+  console.log(paymentHistory[0])
+
   const totalDiscount = paymentHistory[0]?.discount || 0;
-  const discountedPrice = Math.round(groupPrice * (1 - totalDiscount / 100));
+  const discountSum = paymentHistory[0]?.discountSum || 0;
+  let discountedPrice = Math.round(groupPrice * (1 - totalDiscount / 100));
+  if (discountSum > 0) {
+    discountedPrice = groupPrice - discountSum;
+  }
+  
 
   let currentMonthPaid = 0;
   paymentHistory.forEach((payment) => {
@@ -3377,6 +3441,7 @@ const getOneProduct = async (id) => {
       notification.warning(
         "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
       );
+      console.log(error)
     }
   }
 };
@@ -3490,6 +3555,7 @@ const checkOldPayment = async (
     });
 
     const payments = res.data;
+
     const studentPayments = payments.filter(
       (payment) =>
         payment.student_id === student_id &&
@@ -3499,19 +3565,31 @@ const checkOldPayment = async (
         payment.status !== "delete"
     );
 
-    // Agar chegirma mavjud bo'lsa, uni hisoblash
-    const discount =
-      studentPayments.length > 0 ? studentPayments[0].discount || 0 : 0;
-    const discountedPrice = Math.round(store.price * (1 - discount / 100));
+  
+    const basePrice = store.price;
 
-    // To'langan umumiy summani hisoblash
+  
+    const discountPercent =
+      studentPayments[0]?.discount ? studentPayments[0].discount : 0;
+
+   
+    const discountSum =
+      studentPayments[0]?.discountSum ? studentPayments[0].discountSum : 0;
+
+   
+    const priceAfterPercent = Math.round(basePrice * (1 - discountPercent / 100));
+
+   
+    const finalPrice = Math.max(priceAfterPercent - discountSum, 0);
+
+    
     const totalPaid = studentPayments.reduce(
       (sum, payment) => sum + payment.price,
       0
     );
 
-    // To'langan summa chegirma qo'llangan narxdan kam bo'lsa, eski to'lov yo'q deb qaytarish
-    return totalPaid < discountedPrice;
+    
+    return totalPaid < finalPrice; 
   } catch (error) {
     return false;
   }
@@ -3529,6 +3607,7 @@ const addPayment = async () => {
     month: form.month,
     method: form.method,
     discount: form.discount,
+    discountSum: form.discountSum,
     price: form.price,
     description: form.description,
   };
@@ -3719,6 +3798,7 @@ const getEditProduct = (id) => {
       form.month = res.data.month;
       store.pay_price = res.data.price;
       form.discount = res.data.discount;
+      form.discountSum = res.data.discountSum;
       form.method = res.data.method;
       form.description = res.data.description;
       form.id = res.data.student.id;
@@ -3754,6 +3834,7 @@ const editProduct = () => {
     month: form.month,
     method: form.method,
     discount: form.discount,
+    discountSum: form.discountSum,
     price: store.pay_price,
   };
 
@@ -3975,12 +4056,13 @@ const printReceipt = () => {
 
 const printChek = (id) => {
   const product = store.PageProduct.find((product) => product.id === id);
-  const priceDiscounted = product.discount
-    ? (
-        product.group_price -
-        (product.group_price * product.discount) / 100
-      ).toFixed(2)
-    : product.group_price;
+  const priceDiscounted =
+  product.discount
+    ? (product.group_price - (product.group_price * product.discount) / 100).toFixed(2)
+    : product.discountSum
+      ? product.group_price - product.discountSum
+      : product.group_price;
+
 
   formatDateToNumeric(new Date(product.createdAt));
   axios
@@ -4090,7 +4172,7 @@ const printChek = (id) => {
             <span class="bold">Kurs narxi:</span>
             <span class="card">
               ${
-                product.discount !== 0 && product.discount !== ""
+                (product.discount !== 0 && product.discount !== "") || product.discountSum !== 0 && product.discountSum !== ""
                   ? `<span class="strike">${Number(
                       product.group_price
                     )?.toLocaleString("uz-UZ")} so'm</span>`
@@ -4105,6 +4187,16 @@ const printChek = (id) => {
           <div class="row">
             <span class="bold">Chegirma:</span>
             <span>${product.discount}%</span>
+          </div>
+          `
+              : ""
+          }
+          ${
+            product.discountSum !== 0 && product.discountSum !== ""
+              ? `
+          <div class="row">
+            <span class="bold">Chegirma:</span>
+            <span>${Number(product.discountSum)?.toLocaleString("uz-UZ")} so'm</span>
           </div>
           `
               : ""

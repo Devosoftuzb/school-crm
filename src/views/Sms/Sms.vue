@@ -14,10 +14,10 @@
 
         <!------------------------------------------- Search ------------------------------------------->
         <div
-          class="shadow rounded-xl flex flex-col lg:flex-row items-center justify-between lg:space-x-4 p-4 gap-3 mb-4"
+          class="flex flex-col items-center justify-between gap-3 p-4 mb-4 shadow rounded-xl lg:flex-row lg:space-x-4"
           :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
         >
-          <h1 class="text-blue-700 font-bold text-lg w-full">
+          <h1 class="w-full text-lg font-bold text-blue-700">
             Xabar jo'natish
           </h1>
         </div>
@@ -28,14 +28,14 @@
 
         <!------------------------------------------- Search ------------------------------------------->
         <div
-          class="shadow rounded-xl flex flex-col justify-between p-4 py-10 gap-3 mb-4"
+          class="flex flex-col justify-between gap-3 p-4 py-10 mb-4 shadow rounded-xl"
           :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
         >
-          <div class="2xl:w-5/12 sm:w-4/6 w-full flex lg:pb-0 pb-2 gap-5">
+          <div class="flex w-full gap-5 pb-2 2xl:w-5/12 sm:w-4/6 lg:pb-0">
             <form
               @submit.prevent="sendSMS(form.group_id)"
               :class="{ darkForm: navbar.userNav }"
-              class="w-full flex sm:flex-row flex-col items-center justify-end gap-5"
+              class="flex flex-col items-center justify-end w-full gap-5 sm:flex-row"
             >
               <div class="relative w-full">
                 <div
@@ -68,15 +68,15 @@
                   "
                   type="search"
                   id="simple-search"
-                  class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2"
+                  class="block w-full p-2 pl-10 text-sm border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
                   placeholder="Guruhni tanlang yoki qidirish..."
                 />
                 <ul
                   v-show="store.filter_show && store.searchList.length > 0"
-                  class="absolute z-10 max-h-80 overflow-y-auto overflow-hidden py-1 text-gray-600 rounded bg-white w-full"
+                  class="absolute z-10 w-full py-1 overflow-hidden overflow-y-auto text-gray-600 bg-white rounded max-h-80"
                 >
                   <li
-                    class="hover:bg-blue-600 hover:text-white cursor-pointer pl-2"
+                    class="pl-2 cursor-pointer hover:bg-blue-600 hover:text-white"
                     v-for="(i, index) in store.searchList"
                     :key="index"
                     @mousedown.prevent="
@@ -90,10 +90,10 @@
                 </ul>
                 <ul
                   v-show="store.selectLamp && !store.filter"
-                  class="absolute z-10 max-h-80 overflow-y-auto overflow-hidden py-1 text-gray-600 rounded bg-white w-full"
+                  class="absolute z-10 w-full py-1 overflow-hidden overflow-y-auto text-gray-600 bg-white rounded max-h-80"
                 >
                   <li
-                    class="hover:bg-blue-600 hover:text-white whitespace-nowrap cursor-pointer pl-2"
+                    class="pl-2 cursor-pointer hover:bg-blue-600 hover:text-white whitespace-nowrap"
                     v-for="(i, index) in store.allProducts"
                     :key="index"
                     @mousedown.prevent="
@@ -108,7 +108,7 @@
               </div>
 
               <div
-                class="sm:max-w-fit w-full flex flex-row md:space-y-0 items-center justify-between md:justify-end md:space-x-3"
+                class="flex flex-row items-center justify-between w-full sm:max-w-fit md:space-y-0 md:justify-end md:space-x-3"
               >
                 <button
                   type="submit"
@@ -120,7 +120,7 @@
             </form>
           </div>
           <div
-            class="font-bold lg:w-6/12 w-full flex flex-col gap-7 mt-10"
+            class="flex flex-col w-full mt-10 font-bold lg:w-6/12 gap-7"
             :class="navbar.userNav ? 'text-white' : 'text-black'"
           >
             <span>

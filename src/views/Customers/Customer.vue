@@ -1,5 +1,45 @@
 <template>
-  <div @click="store.filter_show = false" class="px-2">
+  <div @click="store.filter_show = false" class="px-2 pt-4">
+    
+    <!-- ---------------------------------------- Statistic ------------------------------------- -->
+
+    <div
+      v-show="store.PageProduct"
+      v-for="i in store.statistic"
+      :key="i"
+      class="flex flex-wrap items-center justify-center cards gap-x-5 gap-y-5"
+    >
+      <div class="card sm:w-[295px] w-full" v-for="j in i" :key="j">
+        <div
+          class="relative flex flex-col min-w-0 break-words shadow-soft-xl rounded-xl bg-clip-border"
+          :class="{
+            'bg-[#1e293b]': navbar.userNav,
+            'bg-white': !navbar.userNav,
+          }"
+        >
+          <div class="flex-auto p-4">
+            <div class="flex flex-row -mx-3">
+              <div
+                class="flex items-center justify-between w-full px-3"
+                :class="navbar.userNav ? 'text-white' : 'text-black'"
+              >
+                <h3 class="text-sm font-semibold leading-normal sm:text-md">
+                  {{ j.social }}
+                </h3>
+                <h5
+                  class="p-1 px-3 text-sm font-bold text-blue-700 bg-blue-100 rounded-lg sm:text-md"
+                >
+                  {{ j.count.toLocaleString("uz-UZ") }} ta
+                </h5>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ---------------------------------------- Statistic ------------------------------------- -->
+
     <!-- ----------------------------------------- Student modal ----------------------------------------------- -->
 
     <div
@@ -9,7 +49,7 @@
           : 'hidden'
       "
     >
-      <div class="relative p-4 w-full max-w-3xl h-auto">
+      <div class="relative w-full h-auto max-w-3xl p-4">
         <!-- Modal content -->
         <div
           class="relative p-4 rounded-lg shadow sm:p-5"
@@ -17,7 +57,7 @@
         >
           <!-- Modal header -->
           <div
-            class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5"
+            class="flex items-center justify-between pb-4 mb-4 border-b rounded-t sm:mb-5"
           >
             <h3
               class="text-lg"
@@ -52,7 +92,7 @@
             @submit.prevent="createStudent"
             :class="{ darkForm: navbar.userNav }"
           >
-            <div class="grid font-medium gap-4 mb-4 sm:grid-cols-2">
+            <div class="grid gap-4 mb-4 font-medium sm:grid-cols-2">
               <div>
                 <label for="parents_fullname" class="block mb-2 text-sm"
                   >Ota-ona ism familiyasi</label
@@ -128,7 +168,7 @@
               </div>
             </div>
             <div
-              class="w-full flex items-center justify-between border-t pt-5 mt-5"
+              class="flex items-center justify-between w-full pt-5 mt-5 border-t"
             >
               <button
                 @click="edit.modal = false"
@@ -162,7 +202,7 @@
           : 'hidden'
       "
     >
-      <div class="relative p-4 w-full max-w-xl h-auto">
+      <div class="relative w-full h-auto max-w-xl p-4">
         <!-- Modal content -->
         <div
           class="relative p-4 rounded-lg shadow sm:p-5"
@@ -170,7 +210,7 @@
         >
           <!-- Modal header -->
           <div
-            class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5"
+            class="flex items-center justify-between pb-4 mb-4 border-b rounded-t sm:mb-5"
           >
             <h3
               class="text-lg"
@@ -205,7 +245,7 @@
             @submit.prevent="createProduct"
             :class="{ darkForm: navbar.userNav }"
           >
-            <div class="grid font-medium gap-4 mb-4 grid-cols-1">
+            <div class="grid grid-cols-1 gap-4 mb-4 font-medium">
               <div class="">
                 <label for="name" class="block mb-2 text-sm">F . I . O</label>
                 <input
@@ -282,7 +322,7 @@
               </div>
             </div>
             <div
-              class="w-full flex items-center justify-between border-t pt-5 mt-5"
+              class="flex items-center justify-between w-full pt-5 mt-5 border-t"
             >
               <button
                 @click="toggleModal"
@@ -312,7 +352,7 @@
           : 'hidden'
       "
     >
-      <div class="relative p-4 w-full max-w-xl h-auto">
+      <div class="relative w-full h-auto max-w-xl p-4">
         <!-- Modal content -->
         <div
           class="relative p-4 rounded-lg shadow sm:p-5"
@@ -320,7 +360,7 @@
         >
           <!-- Modal header -->
           <div
-            class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5"
+            class="flex items-center justify-between pb-4 mb-4 border-b rounded-t sm:mb-5"
           >
             <h3
               class="text-lg"
@@ -355,7 +395,7 @@
             @submit.prevent="editProduct"
             :class="{ darkForm: navbar.userNav }"
           >
-            <div class="grid font-medium gap-4 mb-4 grid-cols-1">
+            <div class="grid grid-cols-1 gap-4 mb-4 font-medium">
               <div class="">
                 <label for="name" class="block mb-2 text-sm">F . I . O</label>
                 <input
@@ -432,7 +472,7 @@
               </div>
             </div>
             <div
-              class="w-full flex items-center justify-between border-t pt-5 mt-5"
+              class="flex items-center justify-between w-full pt-5 mt-5 border-t"
             >
               <button
                 @click="edit.toggle = false"
@@ -470,7 +510,7 @@
         >
           <!-- Modal header -->
           <div
-            class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5"
+            class="flex items-center justify-between pb-4 mb-4 border-b rounded-t sm:mb-5"
           >
             <h3
               class="text-lg"
@@ -501,7 +541,7 @@
           </div>
           <!-- Modal body -->
           <div :class="{ darkForm: navbar.userNav }">
-            <div class="grid font-medium gap-4 mb-4 grid-cols-1">
+            <div class="grid grid-cols-1 gap-4 mb-4 font-medium">
               <div>
                 <div></div>
                 <h1
@@ -512,7 +552,7 @@
                 </h1>
               </div>
               <div
-                class="w-full flex items-center justify-between border-t pt-5 mt-5"
+                class="flex items-center justify-between w-full pt-5 mt-5 border-t"
               >
                 <button
                   @click="remove.toggle = false"
@@ -549,31 +589,31 @@
 
         <!------------------------------------------- Search ------------------------------------------->
         <div
-          class="shadow rounded-xl flex flex-col lg:flex-row items-center justify-between lg:space-x-4 p-4 mb-4"
+          class="flex flex-col items-center justify-between p-4 mb-4 shadow rounded-xl lg:flex-row lg:space-x-4"
           :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
         >
           <div
-            class="w-full flex items-center lg:justify-start lg:pb-0 pb-4 justify-between gap-5"
+            class="flex items-center justify-between w-full gap-5 pb-4 lg:justify-start lg:pb-0"
           >
-            <h1 class="text-blue-700 font-bold text-lg">Mijozlar</h1>
+            <h1 class="text-lg font-bold text-blue-700">Mijozlar</h1>
             <div
-              class="lg:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3"
+              class="flex flex-col items-stretch justify-end space-y-2 lg:w-auto md:flex-row md:space-y-0 md:items-center md:space-x-3"
             >
               <button
                 v-show="!store.guard"
                 @click="toggleModal"
                 id=""
                 type="button"
-                class="btnAdd flex items-center max-w-fit justify-center whitespace-nowrap text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 sm:py-2"
+                class="flex items-center justify-center px-4 text-sm font-medium text-white bg-blue-600 rounded-lg btnAdd max-w-fit whitespace-nowrap hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 sm:py-2"
               >
-                <span class="sm:block hidden">Mijoz qo'shish</span>
-                <i class="sm:hidden block bx bxs-user-plus text-lg"></i>
+                <span class="hidden sm:block">Mijoz qo'shish</span>
+                <i class="block text-lg sm:hidden bx bxs-user-plus"></i>
               </button>
             </div>
           </div>
 
           <div class="w-full lg:w-80">
-            <form class="flex items-center text-gray-900 font-medium">
+            <form class="flex items-center font-medium text-gray-900">
               <label for="simple-search" class="sr-only">Qidiruv</label>
               <div class="relative w-full">
                 <div
@@ -601,16 +641,16 @@
                   "
                   type="search"
                   id="simple-search"
-                  class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2"
+                  class="block w-full p-2 pl-10 text-sm border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
                   placeholder="Qidirish .."
                 />
                 <ul
                   v-show="store.filter_show"
-                  class="absolute z-10 max-h-80 overflow-y-auto overflow-hidden py-1 text-gray-600 rounded bg-white w-full"
+                  class="absolute z-10 w-full py-1 overflow-hidden overflow-y-auto text-gray-600 bg-white rounded max-h-80"
                   :class="{ hidden: !store.searchList.length }"
                 >
                   <li
-                    class="hover:bg-gray-100 cursor-pointer pl-2"
+                    class="pl-2 cursor-pointer hover:bg-gray-100"
                     v-for="(i, index) in store.searchList"
                     :key="index"
                     @click="
@@ -628,21 +668,21 @@
         <!------------------------------------------- Search ------------------------------------------->
 
         <div
-          class="relative shadow-md rounded-lg overflow-hidden"
+          class="relative overflow-hidden rounded-lg shadow-md"
           :class="navbar.userNav ? 'bg-[#1e293b] text-white' : 'bg-white'"
         >
           <div class="overflow-x-auto">
             <table class="w-full text-sm text-left">
               <thead
-                class="btnAdd text-xs rounded-lg uppercase text-white"
+                class="text-xs text-white uppercase rounded-lg btnAdd"
                 :class="navbar.userNav ? 'bg-gray-700' : 'bg-gray-50'"
               >
                 <tr>
-                  <th scope="col" class="text-center py-3">F . I . O</th>
-                  <th scope="col" class="text-center py-3">Telefon Raqami</th>
-                  <th scope="col" class="text-center py-3">Fani</th>
-                  <th scope="col" class="text-center py-3">Mijoz haqida</th>
-                  <th scope="col" class="text-center py-3">Mijoz oqimi</th>
+                  <th scope="col" class="py-3 text-center">F . I . O</th>
+                  <th scope="col" class="py-3 text-center">Telefon Raqami</th>
+                  <th scope="col" class="py-3 text-center">Fani</th>
+                  <th scope="col" class="py-3 text-center">Mijoz haqida</th>
+                  <th scope="col" class="py-3 text-center">Mijoz oqimi</th>
                   <th></th>
                   <th></th>
                 </tr>
@@ -659,22 +699,22 @@
                 >
                   <th
                     scope="row"
-                    class="text-center px-8 py-3 font-medium whitespace-nowrap"
+                    class="px-8 py-3 font-medium text-center whitespace-nowrap"
                   >
                     <span>{{ i.full_name }}</span>
                   </th>
-                  <td class="text-center font-medium text-red-800 px-8 py-2">
+                  <td class="px-8 py-2 font-medium text-center text-red-800">
                     <p class="bg-red-100 whitespace-nowrap rounded-[5px] p-1">
                       {{ i.phone_number }}
                     </p>
                   </td>
-                  <td class="text-center font-medium text-blue-800 px-8 py-2">
+                  <td class="px-8 py-2 font-medium text-center text-blue-800">
                     <p class="bg-blue-100 whitespace-nowrap rounded-[5px] p-1">
                       {{ i.subject == null ? "..." : i.subject.name }}
                     </p>
                   </td>
-                  <td class="text-center font-medium px-8 py-2 relative">
-                    <div class="group relative w-40 inline-block">
+                  <td class="relative px-8 py-2 font-medium text-center">
+                    <div class="relative inline-block w-40 group">
                       <p class="truncate w-40 p-1 rounded-[5px]">
                         {{
                           i.description && i.description.split(" ").length > 3
@@ -684,19 +724,19 @@
                         }}
                       </p>
                       <span
-                        class="absolute left-1/2 -translate-x-1/2 bottom-full mb-1 hidden w-max max-w-xs bg-blue-100 text-blue-800 text-sm p-2 rounded-md shadow-lg group-hover:block"
+                        class="absolute hidden max-w-xs p-2 mb-1 text-sm text-blue-800 -translate-x-1/2 bg-blue-100 rounded-md shadow-lg left-1/2 bottom-full w-max group-hover:block"
                       >
                         {{ i.description }}
                       </span>
                     </div>
                   </td>
 
-                  <td class="text-center font-medium text-blue-800 px-8 py-2">
+                  <td class="px-8 py-2 font-medium text-center text-blue-800">
                     <p class="bg-blue-100 whitespace-nowrap rounded-[5px] p-1">
                       {{ i.social_media.name }}
                     </p>
                   </td>
-                  <td class="text-center font-medium px-8 py-3">
+                  <td class="px-8 py-3 font-medium text-center">
                     <button
                       @click="getOneProduct(i.id, 'student')"
                       class="btnKirish bg-blue-600 rounded-lg px-5 py-2.5 text-white focus:ring-2 whitespace-nowrap"
@@ -706,16 +746,16 @@
                   </td>
                   <td
                     v-show="!store.guard"
-                    class="text-center whitespace-nowrap font-medium pr-5"
+                    class="pr-5 font-medium text-center whitespace-nowrap"
                   >
                     <i
                       @click="getOneProduct(i.id, 'edit')"
-                      class="bx bxs-pencil bg-blue-300 text-blue-600 rounded-lg p-2 mr-3 cursor-pointer focus:ring-2"
+                      class="p-2 mr-3 text-blue-600 bg-blue-300 rounded-lg cursor-pointer bx bxs-pencil focus:ring-2"
                     >
                     </i>
                     <i
                       @click="deleteFunc(i.id)"
-                      class="bx bxs-trash bg-red-300 cursor-pointer text-red-600 rounded-lg p-2 focus:ring-2"
+                      class="p-2 text-red-600 bg-red-300 rounded-lg cursor-pointer bx bxs-trash focus:ring-2"
                     >
                     </i>
                   </td>
@@ -731,34 +771,34 @@
                 >
                   <th
                     scope="row"
-                    class="text-center px-8 py-3 font-medium whitespace-nowrap"
+                    class="px-8 py-3 font-medium text-center whitespace-nowrap"
                   >
                     <span>{{ i.full_name }}</span>
                   </th>
-                  <td class="text-center font-medium text-red-800 px-8 py-2">
+                  <td class="px-8 py-2 font-medium text-center text-red-800">
                     <p class="bg-red-100 whitespace-nowrap rounded-[5px] p-1">
                       {{ i.phone_number }}
                     </p>
                   </td>
-                  <td class="text-center font-medium text-blue-800 px-8 py-2">
+                  <td class="px-8 py-2 font-medium text-center text-blue-800">
                     <p class="bg-blue-100 whitespace-nowrap rounded-[5px] p-1">
                       {{ i.subject == null ? "..." : i.subject.name }}
                     </p>
                   </td>
-                  <td class="text-center font-medium px-8 py-2">
+                  <td class="px-8 py-2 font-medium text-center">
                     <p
                       class="whitespace-nowrap rounded-[5px] p-1 truncate w-40 inline-flex justify-center"
                     >
                       {{ i.description === null ? "..." : i.description }}
                     </p>
                   </td>
-                  <td class="text-center font-medium text-blue-800 px-8 py-2">
+                  <td class="px-8 py-2 font-medium text-center text-blue-800">
                     <p class="bg-blue-100 whitespace-nowrap rounded-[5px] p-1">
                       {{ i.social_media.name }}
                     </p>
                   </td>
 
-                  <td class="text-center font-medium px-8 py-3">
+                  <td class="px-8 py-3 font-medium text-center">
                     <button
                       @click="getOneProduct(i.id, 'student')"
                       class="btnKirish bg-blue-600 rounded-lg px-5 py-2.5 text-white focus:ring-2 whitespace-nowrap"
@@ -768,16 +808,16 @@
                   </td>
                   <td
                     v-show="!store.guard"
-                    class="text-center whitespace-nowrap font-medium pr-5"
+                    class="pr-5 font-medium text-center whitespace-nowrap"
                   >
                     <i
                       @click="getOneProduct(i.id, 'edit')"
-                      class="bx bxs-pencil bg-blue-300 text-blue-600 rounded-lg p-2 mr-3 cursor-pointer focus:ring-2"
+                      class="p-2 mr-3 text-blue-600 bg-blue-300 rounded-lg cursor-pointer bx bxs-pencil focus:ring-2"
                     >
                     </i>
                     <i
                       @click="deleteFunc(i.id)"
-                      class="bx bxs-trash bg-red-300 cursor-pointer text-red-600 rounded-lg p-2 focus:ring-2"
+                      class="p-2 text-red-600 bg-red-300 rounded-lg cursor-pointer bx bxs-trash focus:ring-2"
                     >
                     </i>
                   </td>
@@ -786,14 +826,14 @@
             </table>
             <div
               v-show="!store.PageProduct || store.PageProduct.length === 0"
-              class="w-full max-w-screen text-center p-20 text-2xl font-medium"
+              class="w-full p-20 text-2xl font-medium text-center max-w-screen"
             >
               <h1>Mijozlar ro'yhati bo'sh</h1>
             </div>
           </div>
           <nav
             v-if="!store.searchList.length"
-            class="flex flex-row justify-between items-center space-y-0 p-4"
+            class="flex flex-row items-center justify-between p-4 space-y-0"
             aria-label="Table navigation"
           >
             <!-- Oldingi sahifa tugmasi -->
@@ -813,7 +853,7 @@
                 "
               >
                 <i
-                  class="md:hidden font-bold text-black text-2xl bx bx-chevron-left"
+                  class="text-2xl font-bold text-black md:hidden bx bx-chevron-left"
                 ></i>
                 <span class="hidden md:block">Oldingi</span>
               </li>
@@ -851,7 +891,7 @@
               >
                 <span class="hidden md:block">Keyingi</span>
                 <i
-                  class="md:hidden font-bold text-black text-2xl bx bx-chevron-right"
+                  class="text-2xl font-bold text-black md:hidden bx bx-chevron-right"
                 ></i>
               </li>
             </ul>
@@ -866,7 +906,6 @@
 
 <script setup>
 import { onMounted, ref, reactive } from "vue";
-import { useRouter } from "vue-router";
 import { useNavStore } from "../../stores/toggle";
 import { Placeholder2 } from "../../components";
 import { useNotificationStore } from "../../stores/notification";
@@ -874,7 +913,6 @@ import axios from "@/services/axios";
 
 const notification = useNotificationStore();
 const navbar = useNavStore();
-const router = useRouter();
 
 const modal = ref(false);
 
@@ -898,6 +936,7 @@ const store = reactive({
   filter: "",
   searchList: [],
   subject: "",
+  statistic: false,
 });
 
 const form = reactive({
@@ -928,6 +967,10 @@ const remove = reactive({
   toggle: false,
 });
 
+const now = new Date();
+const year = now.getFullYear();
+const month = String(now.getMonth() + 1).padStart(2, '0');
+
 // ---------------------------- qidiruv funksiyasi ------------------------------------
 function searchFunc() {
   store.searchList = store.allProducts.filter((i) =>
@@ -954,6 +997,23 @@ function deleteFunc(id) {
 }
 
 // ----------------------------------- axios so'rovlari --------------------------------
+const getStatistic = async (date) => {
+  await axios
+    .get(
+      `/statistic/customer/${localStorage.getItem("school_id")}/${date}`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    )
+    .then((res) => {
+      store.statistic = res.data;
+    })
+    .catch((error) => {});
+};
+
+
 const getAllProduct = async () => {
   try {
     const res = await axios.get(
@@ -1169,6 +1229,7 @@ onMounted(() => {
   getGroups();
   getSubject();
   getSocialLink();
+  getStatistic(`${year}-${month}`);
 });
 </script>
 
