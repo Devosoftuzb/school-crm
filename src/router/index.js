@@ -39,6 +39,19 @@ const routes = [
     children: [
       {
         path: "",
+        name: "root-redirect",
+        beforeEnter: (to, from, next) => {
+          const role = localStorage.getItem("role");
+
+          if (role === "_sp_am_") {
+            return next({ name: "owner" });
+          }
+
+          return next({ name: "dashboard" });
+        },
+      },
+      {
+        path: "",
         name: "dashboard",
         component: Dashboard,
         meta: {
