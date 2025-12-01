@@ -25,7 +25,7 @@
           >
             <!-- Modal header -->
             <div
-              class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5"
+              class="flex items-center justify-between pb-4 mb-4 border-b rounded-t sm:mb-5"
             >
               <h3
                 class="text-lg"
@@ -56,7 +56,7 @@
             </div>
             <!-- Modal body -->
             <div :class="{ darkForm: navbar.userNav }">
-              <div class="grid font-medium gap-4 mb-4 grid-cols-1">
+              <div class="grid grid-cols-1 gap-4 mb-4 font-medium">
                 <div>
                   <div></div>
                   <h1
@@ -67,7 +67,7 @@
                   </h1>
                 </div>
                 <div
-                  class="w-full flex items-center justify-between border-t pt-5 mt-5"
+                  class="flex items-center justify-between w-full pt-5 mt-5 border-t"
                 >
                   <button
                     @click="remove.toggle = false"
@@ -100,7 +100,7 @@
         "
       >
         <transition name="modal-fade">
-          <div class="relative p-4 w-full max-w-xl h-auto">
+          <div class="relative w-full h-auto max-w-xl p-4">
             <!-- Modal content -->
             <div
               class="relative p-4 rounded-lg shadow sm:p-5"
@@ -108,7 +108,7 @@
             >
               <!-- Modal header -->
               <div
-                class="flex flex-col items-center gap-5 pb-4 mb-4 rounded-t border-b sm:mb-5"
+                class="flex flex-col items-center gap-5 pb-4 mb-4 border-b rounded-t sm:mb-5"
               >
                 <div class="flex items-center justify-between w-full">
                   <h3
@@ -146,7 +146,7 @@
                 @submit.prevent="getHistory(1)"
                 :class="{ darkForm: navbar.userNav }"
               >
-                <div class="grid font-medium gap-4 mb-4">
+                <div class="grid gap-4 mb-4 font-medium">
                   <div>
                     <label for="year" class="block mb-2 text-sm"
                       >Yilni tanlang</label
@@ -230,17 +230,17 @@
                         "
                         type="search"
                         id="simple-search"
-                        class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2"
+                        class="block w-full p-2 pl-10 text-sm border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
                         placeholder="Guruhni tanlang yoki qidirish..."
                       />
                       <ul
                         v-show="
                           history.filter_show && history.searchList.length > 0
                         "
-                        class="absolute z-10 max-h-80 overflow-y-auto overflow-hidden py-1 text-gray-600 rounded bg-white w-full bottom-full"
+                        class="absolute z-10 w-full py-1 overflow-hidden overflow-y-auto text-gray-600 bg-white rounded max-h-80 bottom-full"
                       >
                         <li
-                          class="hover:bg-blue-600 hover:text-white cursor-pointer pl-2"
+                          class="pl-2 cursor-pointer hover:bg-blue-600 hover:text-white"
                           v-for="(i, index) in history.searchList"
                           :key="index"
                           @mousedown.prevent="
@@ -255,10 +255,10 @@
                       </ul>
                       <ul
                         v-show="history.selectLamp && !history.filter"
-                        class="absolute z-10 max-h-80 overflow-y-auto overflow-hidden py-1 text-gray-600 rounded bg-white w-full bottom-full"
+                        class="absolute z-10 w-full py-1 overflow-hidden overflow-y-auto text-gray-600 bg-white rounded max-h-80 bottom-full"
                       >
                         <li
-                          class="hover:bg-blue-600 hover:text-white whitespace-nowrap cursor-pointer pl-2"
+                          class="pl-2 cursor-pointer hover:bg-blue-600 hover:text-white whitespace-nowrap"
                           v-for="(i, index) in store.groupAllProducts"
                           :key="index"
                           @mousedown.prevent="
@@ -275,7 +275,7 @@
                   </div>
                 </div>
                 <div
-                  class="w-full flex items-center justify-between border-t pt-5 mt-5"
+                  class="flex items-center justify-between w-full pt-5 mt-5 border-t"
                 >
                   <button
                     @click="historyModal"
@@ -303,15 +303,15 @@
 
         <!------------------------------------------- Search ------------------------------------------->
         <div
-          class="shadow rounded-xl flex flex-col lg:flex-row items-center justify-between lg:space-x-4 p-4 gap-3 mb-4"
+          class="flex flex-col items-center justify-between gap-3 p-4 mb-4 shadow rounded-xl lg:flex-row lg:space-x-4"
           :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
         >
           <div
-            class="w-full flex items-center sm:justify-start lg:pb-0 pb-4 justify-between gap-5"
+            class="flex items-center justify-between w-full gap-5 pb-4 sm:justify-start lg:pb-0"
           >
-            <h1 class="text-blue-700 font-bold text-lg">Davomat</h1>
+            <h1 class="text-lg font-bold text-blue-700">Davomat</h1>
             <div
-              class="lg:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3"
+              class="flex flex-col items-stretch justify-end space-y-2 lg:w-auto md:flex-row md:space-y-0 md:items-center md:space-x-3"
             >
               <button
                 @click="history.modal = true"
@@ -322,11 +322,11 @@
               </button>
             </div>
           </div>
-          <div class="w-full flex items-center lg:pb-0 pb-2 gap-5 justify-end">
+          <div class="flex items-center justify-end w-full gap-5 pb-2 lg:pb-0">
             <form
               @submit.prevent="getOneProduct(form.group_id)"
               :class="{ darkForm: navbar.userNav }"
-              class="w-full flex sm:flex-row flex-col items-center justify-end gap-5"
+              class="flex flex-col items-center justify-end w-full gap-5 sm:flex-row"
             >
               <div class="relative w-full">
                 <div
@@ -359,15 +359,15 @@
                   "
                   type="search"
                   id="simple-search"
-                  class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2"
+                  class="block w-full p-2 pl-10 text-sm border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
                   placeholder="Guruhni tanlang yoki qidirish..."
                 />
                 <ul
                   v-show="store.filter_show && store.searchList.length > 0"
-                  class="absolute z-10 max-h-80 overflow-y-auto overflow-hidden py-1 text-gray-600 rounded bg-white w-full"
+                  class="absolute z-10 w-full py-1 overflow-hidden overflow-y-auto text-gray-600 bg-white rounded max-h-80"
                 >
                   <li
-                    class="hover:bg-blue-600 hover:text-white cursor-pointer pl-2"
+                    class="pl-2 cursor-pointer hover:bg-blue-600 hover:text-white"
                     v-for="(i, index) in store.searchList"
                     :key="index"
                     @mousedown.prevent="
@@ -381,10 +381,10 @@
                 </ul>
                 <ul
                   v-show="store.selectLamp && !store.filter"
-                  class="absolute z-10 max-h-80 overflow-y-auto overflow-hidden py-1 text-gray-600 rounded bg-white w-full"
+                  class="absolute z-10 w-full py-1 overflow-hidden overflow-y-auto text-gray-600 bg-white rounded max-h-80"
                 >
                   <li
-                    class="hover:bg-blue-600 hover:text-white whitespace-nowrap cursor-pointer pl-2"
+                    class="pl-2 cursor-pointer hover:bg-blue-600 hover:text-white whitespace-nowrap"
                     v-for="(i, index) in store.groupAllProducts"
                     :key="index"
                     @mousedown.prevent="
@@ -399,7 +399,7 @@
               </div>
 
               <div
-                class="sm:max-w-fit w-full flex flex-row md:space-y-0 items-center justify-between md:justify-end md:space-x-3"
+                class="flex flex-row items-center justify-between w-full sm:max-w-fit md:space-y-0 md:justify-end md:space-x-3"
               >
                 <button
                   type="submit"
@@ -414,17 +414,17 @@
         <!------------------------------------------- Search ------------------------------------------->
 
         <div
-          class="relative shadow-md rounded-lg overflow-hidden mb-28"
+          class="relative overflow-hidden rounded-lg shadow-md mb-28"
           :class="navbar.userNav ? 'bg-[#1e293b] text-white' : 'bg-white'"
         >
           <div v-show="!store.PageProduct" class="overflow-x-auto">
             <table class="w-full text-sm text-left">
-              <thead class="btnAdd text-white text-xs rounded-lg uppercase">
+              <thead class="text-xs text-white uppercase rounded-lg btnAdd">
                 <tr>
-                  <th scope="col" class="text-center py-3">F . I . O</th>
-                  <th scope="col" class="text-center py-3">To'lov holati</th>
-                  <th scope="col" class="text-center py-3">Davomat</th>
-                  <th scope="col" class="text-center py-3"></th>
+                  <th scope="col" class="py-3 text-center">F . I . O</th>
+                  <th scope="col" class="py-3 text-center">To'lov holati</th>
+                  <th scope="col" class="py-3 text-center">Davomat</th>
+                  <th scope="col" class="py-3 text-center"></th>
                 </tr>
               </thead>
               <tbody v-if="!store.error">
@@ -438,11 +438,11 @@
                 >
                   <th
                     scope="row"
-                    class="text-center px-8 py-4 font-medium whitespace-nowrap"
+                    class="px-8 py-4 font-medium text-center whitespace-nowrap"
                   >
                     <span>{{ i.full_name }}</span>
                   </th>
-                  <td class="text-center font-medium px-8 py-4">
+                  <td class="px-8 py-4 font-medium text-center">
                     <p
                       :class="{
                         'bg-green-100 text-green-800':
@@ -456,7 +456,7 @@
                     </p>
                   </td>
 
-                  <td class="text-center font-medium text-blue-800 px-8 py-4">
+                  <td class="px-8 py-4 font-medium text-center text-blue-800">
                     <button
                       @click="davomatToggle(i.id, false)"
                       :class="
@@ -479,12 +479,12 @@
                     </button>
                   </td>
                   <td
-                    class="text-center whitespace-nowrap font-medium pr-5 py-4"
+                    class="py-4 pr-5 font-medium text-center whitespace-nowrap"
                   >
                     <i
                     v-show="store.guard"
                       @click="deleteFunc(i.id)"
-                      class="bx bxs-trash bg-red-300 cursor-pointer text-red-600 rounded-lg p-2 focus:ring-2"
+                      class="p-2 text-red-600 bg-red-300 rounded-lg cursor-pointer bx bxs-trash focus:ring-2"
                     >
                     </i>
                   </td>
@@ -493,7 +493,7 @@
             </table>
             <div
               v-show="!store.allProducts"
-              class="w-full max-w-screen text-center p-20 text-2xl font-medium"
+              class="w-full p-20 text-2xl font-medium text-center max-w-screen"
             >
               <h1>Davomat ro'yhati bo'sh</h1>
             </div>
@@ -501,12 +501,12 @@
 
           <div
             v-show="store.allProducts"
-            class="shadow rounded-xl flex flex-col lg:flex-row items-center justify-between lg:space-x-4 p-4 gap-3 mt-5"
+            class="flex flex-col items-center justify-between gap-3 p-4 mt-5 shadow rounded-xl lg:flex-row lg:space-x-4"
             :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
           >
             <div
               v-show="store.allProducts"
-              class="w-full flex items-center lg:pb-0 pb-2 gap-5 justify-end"
+              class="flex items-center justify-end w-full gap-5 pb-2 lg:pb-0"
             >
               <button
                 id=""
@@ -523,18 +523,18 @@
             class="overflow-x-auto"
           >
             <table class="w-full text-sm text-left">
-              <thead class="btnAdd text-white text-xs rounded-lg uppercase">
+              <thead class="text-xs text-white uppercase rounded-lg btnAdd">
                 <tr>
-                  <th scope="col" class="text-center py-3">F . I . O</th>
+                  <th scope="col" class="py-3 text-center">F . I . O</th>
                   <th
                     v-for="(date, index) in store.uniqueDates"
                     :key="index"
                     scope="col"
-                    class="text-center py-3"
+                    class="py-3 text-center"
                   >
                     {{ date }}
                   </th>
-                  <th scope="col" class="text-center py-3"></th>
+                  <th scope="col" class="py-3 text-center"></th>
                 </tr>
               </thead>
               <tbody v-if="!store.error">
@@ -548,7 +548,7 @@
                 >
                   <th
                     scope="row"
-                    class="text-center px-8 py-4 font-medium whitespace-nowrap"
+                    class="px-8 py-4 font-medium text-center whitespace-nowrap"
                   >
                     <span>{{ i.student_name }}</span>
                   </th>
@@ -556,7 +556,7 @@
                   <td
                     v-for="(date, index) in store.uniqueDates"
                     :key="index"
-                    class="text-center font-medium px-8 py-4"
+                    class="px-8 py-4 font-medium text-center"
                   >
                     <p
                       v-if="getAttendanceStatus(i.attendance, date)"
@@ -572,12 +572,12 @@
                     </p>
                   </td>
                   <td
-                    class="text-center whitespace-nowrap font-medium pr-5 py-4"
+                    class="py-4 pr-5 font-medium text-center whitespace-nowrap"
                   >
                     <i
                     v-show="store.guard"
                       @click="deleteFunc(i.student_id)"
-                      class="bx bxs-trash bg-red-300 cursor-pointer text-red-600 rounded-lg p-2 focus:ring-2"
+                      class="p-2 text-red-600 bg-red-300 rounded-lg cursor-pointer bx bxs-trash focus:ring-2"
                     >
                     </i>
                   </td>
@@ -586,7 +586,7 @@
             </table>
             <div
               v-show="!store.PageProduct"
-              class="w-full max-w-screen text-center p-20 text-2xl font-medium"
+              class="w-full p-20 text-2xl font-medium text-center max-w-screen"
             >
               <h1>Davomat ro'yhati bo'sh</h1>
             </div>
@@ -594,7 +594,7 @@
 
           <nav
             v-show="store.PageProduct"
-            class="flex flex-row justify-between items-center space-y-0 p-4"
+            class="flex flex-row items-center justify-between p-4 space-y-0"
             aria-label="Table navigation"
           >
             <!-- Oldingi sahifa tugmasi -->
@@ -614,7 +614,7 @@
                 "
               >
                 <i
-                  class="md:hidden font-bold text-black text-2xl bx bx-chevron-left"
+                  class="text-2xl font-bold text-black md:hidden bx bx-chevron-left"
                 ></i>
                 <span class="hidden md:block">Oldingi</span>
               </li>
@@ -652,7 +652,7 @@
               >
                 <span class="hidden md:block">Keyingi</span>
                 <i
-                  class="md:hidden font-bold text-black text-2xl bx bx-chevron-right"
+                  class="text-2xl font-bold text-black md:hidden bx bx-chevron-right"
                 ></i>
               </li>
             </ul>
@@ -789,8 +789,15 @@ const calculatePaymentStatus = (paymentHistory, groupPrice) => {
     return `(${groupPrice}) so'm to'lanmagan`;
   }
 
+  console.log(paymentHistory[0])
+
   const totalDiscount = paymentHistory[0]?.discount || 0;
-  const discountedPrice = Math.round(groupPrice * (1 - totalDiscount / 100));
+  const discountSum = paymentHistory[0]?.discountSum || 0;
+  let discountedPrice = Math.round(groupPrice * (1 - totalDiscount / 100));
+  if (discountSum > 0) {
+    discountedPrice = groupPrice - discountSum;
+  }
+  
 
   let currentMonthPaid = 0;
   paymentHistory.forEach((payment) => {
