@@ -4,7 +4,7 @@ export const header = [
     title: "Asosiy",
     link: "/",
     icon: "bx bxs-dashboard",
-    role: "_ow_sch_, _ad_sch_, _tch_sch_",
+    role: "_ow_sch_, _tch_sch_",
   },
   {
     id: 2,
