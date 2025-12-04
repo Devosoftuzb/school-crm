@@ -1,6 +1,5 @@
 <template>
   <div @click="store.filter_show = false" class="px-2 pt-4">
-    
     <!-- ---------------------------------------- Statistic ------------------------------------- -->
 
     <div
@@ -612,57 +611,102 @@
             </div>
           </div>
 
-          <div class="w-full lg:w-80">
-            <form class="flex items-center font-medium text-gray-900">
-              <label for="simple-search" class="sr-only">Qidiruv</label>
-              <div class="relative w-full">
-                <div
-                  class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"
+          <div
+            class="flex flex-col items-center justify-between w-full gap-5 sm:flex-row"
+          >
+            <div class="w-full">
+              <select
+                v-model="history.year"
+                id="name"
+                class="bg-white text-black rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-[7px]"
+                required
+                @change="getProduct(store.pagination)"
+              >
+                <option value="" disabled selected>Yilni tanlang</option>
+                <option
+                  v-for="i in store.curentYil"
+                  :key="i.id"
+                  :value="i.name"
                 >
-                  <svg
-                    aria-hidden="true"
-                    class="w-5 h-5"
-                    fill="currentColor"
-                    viewbox="0 0 20 20"
-                    xmlns="http://www.w3.org/2000/svg"
+                  {{ i.name }}
+                </option>
+              </select>
+            </div>
+            <div class="w-full">
+              <select
+                v-model="history.month"
+                id="month"
+                class="bg-white text-black rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-[7px]"
+                @change="getProduct(store.pagination)"
+              >
+                <option value="" disabled selected>Oyni tanlang</option>
+                <option value="01">Yanvar</option>
+                <option value="02">Fevral</option>
+                <option value="03">Mart</option>
+                <option value="04">Aprel</option>
+                <option value="05">May</option>
+                <option value="06">Iyun</option>
+                <option value="07">Iyul</option>
+                <option value="08">Avgust</option>
+                <option value="09">Sentabr</option>
+                <option value="10">Oktabr</option>
+                <option value="11">Noyabr</option>
+                <option value="12">Dekabr</option>
+              </select>
+            </div>
+
+            <div class="flex w-full">
+              <form class="flex items-center w-full font-medium text-gray-900">
+                <label for="simple-search" class="sr-only">Qidiruv</label>
+                <div class="relative w-full">
+                  <div
+                    class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"
                   >
-                    <path
-                      fill-rule="evenodd"
-                      d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                      clip-rule="evenodd"
-                    />
-                  </svg>
-                </div>
-                <input
-                  v-model="store.filter"
-                  @input="
-                    store.filter_show = true;
-                    searchFunc();
-                  "
-                  type="search"
-                  id="simple-search"
-                  class="block w-full p-2 pl-10 text-sm border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
-                  placeholder="Qidirish .."
-                />
-                <ul
-                  v-show="store.filter_show"
-                  class="absolute z-10 w-full py-1 overflow-hidden overflow-y-auto text-gray-600 bg-white rounded max-h-80"
-                  :class="{ hidden: !store.searchList.length }"
-                >
-                  <li
-                    class="pl-2 cursor-pointer hover:bg-gray-100"
-                    v-for="(i, index) in store.searchList"
-                    :key="index"
-                    @click="
-                      store.filter = i.full_name;
+                    <svg
+                      aria-hidden="true"
+                      class="w-5 h-5"
+                      fill="currentColor"
+                      viewbox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                        clip-rule="evenodd"
+                      />
+                    </svg>
+                  </div>
+                  <input
+                    v-model="store.filter"
+                    @input="
+                      store.filter_show = true;
                       searchFunc();
                     "
+                    type="search"
+                    id="simple-search"
+                    class="block w-full p-2 pl-10 text-sm border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="Qidirish .."
+                  />
+                  <ul
+                    v-show="store.filter_show"
+                    class="absolute z-10 w-full py-1 overflow-hidden overflow-y-auto text-gray-600 bg-white rounded max-h-80"
+                    :class="{ hidden: !store.searchList.length }"
                   >
-                    {{ i.full_name }}
-                  </li>
-                </ul>
-              </div>
-            </form>
+                    <li
+                      class="pl-2 cursor-pointer hover:bg-gray-100"
+                      v-for="(i, index) in store.searchList"
+                      :key="index"
+                      @click="
+                        store.filter = i.full_name;
+                        searchFunc();
+                      "
+                    >
+                      {{ i.full_name }}
+                    </li>
+                  </ul>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
         <!------------------------------------------- Search ------------------------------------------->
@@ -916,6 +960,10 @@ const navbar = useNavStore();
 
 const modal = ref(false);
 
+const now = new Date();
+const year = now.getFullYear();
+const orqaYil = now.getFullYear() - 2;
+
 const toggleModal = () => {
   modal.value = !modal.value;
   form.full_name = "";
@@ -937,6 +985,7 @@ const store = reactive({
   searchList: [],
   subject: "",
   statistic: false,
+  curentYil: [],
 });
 
 const form = reactive({
@@ -967,9 +1016,10 @@ const remove = reactive({
   toggle: false,
 });
 
-const now = new Date();
-const year = now.getFullYear();
-const month = String(now.getMonth() + 1).padStart(2, '0');
+const history = reactive({
+  year: year,
+  month: "",
+});
 
 // ---------------------------- qidiruv funksiyasi ------------------------------------
 function searchFunc() {
@@ -999,20 +1049,16 @@ function deleteFunc(id) {
 // ----------------------------------- axios so'rovlari --------------------------------
 const getStatistic = async (date) => {
   await axios
-    .get(
-      `/statistic/customer/${localStorage.getItem("school_id")}/${date}`,
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      }
-    )
+    .get(`/statistic/customer/${localStorage.getItem("school_id")}/${date}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    })
     .then((res) => {
       store.statistic = res.data;
     })
     .catch((error) => {});
 };
-
 
 const getAllProduct = async () => {
   try {
@@ -1032,12 +1078,28 @@ const getAllProduct = async () => {
 
 const getProduct = async (page) => {
   try {
-    const res = await axios.get(
-      `/customer/${localStorage.getItem("school_id")}/page?page=${page}`,
-      {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      }
-    );
+    let res = null;
+    if (history.month && history.month !== "") {
+      res = await axios.get(
+        `/customer/month/${localStorage.getItem("school_id")}/${history.year}/${
+          history.month
+        }/page?page=${page}`,
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        }
+      );
+      getStatistic(`${history.year}-${history.month}`);
+    } else {
+      res = await axios.get(
+        `/customer/year/${localStorage.getItem("school_id")}/${
+          history.year
+        }/page?page=${page}`,
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        }
+      );
+      getStatistic(history.year);
+    }
 
     store.PageProduct = res.data?.data?.records;
     const pagination = res.data?.data?.pagination;
@@ -1229,7 +1291,14 @@ onMounted(() => {
   getGroups();
   getSubject();
   getSocialLink();
-  getStatistic(`${year}-${month}`);
+  getStatistic(history.year);
+  for (let i = 0; i < 5; i++) {
+    let list = {
+      id: i,
+      name: String(orqaYil + i),
+    };
+    store.curentYil.push(list);
+  }
 });
 </script>
 
