@@ -3,7 +3,7 @@
     <div class="mt-8" v-show="!store.loading">
       <Placeholder2 />
     </div>
-    <div v-show="store.loading" class="wrapper mt-8 mb-32 border border-red">
+    <div v-show="store.loading" class="mt-8 mb-32 border wrapper border-red">
       <div
         :class="
           navbar.userNav
@@ -14,27 +14,32 @@
         data-accordion="collapse"
       >
         <div
-          class="flex sm:flex-row flex-col gap-5 items-start justify-between mb-6"
+          class="flex flex-col items-start justify-between gap-5 mb-6 sm:flex-row"
         >
-          <div class="flex flex-col gap-2 sm:w-auto w-full">
+          <div class="flex flex-col w-full gap-2 sm:w-auto">
             <h1
               class="sm:text-[24px] text-lg font-bold border-b border-[#4141eb]"
             >
               {{ router.currentRoute.value.params.name.toUpperCase() }}
             </h1>
-            <p class="text-sm flex items-center gap-3">
+
+            <p class="flex items-center gap-3 text-sm">
+              <span class="font-bold">Darajasi:</span>
+              <span class="px-4 py-1 text-green-800 bg-green-100 rounded-lg">{{ store.level || "No'malum"}}</span>
+            </p>
+            <p class="flex items-center gap-3 text-sm">
               <span class="font-bold">Boshlangan sana:</span>
               {{ store.start_time?.slice(0, 10) }}
             </p>
-            <p class="text-sm flex items-center gap-3">
+            <p class="flex items-center gap-3 text-sm">
               <span class="font-bold">Dars vaqti:</span>
               {{ store.group_start_end_time }}
             </p>
-            <p class="text-sm flex items-center gap-3">
+            <p class="flex items-center gap-3 text-sm">
               <span class="font-bold">Kurs narxi:</span>
               {{ Number(store.group_price).toLocaleString("uz-UZ") }} so'm
             </p>
-            <p class="text-sm flex items-center gap-3">
+            <p class="flex items-center gap-3 text-sm">
               <span class="font-bold">O'quvchilar soni:</span>
               {{ store.student_number }} ta
             </p>
@@ -55,7 +60,7 @@
             aria-expanded="true"
             aria-controls="accordion-collapse-body-1"
           >
-            <div class="flex items-center sm:gap-5 gap-2">
+            <div class="flex items-center gap-2 sm:gap-5">
               <i
                 class="btn bx bx-user sm:text-[24px] text-sm sm:py-3 px-3 py-2 text-white rounded-full"
               ></i>
@@ -76,17 +81,17 @@
           aria-labelledby="accordion-collapse-heading-1"
         >
           <div
-            class="relative shadow-md rounded-lg overflow-hidden"
+            class="relative overflow-hidden rounded-lg shadow-md"
             :class="navbar.userNav ? 'bg-[#1e293b] text-white' : 'bg-white'"
           >
             <div class="overflow-x-auto">
               <table class="w-full text-sm text-left">
-                <thead class="btn text-xs rounded-lg uppercase">
+                <thead class="text-xs uppercase rounded-lg btn">
                   <tr class="text-white">
-                    <th scope="col" class="text-center py-3">I . F . O</th>
-                    <th scope="col" class="text-center py-3">Lavozim</th>
-                    <th scope="col" class="text-center py-3">Telefon raqami</th>
-                    <th scope="col" class="text-center py-3">
+                    <th scope="col" class="py-3 text-center">I . F . O</th>
+                    <th scope="col" class="py-3 text-center">Lavozim</th>
+                    <th scope="col" class="py-3 text-center">Telefon raqami</th>
+                    <th scope="col" class="py-3 text-center">
                       Qo'shilgan sana
                     </th>
                   </tr>
@@ -102,22 +107,22 @@
                   >
                     <th
                       scope="row"
-                      class="text-center px-8 py-3 font-medium whitespace-nowrap"
+                      class="px-8 py-3 font-medium text-center whitespace-nowrap"
                     >
                       {{ i.full_name }}
                     </th>
                     <td
-                      class="text-center font-medium text-green-800 px-8 py-2"
+                      class="px-8 py-2 font-medium text-center text-green-800"
                     >
                       <p class="bg-green-100 rounded-[5px] p-1">{{ i.role }}</p>
                     </td>
-                    <td class="text-center font-medium text-red-800 px-8 py-2">
+                    <td class="px-8 py-2 font-medium text-center text-red-800">
                       <p class="bg-red-100 rounded-[5px] p-1">
                         {{ i.phone_number }}
                       </p>
                     </td>
                     <td
-                      class="text-center font-medium whitespace-nowrap text-blue-800 px-8 py-2"
+                      class="px-8 py-2 font-medium text-center text-blue-800 whitespace-nowrap"
                     >
                       <p class="bg-blue-100 rounded-[5px] p-1">
                         {{ i.teachers_date }}
@@ -128,7 +133,7 @@
               </table>
               <div
                 v-show="store.teachers.length == 0"
-                class="w-full max-w-screen text-center p-20 text-2xl font-medium"
+                class="w-full p-20 text-2xl font-medium text-center max-w-screen"
               >
                 <h1>Xodimlar ro'yhati bo'sh</h1>
               </div>
@@ -144,7 +149,7 @@
             aria-expanded="false"
             aria-controls="accordion-collapse-body-2"
           >
-            <div class="flex items-center sm:gap-5 gap-2">
+            <div class="flex items-center gap-2 sm:gap-5">
               <i
                 class="btn bx bxs-graduation sm:text-[24px] text-sm sm:py-3 px-3 py-2 text-white rounded-full"
               ></i>
@@ -165,20 +170,20 @@
           aria-labelledby="accordion-collapse-heading-2"
         >
           <div
-            class="relative shadow-md rounded-lg overflow-hidden"
+            class="relative overflow-hidden rounded-lg shadow-md"
             :class="navbar.userNav ? 'bg-[#1e293b] text-white' : 'bg-white'"
           >
             <div class="overflow-x-auto">
               <table class="w-full text-sm text-left">
-                <thead class="btn text-xs rounded-lg uppercase">
+                <thead class="text-xs uppercase rounded-lg btn">
                   <tr class="text-white">
-                    <th scope="col" class="text-center py-3">№</th>
-                    <th scope="col" class="text-center py-3">I . F . O</th>
-                    <th scope="col" class="text-center py-3">Telefon raqami</th>
-                    <th scope="col" class="text-center py-3">
+                    <th scope="col" class="py-3 text-center">№</th>
+                    <th scope="col" class="py-3 text-center">I . F . O</th>
+                    <th scope="col" class="py-3 text-center">Telefon raqami</th>
+                    <th scope="col" class="py-3 text-center">
                       Qo'shilgan sana
                     </th>
-                    <th scope="col" class="text-center py-3">To'liq</th>
+                    <th scope="col" class="py-3 text-center">To'liq</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -192,28 +197,28 @@
                   >
                     <th
                       scope="row"
-                      class="text-center px-8 py-3 font-medium whitespace-nowrap"
+                      class="px-8 py-3 font-medium text-center whitespace-nowrap"
                     >
                       {{ i.students_number }}
                     </th>
-                    <td class="text-center font-medium text-green-800 px-8 py-2">
+                    <td class="px-8 py-2 font-medium text-center text-green-800">
                       <p class="bg-green-100 rounded-[5px] p-1">
                         {{ i.full_name }}
                       </p>
                     </td>
-                    <td class="text-center font-medium text-red-800 px-8 py-2">
+                    <td class="px-8 py-2 font-medium text-center text-red-800">
                       <p class="bg-red-100 rounded-[5px] p-1">
                         {{ i.phone_number }}
                       </p>
                     </td>
                     <td
-                      class="text-center font-medium whitespace-nowrap text-blue-800 px-8 py-2"
+                      class="px-8 py-2 font-medium text-center text-blue-800 whitespace-nowrap"
                     >
                       <p class="bg-blue-100 rounded-[5px] p-1">
                         {{ i.students_date }}
                       </p>
                     </td>
-                    <td class="text-center font-medium px-8 py-4">
+                    <td class="px-8 py-4 font-medium text-center">
                       <button
                         @click="
                           enterSlug(
@@ -231,7 +236,7 @@
               </table>
               <div
                 v-show="store.students.length == 0"
-                class="w-full max-w-screen text-center p-20 text-2xl font-medium"
+                class="w-full p-20 text-2xl font-medium text-center max-w-screen"
               >
                 <h1>O'quvchilar ro'yhati bo'sh</h1>
               </div>
@@ -262,6 +267,7 @@ const store = reactive({
   group_price: "",
   group_start_end_time: "",
   student_number: "",
+  level: "",
   loading: false,
 });
 
@@ -281,11 +287,12 @@ const getGroup = async () => {
       },
     });
 
-    const { start_date, price, start_time, end_time, employee, student } =
+    const { start_date, price, start_time, end_time, employee, student, level } =
       res.data;
 
     store.start_time = start_date;
     store.group_price = price;
+    store.level = level;
     store.group_start_end_time = `${start_time} dan - ${end_time} gacha`;
     store.student_number = student.length;
 
