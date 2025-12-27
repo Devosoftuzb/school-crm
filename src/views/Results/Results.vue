@@ -328,7 +328,7 @@
                     class="px-8 py-4 font-medium text-center text-blue-800 whitespace-nowrap"
                   >
                     <p class="bg-blue-100 rounded-[5px] p-1">
-                      {{ i.result }}
+                      {{ i.overall_result }}
                     </p>
                   </td>
                   <td
@@ -432,7 +432,7 @@
                     class="px-8 py-4 font-medium text-center text-blue-800 whitespace-nowrap"
                   >
                     <p class="bg-blue-100 rounded-[5px] p-1">
-                      {{ i.result }}
+                      {{ i.overall_result }}
                     </p>
                   </td>
                   <td
