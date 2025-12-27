@@ -17,7 +17,7 @@
         >
           <!-- Modal header -->
           <div
-            class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5"
+            class="flex items-center justify-between pb-4 mb-4 border-b rounded-t sm:mb-5"
           >
             <h3
               class="text-lg"
@@ -46,35 +46,59 @@
               </svg>
             </button>
           </div>
-          <!-- Modal body -->
+
           <form @submit.prevent="createProduct">
             <div class="grid grid-cols-1 gap-5 mb-5">
               <div>
                 <label
-                  class="block text-sm mb-2"
+                  for="question_type"
+                  class="block mb-2 text-sm"
+                  :class="navbar.userNav ? 'text-white' : 'text-black'"
+                >
+                  Savol turi
+                </label>
+                <select
+                  v-model="form.question_type"
+                  id="question_type"
+                  class="z-10 block w-full p-2 text-sm border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
+                  required
+                >
+                  <option value="" disabled selected>
+                    Savol turini tanlang
+                  </option>
+                  <option value="test">Test</option>
+                  <option value="writing">Writing</option>
+                </select>
+              </div>
+
+              <div v-if="form.question_type === 'test'">
+                <label
+                  class="block mb-2 text-sm"
                   :class="navbar.userNav ? 'text-white' : 'text-black'"
                   for="file_input"
-                  >File</label
                 >
+                  File
+                </label>
                 <input
-                  class="block w-full cursor-pointer bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600"
+                  class="block w-full text-sm border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:ring-blue-600 focus:border-blue-600"
                   id="file_input"
                   @change="(e) => setImg(e)"
                   type="file"
                 />
               </div>
 
-              <div class="">
+              <div v-if="form.question_type === 'test'">
                 <label
                   for="subject"
-                  class="block text-sm mb-2"
+                  class="block mb-2 text-sm"
                   :class="navbar.userNav ? 'text-white' : 'text-black'"
-                  >Matn tanlang</label
                 >
+                  Matn tanlang
+                </label>
                 <select
                   v-model="form.text_id"
                   id="subject"
-                  class="bg-gray-50 border border-gray-300 text-sm z-10 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2"
+                  class="z-10 block w-full p-2 text-sm border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
                 >
                   <option value="" disabled selected>Matn tanlang</option>
                   <option
@@ -88,13 +112,14 @@
                 </select>
               </div>
 
-              <div class="">
+              <div>
                 <label
                   for="question"
                   class="block mb-2 text-sm"
                   :class="navbar.userNav ? 'text-white' : 'text-black'"
-                  >Savol</label
                 >
+                  Savol
+                </label>
                 <textarea
                   id="question"
                   v-model="form.question"
@@ -106,78 +131,83 @@
               </div>
             </div>
 
-            <!-- Dynamic Variants -->
-            <div
-              :class="[
-                'gap-x-5',
-                form.variants.length > 1 ? 'grid grid-cols-2' : 'flex flex-col',
-              ]"
-            >
+            <!-- Dynamic Variants - faqat test uchun -->
+            <div v-if="form.question_type === 'test'">
               <div
-                v-for="(variant, index) in form.variants"
-                :key="index"
                 :class="[
-                  'mb-3',
-                  // Agar oxirgi item bo‘lsa va toq bo‘lsa => w-full
-                  form.variants.length % 2 === 1 &&
-                  index === form.variants.length - 1
-                    ? 'w-full col-span-2'
-                    : '',
+                  'gap-x-5',
+                  form.variants.length > 1
+                    ? 'grid grid-cols-2'
+                    : 'flex flex-col',
                 ]"
               >
-                <label
-                  :for="'variant-' + index"
-                  class="block text-sm mb-2"
-                  :class="navbar.userNav ? 'text-white' : 'text-black'"
-                >
-                  Variant {{ String.fromCharCode(65 + index) }}
-                </label>
-                <input
-                  v-model="form.variants[index]"
-                  :id="'variant-' + index"
-                  type="text"
-                  class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
-                  :placeholder="`Variant ${String.fromCharCode(
-                    65 + index
-                  )} ni kiriting`"
-                  required
-                />
-              </div>
-            </div>
-
-            <!-- Add Variant Button -->
-            <button
-              type="button"
-              @click="addVariant"
-              class="mb-5 cursor-pointer text-blue-700 text-end w-full underline"
-            >
-              Variant qo‘shish
-            </button>
-
-            <!-- Correct Answer Selector -->
-            <div class="mb-4">
-              <label
-                class="block text-sm font-medium text-center text-white bg-blue-700 py-1 rounded-[5px]"
-                >To‘g‘ri javobni tanlang</label
-              >
-              <div class="flex justify-center gap-4 pt-2">
-                <span
+                <div
                   v-for="(variant, index) in form.variants"
-                  :key="'select-' + index"
-                  @click="form.true_answer = index"
-                  :class="{
-                    'ring-4 ring-blue-500 bg-blue-700 text-white':
-                      form.true_answer === index,
-                    'bg-gray-100': form.true_answer !== index,
-                  }"
-                  class="cursor-pointer w-8 h-8 flex items-center justify-center rounded-full hover:bg-blue-300"
+                  :key="index"
+                  :class="[
+                    'mb-3',
+                    form.variants.length % 2 === 1 &&
+                    index === form.variants.length - 1
+                      ? 'w-full col-span-2'
+                      : '',
+                  ]"
                 >
-                  {{ String.fromCharCode(65 + index) }}
-                </span>
+                  <label
+                    :for="'variant-' + index"
+                    class="block mb-2 text-sm"
+                    :class="navbar.userNav ? 'text-white' : 'text-black'"
+                  >
+                    Variant {{ String.fromCharCode(65 + index) }}
+                  </label>
+                  <input
+                    v-model="form.variants[index]"
+                    :id="'variant-' + index"
+                    type="text"
+                    class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                    :placeholder="`Variant ${String.fromCharCode(
+                      65 + index
+                    )} ni kiriting`"
+                    required
+                  />
+                </div>
+              </div>
+
+              <!-- Add Variant Button -->
+              <button
+                type="button"
+                @click="addVariant"
+                class="w-full mb-5 text-blue-700 underline cursor-pointer text-end"
+              >
+                Variant qo'shish
+              </button>
+
+              <!-- Correct Answer Selector -->
+              <div class="mb-4">
+                <label
+                  class="block text-sm font-medium text-center text-white bg-blue-700 py-1 rounded-[5px]"
+                >
+                  To'g'ri javobni tanlang
+                </label>
+                <div class="flex justify-center gap-4 pt-2">
+                  <span
+                    v-for="(variant, index) in form.variants"
+                    :key="'select-' + index"
+                    @click="form.true_answer = index"
+                    :class="{
+                      'ring-4 ring-blue-500 bg-blue-700 text-white':
+                        form.true_answer === index,
+                      'bg-gray-100': form.true_answer !== index,
+                    }"
+                    class="flex items-center justify-center w-8 h-8 rounded-full cursor-pointer hover:bg-blue-300"
+                  >
+                    {{ String.fromCharCode(65 + index) }}
+                  </span>
+                </div>
               </div>
             </div>
 
-            <div class="flex items-center justify-between border-t pt-5 mt-5">
+            <!-- Submit Buttons -->
+            <div class="flex items-center justify-between pt-5 mt-5 border-t">
               <button
                 @click="cancelFunc1"
                 type="button"
@@ -209,7 +239,7 @@
           : 'hidden'
       "
     >
-      <div class="relative p-4 w-full max-w-lg h-auto">
+      <div class="relative w-full h-auto max-w-lg p-4">
         <!-- Modal content -->
         <div
           class="relative p-4 rounded-lg shadow sm:p-5"
@@ -217,7 +247,7 @@
         >
           <!-- Modal header -->
           <div
-            class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5"
+            class="flex items-center justify-between pb-4 mb-4 border-b rounded-t sm:mb-5"
           >
             <h3
               class="text-lg"
@@ -251,7 +281,7 @@
             @submit.prevent="createText"
             :class="{ darkForm: navbar.userNav }"
           >
-            <div class="grid font-medium gap-4 mb-4 grid-cols-1">
+            <div class="grid grid-cols-1 gap-4 mb-4 font-medium">
               <div class="">
                 <label
                   for="title"
@@ -303,7 +333,7 @@
               </div>
             </div>
             <div
-              class="w-full flex items-center justify-between border-t pt-5 mt-5"
+              class="flex items-center justify-between w-full pt-5 mt-5 border-t"
             >
               <button
                 @click="store.textModal"
@@ -344,13 +374,13 @@
         >
           <!-- Modal header -->
           <div
-            class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5"
+            class="flex items-center justify-between pb-4 mb-4 border-b rounded-t sm:mb-5"
           >
             <h3
               class="text-lg"
               :class="navbar.userNav ? 'text-white' : 'text-black'"
             >
-              Savolni tahrirlash qo'shish
+              Savolni tahrirlash
             </h3>
             <button
               @click="edit.toggle = false"
@@ -378,30 +408,52 @@
             <div class="grid gap-5 mb-5">
               <div>
                 <label
-                  class="block text-sm mb-2"
+                  for="edit_question_type"
+                  class="block mb-2 text-sm"
+                  :class="navbar.userNav ? 'text-white' : 'text-black'"
+                >
+                  Savol turi
+                </label>
+                <select
+                  v-model="edit.question_type"
+                  id="edit_question_type"
+                  class="block w-full p-2 text-sm border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
+                  required
+                >
+                  <option value="" disabled>Savol turini tanlang</option>
+                  <option value="test">Test</option>
+                  <option value="writing">Writing</option>
+                </select>
+              </div>
+
+              <div v-if="edit.question_type === 'test'">
+                <label
+                  class="block mb-2 text-sm"
                   :class="navbar.userNav ? 'text-white' : 'text-black'"
                   for="file_input"
-                  >File</label
                 >
+                  File
+                </label>
                 <input
-                  class="block w-full cursor-pointer bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600"
+                  class="block w-full text-sm border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:ring-blue-600 focus:border-blue-600"
                   id="file_input"
                   @change="(e) => setImg(e)"
                   type="file"
                 />
               </div>
 
-              <div class="">
+              <div v-if="edit.question_type === 'test'">
                 <label
                   for="subject"
-                  class="block text-sm mb-2"
+                  class="block mb-2 text-sm"
                   :class="navbar.userNav ? 'text-white' : 'text-black'"
-                  >Matn tanlang</label
                 >
+                  Matn tanlang
+                </label>
                 <select
                   v-model="edit.text_id"
                   id="subject"
-                  class="bg-gray-50 border border-gray-300 text-sm z-10 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2"
+                  class="z-10 block w-full p-2 text-sm border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
                 >
                   <option value="" disabled selected>Matn tanlang</option>
                   <option
@@ -415,13 +467,14 @@
                 </select>
               </div>
 
-              <div class="">
+              <div>
                 <label
                   for="question"
                   class="block mb-2 text-sm"
                   :class="navbar.userNav ? 'text-white' : 'text-black'"
-                  >Savol</label
                 >
+                  Savol
+                </label>
                 <textarea
                   id="question"
                   v-model="edit.question"
@@ -433,84 +486,88 @@
               </div>
             </div>
 
-            <!-- Dynamic Variants -->
-            <div
-              :class="[
-                'gap-x-5',
-                edit.variants.length > 1 ? 'grid grid-cols-2' : 'flex flex-col',
-              ]"
-            >
+            <div v-if="edit.question_type === 'test'">
               <div
-                v-for="(variant, index) in edit.variants"
-                :key="index"
                 :class="[
-                  'mb-3 flex items-center gap-3',
-                  edit.variants.length % 2 === 1 &&
-                  index === edit.variants.length - 1
-                    ? 'w-full col-span-2'
-                    : '',
+                  'gap-x-5',
+                  edit.variants.length > 1
+                    ? 'grid grid-cols-2'
+                    : 'flex flex-col',
                 ]"
               >
-                <div>
-                  <label
-                    :for="'variant-' + index"
-                    class="block text-sm mb-2"
-                    :class="navbar.userNav ? 'text-white' : 'text-black'"
-                  >
-                    Variant {{ String.fromCharCode(65 + index) }}
-                  </label>
-                  <input
-                    v-model="edit.variants[index].text"
-                    :id="'variant-' + index"
-                    type="text"
-                    class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
-                    :placeholder="`Variant ${String.fromCharCode(
-                      65 + index
-                    )} ni kiriting`"
-                    required
-                  />
-                </div>
-                <i
-                  @click="deleteOption(variant.id)"
-                  class="bx bxs-trash mt-7 bg-red-300 cursor-pointer text-red-600 rounded-lg p-2 focus:ring-2"
-                >
-                </i>
-              </div>
-            </div>
-
-            <!-- Add Variant Button -->
-            <button
-              type="button"
-              @click="addVariant2"
-              class="mb-5 cursor-pointer text-blue-700 text-end w-full underline"
-            >
-              Variant qo‘shish
-            </button>
-
-            <!-- Correct Answer Selector -->
-            <div class="mb-4">
-              <label
-                class="block text-sm font-medium text-center text-white bg-blue-700 py-1 rounded-[5px]"
-                >To‘g‘ri javobni tanlang</label
-              >
-              <div class="flex justify-center gap-4 pt-2">
-                <span
+                <div
                   v-for="(variant, index) in edit.variants"
-                  :key="'select-' + index"
-                  @click="edit.true_answer = index"
-                  :class="{
-                    'ring-4 ring-blue-500 bg-blue-700 text-white':
-                      edit.true_answer === index,
-                    'bg-gray-100': edit.true_answer !== index,
-                  }"
-                  class="cursor-pointer w-8 h-8 flex items-center justify-center rounded-full hover:bg-blue-300"
+                  :key="index"
+                  :class="[
+                    'mb-3 flex items-center gap-3',
+                    edit.variants.length % 2 === 1 &&
+                    index === edit.variants.length - 1
+                      ? 'w-full col-span-2'
+                      : '',
+                  ]"
                 >
-                  {{ String.fromCharCode(65 + index) }}
-                </span>
+                  <div class="flex-1">
+                    <label
+                      :for="'variant-' + index"
+                      class="block mb-2 text-sm"
+                      :class="navbar.userNav ? 'text-white' : 'text-black'"
+                    >
+                      Variant {{ String.fromCharCode(65 + index) }}
+                    </label>
+                    <input
+                      v-model="edit.variants[index].text"
+                      :id="'variant-' + index"
+                      type="text"
+                      class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                      :placeholder="`Variant ${String.fromCharCode(
+                        65 + index
+                      )} ni kiriting`"
+                      required
+                    />
+                  </div>
+                  <i
+                    @click="deleteOption(variant.id)"
+                    class="p-2 text-red-600 bg-red-300 rounded-lg cursor-pointer bx bxs-trash mt-7 focus:ring-2"
+                  >
+                  </i>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                @click="addVariant2"
+                class="w-full mb-5 text-blue-700 underline cursor-pointer text-end"
+              >
+                Variant qo'shish
+              </button>
+
+              <!-- Correct Answer Selector -->
+              <div class="mb-4">
+                <label
+                  class="block text-sm font-medium text-center text-white bg-blue-700 py-1 rounded-[5px]"
+                >
+                  To'g'ri javobni tanlang
+                </label>
+                <div class="flex justify-center gap-4 pt-2">
+                  <span
+                    v-for="(variant, index) in edit.variants"
+                    :key="'select-' + index"
+                    @click="edit.true_answer = index"
+                    :class="{
+                      'ring-4 ring-blue-500 bg-blue-700 text-white':
+                        edit.true_answer === index,
+                      'bg-gray-100': edit.true_answer !== index,
+                    }"
+                    class="flex items-center justify-center w-8 h-8 rounded-full cursor-pointer hover:bg-blue-300"
+                  >
+                    {{ String.fromCharCode(65 + index) }}
+                  </span>
+                </div>
               </div>
             </div>
 
-            <div class="flex items-center justify-between border-t pt-5 mt-5">
+            <!-- Submit Buttons -->
+            <div class="flex items-center justify-between pt-5 mt-5 border-t">
               <button
                 @click="edit.toggle = false"
                 type="button"
@@ -522,7 +579,7 @@
                 type="submit"
                 class="btnAdd cursor-pointer text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
               >
-                Qo'shish
+                Saqlash
               </button>
             </div>
           </form>
@@ -548,7 +605,7 @@
         >
           <!-- Modal header -->
           <div
-            class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5"
+            class="flex items-center justify-between pb-4 mb-4 border-b rounded-t sm:mb-5"
           >
             <h3
               class="text-lg"
@@ -579,7 +636,7 @@
           </div>
           <!-- Modal body -->
           <div :class="{ darkForm: navbar.userNav }">
-            <div class="grid font-medium gap-4 mb-4 grid-cols-1">
+            <div class="grid grid-cols-1 gap-4 mb-4 font-medium">
               <div>
                 <div></div>
                 <h1
@@ -590,7 +647,7 @@
                 </h1>
               </div>
               <div
-                class="w-full flex items-center justify-between border-t pt-5 mt-5"
+                class="flex items-center justify-between w-full pt-5 mt-5 border-t"
               >
                 <button
                   @click="remove.toggle = false"
@@ -625,21 +682,21 @@
       <div v-show="store.allProducts" class="w-full max-w-screen">
         <!-- Start coding here -->
         <div
-          class="shadow rounded-xl flex flex-col lg:flex-row items-center justify-between lg:space-x-4 p-4 mb-4"
+          class="flex flex-col items-center justify-between p-4 mb-4 shadow rounded-xl lg:flex-row lg:space-x-4"
           :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
         >
           <div
-            class="w-full flex sm:flex-row flex-col items-center lg:justify-start lg:pb-0 pb-4 justify-between gap-5"
+            class="flex flex-col items-center justify-between w-full gap-5 pb-4 sm:flex-row lg:justify-start lg:pb-0"
           >
-            <h1 class="text-blue-700 font-bold text-lg">Savollar</h1>
+            <h1 class="text-lg font-bold text-blue-700">Savollar</h1>
             <div
-              class="lg:w-auto w-full flex flex-row items-center justify-between gap-5 md:space-x-3"
+              class="flex flex-row items-center justify-between w-full gap-5 lg:w-auto md:space-x-3"
             >
               <button
                 @click="modal = true"
                 id=""
                 type="button"
-                class="btnAdd flex items-center w-full justify-center whitespace-nowrap text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2"
+                class="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg btnAdd whitespace-nowrap hover:bg-blue-700 focus:ring-4 focus:ring-blue-300"
               >
                 <span>Savol qo'shish</span>
               </button>
@@ -648,7 +705,7 @@
                 @click="store.textModal = true"
                 id=""
                 type="button"
-                class="btnAdd flex items-center w-full justify-center whitespace-nowrap text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2"
+                class="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg btnAdd whitespace-nowrap hover:bg-blue-700 focus:ring-4 focus:ring-blue-300"
               >
                 <span>Matn qo'shish</span>
               </button>
@@ -665,7 +722,7 @@
         <!------------------------------------------- Search ------------------------------------------->
 
         <div
-          class="relative shadow-md rounded-lg overflow-hidden p-5"
+          class="relative p-5 overflow-hidden rounded-lg shadow-md"
           :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
         >
           <div
@@ -675,7 +732,7 @@
           >
             <div>
               <div
-                class="flex justify-between items-center w-full sm:gap-5 gap-2"
+                class="flex items-center justify-between w-full gap-2 sm:gap-5"
               >
                 <div
                   @click="accordion(i.id)"
@@ -686,7 +743,7 @@
                     type="button"
                     class="flex items-center justify-between w-full text-left rounded-lg bg-[rgba(213,219,242,0.5)] sm:py-[18px] sm:px-[20px] py-[14px] px-[14px]"
                   >
-                    <div class="flex items-center sm:gap-5 gap-3">
+                    <div class="flex items-center gap-3 sm:gap-5">
                       <p
                         class="btn sm:min-w-[50px] sm:min-h-[50px] min-w-[30px] min-h-[30px] sm:h-[35px] 2xl:w-[55px] 2xl:h-[50px] flex items-center font-bold justify-center text-[14px] sm:text-[16px] 2xl:text-[20px] text-white rounded-full"
                       >
@@ -751,14 +808,14 @@
                   </div>
                   <div
                     v-if="i.text"
-                    class="text-justify flex flex-col px-5 mb-10"
+                    class="flex flex-col px-5 mb-10 text-justify"
                   >
-                    <h3 class="font-bold mb-2">{{ i.text.title }}</h3>
+                    <h3 class="mb-2 font-bold">{{ i.text.title }}</h3>
                     <p class="whitespace-pre-line">{{ i.text.text }}</p>
                   </div>
-                  <h3 class="text-justify flex px-5">{{ i.question }}</h3>
+                  <h3 class="flex px-5 text-justify">{{ i.question }}</h3>
                 </div>
-                <div class="grid sm:grid-cols-2 gap-5">
+                <div class="grid gap-5 sm:grid-cols-2">
                   <div
                     v-for="(ans, ansIndex) in i.option"
                     :key="ansIndex"
@@ -778,13 +835,13 @@
           </div>
           <div
             v-show="store.allProducts && store.error"
-            class="w-full max-w-screen text-center p-20 text-2xl font-medium"
+            class="w-full p-20 text-2xl font-medium text-center max-w-screen"
           >
             <h1>{{ store.allProducts }}</h1>
           </div>
           <div
             v-show="store.guard == 'o\'quvchi'"
-            class="w-full max-w-screen text-center p-20 text-2xl font-medium"
+            class="w-full p-20 text-2xl font-medium text-center max-w-screen"
           >
             <h1>Siz savollarni ko'rish huququga ega emassiz!</h1>
           </div>
@@ -870,6 +927,7 @@ const form = reactive({
   test_id: "",
   question_id: "",
   text_id: "",
+  question_type: "",
 });
 
 function addVariant() {
@@ -877,13 +935,11 @@ function addVariant() {
 }
 
 const addVariant2 = () => {
-  // Yangi variant yaratamiz
   const newVariant = {
     option: "",
     is_correct: false,
   };
 
-  // Ro'yxatga qo‘shamiz
   edit.variants.push(newVariant);
 };
 
@@ -896,6 +952,7 @@ const edit = reactive({
   id: "",
   toggle: false,
   text_id: "",
+  question_type: "",
 });
 
 const remove = reactive({
@@ -913,6 +970,7 @@ function cancelFunc1() {
   form.true_answer = null;
   form.test_id = "";
   form.question_id = "";
+  form.question_type = "";
 }
 
 // ----------------------------------- axios --------------------------------
@@ -949,6 +1007,7 @@ const getOneProduct = (id) => {
       },
     })
     .then((res) => {
+      edit.question_type = res.data.type;
       edit.id = id;
       edit.question = res.data.question;
       edit.variants =
@@ -985,7 +1044,7 @@ const getText = () => {
 };
 
 const createProduct = () => {
-  if (!form.true_answer) {
+  if (!form.true_answer && form.question_type === "test") {
     if (form.true_answer !== 0) {
       notification.warning("To'g'ri javobni belgilang!");
       return;
@@ -993,6 +1052,7 @@ const createProduct = () => {
   }
 
   const data = {
+    type: form.question_type,
     test_id: Number(testId),
     text_id: form.text_id === "" ? null : form.text_id,
     file: getImg.value,
@@ -1075,6 +1135,7 @@ const editProduct = () => {
   }
 
   const data = {
+    type: edit.question,
     text_id:
       edit.text_id === "" && edit.test_id === "null" ? null : edit.text_id,
     test_id: +router.currentRoute?.value?.params?.name,
