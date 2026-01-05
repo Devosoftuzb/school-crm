@@ -28,7 +28,7 @@
           <div
             class="relative flex flex-col min-w-0 break-words shadow-soft-xl rounded-xl bg-clip-border"
             :class="{
-              'bg-[#1e293b]': navbar.userNav,
+              'bg-slate-900': navbar.userNav,
               'bg-white': !navbar.userNav,
             }"
           >
@@ -42,7 +42,7 @@
                     {{ store.guard ? j.name : j.method }} ({{ j.count || 0 }})
                   </h3>
                   <h5
-                    class="p-1 px-3 text-sm font-bold text-blue-700 bg-blue-100 rounded-lg sm:text-md"
+                    class="p-1 px-3 text-sm font-bold text-blue-700 bg-blue-100 rounded-xl sm:text-md"
                   >
                     {{ Number(j.sum)?.toLocaleString("uz-UZ") }} so'm
                   </h5>
@@ -68,8 +68,8 @@
           <div class="relative w-full h-auto max-w-xl p-4">
             <!-- Modal content -->
             <div
-              class="relative p-4 rounded-lg shadow sm:p-5"
-              :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
+              class="relative p-4 shadow rounded-xl sm:p-5"
+              :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
             >
               <!-- Modal header -->
               <div
@@ -85,7 +85,7 @@
                   <button
                     @click="costCategoryModal"
                     type="button"
-                    class="bg-transparent hover:bg-gray-200 hover rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+                    class="bg-transparent hover:bg-gray-200 hover rounded-xl text-sm p-1.5 ml-auto inline-flex items-center"
                     :class="{ 'text-white': navbar.userNav }"
                   >
                     <svg
@@ -120,7 +120,7 @@
                       v-model="costCategory.categoryName"
                       id="name"
                       type="name"
-                      class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full py-2.5 pl-3"
+                      class="bg-white border text-black border-gray-300 rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full py-2.5 pl-3"
                       placeholder="Suv uchun"
                       required
                     />
@@ -131,13 +131,13 @@
                   <div v-for="i in store.costCategory" :key="i.id">
                     <div class="flex items-center justify-between gap-3">
                       <h2
-                        class="bg-gray-50 border text-black border-gray-300 text-sm w-full p-2.5 rounded-lg"
+                        class="bg-gray-50 border text-black border-gray-300 text-sm w-full p-2.5 rounded-xl"
                       >
                         {{ i.name }}
                       </h2>
                       <i
                         @click="deleteCostCategoryFunc(i.id)"
-                        class="bx bxs-trash bg-red-300 cursor-pointer text-red-600 rounded-lg sm:p-2 p-1.5 focus:ring-2"
+                        class="bx bxs-trash bg-red-300 cursor-pointer text-red-600 rounded-xl sm:p-2 p-1.5 focus:ring-2"
                       >
                       </i>
                     </div>
@@ -150,14 +150,14 @@
                     <button
                       @click="costCategoryModal"
                       type="button"
-                      class="border inline-flex items-center hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                      class="border inline-flex items-center hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                     >
                       Bekor qilish
                     </button>
                     <ButtonLoader
                       :loading="loading.view"
                       type="submit"
-                      class="btnAdd text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                      class="btnAdd text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                     >
                       Qo'shish
                     </ButtonLoader>
@@ -181,8 +181,8 @@
         <div class="relative p-4 max-w-5xl min-w-[30%] h-auto">
           <!-- Modal content -->
           <div
-            class="relative p-4 rounded-lg shadow sm:p-5"
-            :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
+            class="relative p-4 shadow rounded-xl sm:p-5"
+            :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
           >
             <!-- Modal header -->
             <div
@@ -197,7 +197,7 @@
               <button
                 @click="costCategory.remove = false"
                 type="button"
-                class="bg-transparent hover:bg-gray-200 hover rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+                class="bg-transparent hover:bg-gray-200 hover rounded-xl text-sm p-1.5 ml-auto inline-flex items-center"
                 :class="navbar.userNav ? 'text-white' : 'text-black'"
               >
                 <svg
@@ -233,14 +233,14 @@
                   <button
                     @click="costCategory.remove = false"
                     type="button"
-                    class="border cursor-pointer inline-flex items-center hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                    class="border cursor-pointer inline-flex items-center hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                   >
                     Bekor qilish
                   </button>
                   <ButtonLoader
                     :loading="loading.view"
                     @click="deleteCostCategory"
-                    class="btnAdd cursor-pointer text-white inline-flex items-center bg-[#4141eb] hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-500 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                    class="btnAdd cursor-pointer text-white inline-flex items-center bg-[#4141eb] hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-500 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                   >
                     O'chirish
                   </ButtonLoader>
@@ -265,8 +265,8 @@
           <div class="relative w-full h-auto max-w-xl p-4">
             <!-- Modal content -->
             <div
-              class="relative p-4 rounded-lg shadow sm:p-5"
-              :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
+              class="relative p-4 shadow rounded-xl sm:p-5"
+              :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
             >
               <!-- Modal header -->
               <div
@@ -282,7 +282,7 @@
                   <button
                     @click="costModal"
                     type="button"
-                    class="bg-transparent hover:bg-gray-200 hover rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+                    class="bg-transparent hover:bg-gray-200 hover rounded-xl text-sm p-1.5 ml-auto inline-flex items-center"
                     :class="{ 'text-white': navbar.userNav }"
                   >
                     <svg
@@ -317,7 +317,7 @@
                       v-model="cost.price"
                       id="price"
                       type="number"
-                      class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full py-2.5 pl-3"
+                      class="bg-white border text-black border-gray-300 rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full py-2.5 pl-3"
                       placeholder="100000 so'm"
                       required
                     />
@@ -332,7 +332,7 @@
                     <select
                       v-model="cost.category_id"
                       id="name"
-                      class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                      class="bg-white border text-black border-gray-300 rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                       required
                     >
                       <option value="" disabled selected>
@@ -357,7 +357,7 @@
                     <select
                       v-model="cost.method"
                       id="name"
-                      class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                      class="bg-white border text-black border-gray-300 rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                       required
                     >
                       <option value="" disabled selected>
@@ -379,7 +379,7 @@
                     <select
                       v-model="cost.month"
                       id="month"
-                      class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                      class="bg-white border text-black border-gray-300 rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                       required
                     >
                       <option value="" disabled selected>Oyni tanlang</option>
@@ -406,7 +406,7 @@
                       v-model="cost.description"
                       name="description"
                       id="description"
-                      class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full py-2.5 pl-3 h-32"
+                      class="bg-white border text-black border-gray-300 rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full py-2.5 pl-3 h-32"
                       placeholder="Izoh.."
                     ></textarea>
                   </div>
@@ -418,14 +418,14 @@
                     <button
                       @click="costModal"
                       type="button"
-                      class="border inline-flex items-center hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                      class="border inline-flex items-center hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                     >
                       Bekor qilish
                     </button>
                     <ButtonLoader
                       :loading="loading.view"
                       type="submit"
-                      class="btnAdd text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                      class="btnAdd text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                     >
                       Qo'shish
                     </ButtonLoader>
@@ -451,8 +451,8 @@
           <div class="relative w-full h-auto max-w-xl p-4">
             <!-- Modal content -->
             <div
-              class="relative p-4 rounded-lg shadow sm:p-5"
-              :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
+              class="relative p-4 shadow rounded-xl sm:p-5"
+              :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
             >
               <!-- Modal header -->
               <div
@@ -468,7 +468,7 @@
                   <button
                     @click="costUpdateModal"
                     type="button"
-                    class="bg-transparent hover:bg-gray-200 hover rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+                    class="bg-transparent hover:bg-gray-200 hover rounded-xl text-sm p-1.5 ml-auto inline-flex items-center"
                     :class="{ 'text-white': navbar.userNav }"
                   >
                     <svg
@@ -503,7 +503,7 @@
                       v-model="cost.price"
                       id="price"
                       type="number"
-                      class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full py-2.5 pl-3"
+                      class="bg-white border text-black border-gray-300 rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full py-2.5 pl-3"
                       placeholder="100000 so'm"
                       required
                     />
@@ -518,7 +518,7 @@
                     <select
                       v-model="cost.category_id"
                       id="name"
-                      class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                      class="bg-white border text-black border-gray-300 rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                       required
                     >
                       <option value="" disabled selected>
@@ -543,7 +543,7 @@
                     <select
                       v-model="cost.method"
                       id="name"
-                      class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                      class="bg-white border text-black border-gray-300 rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                       required
                     >
                       <option value="" disabled selected>
@@ -565,7 +565,7 @@
                     <select
                       v-model="cost.month"
                       id="month"
-                      class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                      class="bg-white border text-black border-gray-300 rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                       required
                     >
                       <option value="" disabled selected>Oyni tanlang</option>
@@ -592,7 +592,7 @@
                       v-model="cost.description"
                       name="description"
                       id="description"
-                      class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full py-2.5 pl-3 h-32"
+                      class="bg-white border text-black border-gray-300 rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full py-2.5 pl-3 h-32"
                       placeholder="Izoh.."
                       required
                     ></textarea>
@@ -605,14 +605,14 @@
                     <button
                       @click="costUpdateModal"
                       type="button"
-                      class="border inline-flex items-center hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                      class="border inline-flex items-center hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                     >
                       Bekor qilish
                     </button>
                     <ButtonLoader
                       :loading="loading.view"
                       type="submit"
-                      class="btnAdd text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                      class="btnAdd text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                     >
                       O'zgartirish
                     </ButtonLoader>
@@ -636,8 +636,8 @@
         <div class="relative p-4 max-w-5xl min-w-[30%] h-auto">
           <!-- Modal content -->
           <div
-            class="relative p-4 rounded-lg shadow sm:p-5"
-            :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
+            class="relative p-4 shadow rounded-xl sm:p-5"
+            :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
           >
             <!-- Modal header -->
             <div
@@ -652,7 +652,7 @@
               <button
                 @click="cost.remove = false"
                 type="button"
-                class="bg-transparent hover:bg-gray-200 hover rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+                class="bg-transparent hover:bg-gray-200 hover rounded-xl text-sm p-1.5 ml-auto inline-flex items-center"
                 :class="navbar.userNav ? 'text-white' : 'text-black'"
               >
                 <svg
@@ -688,14 +688,14 @@
                   <button
                     @click="cost.remove = false"
                     type="button"
-                    class="border cursor-pointer inline-flex items-center hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                    class="border cursor-pointer inline-flex items-center hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                   >
                     Bekor qilish
                   </button>
                   <ButtonLoader
                     :loading="loading.view"
                     @click="deleteCost"
-                    class="btnAdd cursor-pointer text-white inline-flex items-center bg-[#4141eb] hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-500 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                    class="btnAdd cursor-pointer text-white inline-flex items-center bg-[#4141eb] hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-500 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                   >
                     O'chirish
                   </ButtonLoader>
@@ -720,8 +720,8 @@
           <div class="relative w-full h-auto max-w-xl p-4">
             <!-- Modal content -->
             <div
-              class="relative p-4 rounded-lg shadow sm:p-5"
-              :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
+              class="relative p-4 shadow rounded-xl sm:p-5"
+              :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
             >
               <!-- Modal header -->
               <div
@@ -737,7 +737,7 @@
                   <button
                     @click="salaryModal"
                     type="button"
-                    class="bg-transparent hover:bg-gray-200 hover rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+                    class="bg-transparent hover:bg-gray-200 hover rounded-xl text-sm p-1.5 ml-auto inline-flex items-center"
                     :class="{ 'text-white': navbar.userNav }"
                   >
                     <svg
@@ -774,7 +774,7 @@
                     <select
                       v-model="salary.teacher_id"
                       id="teacher"
-                      class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                      class="bg-white border text-black border-gray-300 rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                       required
                     >
                       <option value="" disabled selected>
@@ -798,7 +798,7 @@
                       v-model="salary.price"
                       id="price"
                       type="number"
-                      class="bg-white border border-gray-300 text-black rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full py-2.5 pl-3"
+                      class="bg-white border border-gray-300 text-black rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full py-2.5 pl-3"
                       placeholder="100000 so'm"
                       required
                     />
@@ -813,7 +813,7 @@
                     <select
                       v-model="salary.method"
                       id="name"
-                      class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                      class="bg-white border text-black border-gray-300 rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                       required
                     >
                       <option value="" disabled selected>
@@ -835,7 +835,7 @@
                     <select
                       v-model="salary.month"
                       id="month"
-                      class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                      class="bg-white border text-black border-gray-300 rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                       required
                     >
                       <option value="" disabled selected>Oyni tanlang</option>
@@ -862,7 +862,7 @@
                       v-model="salary.description"
                       name="description"
                       id="description"
-                      class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full py-2.5 pl-3 h-32"
+                      class="bg-white border text-black border-gray-300 rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full py-2.5 pl-3 h-32"
                       placeholder="Izoh.."
                     ></textarea>
                   </div>
@@ -874,14 +874,14 @@
                     <button
                       @click="salaryModal"
                       type="button"
-                      class="border inline-flex items-center hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                      class="border inline-flex items-center hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                     >
                       Bekor qilish
                     </button>
                     <ButtonLoader
                       :loading="loading.view"
                       type="submit"
-                      class="btnAdd text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                      class="btnAdd text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                     >
                       Qo'shish
                     </ButtonLoader>
@@ -907,8 +907,8 @@
           <div class="relative w-full h-auto max-w-xl p-4">
             <!-- Modal content -->
             <div
-              class="relative p-4 rounded-lg shadow sm:p-5"
-              :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
+              class="relative p-4 shadow rounded-xl sm:p-5"
+              :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
             >
               <!-- Modal header -->
               <div
@@ -924,7 +924,7 @@
                   <button
                     @click="salaryUpdateModal"
                     type="button"
-                    class="bg-transparent hover:bg-gray-200 hover rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+                    class="bg-transparent hover:bg-gray-200 hover rounded-xl text-sm p-1.5 ml-auto inline-flex items-center"
                     :class="{ 'text-white': navbar.userNav }"
                   >
                     <svg
@@ -961,7 +961,7 @@
                     <select
                       v-model="salary.teacher_id"
                       id="teacher"
-                      class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                      class="bg-white border text-black border-gray-300 rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                       required
                     >
                       <option value="" disabled selected>
@@ -985,7 +985,7 @@
                       v-model="salary.price"
                       id="price"
                       type="number"
-                      class="bg-white border border-gray-300 text-black rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full py-2.5 pl-3"
+                      class="bg-white border border-gray-300 text-black rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full py-2.5 pl-3"
                       placeholder="100000 so'm"
                       required
                     />
@@ -1000,7 +1000,7 @@
                     <select
                       v-model="salary.method"
                       id="name"
-                      class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                      class="bg-white border text-black border-gray-300 rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                       required
                     >
                       <option value="" disabled selected>
@@ -1022,7 +1022,7 @@
                     <select
                       v-model="salary.month"
                       id="month"
-                      class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                      class="bg-white border text-black border-gray-300 rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                       required
                     >
                       <option value="" disabled selected>Oyni tanlang</option>
@@ -1049,7 +1049,7 @@
                       v-model="salary.description"
                       name="description"
                       id="description"
-                      class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full py-2.5 pl-3 h-32"
+                      class="bg-white border text-black border-gray-300 rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full py-2.5 pl-3 h-32"
                       placeholder="Izoh.."
                     ></textarea>
                   </div>
@@ -1061,13 +1061,13 @@
                     <button
                       @click="salaryUpdateModal"
                       type="button"
-                      class="border inline-flex items-center hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                      class="border inline-flex items-center hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                     >
                       Bekor qilish
                     </button>
                     <button
                       type="submit"
-                      class="btnAdd text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                      class="btnAdd text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                     >
                       O'zgartirish
                     </button>
@@ -1091,8 +1091,8 @@
         <div class="relative p-4 max-w-5xl min-w-[30%] h-auto">
           <!-- Modal content -->
           <div
-            class="relative p-4 rounded-lg shadow sm:p-5"
-            :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
+            class="relative p-4 shadow rounded-xl sm:p-5"
+            :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
           >
             <!-- Modal header -->
             <div
@@ -1107,7 +1107,7 @@
               <button
                 @click="salary.remove = false"
                 type="button"
-                class="bg-transparent hover:bg-gray-200 hover rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+                class="bg-transparent hover:bg-gray-200 hover rounded-xl text-sm p-1.5 ml-auto inline-flex items-center"
                 :class="navbar.userNav ? 'text-white' : 'text-black'"
               >
                 <svg
@@ -1143,13 +1143,13 @@
                   <button
                     @click="salary.remove = false"
                     type="button"
-                    class="border cursor-pointer inline-flex items-center hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                    class="border cursor-pointer inline-flex items-center hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                   >
                     Bekor qilish
                   </button>
                   <button
                     @click="deleteSalary"
-                    class="btnAdd cursor-pointer text-white inline-flex items-center bg-[#4141eb] hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-500 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                    class="btnAdd cursor-pointer text-white inline-flex items-center bg-[#4141eb] hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-500 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                   >
                     O'chirish
                   </button>
@@ -1174,8 +1174,8 @@
           <div class="relative w-full h-auto max-w-2xl p-4">
             <!-- Modal content -->
             <div
-              class="relative p-4 rounded-lg shadow sm:p-5"
-              :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
+              class="relative p-4 shadow rounded-xl sm:p-5"
+              :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
             >
               <!-- Modal header -->
               <div
@@ -1191,7 +1191,7 @@
                   <button
                     @click="historyModal"
                     type="button"
-                    class="bg-transparent hover:bg-gray-200 hover rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+                    class="bg-transparent hover:bg-gray-200 hover rounded-xl text-sm p-1.5 ml-auto inline-flex items-center"
                     :class="{ 'text-white': navbar.userNav }"
                   >
                     <svg
@@ -1210,26 +1210,26 @@
                     <span class="sr-only">Close modal</span>
                   </button>
                 </div>
-                <div class="w-full rounded-lg" id="navbar-sticky">
+                <div class="w-full rounded-xl" id="navbar-sticky">
                   <ul
                     class="grid w-full grid-cols-2 gap-3 font-medium text-white lg:grid-cols-4"
                   >
                     <li
-                      class="cursor-pointer w-full h-[100%] whitespace-nowrap text-center bg-gray-600 hover:bg-gray-500 p-2 px-5 sm:text-md text-sm rounded-lg"
+                      class="cursor-pointer w-full h-[100%] whitespace-nowrap text-center bg-gray-600 hover:bg-gray-500 p-2 px-5 sm:text-md text-sm rounded-xl"
                       :class="history.dayModal ? 'btnAdd' : 'bg-gray-600'"
                       @click="historyDayModal"
                     >
                       <span>Kun bo'yicha</span>
                     </li>
                     <li
-                      class="cursor-pointer w-full h-[100%] whitespace-nowrap text-center bg-gray-600 hover:bg-gray-500 p-2 px-5 sm:text-md text-sm rounded-lg"
+                      class="cursor-pointer w-full h-[100%] whitespace-nowrap text-center bg-gray-600 hover:bg-gray-500 p-2 px-5 sm:text-md text-sm rounded-xl"
                       :class="history.monthModal ? 'btnAdd' : 'bg-gray-600'"
                       @click="historyMonthModal"
                     >
                       <span>Oy bo'yicha</span>
                     </li>
                     <li
-                      class="cursor-pointer w-full h-[100%] whitespace-nowrap text-center bg-gray-600 hover:bg-gray-500 p-2 px-5 sm:text-md text-sm rounded-lg"
+                      class="cursor-pointer w-full h-[100%] whitespace-nowrap text-center bg-gray-600 hover:bg-gray-500 p-2 px-5 sm:text-md text-sm rounded-xl"
                       :class="
                         history.groupMonthModal ? 'btnAdd' : 'bg-gray-600'
                       "
@@ -1238,7 +1238,7 @@
                       <span>Guruh bo'yicha</span>
                     </li>
                     <li
-                      class="cursor-pointer w-full h-[100%] whitespace-nowrap text-center bg-gray-600 hover:bg-gray-500 p-2 px-5 sm:text-md text-sm rounded-lg"
+                      class="cursor-pointer w-full h-[100%] whitespace-nowrap text-center bg-gray-600 hover:bg-gray-500 p-2 px-5 sm:text-md text-sm rounded-xl"
                       :class="history.yearModal ? 'btnAdd' : 'bg-gray-600'"
                       @click="historyYearModal"
                     >
@@ -1262,7 +1262,7 @@
                     <select
                       v-model="history.year"
                       id="name"
-                      class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                      class="bg-white border text-black border-gray-300 rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                       required
                     >
                       <option value="" disabled selected>Yilni tanlang</option>
@@ -1282,7 +1282,7 @@
                     <select
                       v-model="history.month"
                       id="month"
-                      class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                      class="bg-white border text-black border-gray-300 rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                       required
                     >
                       <option value="" disabled selected>Oyni tanlang</option>
@@ -1308,7 +1308,7 @@
                       v-model="history.day"
                       id="day"
                       type="number"
-                      class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full py-2.5 pl-3"
+                      class="bg-white border text-black border-gray-300 rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full py-2.5 pl-3"
                       placeholder="Kuni kiriting.."
                       min="1"
                       max="31"
@@ -1323,7 +1323,7 @@
                     :loading="loading.excel"
                     @click="exportToExcel"
                     type="button"
-                    class="btnAdd3 text-white inline-flex items-center justify-center bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                    class="btnAdd3 text-white inline-flex items-center justify-center bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                   >
                     Excelga yuklab olish
                   </ButtonLoader>
@@ -1331,14 +1331,14 @@
                     <button
                       @click="historyModal"
                       type="button"
-                      class="border inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                      class="border inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                     >
                       Bekor qilish
                     </button>
                     <ButtonLoader
                       :loading="loading.view"
                       type="submit"
-                      class="btnAdd text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                      class="btnAdd text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                     >
                       Ko'rish
                     </ButtonLoader>
@@ -1358,7 +1358,7 @@
                     <select
                       v-model="history.year"
                       id="name"
-                      class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                      class="bg-white border text-black border-gray-300 rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                       required
                     >
                       <option value="" disabled selected>Yilni tanlang</option>
@@ -1378,7 +1378,7 @@
                     <select
                       v-model="history.month"
                       id="month"
-                      class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                      class="bg-white border text-black border-gray-300 rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                       required
                     >
                       <option value="" disabled selected>Oyni tanlang</option>
@@ -1404,7 +1404,7 @@
                     :loading="loading.excel"
                     @click="exportToExcel"
                     type="button"
-                    class="btnAdd3 text-white inline-flex items-center justify-center bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                    class="btnAdd3 text-white inline-flex items-center justify-center bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                   >
                     Excelga yuklab olish
                   </ButtonLoader>
@@ -1412,14 +1412,14 @@
                     <button
                       @click="historyModal"
                       type="button"
-                      class="border inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                      class="border inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                     >
                       Bekor qilish
                     </button>
                     <ButtonLoader
                       :loading="loading.view"
                       type="submit"
-                      class="btnAdd text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                      class="btnAdd text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                     >
                       Ko'rish
                     </ButtonLoader>
@@ -1439,7 +1439,7 @@
                     <select
                       v-model="history.year"
                       id="name"
-                      class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                      class="bg-white border text-black border-gray-300 rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                       required
                     >
                       <option value="" disabled selected>Yilni tanlang</option>
@@ -1459,7 +1459,7 @@
                     <select
                       v-model="history.month"
                       id="month"
-                      class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                      class="bg-white border text-black border-gray-300 rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                       required
                     >
                       <option value="" disabled selected>Oyni tanlang</option>
@@ -1515,7 +1515,7 @@
                         "
                         type="search"
                         id="simple-search"
-                        class="block w-full p-2 pl-10 text-sm border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
+                        class="block w-full p-2 pl-10 text-sm border border-gray-300 rounded-xl bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
                         placeholder="Guruhni tanlang yoki qidirish..."
                       />
                       <ul
@@ -1566,7 +1566,7 @@
                     :loading="loading.excel"
                     @click="exportToExcel"
                     type="button"
-                    class="btnAdd3 text-white inline-flex items-center justify-center bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                    class="btnAdd3 text-white inline-flex items-center justify-center bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                   >
                     Excelga yuklab olish
                   </ButtonLoader>
@@ -1574,14 +1574,14 @@
                     <button
                       @click="historyModal"
                       type="button"
-                      class="border inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                      class="border inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                     >
                       Bekor qilish
                     </button>
                     <ButtonLoader
                       :loading="loading.view"
                       type="submit"
-                      class="btnAdd text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                      class="btnAdd text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                     >
                       Ko'rish
                     </ButtonLoader>
@@ -1601,7 +1601,7 @@
                     <select
                       v-model="history.year"
                       id="name"
-                      class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                      class="bg-white border text-black border-gray-300 rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                       required
                     >
                       <option value="" disabled selected>Yilni tanlang</option>
@@ -1622,7 +1622,7 @@
                     :loading="loading.excel"
                     @click="exportToExcel"
                     type="button"
-                    class="btnAdd3 text-white inline-flex items-center justify-center bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                    class="btnAdd3 text-white inline-flex items-center justify-center bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                   >
                     Excelga yuklab olish
                   </ButtonLoader>
@@ -1630,14 +1630,14 @@
                     <button
                       @click="historyModal"
                       type="button"
-                      class="border inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                      class="border inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                     >
                       Bekor qilish
                     </button>
                     <ButtonLoader
                       :loading="loading.view"
                       type="submit"
-                      class="btnAdd text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                      class="btnAdd text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                     >
                       Ko'rish
                     </ButtonLoader>
@@ -1663,8 +1663,8 @@
           <div class="relative w-full h-auto max-w-xl p-4">
             <!-- Modal content -->
             <div
-              class="relative p-4 rounded-lg shadow sm:p-5"
-              :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
+              class="relative p-4 shadow rounded-xl sm:p-5"
+              :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
             >
               <!-- Modal header -->
               <div
@@ -1680,7 +1680,7 @@
                   <button
                     @click="debtorModal"
                     type="button"
-                    class="bg-transparent hover:bg-gray-200 hover rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+                    class="bg-transparent hover:bg-gray-200 hover rounded-xl text-sm p-1.5 ml-auto inline-flex items-center"
                     :class="{ 'text-white': navbar.userNav }"
                   >
                     <svg
@@ -1707,14 +1707,14 @@
                     class="flex flex-col items-center w-full gap-5 font-medium text-white sm:flex-row"
                   >
                     <li
-                      class="w-full p-2 px-5 text-sm text-center bg-gray-600 rounded-lg cursor-pointer sm:max-w-fit hover:bg-gray-500 sm:text-md"
+                      class="w-full p-2 px-5 text-sm text-center bg-gray-600 cursor-pointer rounded-xl sm:max-w-fit hover:bg-gray-500 sm:text-md"
                       :class="debtor.dayModal ? 'btnAdd' : 'bg-gray-600'"
                       @click="debtorDayModal"
                     >
                       <span>Oy bo'yicha ko'rish</span>
                     </li>
                     <li
-                      class="w-full p-2 px-5 text-sm text-center bg-gray-600 rounded-lg cursor-pointer sm:max-w-fit hover:bg-gray-500 sm:text-md"
+                      class="w-full p-2 px-5 text-sm text-center bg-gray-600 cursor-pointer rounded-xl sm:max-w-fit hover:bg-gray-500 sm:text-md"
                       :class="debtor.monthModal ? 'btnAdd' : 'bg-gray-600'"
                       @click="debtorMonthModal"
                     >
@@ -1738,7 +1738,7 @@
                     <select
                       v-model="debtor.year"
                       id="name"
-                      class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                      class="bg-white border text-black border-gray-300 rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                       required
                     >
                       <option value="" disabled selected>Yilni tanlang</option>
@@ -1758,7 +1758,7 @@
                     <select
                       v-model="debtor.month"
                       id="month"
-                      class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                      class="bg-white border text-black border-gray-300 rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                       required
                     >
                       <option value="" disabled selected>Oyni tanlang</option>
@@ -1785,7 +1785,7 @@
                     :loading="loading.excel"
                     @click="exportToExcelDebtor"
                     type="button"
-                    class="btnAdd3 text-white inline-flex items-center justify-center bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                    class="btnAdd3 text-white inline-flex items-center justify-center bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                   >
                     Excelga yuklab olish
                   </ButtonLoader>
@@ -1793,14 +1793,14 @@
                     <button
                       @click="debtorModal"
                       type="button"
-                      class="border inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                      class="border inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                     >
                       Bekor qilish
                     </button>
                     <ButtonLoader
                       :loading="loading.view"
                       type="submit"
-                      class="btnAdd text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                      class="btnAdd text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                     >
                       Ko'rish
                     </ButtonLoader>
@@ -1820,7 +1820,7 @@
                     <select
                       v-model="debtor.year"
                       id="name"
-                      class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                      class="bg-white border text-black border-gray-300 rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                       required
                     >
                       <option value="" disabled selected>Yilni tanlang</option>
@@ -1840,7 +1840,7 @@
                     <select
                       v-model="debtor.month"
                       id="month"
-                      class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                      class="bg-white border text-black border-gray-300 rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                       required
                     >
                       <option value="" disabled selected>Oyni tanlang</option>
@@ -1896,7 +1896,7 @@
                         "
                         type="search"
                         id="simple-search"
-                        class="block w-full p-2 pl-10 text-sm border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
+                        class="block w-full p-2 pl-10 text-sm border border-gray-300 rounded-xl bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
                         placeholder="Guruhni tanlang yoki qidirish..."
                       />
                       <ul
@@ -1947,7 +1947,7 @@
                     :loading="loading.excel"
                     @click="exportToExcelDebtor"
                     type="button"
-                    class="btnAdd3 text-white inline-flex items-center justify-center bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                    class="btnAdd3 text-white inline-flex items-center justify-center bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                   >
                     Excelga yuklab olish
                   </ButtonLoader>
@@ -1955,14 +1955,14 @@
                     <button
                       @click="debtorModal"
                       type="button"
-                      class="border inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                      class="border inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                     >
                       Bekor qilish
                     </button>
                     <ButtonLoader
                       :loading="loading.view"
                       type="submit"
-                      class="btnAdd text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                      class="btnAdd text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                     >
                       Ko'rish
                     </ButtonLoader>
@@ -1987,7 +1987,7 @@
 
         <div
           class="flex flex-col items-center justify-between gap-3 p-4 mb-4 shadow rounded-xl lg:flex-row lg:space-x-4"
-          :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
+          :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
         >
           <div
             class="flex flex-col items-center justify-between w-full gap-3 lg:w-auto sm:flex-row"
@@ -2000,7 +2000,7 @@
               v-show="store.guard"
               @click="costCategory.modal = true"
               type="button"
-              class="btnAdd flex items-center w-full sm:max-w-fit justify-center whitespace-nowrap text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2.5"
+              class="btnAdd flex items-center w-full sm:max-w-fit justify-center whitespace-nowrap text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-xl text-sm px-4 py-2.5"
             >
               <span class="">Kategoriya qo'shish</span>
             </button>
@@ -2013,7 +2013,7 @@
               v-show="store.guard"
               @click="cost.modal = true"
               type="button"
-              class="btnAdd flex items-center w-full justify-center whitespace-nowrap text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2.5"
+              class="btnAdd flex items-center w-full justify-center whitespace-nowrap text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-xl text-sm px-4 py-2.5"
             >
               <span class="">Chiqim kiritish</span>
             </button>
@@ -2021,7 +2021,7 @@
               v-show="store.guard"
               @click="salary.modal = true"
               type="button"
-              class="btnAdd flex items-center w-full justify-center whitespace-nowrap text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2.5"
+              class="btnAdd flex items-center w-full justify-center whitespace-nowrap text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-xl text-sm px-4 py-2.5"
             >
               <span class="">Maosh berish</span>
             </button>
@@ -2030,7 +2030,7 @@
               v-show="!store.guard"
               @click="history.modal = true"
               type="button"
-              class="btnAdd flex items-center w-full sm:max-w-fit justify-center whitespace-nowrap text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2.5"
+              class="btnAdd flex items-center w-full sm:max-w-fit justify-center whitespace-nowrap text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-xl text-sm px-4 py-2.5"
             >
               <span class="">To'lov tarixi</span>
             </button>
@@ -2039,14 +2039,14 @@
               v-show="!store.guard"
               @click="debtor.modal = true"
               type="button"
-              class="btnAdd2 flex items-center w-full sm:max-w-fit justify-center whitespace-nowrap text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-4 py-2.5"
+              class="btnAdd2 flex items-center w-full sm:max-w-fit justify-center whitespace-nowrap text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:ring-red-300 font-medium rounded-xl text-sm px-4 py-2.5"
             >
               <span class="">Qarzdorlar tarixi</span>
             </button>
           </div>
         </div>
 
-        <div v-show="store.guard" class="mb-10 rounded-lg">
+        <div v-show="store.guard" class="mb-10 rounded-xl">
           <div
             class="flex flex-col justify-between w-full lg:flex-row lg:items-center gap-x-20"
           >
@@ -2069,7 +2069,7 @@
                     <select
                       v-model="costHistory.year"
                       id="name"
-                      class="bg-white border text-black border-blue-600 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-[7px]"
+                      class="bg-white border text-black border-blue-600 rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-[7px]"
                       required
                     >
                       <option value="" disabled selected>Yilni tanlang</option>
@@ -2086,7 +2086,7 @@
                     <select
                       v-model="costHistory.month"
                       id="month"
-                      class="bg-white border text-black border-blue-600 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-[7px]"
+                      class="bg-white border text-black border-blue-600 rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-[7px]"
                     >
                       <option value="" disabled selected>Oyni tanlang</option>
                       <option value="01">Yanvar</option>
@@ -2136,7 +2136,7 @@
                       "
                       type="search"
                       id="simple-search"
-                      class="bg-gray-50 border border-blue-600 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-[9px]"
+                      class="bg-gray-50 border border-blue-600 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-[9px]"
                       placeholder="Kategoriyani tanlang yoki qidirish..."
                     />
                     <ul
@@ -2184,7 +2184,7 @@
                   <ButtonLoader
                     :loading="loading.view"
                     type="submit"
-                    class="btnAdd w-full sm:max-w-fit text-white items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                    class="btnAdd w-full sm:max-w-fit text-white items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                   >
                     Ko'rish
                   </ButtonLoader>
@@ -2192,7 +2192,7 @@
                     :loading="loading.excel"
                     @click="exportToExcelCost"
                     type="button"
-                    class="btnAdd3 w-full text-white inline-flex whitespace-nowrap items-center justify-center bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                    class="btnAdd3 w-full text-white inline-flex whitespace-nowrap items-center justify-center bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                   >
                     Excelga yuklash
                   </ButtonLoader>
@@ -2201,12 +2201,12 @@
             </form>
           </div>
           <div
-            class="relative overflow-hidden rounded-lg shadow-md"
-            :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
+            class="relative overflow-hidden shadow-md rounded-xl"
+            :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
           >
             <div class="overflow-x-auto">
               <table class="w-full text-sm text-left">
-                <thead class="text-xs text-white uppercase rounded-lg btnAdd">
+                <thead class="text-xs text-white uppercase rounded-xl btnAdd">
                   <tr>
                     <th scope="col" class="px-8 py-3 text-center">
                       Kategoriya
@@ -2298,12 +2298,12 @@
                     >
                       <i
                         @click="getOneCost(i.id)"
-                        class="p-2 mr-3 text-blue-600 bg-blue-300 rounded-lg cursor-pointer bx bxs-pencil focus:ring-2"
+                        class="p-2 mr-3 text-blue-600 bg-blue-300 cursor-pointer rounded-xl bx bxs-pencil focus:ring-2"
                       >
                       </i>
                       <i
                         @click="deleteCostFunc(i.id)"
-                        class="p-2 text-red-600 bg-red-300 rounded-lg cursor-pointer bx bxs-trash focus:ring-2"
+                        class="p-2 text-red-600 bg-red-300 cursor-pointer rounded-xl bx bxs-trash focus:ring-2"
                       >
                       </i>
                     </td>
@@ -2335,7 +2335,7 @@
                     store.costPagination === 1
                       ? 'pointer-events-none opacity-50'
                       : '',
-                    'flex font-bold text-black border-2 bg-white hover:bg-gray-300 items-center justify-center text-sm sm:py-2 sm:px-6 px-3 rounded-lg leading-tight cursor-pointer transition duration-200 ease-in-out',
+                    'flex font-bold text-black border-2 bg-white hover:bg-gray-300 items-center justify-center text-sm sm:py-2 sm:px-6 px-3 rounded-xl leading-tight cursor-pointer transition duration-200 ease-in-out',
                   ]"
                   @click="
                     if (store.costPagination > 1) {
@@ -2372,7 +2372,7 @@
                     store.costPage[0] * 15 >= store.costPage[1]
                       ? 'pointer-events-none opacity-50'
                       : '',
-                    'flex font-bold text-black border-2 bg-white hover:bg-gray-300 items-center justify-center text-sm sm:py-2 sm:px-6 px-3 rounded-lg leading-tight cursor-pointer transition duration-200 ease-in-out',
+                    'flex font-bold text-black border-2 bg-white hover:bg-gray-300 items-center justify-center text-sm sm:py-2 sm:px-6 px-3 rounded-xl leading-tight cursor-pointer transition duration-200 ease-in-out',
                   ]"
                   @click="
                     if (store.costPage[0] * 15 < store.costPage[1]) {
@@ -2427,12 +2427,12 @@
 
         <div
           v-show="!store.guard && !debtor.isTable"
-          class="relative mb-10 overflow-hidden rounded-lg shadow-md"
-          :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
+          class="relative mb-10 overflow-hidden shadow-md rounded-xl"
+          :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
         >
           <div class="overflow-x-auto">
             <table class="w-full text-sm text-left">
-              <thead class="text-xs text-white uppercase rounded-lg btnAdd">
+              <thead class="text-xs text-white uppercase rounded-xl btnAdd">
                 <tr>
                   <th scope="col" class="py-3 text-center whitespace-nowrap">
                     O'quvchi (F . I . O)
@@ -2561,7 +2561,7 @@
                   store.teacherPagination === 1
                     ? 'pointer-events-none opacity-50'
                     : '',
-                  'flex font-bold text-black border-2 bg-white hover:bg-gray-300 items-center justify-center text-sm sm:py-2 sm:px-6 px-3 rounded-lg leading-tight cursor-pointer transition duration-200 ease-in-out',
+                  'flex font-bold text-black border-2 bg-white hover:bg-gray-300 items-center justify-center text-sm sm:py-2 sm:px-6 px-3 rounded-xl leading-tight cursor-pointer transition duration-200 ease-in-out',
                 ]"
                 @click="
                   if (store.teacherPagination > 1) {
@@ -2598,7 +2598,7 @@
                   store.teacherPage[0] * 15 >= store.teacherPage[1]
                     ? 'pointer-events-none opacity-50'
                     : '',
-                  'flex font-bold text-black border-2 bg-white hover:bg-gray-300 items-center justify-center text-sm sm:py-2 sm:px-6 px-3 rounded-lg leading-tight cursor-pointer transition duration-200 ease-in-out',
+                  'flex font-bold text-black border-2 bg-white hover:bg-gray-300 items-center justify-center text-sm sm:py-2 sm:px-6 px-3 rounded-xl leading-tight cursor-pointer transition duration-200 ease-in-out',
                 ]"
                 @click="
                   if (store.teacherPage[0] * 15 < store.teacherPage[1]) {
@@ -2618,13 +2618,13 @@
 
         <div
           v-show="!store.guard && debtor.isTable"
-          class="relative mb-10 overflow-hidden rounded-lg shadow-md"
-          :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
+          class="relative mb-10 overflow-hidden shadow-md rounded-xl"
+          :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
         >
           <div class="overflow-x-auto">
             <table class="w-full text-sm text-left">
               <thead
-                class="text-xs text-white uppercase rounded-lg btnAdd whitespace-nowrap"
+                class="text-xs text-white uppercase rounded-xl btnAdd whitespace-nowrap"
               >
                 <tr>
                   <th scope="col" class="py-3 text-center whitespace-nowrap">
@@ -2713,7 +2713,7 @@
                   store.debtorPagination === 1
                     ? 'pointer-events-none opacity-50'
                     : '',
-                  'flex font-bold text-black border-2 bg-white hover:bg-gray-300 items-center justify-center text-sm sm:py-2 sm:px-6 px-3 rounded-lg leading-tight cursor-pointer transition duration-200 ease-in-out',
+                  'flex font-bold text-black border-2 bg-white hover:bg-gray-300 items-center justify-center text-sm sm:py-2 sm:px-6 px-3 rounded-xl leading-tight cursor-pointer transition duration-200 ease-in-out',
                 ]"
                 @click="
                   if (store.debtorPagination > 1) {
@@ -2750,7 +2750,7 @@
                   store.debtorPage[0] * 15 >= store.debtorPage[1]
                     ? 'pointer-events-none opacity-50'
                     : '',
-                  'flex font-bold text-black border-2 bg-white hover:bg-gray-300 items-center justify-center text-sm sm:py-2 sm:px-6 px-3 rounded-lg leading-tight cursor-pointer transition duration-200 ease-in-out',
+                  'flex font-bold text-black border-2 bg-white hover:bg-gray-300 items-center justify-center text-sm sm:py-2 sm:px-6 px-3 rounded-xl leading-tight cursor-pointer transition duration-200 ease-in-out',
                 ]"
                 @click="
                   if (store.debtorPage[0] * 15 < store.debtorPage[1]) {
@@ -2768,7 +2768,7 @@
           </nav>
         </div>
 
-        <div class="rounded-lg mb-28">
+        <div class="rounded-xl mb-28">
           <div
             class="flex flex-col justify-between w-full lg:flex-row lg:items-center gap-x-20"
           >
@@ -2791,7 +2791,7 @@
                     <select
                       v-model="salaryHistory.year"
                       id="name"
-                      class="bg-white border text-black border-blue-600 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-[7px]"
+                      class="bg-white border text-black border-blue-600 rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-[7px]"
                       required
                     >
                       <option value="" disabled selected>Yilni tanlang</option>
@@ -2808,7 +2808,7 @@
                     <select
                       v-model="salaryHistory.month"
                       id="month"
-                      class="bg-white border text-black border-blue-600 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-[7px]"
+                      class="bg-white border text-black border-blue-600 rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-[7px]"
                     >
                       <option value="" disabled selected>Oyni tanlang</option>
                       <option value="01">Yanvar</option>
@@ -2858,7 +2858,7 @@
                       "
                       type="search"
                       id="simple-search"
-                      class="bg-gray-50 border border-blue-600 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-[9px]"
+                      class="bg-gray-50 border border-blue-600 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-[9px]"
                       placeholder="O'qituvchini tanlang yoki qidirish..."
                     />
                     <ul
@@ -2908,7 +2908,7 @@
                   <ButtonLoader
                     :loading="loading.view"
                     type="submit"
-                    class="btnAdd w-full sm:max-w-fit text-white items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                    class="btnAdd w-full sm:max-w-fit text-white items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                   >
                     Ko'rish
                   </ButtonLoader>
@@ -2916,7 +2916,7 @@
                     :loading="loading.excel"
                     @click="exportToExcelSalary"
                     type="button"
-                    class="btnAdd3 w-full text-white inline-flex whitespace-nowrap items-center justify-center bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                    class="btnAdd3 w-full text-white inline-flex whitespace-nowrap items-center justify-center bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                   >
                     Excelga yuklash
                   </ButtonLoader>
@@ -2925,12 +2925,12 @@
             </form>
           </div>
           <div
-            class="relative overflow-hidden rounded-lg shadow-md"
-            :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
+            class="relative overflow-hidden shadow-md rounded-xl"
+            :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
           >
             <div class="overflow-x-auto">
               <table class="w-full text-sm text-left">
-                <thead class="text-xs text-white uppercase rounded-lg btnAdd">
+                <thead class="text-xs text-white uppercase rounded-xl btnAdd">
                   <tr>
                     <th
                       scope="col"
@@ -3031,12 +3031,12 @@
                     >
                       <i
                         @click="getOneSalary(i.id)"
-                        class="p-2 mr-3 text-blue-600 bg-blue-300 rounded-lg cursor-pointer bx bxs-pencil focus:ring-2"
+                        class="p-2 mr-3 text-blue-600 bg-blue-300 cursor-pointer rounded-xl bx bxs-pencil focus:ring-2"
                       >
                       </i>
                       <i
                         @click="deleteSalaryFunc(i.id)"
-                        class="p-2 text-red-600 bg-red-300 rounded-lg cursor-pointer bx bxs-trash focus:ring-2"
+                        class="p-2 text-red-600 bg-red-300 cursor-pointer rounded-xl bx bxs-trash focus:ring-2"
                       >
                       </i>
                     </td>
@@ -3068,7 +3068,7 @@
                     store.salaryPagination === 1
                       ? 'pointer-events-none opacity-50'
                       : '',
-                    'flex font-bold text-black border-2 bg-white hover:bg-gray-300 items-center justify-center text-sm sm:py-2 sm:px-6 px-3 rounded-lg leading-tight cursor-pointer transition duration-200 ease-in-out',
+                    'flex font-bold text-black border-2 bg-white hover:bg-gray-300 items-center justify-center text-sm sm:py-2 sm:px-6 px-3 rounded-xl leading-tight cursor-pointer transition duration-200 ease-in-out',
                   ]"
                   @click="
                     if (store.salaryPagination > 1) {
@@ -3105,7 +3105,7 @@
                     store.salaryPage[0] * 15 >= store.salaryPage[1]
                       ? 'pointer-events-none opacity-50'
                       : '',
-                    'flex font-bold text-black border-2 bg-white hover:bg-gray-300 items-center justify-center text-sm sm:py-2 sm:px-6 px-3 rounded-lg leading-tight cursor-pointer transition duration-200 ease-in-out',
+                    'flex font-bold text-black border-2 bg-white hover:bg-gray-300 items-center justify-center text-sm sm:py-2 sm:px-6 px-3 rounded-xl leading-tight cursor-pointer transition duration-200 ease-in-out',
                   ]"
                   @click="
                     if (store.salaryPage[0] * 15 < store.salaryPage[1]) {
