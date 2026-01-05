@@ -30,194 +30,209 @@
           :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
         >
           <div
-            class="rounded-lg lg:p-8"
+            class="p-4 mt-5 border shadow-lg rounded-2xl sm:p-6"
+            :class="
+              navbar.userNav
+                ? 'bg-[#1e293b] border-white/10'
+                : 'bg-white border-blue-100'
+            "
             id="about"
             role="tabpanel"
-            aria-labelledby="about-tab"
           >
-            <div class="grid w-full gap-3 lg:grid-cols-2 sm:gap-0">
-              <div
-                class="w-full lg:border-l border-[#4141eb] sm:p-5 flex flex-col gap-3"
-              >
-                <h2
-                  class="w-full flex flex-col items-center justify-between pb-3 border-b border-[#4141eb] sm:text-lg text-sm"
-                  :class="navbar.userNav ? 'text-white' : 'text-[#1e293b]'"
-                >
-                  <span class="w-full font-bold">Ism-familya :</span>
-                  <span class="w-full py-0.5">{{
-                    store.product.customer?.full_name
-                  }}</span>
-                </h2>
-
-                <h2
-                  class="w-full flex flex-col items-center justify-between pb-3 border-b border-[#4141eb] sm:text-lg text-sm"
-                  :class="navbar.userNav ? 'text-white' : 'text-[#1e293b]'"
-                >
-                  <span class="w-full font-bold">Telefon raqam :</span>
-                  <span class="w-full py-0.5">{{
-                    store.product.customer?.phone_number
-                  }}</span>
-                </h2>
-
-                <h2
-                  class="w-full flex flex-col items-center justify-between pb-3 border-b border-[#4141eb] sm:text-lg text-sm"
-                  :class="navbar.userNav ? 'text-white' : 'text-[#1e293b]'"
-                >
-                  <span class="w-full font-bold">Tanlagan fani :</span>
-                  <span class="w-full py-0.5">{{
-                    store.product.subject_name
-                  }}</span>
-                </h2>
-
-                <h2
-                  class="w-full flex flex-col items-center justify-between border-b pb-3 border-[#4141eb] sm:text-lg text-sm"
-                  :class="navbar.userNav ? 'text-white' : 'text-[#1e293b]'"
-                >
-                  <span class="w-full font-bold">Tanlagan o'qituvchisi :</span>
-                  <span class="w-full py-0.5">{{ store.product.teacher }}</span>
-                </h2>
-
-                <h2
-                  class="w-full flex flex-col items-center justify-between border-b pb-3 border-[#4141eb] sm:text-lg text-sm"
-                  :class="navbar.userNav ? 'text-white' : 'text-[#1e293b]'"
-                >
-                  <span class="w-full font-bold"
-                    >Maqul bo'lgan dars vaqti :</span
-                  >
-                  <span class="w-full py-0.5">{{ store.product.time }}</span>
-                </h2>
-
+            <div class="grid gap-6 lg:grid-cols-2">
+              <!-- LEFT -->
+              <div class="space-y-4">
                 <div
-                  class="w-full flex flex-col items-start justify-center border-b pb-3 border-[#4141eb]"
-                  :class="navbar.userNav ? 'text-white' : 'text-[#1e293b]'"
+                  v-for="item in [
+                    ['Ism-familya', store.product.customer?.full_name],
+                    ['Telefon raqam', store.product.customer?.phone_number],
+                    ['Tanlagan fani', store.product.subject_name],
+                    ['Tanlagan o‘qituvchisi', store.product.teacher],
+                    ['Maqul bo‘lgan dars vaqti', store.product.time],
+                  ]"
+                  class="pb-3 border-b border-blue-500/30"
                 >
-                  <span class="w-full mb-3 text-sm font-bold sm:text-lg"
-                    >Darajasi :</span
-                  >
-
                   <div
-                    class="w-full p-2 mb-3 border border-blue-200 rounded-lg bg-blue-50"
+                    class="text-sm"
+                    :class="navbar.userNav ? 'text-gray-300' : 'text-gray-600'"
                   >
-                    <span class="text-xs font-medium text-blue-700 sm:text-sm"
-                      >Umumiy natija:</span
-                    >
-                    <span
-                      class="ml-2 rounded-lg bg-blue-100 py-0.5 px-4 text-blue-800 text-sm sm:text-base font-bold"
-                    >
-                      {{ store.product.overall_result }}
-                    </span>
+                    {{ item[0] }}
                   </div>
 
-                  <div class="grid w-full grid-cols-2 gap-2">
-                    <!-- Test -->
-                    <div
-                      class="p-2 border border-green-200 rounded-lg bg-green-50"
-                    >
-                      <div
-                        class="mb-1 text-xs font-medium text-green-700 sm:text-sm"
+                  <div
+                    class="mt-1 font-semibold"
+                    :class="navbar.userNav ? 'text-white' : 'text-[#1e293b]'"
+                  >
+                    {{ item[1] || "—" }}
+                  </div>
+                </div>
+
+                <!-- LEVEL RESULT -->
+                <div class="pt-2">
+                  <div
+                    class="mb-2 text-sm font-semibold"
+                    :class="navbar.userNav ? 'text-white' : 'text-[#1e293b]'"
+                  >
+                    Darajasi
+                  </div>
+
+                  <div
+                    class="p-3 border border-blue-200 rounded-xl bg-blue-50"
+                    :class="
+                      navbar.userNav ? 'bg-blue-500/10 border-blue-500/30' : ''
+                    "
+                  >
+                    <div class="flex items-center justify-between mb-3">
+                      <span class="text-sm text-blue-600 dark:text-blue-300"
+                        >Umumiy natija</span
                       >
-                        Test
-                      </div>
                       <span
-                        class="rounded-lg bg-green-100 py-0.5 px-3 text-green-800 text-sm sm:text-base font-semibold"
+                        class="px-4 py-1 text-sm font-bold text-blue-800 bg-blue-100 rounded-lg"
                       >
-                        {{ store.product.test_result }}
+                        {{ store.product.overall_result }}
                       </span>
                     </div>
 
-                    <!-- Writing -->
-                    <div
-                      class="p-2 border border-purple-200 rounded-lg bg-purple-50"
-                    >
+                    <div class="grid grid-cols-2 gap-3">
                       <div
-                        class="mb-1 text-xs font-medium text-purple-700 sm:text-sm"
+                        class="p-2 border border-green-200 rounded-lg bg-green-50"
                       >
-                        Writing
+                        <div class="mb-1 text-xs text-green-700">Test</div>
+                        <span
+                          class="px-3 py-0.5 text-sm font-semibold bg-green-100 text-green-800 rounded-md"
+                        >
+                          {{ store.product.test_result }}
+                        </span>
                       </div>
-                      <span
-                        class="rounded-lg bg-purple-100 py-0.5 px-3 text-purple-800 text-sm sm:text-base font-semibold"
+
+                      <div
+                        class="p-2 border border-purple-200 rounded-lg bg-purple-50"
                       >
-                        {{ store.product.writing_result || "Nomalum" }}
-                      </span>
+                        <div class="mb-1 text-xs text-purple-700">Writing</div>
+                        <span
+                          class="px-3 py-0.5 text-sm font-semibold bg-purple-100 text-purple-800 rounded-md"
+                        >
+                          {{ store.product.writing_result || "Nomalum" }}
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-              <div
-                class="w-full lg:border-l border-[#4141eb] sm:p-5 flex flex-col gap-3"
-              >
-                <h2
-                  class="w-full flex flex-col items-start justify-between border-b pb-3 border-[#4141eb] sm:text-lg text-sm"
-                  :class="navbar.userNav ? 'text-white' : 'text-[#1e293b]'"
-                >
-                  <span class="w-full font-bold">Testni boshlagan vaqti :</span>
-                  <span
-                    class="w-auto rounded-lg py-0.5 px-4 bg-blue-100 text-blue-800"
-                    >{{ chekDateFormat(store.product.started_at) }}</span
-                  >
-                </h2>
 
-                <h2
-                  class="w-full flex flex-col items-start justify-between border-b pb-3 border-[#4141eb] sm:text-lg text-sm"
-                  :class="navbar.userNav ? 'text-white' : 'text-[#1e293b]'"
+              <!-- RIGHT -->
+              <div class="space-y-4">
+                <div
+                  v-for="item in [
+                    [
+                      'Testni boshlagan vaqti',
+                      chekDateFormat(store.product.started_at),
+                      'blue',
+                    ],
+                    [
+                      'Testni tugatgan vaqti',
+                      chekDateFormat(store.product.finished_at),
+                      'red',
+                    ],
+                    ['Test vaqti', store.product.test?.time + ' daqiqa'],
+                    ['Savollar soni', store.product.test?.count + ' ta'],
+                    ['To‘g‘ri javoblar', store.product.correct + ' ta', 'blue'],
+                    [
+                      'Noto‘g‘ri javoblar',
+                      store.product.incorrect + ' ta',
+                      'red',
+                    ],
+                  ]"
+                  class="pb-3 border-b border-blue-500/30"
                 >
-                  <span class="w-full font-bold">Testni tugatgan vaqti :</span>
-                  <span
-                    class="w-auto rounded-lg py-0.5 px-4 bg-red-100 text-red-800"
-                    >{{ chekDateFormat(store.product.finished_at) }}</span
+                  <div
+                    class="text-sm"
+                    :class="navbar.userNav ? 'text-gray-300' : 'text-gray-600'"
                   >
-                </h2>
+                    {{ item[0] }}
+                  </div>
 
-                <h2
-                  class="w-full flex flex-col items-center justify-between border-b pb-3 border-[#4141eb] sm:text-lg text-sm"
-                  :class="navbar.userNav ? 'text-white' : 'text-[#1e293b]'"
-                >
-                  <span class="w-full font-bold"
-                    >Test bajarishga berilgan vaqt :</span
-                  >
-                  <span class="w-full py-0.5"
-                    >{{ store.product.test?.time }} daqiqa</span
-                  >
-                </h2>
-
-                <h2
-                  class="w-full flex flex-col items-center justify-between border-b pb-3 border-[#4141eb] sm:text-lg text-sm"
-                  :class="navbar.userNav ? 'text-white' : 'text-[#1e293b]'"
-                >
-                  <span class="w-full font-bold">Savolar soni :</span>
-                  <span class="w-full py-0.5"
-                    >{{ store.product.test?.count }} ta</span
-                  >
-                </h2>
-
-                <h2
-                  class="w-full flex flex-col items-start justify-between border-b pb-3 border-[#4141eb] sm:text-lg text-sm"
-                  :class="navbar.userNav ? 'text-white' : 'text-[#1e293b]'"
-                >
-                  <span class="w-full font-bold">Togri javoblar :</span>
-                  <span
-                    class="w-auto rounded-lg py-0.5 px-4 bg-blue-100 text-blue-800"
-                    >{{ store.product.correct }} ta</span
-                  >
-                </h2>
-
-                <h2
-                  class="w-full flex flex-col items-start justify-between border-b pb-3 border-[#4141eb] sm:text-lg text-sm"
-                  :class="navbar.userNav ? 'text-white' : 'text-[#1e293b]'"
-                >
-                  <span class="w-full font-bold">Notogri javoblar :</span>
-                  <span
-                    class="w-auto rounded-lg py-0.5 px-4 bg-red-100 text-red-800"
-                    >{{ store.product.incorrect }} ta</span
-                  >
-                </h2>
+                  <div class="flex items-center gap-2 mt-1">
+                    <span
+                      class="font-semibold"
+                      :class="navbar.userNav ? 'text-white' : 'text-[#1e293b]'"
+                    >
+                      {{ item[1] || "—" }}
+                    </span>
+                  </div>
+                </div>
               </div>
+            </div>
+          </div>
+
+          <h1 class="w-full py-5 text-lg font-bold text-blue-700">
+            Tavsiya etiladigan guruhlar
+          </h1>
+
+          <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <div
+              v-for="(group, index) in store.groupLevel"
+              :key="group.id || index"
+              class="p-6 transition-all duration-300 border shadow-lg rounded-2xl hover:-translate-y-1 hover:shadow-xl"
+              :class="
+                navbar.userNav
+                  ? 'bg-[#1e293b] border-white/10 text-white'
+                  : 'bg-white border-blue-100 text-gray-800'
+              "
+            >
+              <!-- Title -->
+              <h2 class="mb-2 text-lg font-bold">
+                {{ group.name || "Noma'lum guruh" }}
+              </h2>
+
+              <!-- Level -->
+              <span
+                class="inline-block px-3 py-1 mb-4 text-xs font-semibold rounded-full"
+                :class="
+                  navbar.userNav
+                    ? 'bg-blue-500/20 text-blue-300'
+                    : 'bg-blue-100 text-blue-700'
+                "
+              >
+                {{ group.level || "Noma'lum" }}
+              </span>
+
+              <!-- Info -->
+              <div class="space-y-3 text-sm">
+                <div
+                  class="flex justify-between"
+                  :class="navbar.userNav ? 'text-gray-300' : 'text-gray-500'"
+                >
+                  <span>O'qituvchi</span>
+                  <span class="font-medium">
+                    {{ group.teacher || "Noma'lum" }}
+                  </span>
+                </div>
+
+                <div
+                  class="flex justify-between"
+                  :class="navbar.userNav ? 'text-gray-300' : 'text-gray-500'"
+                >
+                  <span>O'quvchilar soni</span>
+                  <span class="font-medium">
+                    {{ group.student_count || 0 }} ta
+                  </span>
+                </div>
+              </div>
+
+              <!-- Button -->
+              <!-- <button
+                class="btn text-white w-full mt-6 py-2.5 rounded-lg font-semibold transition"
+              >
+                Guruhga qo'shish
+              </button> -->
             </div>
           </div>
 
           <h1 class="w-full py-5 text-lg font-bold text-blue-700 text-start">
             Mijozning bajargan testlari
           </h1>
+          
           <div
             class="overflow-x-auto"
             v-for="(i, index) in store.questions"
@@ -261,13 +276,14 @@
               <!-- acardion main -->
               <div :id="'answers' + i.id" class="hidden mb-5">
                 <div class="mb-5">
-                  <div v-if="i.file !== 'null' || i.file !== ''" class="mb-3">
+                  <!-- File -->
+                  <div v-if="i.file" class="mb-3">
                     <div v-if="isImage(i.file)">
                       <img
                         :src="getFileUrl(i.file)"
                         alt="Image"
                         loading="lazy"
-                        class="w-full max-w-[320px] h-auto object-cove"
+                        class="w-full max-w-[320px] h-auto object-cover"
                       />
                     </div>
                     <div v-else-if="isAudio(i.file)">
@@ -281,12 +297,9 @@
                         height="240"
                       />
                     </div>
-                    <!-- <div v-else>
-                      <a :href="getFileUrl(i.file)" target="_blank"
-                        >Faylni yuklab olish</a
-                      >
-                    </div> -->
                   </div>
+
+                  <!-- Text -->
                   <div
                     v-if="i.text"
                     class="flex flex-col px-5 mb-10 text-justify"
@@ -294,22 +307,40 @@
                     <h3 class="mb-2 font-bold">{{ i.text.title }}</h3>
                     <p class="whitespace-pre-line">{{ i.text.text }}</p>
                   </div>
+
+                  <!-- Question -->
                   <h3 class="flex px-5 text-justify">{{ i.question }}</h3>
                 </div>
-                <div class="grid gap-5 sm:grid-cols-2">
+
+                <!-- Test Options -->
+                <div v-if="i.type === 'test'" class="grid gap-5 sm:grid-cols-2">
                   <div
                     v-for="(ans, ansIndex) in i.option"
                     :key="ansIndex"
                     class="w-full text-justify text-black p-2.5 sm:pl-10 pl-5 text-sm rounded-lg"
                     :class="
-                      ans.is_correct
+                      ans.is_correct === true
                         ? 'bg-blue-300 text-blue-600'
-                        : 'bg-red-300 text-red-600'
+                        : ans.is_correct === false
+                        ? 'bg-red-300 text-red-600'
+                        : 'bg-gray-200 text-gray-600'
                     "
                   >
                     <strong>{{ String.fromCharCode(65 + ansIndex) }}: </strong>
-                    <span>{{ ans.option }}</span>
+                    <span>{{ ans.option || "Noma'lum" }}</span>
                   </div>
+                </div>
+
+                <!-- Writing Answer -->
+                <div
+                  v-if="i.type === 'writing'"
+                  class="p-2 border border-purple-200 rounded-lg bg-purple-50"
+                >
+                  <p
+                    class="px-3 py-1 text-sm font-semibold text-purple-800 whitespace-pre-line rounded-lg sm:text-base"
+                  >
+                    {{ i.writing || "Noma'lum" }}
+                  </p>
                 </div>
               </div>
             </div>
@@ -333,10 +364,12 @@ const router = useRouter();
 const store = reactive({
   product: "",
   subjects: [],
+  groupLevel: [],
   error: null,
   questions: "",
   plus: "",
   accordion: [],
+  overall: "",
 });
 
 const getFileUrl = (file) => import.meta.env.VITE_API + "/" + file;
@@ -399,17 +432,16 @@ const getProduct = async () => {
   const id = router.currentRoute.value.params.id;
   try {
     const response = await axios.get(`/customer-test/${id}`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     });
 
     const record = response.data;
-
+    const customerAnswers = record.customer_answer || [];
     const questionsMap = new Map();
 
-    for (const answer of record.customer_answer) {
+    for (const answer of customerAnswers) {
       const q = answer.question;
+      if (!q) continue;
 
       if (!questionsMap.has(q.id)) {
         questionsMap.set(q.id, {
@@ -418,43 +450,74 @@ const getProduct = async () => {
           file: q.file,
           option: [],
           text: q.text,
+          writing: null,
+          type: q.type,
         });
       }
 
       const qItem = questionsMap.get(q.id);
-      qItem.option.push(answer.option);
+
+      if (q.type === "test") {
+        qItem.option.push({
+          id: answer.option?.id || null,
+          option: answer.option?.option || "Noma'lum",
+          is_correct: answer.is_correct,
+        });
+      } else if (q.type === "writing") {
+        qItem.writing = answer.writing || "Noma'lum";
+      }
     }
 
     store.questions = Array.from(questionsMap.values());
 
-    const subjectId = record.customer.subject_id;
-    const subject = store.subjects.find((s) => s.id === subjectId);
-
-    const correctAnswers = record.customer_answer.filter(
+    // Correct / Incorrect
+    const correctAnswers = customerAnswers.filter(
       (ans) => ans.is_correct === true
     ).length;
-    const incorrectAnswers = record.customer_answer.filter(
+    const incorrectAnswers = customerAnswers.filter(
       (ans) => ans.is_correct === false
     ).length;
 
-    const [time, ...teacherParts] = record.customer.description.split(" ");
+    const subjectId = record.customer.subject_id;
+    const subject = store.subjects.find((s) => s.id === subjectId);
+
+    // Teacher va time
+    const [time, ...teacherParts] =
+      record.customer.description?.split(" ") || [];
     const teacher = teacherParts.join(" ");
 
-    const enrichedRecord = {
+    store.product = {
       ...record,
-      subject_name: subject ? subject.name : "Noma'lum",
+      subject_name: subject?.name || "Noma'lum",
       correct: correctAnswers,
       incorrect: incorrectAnswers,
-      time: time ? time : "Noma'lum",
-      teacher: teacher ? teacher : "Noma'lum",
+      time: time || "Noma'lum",
+      teacher: teacher || "Noma'lum",
     };
-
-    store.product = enrichedRecord;
+    getGroupLevel(store.product.overall_result);
     store.error = null;
   } catch (error) {
-    store.product = {};
+    store.product = null;
     store.error = error.response?.data?.message || "Xatolik yuz berdi!";
   }
+};
+
+const getGroupLevel = (overall) => {
+  axios
+    .get(`/group/level/${localStorage.getItem("school_id")}/${overall}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    })
+    .then((res) => {
+      store.groupLevel = res.data;
+      console.log(res);
+    })
+    .catch((error) => {
+      notification.warning(
+        "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
+      );
+    });
 };
 
 onMounted(() => {
