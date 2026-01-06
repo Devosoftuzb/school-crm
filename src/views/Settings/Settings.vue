@@ -11,7 +11,7 @@
         <!------------------------------------------- Search ------------------------------------------->
         <div
           class="flex flex-col items-center justify-between gap-3 p-4 mb-4 shadow rounded-xl lg:flex-row lg:space-x-4"
-          :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
+          :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
         >
           <h1 class="w-full text-lg font-bold text-blue-700">Sozlamalar</h1>
           <div
@@ -24,8 +24,8 @@
               type="button"
               :class="
                 generalSettings
-                  ? 'btnAdd flex items-center w-full sm:max-w-fit justify-center whitespace-nowrap border border-[#2f73f0] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5'
-                  : 'flex items-center w-full sm:max-w-fit justify-center whitespace-nowrap bg-transparent border border-[#2f73f0] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5'
+                  ? 'btnAdd flex items-center w-full sm:max-w-fit justify-center whitespace-nowrap border border-[#2f73f0] focus:ring-4 focus:ring-blue-300 font-medium rounded-xl text-sm px-5 py-2.5'
+                  : 'flex items-center w-full sm:max-w-fit justify-center whitespace-nowrap bg-transparent border border-[#2f73f0] focus:ring-4 focus:ring-blue-300 font-medium rounded-xl text-sm px-5 py-2.5'
               "
             >
               <span class="">Asosiy sozlama</span>
@@ -36,8 +36,8 @@
               type="button"
               :class="
                 passwordChange
-                  ? 'btnAdd flex items-center w-full sm:max-w-fit justify-center whitespace-nowrap border border-[#2f73f0] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5'
-                  : 'flex items-center w-full sm:max-w-fit justify-center whitespace-nowrap bg-transparent border border-[#2f73f0] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5'
+                  ? 'btnAdd flex items-center w-full sm:max-w-fit justify-center whitespace-nowrap border border-[#2f73f0] focus:ring-4 focus:ring-blue-300 font-medium rounded-xl text-sm px-5 py-2.5'
+                  : 'flex items-center w-full sm:max-w-fit justify-center whitespace-nowrap bg-transparent border border-[#2f73f0] focus:ring-4 focus:ring-blue-300 font-medium rounded-xl text-sm px-5 py-2.5'
               "
             >
               <span class="">Parolni yangilash</span>
@@ -49,8 +49,8 @@
               type="button"
               :class="
                 socialLink
-                  ? 'btnAdd flex items-center w-full sm:max-w-fit justify-center whitespace-nowrap border border-[#2f73f0] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5'
-                  : 'flex items-center w-full sm:max-w-fit justify-center whitespace-nowrap bg-transparent border border-[#2f73f0] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5'
+                  ? 'btnAdd flex items-center w-full sm:max-w-fit justify-center whitespace-nowrap border border-[#2f73f0] focus:ring-4 focus:ring-blue-300 font-medium rounded-xl text-sm px-5 py-2.5'
+                  : 'flex items-center w-full sm:max-w-fit justify-center whitespace-nowrap bg-transparent border border-[#2f73f0] focus:ring-4 focus:ring-blue-300 font-medium rounded-xl text-sm px-5 py-2.5'
               "
             >
               <span class="">Ijtimoiy tarmoqlar</span>
@@ -62,8 +62,8 @@
               type="button"
               :class="
                 paymentMethod
-                  ? 'btnAdd flex items-center w-full sm:max-w-fit justify-center whitespace-nowrap border border-[#2f73f0] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5'
-                  : 'flex items-center w-full sm:max-w-fit justify-center whitespace-nowrap bg-transparent border border-[#2f73f0] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5'
+                  ? 'btnAdd flex items-center w-full sm:max-w-fit justify-center whitespace-nowrap border border-[#2f73f0] focus:ring-4 focus:ring-blue-300 font-medium rounded-xl text-sm px-5 py-2.5'
+                  : 'flex items-center w-full sm:max-w-fit justify-center whitespace-nowrap bg-transparent border border-[#2f73f0] focus:ring-4 focus:ring-blue-300 font-medium rounded-xl text-sm px-5 py-2.5'
               "
             >
               <span class="">To'lov turlari</span>
@@ -78,15 +78,15 @@
         <!------------------------------------------- Search ------------------------------------------->
         <div
           class="flex flex-col justify-between gap-3 p-4 mb-4 shadow rounded-xl"
-          :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
+          :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
         >
           <!----------------------------------------- User settings ------------------------------------>
 
           <div :class="generalSettings ? 'relative w-full h-auto' : 'hidden'">
             <!-- Modal content -->
             <div
-              class="relative p-4 rounded-lg sm:p-5"
-              :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
+              class="relative p-4 rounded-xl sm:p-5"
+              :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
             >
               <!-- Modal header -->
               <div
@@ -117,7 +117,7 @@
                       type="text"
                       name="name"
                       id="name"
-                      class="bg-white border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                      class="bg-white border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                       placeholder="To'liq ismini kiriting"
                       required
                     />
@@ -134,7 +134,7 @@
                       type="tel"
                       name="phone"
                       id="phone"
-                      class="bg-white border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                      class="bg-white border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                       placeholder="Telefon raqamini kiriting"
                       required
                     />
@@ -151,7 +151,7 @@
                       type="text"
                       name="login"
                       id="login"
-                      class="bg-white border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                      class="bg-white border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                       placeholder="login"
                       required
                     />
@@ -162,7 +162,7 @@
                 >
                   <button
                     type="submit"
-                    class="btnAdd cursor-pointer text-white inline-flex items-center bg-[#4141eb] focus:ring-4 focus:outline-none focus:ring-blue-500 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                    class="btnAdd cursor-pointer text-white inline-flex items-center bg-[#4141eb] focus:ring-4 focus:outline-none focus:ring-blue-500 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                   >
                     O'zgartirish
                   </button>
@@ -176,8 +176,8 @@
           <div :class="passwordChange ? 'relative w-full h-auto' : 'hidden'">
             <!-- Modal content -->
             <div
-              class="relative p-4 rounded-lg sm:p-5"
-              :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
+              class="relative p-4 rounded-xl sm:p-5"
+              :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
             >
               <!-- Modal header -->
               <div
@@ -208,7 +208,7 @@
                       :type="showOldPassword ? 'text' : 'password'"
                       name="password"
                       id="password"
-                      class="bg-white border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                      class="bg-white border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                       placeholder="********"
                       required
                     />
@@ -275,7 +275,7 @@
                       :type="showNewPassword ? 'text' : 'password'"
                       name="new_password"
                       id="new_password"
-                      class="bg-white border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                      class="bg-white border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                       placeholder="********"
                       required
                     />
@@ -342,7 +342,7 @@
                       :type="showNew2Password ? 'text' : 'password'"
                       name="confirm_password"
                       id="confirm_password"
-                      class="bg-white border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                      class="bg-white border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                       placeholder="********"
                       required
                     />
@@ -403,7 +403,7 @@
                 >
                   <button
                     type="submit"
-                    class="btnAdd cursor-pointer text-white inline-flex items-center bg-[#4141eb] focus:ring-4 focus:outline-none focus:ring-blue-500 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                    class="btnAdd cursor-pointer text-white inline-flex items-center bg-[#4141eb] focus:ring-4 focus:outline-none focus:ring-blue-500 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                   >
                     O'zgartirish
                   </button>
@@ -423,8 +423,8 @@
           >
             <div class="relative w-full h-auto max-w-lg p-4">
               <div
-                class="relative p-4 rounded-lg shadow sm:p-5"
-                :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
+                class="relative p-4 shadow rounded-xl sm:p-5"
+                :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
               >
                 <div
                   class="flex items-center justify-between pb-4 mb-4 border-b rounded-t sm:mb-5"
@@ -438,7 +438,7 @@
                   <button
                     @click="socialModal"
                     type="button"
-                    class="bg-transparent hover:bg-gray-200 hover rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+                    class="bg-transparent hover:bg-gray-200 hover rounded-xl text-sm p-1.5 ml-auto inline-flex items-center"
                     :class="{ 'text-white': navbar.userNav }"
                   >
                     <svg
@@ -471,7 +471,7 @@
                         type="text"
                         name="socil_name"
                         id="socil_name"
-                        class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                        class="bg-gray-50 border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                         placeholder="Nomini kiriting"
                       />
                     </div>
@@ -482,13 +482,13 @@
                     <button
                       @click="socialModal"
                       type="button"
-                      class="border inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                      class="border inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                     >
                       Bekor qilish
                     </button>
                     <button
                       type="submit"
-                      class="btnAdd text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                      class="btnAdd text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                     >
                       Qo'shish
                     </button>
@@ -508,8 +508,8 @@
           >
             <div class="relative p-4 max-w-5xl min-w-[30%] h-auto">
               <div
-                class="relative p-4 rounded-lg shadow sm:p-5"
-                :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
+                class="relative p-4 shadow rounded-xl sm:p-5"
+                :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
               >
                 <div
                   class="flex items-center justify-between pb-4 mb-4 border-b rounded-t sm:mb-5"
@@ -523,7 +523,7 @@
                   <button
                     @click="remove.toggle = false"
                     type="button"
-                    class="bg-transparent hover:bg-gray-200 hover rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+                    class="bg-transparent hover:bg-gray-200 hover rounded-xl text-sm p-1.5 ml-auto inline-flex items-center"
                     :class="navbar.userNav ? 'text-white' : 'text-black'"
                   >
                     <svg
@@ -559,13 +559,13 @@
                       <button
                         @click="remove.toggle = false"
                         type="button"
-                        class="border cursor-pointer inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                        class="border cursor-pointer inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                       >
                         Bekor qilish
                       </button>
                       <button
                         @click="deleteSocialLink"
-                        class="btnAdd cursor-pointer text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                        class="btnAdd cursor-pointer text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                       >
                         O'chirish
                       </button>
@@ -594,7 +594,7 @@
                   @click="socialModal"
                   id=""
                   type="button"
-                  class="flex items-center justify-center px-4 text-sm font-medium text-white bg-blue-600 rounded-lg btnAdd max-w-fit whitespace-nowrap hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 sm:py-2"
+                  class="flex items-center justify-center px-4 text-sm font-medium text-white bg-blue-600 rounded-xl btnAdd max-w-fit whitespace-nowrap hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 sm:py-2"
                 >
                   <span class="hidden sm:block">Link qo'shish</span>
                   <i class="block text-lg sm:hidden bx bxs-user-plus"></i>
@@ -602,16 +602,16 @@
               </div>
             </div>
             <div
-              class="relative overflow-hidden border rounded-lg"
+              class="relative overflow-hidden border rounded-xl"
               :class="
                 navbar.userNav
-                  ? 'bg-[#1e293b] border-gray-700 text-white'
+                  ? 'bg-slate-900 border-gray-700 text-white'
                   : 'bg-white'
               "
             >
               <div class="overflow-x-auto">
                 <table class="w-full text-sm text-left">
-                  <thead class="text-xs rounded-lg uppercase bg-[#4141eb]">
+                  <thead class="text-xs rounded-xl uppercase bg-[#4141eb]">
                     <tr>
                       <th
                         scope="col"
@@ -644,7 +644,7 @@
                       <td class="font-medium text-center whitespace-nowrap">
                         <i
                           @click="deleteFunc(i.id)"
-                          class="px-5 py-2 text-red-600 bg-red-300 rounded-lg cursor-pointer bx bxs-trash focus:ring-2"
+                          class="px-5 py-2 text-red-600 bg-red-300 cursor-pointer rounded-xl bx bxs-trash focus:ring-2"
                         >
                         </i>
                       </td>
@@ -672,8 +672,8 @@
           >
             <div class="relative w-full h-auto max-w-lg p-4">
               <div
-                class="relative p-4 rounded-lg shadow sm:p-5"
-                :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
+                class="relative p-4 shadow rounded-xl sm:p-5"
+                :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
               >
                 <div
                   class="flex items-center justify-between pb-4 mb-4 border-b rounded-t sm:mb-5"
@@ -687,7 +687,7 @@
                   <button
                     @click="payModal"
                     type="button"
-                    class="bg-transparent hover:bg-gray-200 hover rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+                    class="bg-transparent hover:bg-gray-200 hover rounded-xl text-sm p-1.5 ml-auto inline-flex items-center"
                     :class="{ 'text-white': navbar.userNav }"
                   >
                     <svg
@@ -720,7 +720,7 @@
                         type="text"
                         name="method_name"
                         id="method_name"
-                        class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                        class="bg-gray-50 border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                         placeholder="Nomini kiriting"
                       />
                     </div>
@@ -731,13 +731,13 @@
                     <button
                       @click="payModal"
                       type="button"
-                      class="border inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                      class="border inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                     >
                       Bekor qilish
                     </button>
                     <button
                       type="submit"
-                      class="btnAdd text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                      class="btnAdd text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                     >
                       Qo'shish
                     </button>
@@ -757,8 +757,8 @@
           >
             <div class="relative p-4 max-w-5xl min-w-[30%] h-auto">
               <div
-                class="relative p-4 rounded-lg shadow sm:p-5"
-                :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
+                class="relative p-4 shadow rounded-xl sm:p-5"
+                :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
               >
                 <div
                   class="flex items-center justify-between pb-4 mb-4 border-b rounded-t sm:mb-5"
@@ -772,7 +772,7 @@
                   <button
                     @click="remove.payment = false"
                     type="button"
-                    class="bg-transparent hover:bg-gray-200 hover rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+                    class="bg-transparent hover:bg-gray-200 hover rounded-xl text-sm p-1.5 ml-auto inline-flex items-center"
                     :class="navbar.userNav ? 'text-white' : 'text-black'"
                   >
                     <svg
@@ -808,13 +808,13 @@
                       <button
                         @click="remove.payment = false"
                         type="button"
-                        class="border cursor-pointer inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                        class="border cursor-pointer inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                       >
                         Bekor qilish
                       </button>
                       <button
                         @click="deletePaymentMethod"
-                        class="btnAdd cursor-pointer text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                        class="btnAdd cursor-pointer text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                       >
                         O'chirish
                       </button>
@@ -843,7 +843,7 @@
                   @click="payModal"
                   id=""
                   type="button"
-                  class="flex items-center justify-center px-4 text-sm font-medium text-white bg-blue-600 rounded-lg btnAdd max-w-fit whitespace-nowrap hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 sm:py-2"
+                  class="flex items-center justify-center px-4 text-sm font-medium text-white bg-blue-600 rounded-xl btnAdd max-w-fit whitespace-nowrap hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 sm:py-2"
                 >
                   <span class="hidden sm:block">To'lov turi qo'shish</span>
                   <i class="block text-lg sm:hidden bx bxs-user-plus"></i>
@@ -851,16 +851,16 @@
               </div>
             </div>
             <div
-              class="relative overflow-hidden border rounded-lg"
+              class="relative overflow-hidden border rounded-xl"
               :class="
                 navbar.userNav
-                  ? 'bg-[#1e293b] border-gray-700 text-white'
+                  ? 'bg-slate-900 border-gray-700 text-white'
                   : 'bg-white'
               "
             >
               <div class="overflow-x-auto">
                 <table class="w-full text-sm text-left">
-                  <thead class="text-xs rounded-lg uppercase bg-[#4141eb]">
+                  <thead class="text-xs rounded-xl uppercase bg-[#4141eb]">
                     <tr>
                       <th
                         scope="col"
@@ -893,7 +893,7 @@
                       <td class="font-medium text-center whitespace-nowrap">
                         <i
                           @click="deleteFuncPay(i.id)"
-                          class="px-5 py-2 text-red-600 bg-red-300 rounded-lg cursor-pointer bx bxs-trash focus:ring-2"
+                          class="px-5 py-2 text-red-600 bg-red-300 cursor-pointer rounded-xl bx bxs-trash focus:ring-2"
                         >
                         </i>
                       </td>

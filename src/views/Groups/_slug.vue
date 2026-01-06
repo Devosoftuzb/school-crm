@@ -3,12 +3,13 @@
     <div class="mt-8" v-show="!store.loading">
       <Placeholder2 />
     </div>
-    <div v-show="store.loading" class="mt-8 mb-32 border wrapper border-red">
+
+    <div v-show="store.loading" class="mt-8 mb-32 wrapper border-red">
       <div
         :class="
           navbar.userNav
-            ? 'bg-[#1e293b] text-white px-5 py-10 sm:px-10 flex flex-col gap-5 rounded-lg'
-            : 'bg-white px-5 py-10 sm:px-10 flex flex-col gap-5 rounded-lg'
+            ? 'bg-slate-900 text-white px-5 py-10 sm:px-10 flex flex-col gap-5 rounded-xl'
+            : 'bg-white px-5 py-10 sm:px-10 flex flex-col gap-5 rounded-xl'
         "
         id="accordion-collapse"
         data-accordion="collapse"
@@ -25,7 +26,9 @@
 
             <p class="flex items-center gap-3 text-sm">
               <span class="font-bold">Darajasi:</span>
-              <span class="px-4 py-1 text-green-800 bg-green-100 rounded-lg">{{ store.level || "No'malum"}}</span>
+              <span class="px-4 py-1 text-green-800 bg-green-100 rounded-lg">{{
+                store.level || "No'malum"
+              }}</span>
             </p>
             <p class="flex items-center gap-3 text-sm">
               <span class="font-bold">Boshlangan sana:</span>
@@ -46,7 +49,7 @@
           </div>
           <button
             @click="router.back(-1)"
-            class="btn shadow-lg sm:w-auto w-full whitespace-nowrap rounded-lg px-5 py-2.5 text-white focus:ring-2"
+            class="btn shadow-lg sm:w-auto w-full whitespace-nowrap rounded-xl px-5 py-2.5 text-white focus:ring-2"
           >
             Orqaga qaytish
           </button>
@@ -55,7 +58,7 @@
           <button
             @click="toggleStaff"
             type="button"
-            class="flex items-center justify-between w-full text-left rounded-lg bg-[rgba(213,219,242,0.5)] sm:py-[24px] py-3 sm:px-[32px] px-5"
+            class="flex items-center justify-between w-full text-left rounded-xl bg-[rgba(213,219,242,0.5)] sm:py-[24px] py-3 sm:px-[32px] px-5"
             data-accordion-target="#accordion-collapse-body-1"
             aria-expanded="true"
             aria-controls="accordion-collapse-body-1"
@@ -81,12 +84,12 @@
           aria-labelledby="accordion-collapse-heading-1"
         >
           <div
-            class="relative overflow-hidden rounded-lg shadow-md"
-            :class="navbar.userNav ? 'bg-[#1e293b] text-white' : 'bg-white'"
+            class="relative overflow-hidden shadow-md rounded-xl"
+            :class="navbar.userNav ? 'bg-slate-900 text-white' : 'bg-white'"
           >
             <div class="overflow-x-auto">
               <table class="w-full text-sm text-left">
-                <thead class="text-xs uppercase rounded-lg btn">
+                <thead class="text-xs uppercase rounded-xl btn">
                   <tr class="text-white">
                     <th scope="col" class="py-3 text-center">I . F . O</th>
                     <th scope="col" class="py-3 text-center">Lavozim</th>
@@ -144,7 +147,7 @@
           <button
             @click="toggleStudent"
             type="button"
-            class="flex items-center justify-between w-full text-left rounded-lg bg-[rgba(213,219,242,0.5)] sm:py-[24px] py-3 sm:px-[32px] px-5"
+            class="flex items-center justify-between w-full text-left rounded-xl bg-[rgba(213,219,242,0.5)] sm:py-[24px] py-3 sm:px-[32px] px-5"
             data-accordion-target="#accordion-collapse-body-2"
             aria-expanded="false"
             aria-controls="accordion-collapse-body-2"
@@ -170,12 +173,12 @@
           aria-labelledby="accordion-collapse-heading-2"
         >
           <div
-            class="relative overflow-hidden rounded-lg shadow-md"
-            :class="navbar.userNav ? 'bg-[#1e293b] text-white' : 'bg-white'"
+            class="relative overflow-hidden shadow-md rounded-xl"
+            :class="navbar.userNav ? 'bg-slate-900 text-white' : 'bg-white'"
           >
             <div class="overflow-x-auto">
               <table class="w-full text-sm text-left">
-                <thead class="text-xs uppercase rounded-lg btn">
+                <thead class="text-xs uppercase rounded-xl btn">
                   <tr class="text-white">
                     <th scope="col" class="py-3 text-center">№</th>
                     <th scope="col" class="py-3 text-center">I . F . O</th>
@@ -201,7 +204,9 @@
                     >
                       {{ i.students_number }}
                     </th>
-                    <td class="px-8 py-2 font-medium text-center text-green-800">
+                    <td
+                      class="px-8 py-2 font-medium text-center text-green-800"
+                    >
                       <p class="bg-green-100 rounded-[5px] p-1">
                         {{ i.full_name }}
                       </p>
@@ -226,7 +231,7 @@
                             i.full_name.split(' ').join('_').toLowerCase()
                           )
                         "
-                        class="btn bg-blue-600 rounded-lg px-5 py-2.5 text-white focus:ring-2"
+                        class="btn bg-blue-600 rounded-xl px-5 py-2.5 text-white focus:ring-2"
                       >
                         Kirish
                       </button>
@@ -287,8 +292,15 @@ const getGroup = async () => {
       },
     });
 
-    const { start_date, price, start_time, end_time, employee, student, level } =
-      res.data;
+    const {
+      start_date,
+      price,
+      start_time,
+      end_time,
+      employee,
+      student,
+      level,
+    } = res.data;
 
     store.start_time = start_date;
     store.group_price = price;

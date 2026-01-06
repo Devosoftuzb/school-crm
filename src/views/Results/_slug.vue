@@ -7,8 +7,9 @@
 
     <div
       v-show="store.product && store.questions"
-      class="p-8 mb-32 rounded-lg"
-      :class="navbar.userNav ? 'bg-[#1e293b] text-white' : 'bg-white'"
+
+      class="p-8 mb-32 rounded-xl"
+      :class="navbar.userNav ? 'bg-slate-900 text-white' : 'bg-white'"
     >
       <div
         class="flex flex-col items-center justify-between w-full gap-3 mb-8 font-bold sm:flex-row sm:mb-0"
@@ -18,27 +19,30 @@
         </h1>
         <button
           @click="router.back(-1)"
-          class="btn shadow-lg w-full sm:w-auto rounded-lg whitespace-nowrap px-5 py-2.5 text-white focus:ring-2 text-sm"
+          class="btn shadow-lg w-full sm:w-auto rounded-xl whitespace-nowrap px-5 py-2.5 text-white focus:ring-2 text-sm"
         >
           Orqaga qaytish
         </button>
       </div>
 
-      <div class="w-full bg-transparent rounded-lg">
+      <div class="w-full bg-transparent rounded-xl">
         <div
           id="defaultTabContent"
-          :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
+          :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
         >
           <div
+
             class="p-4 mt-5 border shadow-lg rounded-2xl sm:p-6"
             :class="
               navbar.userNav
-                ? 'bg-[#1e293b] border-white/10'
+                ? 'bg-slate-900 border-white/10'
                 : 'bg-white border-blue-100'
             "
+
             id="about"
             role="tabpanel"
           >
+
             <div class="grid gap-6 lg:grid-cols-2">
               <!-- LEFT -->
               <div class="space-y-4">
@@ -51,6 +55,7 @@
                     ['Maqul bo‘lgan dars vaqti', store.product.time],
                   ]"
                   class="pb-3 border-b border-blue-500/30"
+
                 >
                   <div
                     class="text-sm"
@@ -59,9 +64,11 @@
                     {{ item[0] }}
                   </div>
 
+
                   <div
                     class="mt-1 font-semibold"
                     :class="navbar.userNav ? 'text-white' : 'text-[#1e293b]'"
+
                   >
                     {{ item[1] || "—" }}
                   </div>
@@ -120,6 +127,21 @@
                 </div>
               </div>
 
+              <div
+                class="w-full lg:border-l border-[#4141eb] sm:p-5 flex flex-col gap-3"
+              >
+                <h2
+                  class="w-full flex flex-col items-start justify-between border-b pb-3 border-[#4141eb] sm:text-lg text-sm"
+                  :class="navbar.userNav ? 'text-white' : 'text-[#1e293b]'"
+                >
+                  <span class="w-full font-bold">Testni boshlagan vaqti :</span>
+                  <span
+                    class="w-auto rounded-xl py-0.5 px-4 bg-blue-100 text-blue-800"
+                    >{{ chekDateFormat(store.product.started_at) }}</span
+                  >
+                </h2>
+
+
               <!-- RIGHT -->
               <div class="space-y-4">
                 <div
@@ -145,12 +167,15 @@
                   ]"
                   class="pb-3 border-b border-blue-500/30"
                 >
+
                   <div
                     class="text-sm"
                     :class="navbar.userNav ? 'text-gray-300' : 'text-gray-600'"
+
                   >
                     {{ item[0] }}
                   </div>
+
 
                   <div class="flex items-center gap-2 mt-1">
                     <span
@@ -161,9 +186,11 @@
                     </span>
                   </div>
                 </div>
+
               </div>
             </div>
           </div>
+
 
           <h1 class="w-full py-5 text-lg font-bold text-blue-700">
             Tavsiya etiladigan guruhlar
@@ -176,7 +203,7 @@
               class="p-6 transition-all duration-300 border shadow-lg rounded-2xl hover:-translate-y-1 hover:shadow-xl"
               :class="
                 navbar.userNav
-                  ? 'bg-[#1e293b] border-white/10 text-white'
+                  ? 'bg-slate-900 border-white/10 text-white'
                   : 'bg-white border-blue-100 text-gray-800'
               "
             >
@@ -249,7 +276,7 @@
                 >
                   <button
                     type="button"
-                    class="flex items-center justify-between w-full text-left rounded-lg bg-[rgba(213,219,242,0.5)] sm:py-[18px] sm:px-[20px] py-[14px] px-[14px]"
+                    class="flex items-center justify-between w-full text-left rounded-xl bg-[rgba(213,219,242,0.5)] sm:py-[18px] sm:px-[20px] py-[14px] px-[14px]"
                   >
                     <div class="flex items-center gap-3 sm:gap-5">
                       <p
@@ -308,16 +335,18 @@
                     <p class="whitespace-pre-line">{{ i.text.text }}</p>
                   </div>
 
+
                   <!-- Question -->
                   <h3 class="flex px-5 text-justify">{{ i.question }}</h3>
                 </div>
 
                 <!-- Test Options -->
                 <div v-if="i.type === 'test'" class="grid gap-5 sm:grid-cols-2">
+
                   <div
                     v-for="(ans, ansIndex) in i.option"
                     :key="ansIndex"
-                    class="w-full text-justify text-black p-2.5 sm:pl-10 pl-5 text-sm rounded-lg"
+                    class="w-full text-justify text-black p-2.5 sm:pl-10 pl-5 text-sm rounded-xl"
                     :class="
                       ans.is_correct === true
                         ? 'bg-blue-300 text-blue-600'
@@ -348,6 +377,7 @@
         </div>
       </div>
     </div>
+  </div>
   </div>
 </template>
 

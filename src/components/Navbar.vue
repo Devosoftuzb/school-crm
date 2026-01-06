@@ -1,88 +1,150 @@
 <template>
   <nav
-    class="fixed top-0 z-50 w-full"
+    class="fixed top-0 z-50 w-full transition-all duration-300 border-b backdrop-blur-md"
     :class="{
-      'bg-[#1e293b] text-white': navbar.userNav,
-      'bg-white text-black': !navbar.userNav,
+      'bg-slate-900/95 text-white border-slate-700': navbar.userNav,
+      'bg-white/95 text-slate-900 border-slate-200': !navbar.userNav,
     }"
   >
-    <!-- <marquee class="text-white py-1 font-bold btnAdd absolute"
-      >Saytda texnik ishlar olib borilmoqda</marquee
-    > -->
-    <div class="flex items-center justify-between px-3 py-3 lg:px-5 lg:pl-3">
-      <div class="flex items-center gap-3">
-        <button @click="toggleSidebar" class="xl:hidden">
-          <i class="bx bx-menu text-2xl"></i>
+    <!-- Technical Work Banner (uncomment if needed) -->
+    <!-- <div class="py-2 text-sm font-medium text-center text-white bg-gradient-to-r from-blue-600 to-indigo-600">
+      <i class="mr-2 bx bx-info-circle"></i>
+      Saytda texnik ishlar olib borilmoqda
+    </div> -->
+
+    <div class="flex items-center justify-between px-4 py-3 lg:px-8">
+      <!-- Left Section -->
+      <div class="flex items-center gap-4">
+        <!-- Mobile Menu Button -->
+        <button 
+          @click="toggleSidebar" 
+          class="p-2 transition-all duration-200 rounded-lg xl:hidden hover:bg-opacity-10"
+          :class="{
+            'hover:bg-white': navbar.userNav,
+            'hover:bg-slate-900': !navbar.userNav,
+          }"
+        >
+          <i class="text-2xl bx bx-menu"></i>
         </button>
-        <router-link to="/" class="flex items-center ml-2">
-          <img
-            :src="store.image ? store.link + store.image : '../favicon.ico'"
-            class="w-12 h-12 mr-2 rounded-full"
-            alt="Logo"
-          />
+
+        <!-- Logo & Brand -->
+        <router-link 
+          to="/" 
+          class="flex items-center gap-3 group"
+        >
+          <div class="relative">
+            <img
+              :src="store.image ? store.link + store.image : '../favicon.ico'"
+              class="object-cover transition-transform duration-300 shadow-lg w-11 h-11 rounded-xl group-hover:scale-105"
+              alt="Logo"
+            />
+            <div 
+              class="absolute inset-0 transition-opacity duration-300 opacity-0 rounded-xl bg-gradient-to-tr from-blue-500/20 to-purple-500/20 group-hover:opacity-100"
+            ></div>
+          </div>
           <span
-            class="hidden font-semibold sm:block text-2xl whitespace-nowrap uppercase"
+            class="hidden text-xl font-bold tracking-tight text-transparent uppercase sm:block lg:text-2xl bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text"
+            :class="{
+              'from-blue-400 to-indigo-400': navbar.userNav,
+              'from-blue-600 to-indigo-600': !navbar.userNav,
+            }"
           >
-            {{ store.data ? store.data : "Devosoft" }}
+            {{ store.data || "Devosoft" }}
           </span>
         </router-link>
       </div>
-      <div class="flex items-center">
-        <div class="flex items-center mr-5">
-          <div
-            class="relative flex items-center cursor-pointer"
-            @click="navbar.setMode()"
-          >
-            <b
-              class="flex items-center justify-between w-[3.8rem] sm:w-[4.5rem] h-8 sm:h-9 border-2 rounded-full"
-            >
-              <span
-                ><i
-                  class="bx bxs-moon ml-1 text-yellow-300 rounded-full text-xl sm:text-2xl"
-                ></i
-              ></span>
-              <span
-                ><i
-                  class="bx bxs-sun mr-1 text-yellow-300 rounded-full mt-1 sm:mt-0 text-xl sm:text-2xl"
-                ></i
-              ></span>
-            </b>
-            <p
-              class="absolute top-[1px] left-0 w-[1.8rem] h-[1.8rem] sm:w-9 sm:h-[2.1rem] -z-10 rounded-full duration-1000"
-              :class="{
-                'translate-x-full bg-black': !navbar.userNav,
-                'bg-white': navbar.userNav,
-              }"
-            ></p>
-          </div>
-        </div>
-        <!-- <img
-          @click="toggleUserInfo"
-          class="w-8 h-8 sm:w-12 sm:h-12 rounded-full bg-gray-800 cursor-pointer border-2 border-[#1e293b]"
-          src="https://static.vecteezy.com/system/resources/thumbnails/005/129/844/small_2x/profile-user-icon-isolated-on-white-background-eps10-free-vector.jpg"
-          alt="user"
-        />
+
+      <!-- Right Section -->
+      <div class="flex items-center gap-4">
+        <!-- Dark/Light Mode Toggle -->
         <div
-          v-show="navbar.userInfo"
-          @click="navbar.userInfo = false"
-          class="absolute top-16 right-5 z-50 border-2 rounded-lg overflow-hidden shadow-md divide-y"
-          :class="{
-            'bg-[#1e293b] border-white shadow-white': navbar.userNav,
-            'bg-white': !navbar.userNav,
-          }"
+          class="relative flex items-center cursor-pointer group"
+          @click="navbar.setMode()"
         >
-          <div class="px-4 py-3 text-center">
-            <p class="text-lg font-bold">{{ store.guard }}</p>
+          <div
+            class="flex items-center justify-between w-16 p-1 transition-all duration-300 border-2 rounded-full h-9"
+            :class="{
+              'border-slate-600 bg-slate-800': navbar.userNav,
+              'border-slate-300 bg-slate-100': !navbar.userNav,
+            }"
+          >
+            <span class="flex items-center justify-center w-6 h-6">
+              <i
+                class="text-xl text-yellow-400 transition-all duration-300 bx bxs-moon"
+                :class="{ 'opacity-100 scale-100': navbar.userNav, 'opacity-50 scale-75': !navbar.userNav }"
+              ></i>
+            </span>
+            <span class="flex items-center justify-center w-6 h-6">
+              <i
+                class="text-xl text-yellow-500 transition-all duration-300 bx bxs-sun"
+                :class="{ 'opacity-100 scale-100': !navbar.userNav, 'opacity-50 scale-75': navbar.userNav }"
+              ></i>
+            </span>
           </div>
-          <ul class="py-1 font-medium">
-            <li
-              @click="Logout"
-              class="block px-4 py-2 text-sm cursor-pointer hover:bg-gray-100"
+          <div
+            class="absolute transition-all duration-500 ease-in-out rounded-full shadow-lg w-7 h-7"
+            :class="{
+              'left-1 bg-slate-700': navbar.userNav,
+              'left-8 bg-white': !navbar.userNav,
+            }"
+          ></div>
+        </div>
+
+        <!-- User Profile (uncomment if needed) -->
+        <div class="relative">
+          <img
+            @click="toggleUserInfo"
+            class="w-10 h-10 transition-all duration-300 border-2 rounded-full cursor-pointer hover:scale-105 hover:border-4"
+            :class="{
+              'border-slate-600 hover:border-blue-500': navbar.userNav,
+              'border-slate-300 hover:border-blue-600': !navbar.userNav,
+            }"
+            src="https://static.vecteezy.com/system/resources/thumbnails/005/129/844/small_2x/profile-user-icon-isolated-on-white-background-eps10-free-vector.jpg"
+            alt="user"
+          />
+          
+          <transition
+            enter-active-class="transition duration-200 ease-out"
+            enter-from-class="scale-95 -translate-y-2 opacity-0"
+            enter-to-class="scale-100 translate-y-0 opacity-100"
+            leave-active-class="transition duration-150 ease-in"
+            leave-from-class="scale-100 translate-y-0 opacity-100"
+            leave-to-class="scale-95 -translate-y-2 opacity-0"
+          >
+            <div
+              v-show="navbar.userInfo"
+              @click="navbar.userInfo = false"
+              class="absolute right-0 z-50 w-56 overflow-hidden border shadow-2xl top-14 rounded-xl backdrop-blur-lg"
+              :class="{
+                'bg-slate-800/95 border-slate-700': navbar.userNav,
+                'bg-white/95 border-slate-200': !navbar.userNav,
+              }"
             >
-              <i class="bx bx-log-out"></i> Log out
-            </li>
-          </ul>
-        </div> -->
+              <div class="px-4 py-4 border-b"
+                :class="{
+                  'border-slate-700': navbar.userNav,
+                  'border-slate-200': !navbar.userNav,
+                }"
+              >
+                <p class="text-lg font-bold capitalize">{{ store.name }}</p>
+                <p class="mt-1 text-sm opacity-70">Admin Panel</p>
+              </div>
+              <ul class="py-2">
+                <li
+                  @click="Logout"
+                  class="flex items-center gap-3 px-4 py-3 transition-all duration-200 cursor-pointer"
+                  :class="{
+                    'hover:bg-slate-700': navbar.userNav,
+                    'hover:bg-slate-100': !navbar.userNav,
+                  }"
+                >
+                  <i class="text-xl bx bx-log-out"></i>
+                  <span class="font-medium">Chiqish</span>
+                </li>
+              </ul>
+            </div>
+          </transition>
+        </div>
       </div>
     </div>
   </nav>
@@ -98,12 +160,23 @@ import axios from "@/services/axios";
 const router = useRouter();
 const sidebar = useSidebarStore();
 const navbar = useNavStore();
+const role = localStorage.getItem("role");
 
 const store = reactive({
-  guard: localStorage.getItem("role") == "owner" ? "owner" : "administrator",
+  guard: role,
   data: "",
   image: "",
   link: import.meta.env.VITE_API + "/",
+  name:
+    role === "_ow_sch_"
+      ? "Owner"
+      : role === "_ad_sch_"
+      ? "Administrator"
+      : role === "_sp_am_"
+      ? "Superadmin"
+      : role === "_tch_sch_"
+      ? "Teacher"
+      : "Admin",
 });
 
 const Logout = () => {
@@ -143,18 +216,12 @@ const getOneProduct = () => {
       });
   }
 };
+
 onMounted(() => {
   getOneProduct();
 });
 </script>
 
-<style lang="scss" scoped>
-@media (max-width: 400px) {
-  .icon {
-    display: none;
-  }
-}
-.btnAdd {
-  background-image: linear-gradient(to right, white -450%, #4141eb);
-}
+<style scoped>
+/* Additional custom styles if needed */
 </style>

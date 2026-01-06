@@ -12,8 +12,8 @@
       <div class="relative p-4 max-w-xl min-w-[30%] h-auto">
         <!-- Modal content -->
         <div
-          class="relative p-4 rounded-lg shadow sm:p-5"
-          :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
+          class="relative p-4 shadow rounded-xl sm:p-5"
+          :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
         >
           <!-- Modal header -->
           <div
@@ -28,7 +28,7 @@
             <button
               @click="cancelFunc1"
               type="button"
-              class="bg-transparent hover:bg-gray-200 hover rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+              class="bg-transparent hover:bg-gray-200 hover rounded-xl text-sm p-1.5 ml-auto inline-flex items-center"
               :class="navbar.userNav ? 'text-white' : 'text-black'"
             >
               <svg
@@ -60,7 +60,7 @@
                 <select
                   v-model="form.question_type"
                   id="question_type"
-                  class="z-10 block w-full p-2 text-sm border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
+                  class="z-10 block w-full p-2 text-sm border border-gray-300 rounded-xl bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
                   required
                 >
                   <option value="" disabled selected>
@@ -80,7 +80,7 @@
                   File
                 </label>
                 <input
-                  class="block w-full text-sm border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:ring-blue-600 focus:border-blue-600"
+                  class="block w-full text-sm border border-gray-300 cursor-pointer rounded-xl bg-gray-50 focus:ring-blue-600 focus:border-blue-600"
                   id="file_input"
                   @change="(e) => setImg(e)"
                   type="file"
@@ -98,7 +98,7 @@
                 <select
                   v-model="form.text_id"
                   id="subject"
-                  class="z-10 block w-full p-2 text-sm border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
+                  class="z-10 block w-full p-2 text-sm border border-gray-300 rounded-xl bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
                 >
                   <option value="" disabled selected>Matn tanlang</option>
                   <option
@@ -124,7 +124,7 @@
                   id="question"
                   v-model="form.question"
                   rows="5"
-                  class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                  class="bg-gray-50 border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                   placeholder="Savolni yozing.."
                   required
                 ></textarea>
@@ -163,7 +163,7 @@
                     v-model="form.variants[index]"
                     :id="'variant-' + index"
                     type="text"
-                    class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                    class="bg-gray-50 border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                     :placeholder="`Variant ${String.fromCharCode(
                       65 + index
                     )} ni kiriting`"
@@ -211,13 +211,13 @@
               <button
                 @click="cancelFunc1"
                 type="button"
-                class="border cursor-pointer inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                class="border cursor-pointer inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
               >
                 Bekor qilish
               </button>
               <button
                 type="submit"
-                class="btnAdd cursor-pointer text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                class="btnAdd cursor-pointer text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
               >
                 Qo'shish
               </button>
@@ -242,8 +242,8 @@
       <div class="relative w-full h-auto max-w-lg p-4">
         <!-- Modal content -->
         <div
-          class="relative p-4 rounded-lg shadow sm:p-5"
-          :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
+          class="relative p-4 shadow rounded-xl sm:p-5"
+          :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
         >
           <!-- Modal header -->
           <div
@@ -258,7 +258,7 @@
             <button
               @click="store.textModal = false"
               type="button"
-              class="bg-transparent hover:bg-gray-200 hover rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+              class="bg-transparent hover:bg-gray-200 hover rounded-xl text-sm p-1.5 ml-auto inline-flex items-center"
               :class="{ 'text-white': navbar.userNav }"
             >
               <svg
@@ -294,7 +294,7 @@
                   type="text"
                   name="title"
                   id="title"
-                  class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                  class="bg-gray-50 border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                   placeholder="Matn mavzusini kiriting.."
                   required
                 />
@@ -310,7 +310,7 @@
                   id="question"
                   v-model="store.text"
                   rows="5"
-                  class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                  class="bg-gray-50 border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                   placeholder="Matnni yozing.."
                   required
                 ></textarea>
@@ -319,14 +319,14 @@
               <div v-for="i in store.textData" :key="i.id">
                 <div class="flex items-center justify-between gap-3">
                   <h2
-                    class="bg-gray-50 border border-gray-300 text-sm w-full p-2.5 rounded-lg"
+                    class="bg-gray-50 border border-gray-300 text-sm w-full p-2.5 rounded-xl"
                     :title="i.text"
                   >
                     {{ i.title }}
                   </h2>
                   <i
                     @click="deleteText(i.id)"
-                    class="bx bxs-trash bg-red-300 cursor-pointer text-red-600 rounded-lg sm:p-2 p-1.5 focus:ring-2"
+                    class="bx bxs-trash bg-red-300 cursor-pointer text-red-600 rounded-xl sm:p-2 p-1.5 focus:ring-2"
                   >
                   </i>
                 </div>
@@ -338,13 +338,13 @@
               <button
                 @click="store.textModal"
                 type="button"
-                class="border inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                class="border inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
               >
                 Bekor qilish
               </button>
               <button
                 type="submit"
-                class="btnAdd text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                class="btnAdd text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
               >
                 Qo'shish
               </button>
@@ -369,8 +369,8 @@
       <div class="relative p-4 max-w-xl min-w-[30%] h-auto">
         <!-- Modal content -->
         <div
-          class="relative p-4 rounded-lg shadow sm:p-5"
-          :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
+          class="relative p-4 shadow rounded-xl sm:p-5"
+          :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
         >
           <!-- Modal header -->
           <div
@@ -385,7 +385,7 @@
             <button
               @click="edit.toggle = false"
               type="button"
-              class="bg-transparent hover:bg-gray-200 hover rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+              class="bg-transparent hover:bg-gray-200 hover rounded-xl text-sm p-1.5 ml-auto inline-flex items-center"
               :class="navbar.userNav ? 'text-white' : 'text-black'"
             >
               <svg
@@ -417,7 +417,7 @@
                 <select
                   v-model="edit.question_type"
                   id="edit_question_type"
-                  class="block w-full p-2 text-sm border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
+                  class="block w-full p-2 text-sm border border-gray-300 rounded-xl bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
                   required
                 >
                   <option value="" disabled>Savol turini tanlang</option>
@@ -435,7 +435,7 @@
                   File
                 </label>
                 <input
-                  class="block w-full text-sm border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:ring-blue-600 focus:border-blue-600"
+                  class="block w-full text-sm border border-gray-300 cursor-pointer rounded-xl bg-gray-50 focus:ring-blue-600 focus:border-blue-600"
                   id="file_input"
                   @change="(e) => setImg(e)"
                   type="file"
@@ -453,7 +453,7 @@
                 <select
                   v-model="edit.text_id"
                   id="subject"
-                  class="z-10 block w-full p-2 text-sm border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
+                  class="z-10 block w-full p-2 text-sm border border-gray-300 rounded-xl bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
                 >
                   <option value="" disabled selected>Matn tanlang</option>
                   <option
@@ -479,7 +479,7 @@
                   id="question"
                   v-model="edit.question"
                   rows="5"
-                  class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                  class="bg-gray-50 border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                   placeholder="Savolni yozing.."
                   required
                 ></textarea>
@@ -518,7 +518,7 @@
                       v-model="edit.variants[index].text"
                       :id="'variant-' + index"
                       type="text"
-                      class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                      class="bg-gray-50 border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                       :placeholder="`Variant ${String.fromCharCode(
                         65 + index
                       )} ni kiriting`"
@@ -527,7 +527,7 @@
                   </div>
                   <i
                     @click="deleteOption(variant.id)"
-                    class="p-2 text-red-600 bg-red-300 rounded-lg cursor-pointer bx bxs-trash mt-7 focus:ring-2"
+                    class="p-2 text-red-600 bg-red-300 cursor-pointer rounded-xl bx bxs-trash mt-7 focus:ring-2"
                   >
                   </i>
                 </div>
@@ -571,13 +571,13 @@
               <button
                 @click="edit.toggle = false"
                 type="button"
-                class="border cursor-pointer inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                class="border cursor-pointer inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
               >
                 Bekor qilish
               </button>
               <button
                 type="submit"
-                class="btnAdd cursor-pointer text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                class="btnAdd cursor-pointer text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
               >
                 Saqlash
               </button>
@@ -600,8 +600,8 @@
       <div class="relative p-4 max-w-5xl min-w-[30%] h-auto">
         <!-- Modal content -->
         <div
-          class="relative p-4 rounded-lg shadow sm:p-5"
-          :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
+          class="relative p-4 shadow rounded-xl sm:p-5"
+          :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
         >
           <!-- Modal header -->
           <div
@@ -616,7 +616,7 @@
             <button
               @click="remove.toggle = false"
               type="button"
-              class="bg-transparent hover:bg-gray-200 hover rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+              class="bg-transparent hover:bg-gray-200 hover rounded-xl text-sm p-1.5 ml-auto inline-flex items-center"
               :class="navbar.userNav ? 'text-white' : 'text-black'"
             >
               <svg
@@ -652,13 +652,13 @@
                 <button
                   @click="remove.toggle = false"
                   type="button"
-                  class="border cursor-pointer inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                  class="border cursor-pointer inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                 >
                   Bekor qilish
                 </button>
                 <button
                   @click="deleteProduct"
-                  class="btnAdd cursor-pointer text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                  class="btnAdd cursor-pointer text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                 >
                   O'chirish
                 </button>
@@ -683,7 +683,7 @@
         <!-- Start coding here -->
         <div
           class="flex flex-col items-center justify-between p-4 mb-4 shadow rounded-xl lg:flex-row lg:space-x-4"
-          :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
+          :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
         >
           <div
             class="flex flex-col items-center justify-between w-full gap-5 pb-4 sm:flex-row lg:justify-start lg:pb-0"
@@ -696,7 +696,7 @@
                 @click="modal = true"
                 id=""
                 type="button"
-                class="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg btnAdd whitespace-nowrap hover:bg-blue-700 focus:ring-4 focus:ring-blue-300"
+                class="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-xl btnAdd whitespace-nowrap hover:bg-blue-700 focus:ring-4 focus:ring-blue-300"
               >
                 <span>Savol qo'shish</span>
               </button>
@@ -705,7 +705,7 @@
                 @click="store.textModal = true"
                 id=""
                 type="button"
-                class="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg btnAdd whitespace-nowrap hover:bg-blue-700 focus:ring-4 focus:ring-blue-300"
+                class="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-xl btnAdd whitespace-nowrap hover:bg-blue-700 focus:ring-4 focus:ring-blue-300"
               >
                 <span>Matn qo'shish</span>
               </button>
@@ -714,7 +714,7 @@
 
           <button
             @click="router.back(-1)"
-            class="btn sm:w-auto w-full shadow-lg rounded-lg whitespace-nowrap px-5 py-2.5 text-white focus:ring-2 text-sm"
+            class="btn sm:w-auto w-full shadow-lg rounded-xl whitespace-nowrap px-5 py-2.5 text-white focus:ring-2 text-sm"
           >
             Orqaga qaytish
           </button>
@@ -722,8 +722,8 @@
         <!------------------------------------------- Search ------------------------------------------->
 
         <div
-          class="relative p-5 overflow-hidden rounded-lg shadow-md"
-          :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
+          class="relative p-5 overflow-hidden shadow-md rounded-xl"
+          :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
         >
           <div
             class="overflow-x-auto"
@@ -741,7 +741,7 @@
                 >
                   <button
                     type="button"
-                    class="flex items-center justify-between w-full text-left rounded-lg bg-[rgba(213,219,242,0.5)] sm:py-[18px] sm:px-[20px] py-[14px] px-[14px]"
+                    class="flex items-center justify-between w-full text-left rounded-xl bg-[rgba(213,219,242,0.5)] sm:py-[18px] sm:px-[20px] py-[14px] px-[14px]"
                   >
                     <div class="flex items-center gap-3 sm:gap-5">
                       <p
@@ -767,12 +767,12 @@
                 <div class="flex flex-col gap-2 mb-5">
                   <i
                     @click="getOneProduct(i.id)"
-                    class="bx bxs-pencil bg-blue-300 text-blue-600 rounded-lg sm:p-2 p-1.5 cursor-pointer focus:ring-2"
+                    class="bx bxs-pencil bg-blue-300 text-blue-600 rounded-xl sm:p-2 p-1.5 cursor-pointer focus:ring-2"
                   >
                   </i>
                   <i
                     @click="deleteFunc(i.id)"
-                    class="bx bxs-trash bg-red-300 cursor-pointer text-red-600 rounded-lg sm:p-2 p-1.5 focus:ring-2"
+                    class="bx bxs-trash bg-red-300 cursor-pointer text-red-600 rounded-xl sm:p-2 p-1.5 focus:ring-2"
                   >
                   </i>
                 </div>
@@ -819,7 +819,7 @@
                   <div
                     v-for="(ans, ansIndex) in i.option"
                     :key="ansIndex"
-                    class="w-full text-justify text-black p-2.5 sm:pl-10 pl-5 text-sm rounded-lg"
+                    class="w-full text-justify text-black p-2.5 sm:pl-10 pl-5 text-sm rounded-xl"
                     :class="
                       ans.is_correct
                         ? 'bg-blue-300 text-blue-600'
