@@ -71,15 +71,17 @@ const Logout = () => {
 };
 
 const showMenu = (item) => {
+  if (!item || !item.role) return false;
+
   const roleArray = item.role.split(",").map((r) => r.trim());
-  if (role === "_sp_am_") {
-    return roleArray.includes(store.guard);
-  } else {
-    const schoolArray = item.school.split(",").map((s) => s.trim());
-    return (
-      roleArray.includes(store.guard) && schoolArray.includes(store.school)
-    );
-  }
+
+  if (store.guard === "_sp_am_") return true;
+
+  if (!item.school) return roleArray.includes(store.guard);
+
+  const schoolArray = item.school.split(",").map((s) => s.trim());
+
+  return roleArray.includes(store.guard) && schoolArray.includes(store.school);
 };
 
 const isActive = (link) => {
