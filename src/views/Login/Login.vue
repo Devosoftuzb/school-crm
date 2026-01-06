@@ -1,44 +1,48 @@
 <template>
   <div
-    class="bg-[#1e293b] flex justify-center items-center min-h-screen bg-cover bg-center px-5"
+    class="flex items-center justify-center min-h-screen px-5 bg-center bg-cover bg-slate-950"
   >
-    <div class="w-[400px] md:w-[500px] p-10 bg-white rounded-xl bg-opacity-60">
+    <div
+      class="w-[400px] md:w-[500px] p-10 bg-slate-900 shadow-sm shadow-slate-500 rounded-xl bg-opacity-60"
+    >
       <img
         class="w-24 sm:w-[120px] mx-auto"
         src="../../assets/img/devo.png"
         alt="Logo"
       />
-      <h1 class="text-2xl sm:text-[28px] font-bold text-center py-5">
+      <h1 class="text-2xl sm:text-[28px] font-bold text-center text-white py-5">
         Tizimga kirish
       </h1>
       <form @submit.prevent="handleSubmit">
-        <div class="mb-4">
+        <div class="mb-3 text-white">
           <label for="login" class="block mb-2 font-semibold">Login</label>
           <input
             type="text"
             id="login"
             v-model="form.login"
-            class="w-full p-2 sm:p-[10px] border rounded-[9px]"
+            class="w-full p-2 sm:p-[10px] border rounded-xl bg-slate-900"
             placeholder="login"
             required
           />
         </div>
-        <div class="relative mb-4">
-          <label for="password" class="block mt-3 mb-2 font-semibold sm:mt-9"
+
+        <div class="relative text-white">
+          <label for="password" class="block mb-2 font-semibold"
+
             >Parol</label
           >
           <input
             :type="showPassword ? 'text' : 'password'"
             id="password"
             v-model="form.password"
-            class="w-full p-2 sm:p-[10px] border rounded-[9px]"
+            class="w-full p-2 sm:p-[10px] border rounded-xl bg-slate-900"
             placeholder="••••••••"
             required
           />
           <button
             type="button"
             @click="showPassword = !showPassword"
-            class="absolute top-[42px] right-3 text-gray-600 hover:text-gray-900 focus:outline-none"
+            class="absolute top-[42px] right-3 text-slate-500 hover:text-slate-300 focus:outline-none"
             aria-label="Yangi parolni ko‘rsatish"
           >
             <svg
@@ -88,7 +92,7 @@
         </div>
         <button
           type="submit"
-          class="w-full bg-[#4141eb] text-white hover:bg-white hover:text-[#4141eb] hover:border-[#4141eb] py-2 sm:py-[10px] rounded-md"
+          class="w-full mt-5 bg-gradient-to-r from-blue-700 to-indigo-600 text-white py-2 sm:py-[10px] rounded-xl"
         >
           Kirish
         </button>
@@ -157,7 +161,6 @@ const handleSubmit = async () => {
       localStorage.setItem("school_id", user.school_id);
     }
 
-    
     router.push("/");
   } catch (error) {
     notification.warning(

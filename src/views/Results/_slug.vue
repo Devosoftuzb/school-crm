@@ -1,5 +1,5 @@
 <template>
-  <div class="py-8 px-2">
+  <div class="px-2 py-8">
     <!-- Placeholder -->
     <div v-show="!store.product && !store.questions">
       <Placeholder2 />
@@ -7,35 +7,35 @@
 
     <div
       v-show="store.product && store.questions"
-      class="rounded-lg p-8 mb-32"
-      :class="navbar.userNav ? 'bg-[#1e293b] text-white' : 'bg-white'"
+      class="p-8 mb-32 rounded-xl"
+      :class="navbar.userNav ? 'bg-slate-900 text-white' : 'bg-white'"
     >
       <div
-        class="flex flex-col sm:flex-row justify-between items-center gap-3 font-bold mb-8 sm:mb-0 w-full"
+        class="flex flex-col items-center justify-between w-full gap-3 mb-8 font-bold sm:flex-row sm:mb-0"
       >
-        <h1 class="text-lg text-start w-full text-blue-700">
+        <h1 class="w-full text-lg text-blue-700 text-start">
           Mijozning test natijalari
         </h1>
         <button
           @click="router.back(-1)"
-          class="btn shadow-lg w-full sm:w-auto rounded-lg whitespace-nowrap px-5 py-2.5 text-white focus:ring-2 text-sm"
+          class="btn shadow-lg w-full sm:w-auto rounded-xl whitespace-nowrap px-5 py-2.5 text-white focus:ring-2 text-sm"
         >
           Orqaga qaytish
         </button>
       </div>
 
-      <div class="w-full bg-transparent rounded-lg">
+      <div class="w-full bg-transparent rounded-xl">
         <div
           id="defaultTabContent"
-          :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
+          :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
         >
           <div
-            class="rounded-lg lg:p-8"
+            class="rounded-xl lg:p-8"
             id="about"
             role="tabpanel"
             aria-labelledby="about-tab"
           >
-            <div class="w-full grid lg:grid-cols-2 gap-3 sm:gap-0">
+            <div class="grid w-full gap-3 lg:grid-cols-2 sm:gap-0">
               <div
                 class="w-full lg:border-l border-[#4141eb] sm:p-5 flex flex-col gap-3"
               >
@@ -93,7 +93,7 @@
                 >
                   <span class="w-full font-bold">Darajasi :</span>
                   <span
-                    class="w-auto rounded-lg bg-blue-100 py-0.5 px-4 text-blue-800"
+                    class="w-auto rounded-xl bg-blue-100 py-0.5 px-4 text-blue-800"
                     >{{ store.product.result }}</span
                   >
                 </h2>
@@ -107,7 +107,7 @@
                 >
                   <span class="w-full font-bold">Testni boshlagan vaqti :</span>
                   <span
-                    class="w-auto rounded-lg py-0.5 px-4 bg-blue-100 text-blue-800"
+                    class="w-auto rounded-xl py-0.5 px-4 bg-blue-100 text-blue-800"
                     >{{ chekDateFormat(store.product.started_at) }}</span
                   >
                 </h2>
@@ -118,7 +118,7 @@
                 >
                   <span class="w-full font-bold">Testni tugatgan vaqti :</span>
                   <span
-                    class="w-auto rounded-lg py-0.5 px-4 bg-red-100 text-red-800"
+                    class="w-auto rounded-xl py-0.5 px-4 bg-red-100 text-red-800"
                     >{{ chekDateFormat(store.product.finished_at) }}</span
                   >
                 </h2>
@@ -151,7 +151,7 @@
                 >
                   <span class="w-full font-bold">Togri javoblar :</span>
                   <span
-                    class="w-auto rounded-lg py-0.5 px-4 bg-blue-100 text-blue-800"
+                    class="w-auto rounded-xl py-0.5 px-4 bg-blue-100 text-blue-800"
                     >{{ store.product.correct }} ta</span
                   >
                 </h2>
@@ -162,7 +162,7 @@
                 >
                   <span class="w-full font-bold">Notogri javoblar :</span>
                   <span
-                    class="w-auto rounded-lg py-0.5 px-4 bg-red-100 text-red-800"
+                    class="w-auto rounded-xl py-0.5 px-4 bg-red-100 text-red-800"
                     >{{ store.product.incorrect }} ta</span
                   >
                 </h2>
@@ -170,7 +170,7 @@
             </div>
           </div>
 
-          <h1 class="text-lg text-start font-bold w-full text-blue-700 py-5">
+          <h1 class="w-full py-5 text-lg font-bold text-blue-700 text-start">
             Mijozning bajargan testlari
           </h1>
           <div
@@ -180,7 +180,7 @@
           >
             <div>
               <div
-                class="flex justify-between items-center w-full sm:gap-5 gap-2"
+                class="flex items-center justify-between w-full gap-2 sm:gap-5"
               >
                 <div
                   @click="accordion(i.id)"
@@ -189,9 +189,9 @@
                 >
                   <button
                     type="button"
-                    class="flex items-center justify-between w-full text-left rounded-lg bg-[rgba(213,219,242,0.5)] sm:py-[18px] sm:px-[20px] py-[14px] px-[14px]"
+                    class="flex items-center justify-between w-full text-left rounded-xl bg-[rgba(213,219,242,0.5)] sm:py-[18px] sm:px-[20px] py-[14px] px-[14px]"
                   >
-                    <div class="flex items-center sm:gap-5 gap-3">
+                    <div class="flex items-center gap-3 sm:gap-5">
                       <p
                         class="btn sm:min-w-[50px] sm:min-h-[50px] min-w-[30px] min-h-[30px] sm:h-[35px] 2xl:w-[55px] 2xl:h-[50px] flex items-center font-bold justify-center text-[14px] sm:text-[16px] 2xl:text-[20px] text-white rounded-full"
                       >
@@ -244,18 +244,18 @@
                   </div>
                   <div
                     v-if="i.text"
-                    class="text-justify flex flex-col px-5 mb-10"
+                    class="flex flex-col px-5 mb-10 text-justify"
                   >
-                    <h3 class="font-bold mb-2">{{ i.text.title }}</h3>
+                    <h3 class="mb-2 font-bold">{{ i.text.title }}</h3>
                     <p class="whitespace-pre-line">{{ i.text.text }}</p>
                   </div>
-                  <h3 class="text-justify flex px-5">{{ i.question }}</h3>
+                  <h3 class="flex px-5 text-justify">{{ i.question }}</h3>
                 </div>
-                <div class="grid sm:grid-cols-2 gap-5">
+                <div class="grid gap-5 sm:grid-cols-2">
                   <div
                     v-for="(ans, ansIndex) in i.option"
                     :key="ansIndex"
-                    class="w-full text-justify text-black p-2.5 sm:pl-10 pl-5 text-sm rounded-lg"
+                    class="w-full text-justify text-black p-2.5 sm:pl-10 pl-5 text-sm rounded-xl"
                     :class="
                       ans.is_correct
                         ? 'bg-blue-300 text-blue-600'

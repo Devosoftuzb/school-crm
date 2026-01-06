@@ -14,8 +14,8 @@
       <div class="relative w-full h-auto max-w-3xl p-4">
         <!-- Modal content -->
         <div
-          class="relative p-4 rounded-lg shadow sm:p-5"
-          :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
+          class="relative p-4 shadow rounded-xl sm:p-5"
+          :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
         >
           <!-- Modal header -->
           <div
@@ -30,7 +30,7 @@
             <button
               @click="toggleModal"
               type="button"
-              class="bg-transparent hover:bg-gray-200 hover rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+              class="bg-transparent hover:bg-gray-200 hover rounded-xl text-sm p-1.5 ml-auto inline-flex items-center"
               :class="{ 'text-white': navbar.userNav }"
             >
               <svg
@@ -64,7 +64,7 @@
                   type="text"
                   name="parents_fullname"
                   id="parents_fullname"
-                  class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                  class="bg-gray-50 border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                   placeholder="Ota-ona ism familiyasi kiriting"
                   required
                 />
@@ -78,7 +78,7 @@
                   type="text"
                   name="parents_phone"
                   id="parents_phone"
-                  class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                  class="bg-gray-50 border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                   placeholder="Ota-ona raqamini kiriting"
                   required
                 />
@@ -90,7 +90,7 @@
                   type="text"
                   name="name"
                   id="name"
-                  class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                  class="bg-gray-50 border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                   placeholder="F . I . O"
                   required
                 />
@@ -104,7 +104,7 @@
                   type="text"
                   name="phone"
                   id="phone"
-                  class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                  class="bg-gray-50 border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                   placeholder="Telefon raqamini kiriting"
                   required
                 />
@@ -147,7 +147,7 @@
                     "
                     type="search"
                     id="simple-search"
-                    class="block w-full p-2 pl-10 text-sm border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
+                    class="block w-full p-2 pl-10 text-sm border border-gray-300 rounded-xl bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
                     placeholder="Guruhni tanlang yoki qidirish..."
                   />
                   <ul
@@ -196,13 +196,13 @@
               <button
                 @click="toggleModal"
                 type="button"
-                class="border inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                class="border inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
               >
                 Bekor qilish
               </button>
               <button
                 type="submit"
-                class="btnAdd text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                class="btnAdd text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
               >
                 Qo'shish
               </button>
@@ -226,8 +226,8 @@
       <div class="relative w-full h-auto max-w-lg p-4">
         <!-- Modal content -->
         <div
-          class="relative p-4 rounded-lg shadow sm:p-5"
-          :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
+          class="relative p-4 shadow rounded-xl sm:p-5"
+          :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
         >
           <!-- Modal header -->
           <div
@@ -242,7 +242,7 @@
             <button
               @click="store.groupModal = false"
               type="button"
-              class="bg-transparent hover:bg-gray-200 hover rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+              class="bg-transparent hover:bg-gray-200 hover rounded-xl text-sm p-1.5 ml-auto inline-flex items-center"
               :class="{ 'text-white': navbar.userNav }"
             >
               <svg
@@ -318,7 +318,7 @@
                   "
                   type="search"
                   id="simple-search"
-                  class="block w-full p-2 pl-10 text-sm border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
+                  class="block w-full p-2 pl-10 text-sm border border-gray-300 rounded-xl bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
                   placeholder="Guruhni tanlang yoki qidirish..."
                 />
                 <ul
@@ -365,13 +365,13 @@
               <button
                 @click="store.groupModal = false"
                 type="button"
-                class="border inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                class="border inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
               >
                 Bekor qilish
               </button>
               <button
                 type="submit"
-                class="btnAdd text-white inline-flex items-center bg-[#4141eb] hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-500 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                class="btnAdd text-white inline-flex items-center bg-[#4141eb] hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-500 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
               >
                 Qo'shish
               </button>
@@ -394,8 +394,8 @@
       <div class="relative w-full h-auto max-w-3xl p-4">
         <!-- Modal content -->
         <div
-          class="relative p-4 rounded-lg shadow sm:p-5"
-          :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
+          class="relative p-4 shadow rounded-xl sm:p-5"
+          :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
         >
           <!-- Modal header -->
           <div
@@ -410,7 +410,7 @@
             <button
               @click="edit.toggle = false"
               type="button"
-              class="bg-transparent hover:bg-gray-200 hover rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+              class="bg-transparent hover:bg-gray-200 hover rounded-xl text-sm p-1.5 ml-auto inline-flex items-center"
               :class="{ 'text-white': navbar.userNav }"
             >
               <svg
@@ -444,7 +444,7 @@
                   type="text"
                   name="parents_fullname"
                   id="parents_fullname"
-                  class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                  class="bg-gray-50 border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                   placeholder="Ota-ona ism familiyasi kiriting"
                   required
                 />
@@ -458,7 +458,7 @@
                   type="text"
                   name="parents_phone"
                   id="parents_phone"
-                  class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                  class="bg-gray-50 border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                   placeholder="Ota-ona raqamini kiriting"
                   required
                 />
@@ -470,7 +470,7 @@
                   type="text"
                   name="name"
                   id="name"
-                  class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                  class="bg-gray-50 border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                   placeholder="F . I . O"
                   required
                 />
@@ -484,7 +484,7 @@
                   type="text"
                   name="phone"
                   id="phone"
-                  class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                  class="bg-gray-50 border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                   placeholder="Telefon raqamini kiriting"
                   required
                 />
@@ -496,13 +496,13 @@
               <button
                 @click="edit.toggle = false"
                 type="button"
-                class="border inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                class="border inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
               >
                 Bekor qilish
               </button>
               <button
                 type="submit"
-                class="btnAdd text-white inline-flex items-center bg-[#4141eb] hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-500 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                class="btnAdd text-white inline-flex items-center bg-[#4141eb] hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-500 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
               >
                 O'zgartirish
               </button>
@@ -524,8 +524,8 @@
       <div class="relative p-4 max-w-5xl min-w-[30%] h-auto">
         <!-- Modal content -->
         <div
-          class="relative p-4 rounded-lg shadow sm:p-5"
-          :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
+          class="relative p-4 shadow rounded-xl sm:p-5"
+          :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
         >
           <!-- Modal header -->
           <div
@@ -540,7 +540,7 @@
             <button
               @click="remove.toggle = false"
               type="button"
-              class="bg-transparent hover:bg-gray-200 hover rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+              class="bg-transparent hover:bg-gray-200 hover rounded-xl text-sm p-1.5 ml-auto inline-flex items-center"
               :class="navbar.userNav ? 'text-white' : 'text-black'"
             >
               <svg
@@ -576,13 +576,13 @@
                 <button
                   @click="remove.toggle = false"
                   type="button"
-                  class="border cursor-pointer inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                  class="border cursor-pointer inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                 >
                   Bekor qilish
                 </button>
                 <button
                   @click="deleteProduct"
-                  class="btnAdd cursor-pointer text-white inline-flex items-center bg-[#4141eb] hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-500 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                  class="btnAdd cursor-pointer text-white inline-flex items-center bg-[#4141eb] hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-500 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                 >
                   O'chirish
                 </button>
@@ -605,8 +605,8 @@
       <div class="relative p-4 max-w-5xl min-w-[30%] h-auto">
         <!-- Modal content -->
         <div
-          class="relative p-4 rounded-lg shadow sm:p-5"
-          :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
+          class="relative p-4 shadow rounded-xl sm:p-5"
+          :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
         >
           <!-- Modal header -->
           <div
@@ -621,7 +621,7 @@
             <button
               @click="archive.toggle = false"
               type="button"
-              class="bg-transparent hover:bg-gray-200 hover rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+              class="bg-transparent hover:bg-gray-200 hover rounded-xl text-sm p-1.5 ml-auto inline-flex items-center"
               :class="navbar.userNav ? 'text-white' : 'text-black'"
             >
               <svg
@@ -657,13 +657,13 @@
                 <button
                   @click="archive.toggle = false"
                   type="button"
-                  class="border cursor-pointer inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                  class="border cursor-pointer inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                 >
                   Bekor qilish
                 </button>
                 <button
                   @click="archiveProduct"
-                  class="btnAdd cursor-pointer text-white inline-flex items-center bg-[#4141eb] hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-500 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                  class="btnAdd cursor-pointer text-white inline-flex items-center bg-[#4141eb] hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-500 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                 >
                   Arxivlash
                 </button>
@@ -690,7 +690,7 @@
         <!------------------------------------------- Search ------------------------------------------->
         <div
           class="flex flex-col items-center justify-between p-4 mb-4 shadow rounded-xl lg:flex-row lg:space-x-4"
-          :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
+          :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
         >
           <div
             class="flex flex-col justify-between w-full gap-5 pb-4 sm:flex-row sm:items-center lg:justify-start lg:pb-0"
@@ -704,7 +704,7 @@
                 @click="toggleModal"
                 id=""
                 type="button"
-                class="flex items-center justify-center px-4 py-1 text-sm font-medium text-white bg-blue-600 rounded-lg btnAdd max-w-fit whitespace-nowrap hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 sm:py-2"
+                class="flex items-center justify-center px-4 py-1 text-sm font-medium text-white bg-blue-600 rounded-xl btnAdd max-w-fit whitespace-nowrap hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 sm:py-2"
               >
                 <span class="hidden sm:block">O'quvchi qo'shish</span>
                 <i class="block text-lg sm:hidden bx bxs-user-plus"></i>
@@ -717,7 +717,7 @@
                 <button
                   id=""
                   type="button"
-                  class="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-white rounded-lg btnAdd2 sm:max-w-fit whitespace-nowrap focus:ring-4 focus:ring-orange-300"
+                  class="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-white rounded-xl btnAdd2 sm:max-w-fit whitespace-nowrap focus:ring-4 focus:ring-orange-300"
                 >
                   <span class="">Arxiv o'quchilar</span>
                 </button>
@@ -754,7 +754,7 @@
                   "
                   type="search"
                   id="simple-search"
-                  class="block w-full p-2 pl-10 text-sm border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
+                  class="block w-full p-2 pl-10 text-sm border border-gray-300 rounded-xl bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
                   placeholder="Qidirish .."
                 />
                 <ul
@@ -781,12 +781,12 @@
         <!------------------------------------------- Search ------------------------------------------->
 
         <div
-          class="relative overflow-hidden rounded-lg shadow-md mb-28"
-          :class="navbar.userNav ? 'bg-[#1e293b] text-white' : 'bg-white'"
+          class="relative overflow-hidden shadow-md rounded-xl mb-28"
+          :class="navbar.userNav ? 'bg-slate-900 text-white' : 'bg-white'"
         >
           <div class="overflow-x-auto">
             <table class="w-full text-sm text-left">
-              <thead class="text-xs text-white uppercase rounded-lg btnAdd">
+              <thead class="text-xs text-white uppercase rounded-xl btnAdd">
                 <tr>
                   <th scope="col" class="py-3 text-center">F . I . O</th>
                   <th scope="col" class="py-3 text-center whitespace-nowrap">
@@ -854,7 +854,7 @@
                           i.full_name.split(' ').join('_').toLowerCase()
                         )
                       "
-                      class="btnKirish bg-blue-600 rounded-lg px-5 py-2.5 text-white focus:ring-2"
+                      class="btnKirish bg-blue-600 rounded-xl px-5 py-2.5 text-white focus:ring-2"
                     >
                       Kirish
                     </button>
@@ -864,18 +864,18 @@
                   >
                     <i
                       @click="getOneProduct(i.id, 'edit')"
-                      class="p-2 mr-3 text-blue-600 bg-blue-300 rounded-lg cursor-pointer bx bxs-pencil focus:ring-2"
+                      class="p-2 mr-3 text-blue-600 bg-blue-300 cursor-pointer rounded-xl bx bxs-pencil focus:ring-2"
                     >
                     </i>
                     <i
                       @click="archiveFunc(i.id)"
-                      class="p-2 mr-3 text-orange-600 bg-orange-300 rounded-lg cursor-pointer bx bx-archive-in focus:ring-2"
+                      class="p-2 mr-3 text-orange-600 bg-orange-300 cursor-pointer rounded-xl bx bx-archive-in focus:ring-2"
                     >
                     </i>
                     <i
                       v-show="store.guard"
                       @click="deleteFunc(i.id)"
-                      class="p-2 text-red-600 bg-red-300 rounded-lg cursor-pointer bx bxs-trash focus:ring-2"
+                      class="p-2 text-red-600 bg-red-300 cursor-pointer rounded-xl bx bxs-trash focus:ring-2"
                     >
                     </i>
                   </td>
@@ -935,7 +935,7 @@
                           i.full_name.split(' ').join('_').toLowerCase()
                         )
                       "
-                      class="btnKirish bg-blue-600 rounded-lg px-5 py-2.5 text-white focus:ring-2"
+                      class="btnKirish bg-blue-600 rounded-xl px-5 py-2.5 text-white focus:ring-2"
                     >
                       Kirish
                     </button>
@@ -945,18 +945,18 @@
                   >
                     <i
                       @click="getOneProduct(i.id, 'edit')"
-                      class="p-2 mr-3 text-blue-600 bg-blue-300 rounded-lg cursor-pointer bx bxs-pencil focus:ring-2"
+                      class="p-2 mr-3 text-blue-600 bg-blue-300 cursor-pointer rounded-xl bx bxs-pencil focus:ring-2"
                     >
                     </i>
                     <i
                       @click="archiveFunc(i.id)"
-                      class="p-2 mr-3 text-orange-600 bg-orange-300 rounded-lg cursor-pointer bx bx-archive-in focus:ring-2"
+                      class="p-2 mr-3 text-orange-600 bg-orange-300 cursor-pointer rounded-xl bx bx-archive-in focus:ring-2"
                     >
                     </i>
                     <i
                       v-show="store.guard"
                       @click="deleteFunc(i.id)"
-                      class="p-2 text-red-600 bg-red-300 rounded-lg cursor-pointer bx bxs-trash focus:ring-2"
+                      class="p-2 text-red-600 bg-red-300 cursor-pointer rounded-xl bx bxs-trash focus:ring-2"
                     >
                     </i>
                   </td>
@@ -982,7 +982,7 @@
                   store.pagination === 1
                     ? 'pointer-events-none opacity-50'
                     : '',
-                  'flex font-bold text-black border-2 bg-white hover:bg-gray-300 items-center justify-center text-sm sm:py-2 sm:px-6 px-3 rounded-lg leading-tight cursor-pointer transition duration-200 ease-in-out',
+                  'flex font-bold text-black border-2 bg-white hover:bg-gray-300 items-center justify-center text-sm sm:py-2 sm:px-6 px-3 rounded-xl leading-tight cursor-pointer transition duration-200 ease-in-out',
                 ]"
                 @click="
                   if (store.pagination > 1) {
@@ -1019,7 +1019,7 @@
                   store.page[0] * 15 >= store.page[1]
                     ? 'pointer-events-none opacity-50'
                     : '',
-                  'flex font-bold text-black border-2 bg-white hover:bg-gray-300 items-center justify-center text-sm sm:py-2 sm:px-6 px-3 rounded-lg leading-tight cursor-pointer transition duration-200 ease-in-out',
+                  'flex font-bold text-black border-2 bg-white hover:bg-gray-300 items-center justify-center text-sm sm:py-2 sm:px-6 px-3 rounded-xl leading-tight cursor-pointer transition duration-200 ease-in-out',
                 ]"
                 @click="
                   if (store.page[0] * 15 < store.page[1]) {

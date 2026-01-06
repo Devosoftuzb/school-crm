@@ -13,12 +13,12 @@
       <div class="relative p-4 max-w-5xl min-w-[40%] h-auto">
         <!-- Modal content -->
         <div
-          class="relative p-4 rounded-lg shadow sm:p-5"
-          :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
+          class="relative p-4 shadow rounded-xl sm:p-5"
+          :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
         >
           <!-- Modal header -->
           <div
-            class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5"
+            class="flex items-center justify-between pb-4 mb-4 border-b rounded-t sm:mb-5"
           >
             <h3
               class="text-lg"
@@ -29,7 +29,7 @@
             <button
               @click="toggleModal"
               type="button"
-              class="bg-transparent hover:bg-gray-200 hover rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+              class="bg-transparent hover:bg-gray-200 hover rounded-xl text-sm p-1.5 ml-auto inline-flex items-center"
               :class="navbar.userNav ? 'text-white' : 'text-black'"
             >
               <svg
@@ -52,7 +52,7 @@
             @submit.prevent="createProduct"
             :class="{ darkForm: navbar.userNav }"
           >
-            <div class="grid font-medium gap-4 mb-4 sm:grid-cols-2">
+            <div class="grid gap-4 mb-4 font-medium sm:grid-cols-2">
               <div>
                 <label
                   for="login"
@@ -65,7 +65,7 @@
                   type="text"
                   name="login"
                   id="login"
-                  class="bg-white border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                  class="bg-white border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                   placeholder="login"
                   required
                 />
@@ -82,7 +82,7 @@
                   :type="showPassword ? 'text' : 'password'"
                   name="password"
                   id="password"
-                  class="bg-white border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                  class="bg-white border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                   placeholder="*********"
                   required
                 />
@@ -149,7 +149,7 @@
                   type="text"
                   name="name"
                   id="name"
-                  class="bg-white border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                  class="bg-white border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                   placeholder="To'liq ismini kiriting"
                   required
                 />
@@ -166,7 +166,7 @@
                   type="number"
                   name="salary"
                   id="salary"
-                  class="bg-white border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                  class="bg-white border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                   placeholder="Maoshni kiriting % da"
                 />
               </div>
@@ -182,7 +182,7 @@
                   type="tel"
                   name="phone"
                   id="phone"
-                  class="bg-white border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                  class="bg-white border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                   placeholder="Telefon raqamini kiriting"
                   required
                 />
@@ -197,7 +197,7 @@
                 <select
                   v-model="form.role"
                   id="category"
-                  class="bg-white border border-gray-300 text-md z-10 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                  class="bg-white border border-gray-300 text-md z-10 rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                   required
                 >
                   <option value="" disabled selected>Lavozim tanlang</option>
@@ -209,18 +209,18 @@
               </div>
             </div>
             <div
-              class="w-full flex items-center justify-between border-t pt-5 mt-5"
+              class="flex items-center justify-between w-full pt-5 mt-5 border-t"
             >
               <button
                 @click="cancelFunc"
                 type="button"
-                class="border cursor-pointer inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                class="border cursor-pointer inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
               >
                 Bekor qilish
               </button>
               <button
                 type="submit"
-                class="btnAdd cursor-pointer text-white inline-flex items-center bg-[#4141eb] focus:ring-4 focus:outline-none focus:ring-blue-500 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                class="btnAdd cursor-pointer text-white inline-flex items-center bg-[#4141eb] focus:ring-4 focus:outline-none focus:ring-blue-500 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
               >
                 Qo'shish
               </button>
@@ -243,15 +243,15 @@
           : 'hidden'
       "
     >
-      <div class="relative p-4 w-full max-w-lg h-auto">
+      <div class="relative w-full h-auto max-w-lg p-4">
         <!-- Modal content -->
         <div
-          class="relative p-4 rounded-lg shadow sm:p-5"
-          :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
+          class="relative p-4 shadow rounded-xl sm:p-5"
+          :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
         >
           <!-- Modal header -->
           <div
-            class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5"
+            class="flex items-center justify-between pb-4 mb-4 border-b rounded-t sm:mb-5"
           >
             <h3
               class="text-lg"
@@ -262,7 +262,7 @@
             <button
               @click="store.subjectModal = false"
               type="button"
-              class="bg-transparent hover:bg-gray-200 hover rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+              class="bg-transparent hover:bg-gray-200 hover rounded-xl text-sm p-1.5 ml-auto inline-flex items-center"
               :class="{ 'text-white': navbar.userNav }"
             >
               <svg
@@ -281,7 +281,7 @@
             </button>
           </div>
           <!-- Modal body -->
-          <div class="py-5 flex flex-wrap gap-5">
+          <div class="flex flex-wrap gap-5 py-5">
             <span
               v-for="i in edit.subject"
               :key="i.id"
@@ -289,10 +289,10 @@
                 remove.title = i.subject_name;
                 removeSubjects(i.id);
               "
-              class="bg-gray-300 rounded px-3 py-1 text-black"
+              class="px-3 py-1 text-black bg-gray-300 rounded"
               >{{ i.subject_name }}
               <i
-                class="bx bx-x cursor-pointer hover:bg-white0 rounded font-bold p-1"
+                class="p-1 font-bold rounded cursor-pointer bx bx-x hover:bg-white0"
               ></i
             ></span>
           </div>
@@ -300,7 +300,7 @@
             @submit.prevent="addSubjects"
             :class="{ darkForm: navbar.userNav }"
           >
-            <div class="grid font-medium gap-4 mb-4 grid-cols-1">
+            <div class="grid grid-cols-1 gap-4 mb-4 font-medium">
               <div>
                 <label
                   for="subject_name"
@@ -311,7 +311,7 @@
                 <select
                   v-model="edit.subjectName"
                   id="subject_name"
-                  class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                  class="bg-white border text-black border-gray-300 rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                   required
                 >
                   <option value="" disabled selected>Fan tanlang</option>
@@ -326,18 +326,18 @@
               </div>
             </div>
             <div
-              class="w-full flex items-center justify-between border-t pt-5 mt-5"
+              class="flex items-center justify-between w-full pt-5 mt-5 border-t"
             >
               <button
                 @click="store.subjectModal = false"
                 type="button"
-                class="border inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                class="border inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
               >
                 Bekor qilish
               </button>
               <button
                 type="submit"
-                class="btnAdd text-white inline-flex items-center bg-[#4141eb] hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-500 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                class="btnAdd text-white inline-flex items-center bg-[#4141eb] hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-500 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
               >
                 Qo'shish
               </button>
@@ -357,15 +357,15 @@
           : 'hidden'
       "
     >
-      <div class="relative p-4 w-full max-w-lg h-auto">
+      <div class="relative w-full h-auto max-w-lg p-4">
         <!-- Modal content -->
         <div
-          class="relative p-4 rounded-lg shadow sm:p-5"
-          :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
+          class="relative p-4 shadow rounded-xl sm:p-5"
+          :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
         >
           <!-- Modal header -->
           <div
-            class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5"
+            class="flex items-center justify-between pb-4 mb-4 border-b rounded-t sm:mb-5"
           >
             <h3
               class="text-lg"
@@ -376,7 +376,7 @@
             <button
               @click="store.groupModal = false"
               type="button"
-              class="bg-transparent hover:bg-gray-200 hover rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+              class="bg-transparent hover:bg-gray-200 hover rounded-xl text-sm p-1.5 ml-auto inline-flex items-center"
               :class="{ 'text-white': navbar.userNav }"
             >
               <svg
@@ -403,10 +403,10 @@
                 remove.name = i.group.name;
                 removeGroups(i.id);
               "
-              class="bg-gray-300 rounded px-3 py-1"
+              class="px-3 py-1 bg-gray-300 rounded"
               >{{ i.group.name }}
               <i
-                class="bx bx-x cursor-pointer hover:bg-white0 rounded font-bold p-1"
+                class="p-1 font-bold rounded cursor-pointer bx bx-x hover:bg-white0"
               ></i
             ></span>
           </div>
@@ -414,7 +414,7 @@
             @submit.prevent="addGroups"
             :class="{ darkForm: navbar.userNav }"
           >
-            <div class="grid font-medium gap-4 mb-4 grid-cols-1">
+            <div class="grid grid-cols-1 gap-4 mb-4 font-medium">
               <div>
                 <label
                   for="group_name"
@@ -425,7 +425,7 @@
                 <select
                   v-model="edit.groupName"
                   id="group_name"
-                  class="bg-white border border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                  class="bg-white border border-gray-300 rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                   required
                 >
                   <option value="" disabled selected>Guruh tanlang</option>
@@ -436,18 +436,18 @@
               </div>
             </div>
             <div
-              class="w-full flex items-center justify-between border-t pt-5 mt-5"
+              class="flex items-center justify-between w-full pt-5 mt-5 border-t"
             >
               <button
                 @click="store.groupModal = false"
                 type="button"
-                class="border inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                class="border inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
               >
                 Bekor qilish
               </button>
               <button
                 type="submit"
-                class="btnAdd text-white inline-flex items-center bg-[#4141eb] hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-500 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                class="btnAdd text-white inline-flex items-center bg-[#4141eb] hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-500 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
               >
                 Qo'shish
               </button>
@@ -470,14 +470,14 @@
       <div class="relative p-4 max-w-5xl min-w-[40%] h-auto">
         <!-- Modal content -->
         <div
-          class="relative p-4 rounded-lg shadow sm:p-5"
-          :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
+          class="relative p-4 shadow rounded-xl sm:p-5"
+          :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
         >
           <!-- Modal header -->
           <div
-            class="flex flex-col items-center gap-5 pb-4 mb-4 rounded-t border-b sm:mb-5"
+            class="flex flex-col items-center gap-5 pb-4 mb-4 border-b rounded-t sm:mb-5"
           >
-            <div class="w-full flex items-center justify-between">
+            <div class="flex items-center justify-between w-full">
               <h3
                 class="text-lg"
                 :class="navbar.userNav ? 'text-white' : 'text-black'"
@@ -487,7 +487,7 @@
               <button
                 @click="cancelFunc1"
                 type="button"
-                class="bg-transparent hover:bg-gray-200 hover rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+                class="bg-transparent hover:bg-gray-200 hover rounded-xl text-sm p-1.5 ml-auto inline-flex items-center"
                 :class="navbar.userNav ? 'text-white' : 'text-black'"
               >
                 <svg
@@ -506,21 +506,21 @@
               </button>
             </div>
             <div
-              class="flex w-full items-center justify-between sm:w-auto"
+              class="flex items-center justify-between w-full sm:w-auto"
               id="navbar-sticky"
             >
               <ul
-                class="font-medium w-full flex flex-col sm:flex-row items-center gap-5 text-white"
+                class="flex flex-col items-center w-full gap-5 font-medium text-white sm:flex-row"
               >
                 <li
-                  class="cursor-pointer w-full sm:max-w-fit text-center bg-gray-600 hover:bg-gray-500 p-2 px-5 sm:text-md text-sm rounded-lg"
+                  class="w-full p-2 px-5 text-sm text-center bg-gray-600 cursor-pointer rounded-xl sm:max-w-fit hover:bg-gray-500 sm:text-md"
                   :class="store.infoModal ? 'btnAdd' : 'bg-gray-600'"
                   @click="infoCenModal"
                 >
                   <span>Ma'lumotlarni o'zgartirish</span>
                 </li>
                 <li
-                  class="cursor-pointer w-full sm:max-w-fit text-center bg-gray-600 hover:bg-gray-500 p-2 px-5 sm:text-md text-sm rounded-lg"
+                  class="w-full p-2 px-5 text-sm text-center bg-gray-600 cursor-pointer rounded-xl sm:max-w-fit hover:bg-gray-500 sm:text-md"
                   :class="store.passwordModal ? 'btnAdd' : 'bg-gray-600'"
                   @click="passwordCenModal"
                 >
@@ -535,7 +535,7 @@
             @submit.prevent="editProduct"
             :class="{ darkForm: navbar.userNav }"
           >
-            <div class="grid font-medium gap-4 mb-4 sm:grid-cols-2">
+            <div class="grid gap-4 mb-4 font-medium sm:grid-cols-2">
               <div>
                 <label
                   for="edit_login"
@@ -548,7 +548,7 @@
                   type="text"
                   name="login"
                   id="edit_login"
-                  class="bg-white border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                  class="bg-white border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                   placeholder="login"
                   required
                 />
@@ -565,7 +565,7 @@
                   type="number"
                   name="salary"
                   id="salary"
-                  class="bg-white border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                  class="bg-white border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                   placeholder="Maoshni kiriting % da"
                 />
               </div>
@@ -581,7 +581,7 @@
                   type="password"
                   name="password"
                   id="edit_password"
-                  class="bg-white placeholder-black border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                  class="bg-white placeholder-black border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                   placeholder="*********"
                 />
               </div> -->
@@ -597,7 +597,7 @@
                   type="text"
                   name="name"
                   id="edit_name"
-                  class="bg-white border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                  class="bg-white border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                   placeholder="To'liq ismini kiriting"
                   required
                 />
@@ -615,7 +615,7 @@
                   type="tel"
                   name="phone"
                   id="edit_phone"
-                  class="bg-white border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                  class="bg-white border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                   placeholder="Telefon raqamini kiriting"
                   required
                 />
@@ -630,7 +630,7 @@
                 <select
                   v-model="edit.role"
                   id="edit_category"
-                  class="bg-white border border-gray-300 text-md z-10 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                  class="bg-white border border-gray-300 text-md z-10 rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                   required
                 >
                   edit_
@@ -643,18 +643,18 @@
               </div>
             </div>
             <div
-              class="w-full flex items-center justify-between border-t pt-5 mt-5"
+              class="flex items-center justify-between w-full pt-5 mt-5 border-t"
             >
               <button
                 @click="cancelFunc1"
                 type="button"
-                class="border cursor-pointer inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                class="border cursor-pointer inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
               >
                 Bekor qilish
               </button>
               <button
                 type="submit"
-                class="btnAdd cursor-pointer text-white inline-flex items-center bg-[#4141eb] hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-500 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                class="btnAdd cursor-pointer text-white inline-flex items-center bg-[#4141eb] hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-500 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
               >
                 O'zgartirish
               </button>
@@ -666,7 +666,7 @@
             @submit.prevent="changePassword"
             :class="{ darkForm: navbar.userNav }"
           >
-            <div class="grid font-medium gap-4 mb-4 sm:grid-cols-2">
+            <div class="grid gap-4 mb-4 font-medium sm:grid-cols-2">
               <!-- Yangi parol -->
               <div class="relative">
                 <label
@@ -681,7 +681,7 @@
                   :type="showNewPassword ? 'text' : 'password'"
                   name="new_password"
                   id="new_password"
-                  class="bg-white placeholder-black border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 pr-10"
+                  class="bg-white placeholder-black border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 pr-10"
                   placeholder="*********"
                 />
                 <button
@@ -750,7 +750,7 @@
                   :type="showNew2Password ? 'text' : 'password'"
                   name="new2_password"
                   id="new2_password"
-                  class="bg-white placeholder-black border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 pr-10"
+                  class="bg-white placeholder-black border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 pr-10"
                   placeholder="*********"
                 />
                 <button
@@ -807,18 +807,18 @@
             </div>
 
             <div
-              class="w-full flex items-center justify-between border-t pt-5 mt-5"
+              class="flex items-center justify-between w-full pt-5 mt-5 border-t"
             >
               <button
                 @click="cancelFunc1"
                 type="button"
-                class="border cursor-pointer inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                class="border cursor-pointer inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
               >
                 Bekor qilish
               </button>
               <button
                 type="submit"
-                class="btnAdd cursor-pointer text-white inline-flex items-center bg-[#4141eb] hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-500 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                class="btnAdd cursor-pointer text-white inline-flex items-center bg-[#4141eb] hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-500 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
               >
                 O'zgartirish
               </button>
@@ -841,12 +841,12 @@
       <div class="relative p-4 max-w-5xl min-w-[30%] h-auto">
         <!-- Modal content -->
         <div
-          class="relative p-4 rounded-lg shadow sm:p-5"
-          :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
+          class="relative p-4 shadow rounded-xl sm:p-5"
+          :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
         >
           <!-- Modal header -->
           <div
-            class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5"
+            class="flex items-center justify-between pb-4 mb-4 border-b rounded-t sm:mb-5"
           >
             <h3
               class="text-lg"
@@ -857,7 +857,7 @@
             <button
               @click="remove.toggle = false"
               type="button"
-              class="bg-transparent hover:bg-gray-200 hover rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+              class="bg-transparent hover:bg-gray-200 hover rounded-xl text-sm p-1.5 ml-auto inline-flex items-center"
               :class="navbar.userNav ? 'text-white' : 'text-black'"
             >
               <svg
@@ -877,7 +877,7 @@
           </div>
           <!-- Modal body -->
           <div :class="{ darkForm: navbar.userNav }">
-            <div class="grid font-medium gap-4 mb-4 grid-cols-1">
+            <div class="grid grid-cols-1 gap-4 mb-4 font-medium">
               <div>
                 <div></div>
                 <h1
@@ -888,18 +888,18 @@
                 </h1>
               </div>
               <div
-                class="w-full flex items-center justify-between border-t pt-5 mt-5"
+                class="flex items-center justify-between w-full pt-5 mt-5 border-t"
               >
                 <button
                   @click="remove.toggle = false"
                   type="button"
-                  class="border cursor-pointer inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                  class="border cursor-pointer inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                 >
                   Bekor qilish
                 </button>
                 <button
                   @click="deleteProduct"
-                  class="btnAdd cursor-pointer text-white inline-flex items-center bg-[#4141eb] hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-500 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                  class="btnAdd cursor-pointer text-white inline-flex items-center bg-[#4141eb] hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-500 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                 >
                   O'chirish
                 </button>
@@ -925,30 +925,30 @@
       <div v-show="store.PageProduct" class="w-full">
         <!-- Start coding here -->
         <div
-          class="shadow rounded-xl flex flex-col lg:flex-row items-center justify-between lg:space-x-4 p-4 mb-4"
-          :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
+          class="flex flex-col items-center justify-between p-4 mb-4 shadow rounded-xl lg:flex-row lg:space-x-4"
+          :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
         >
           <div
-            class="w-full flex items-center lg:justify-start lg:pb-0 pb-4 justify-between gap-5"
+            class="flex items-center justify-between w-full gap-5 pb-4 lg:justify-start lg:pb-0"
           >
-            <h1 class="text-blue-700 font-bold text-lg">Xodimlar</h1>
+            <h1 class="text-lg font-bold text-blue-700">Xodimlar</h1>
             <div
-              class="lg:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3"
+              class="flex flex-col items-stretch justify-end space-y-2 lg:w-auto md:flex-row md:space-y-0 md:items-center md:space-x-3"
             >
               <button
                 @click="toggleModal"
                 id=""
                 type="button"
-                class="btnAdd flex items-center max-w-fit justify-center whitespace-nowrap text-white bg-[#4141eb] hover:bg-blue-600 focus:ring-4 focus:ring-blue-500 font-medium rounded-lg text-sm px-4 sm:py-2"
+                class="btnAdd flex items-center max-w-fit justify-center whitespace-nowrap text-white bg-[#4141eb] hover:bg-blue-600 focus:ring-4 focus:ring-blue-500 font-medium rounded-xl text-sm px-4 sm:py-2"
               >
-                <span class="sm:block hidden">Xodim qo'shish</span>
-                <i class="sm:hidden block bx bxs-user-plus text-lg"></i>
+                <span class="hidden sm:block">Xodim qo'shish</span>
+                <i class="block text-lg sm:hidden bx bxs-user-plus"></i>
               </button>
             </div>
           </div>
 
           <div class="w-full lg:w-80">
-            <form class="flex items-center text-gray-900 font-medium">
+            <form class="flex items-center font-medium text-gray-900">
               <label for="simple-search" class="sr-only">Qidiruv</label>
               <div class="relative w-full">
                 <div
@@ -976,16 +976,16 @@
                   "
                   type="search"
                   id="simple-search"
-                  class="bg-white border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2"
+                  class="block w-full p-2 pl-10 text-sm bg-white border border-gray-300 rounded-xl focus:ring-blue-500 focus:border-blue-500"
                   placeholder="Qidirish .."
                 />
                 <ul
                   v-show="store.filter_show"
-                  class="absolute z-10 max-h-80 overflow-y-auto overflow-hidden py-1 text-gray-600 rounded bg-white w-full"
+                  class="absolute z-10 w-full py-1 overflow-hidden overflow-y-auto text-gray-600 bg-white rounded max-h-80"
                   :class="{ hidden: !store.searchList.length }"
                 >
                   <li
-                    class="hover:bg-gray-100 cursor-pointer pl-2"
+                    class="pl-2 cursor-pointer hover:bg-gray-100"
                     v-for="(i, index) in store.searchList"
                     :key="index"
                     @click="
@@ -1003,19 +1003,19 @@
         <!------------------------------------------- Search ------------------------------------------->
 
         <div
-          class="relative shadow-md rounded-lg overflow-hidden mb-28"
-          :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
+          class="relative overflow-hidden shadow-md rounded-xl mb-28"
+          :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
         >
           <div class="overflow-x-auto">
             <table class="w-full text-sm text-left">
-              <thead class="btnAdd text-xs rounded-lg uppercase text-white">
+              <thead class="text-xs text-white uppercase rounded-xl btnAdd">
                 <tr>
-                  <th scope="col" class="text-center py-3">F. I. O.</th>
-                  <th scope="col" class="text-center py-3">Lavozim</th>
-                  <th scope="col" class="text-center py-3">Telefon raqam</th>
-                  <th scope="col" class="text-center py-3">Fanlar</th>
-                  <th scope="col" class="text-center py-3">Guruhlar</th>
-                  <th scope="col" class="text-center py-3">To'liq</th>
+                  <th scope="col" class="py-3 text-center">F. I. O.</th>
+                  <th scope="col" class="py-3 text-center">Lavozim</th>
+                  <th scope="col" class="py-3 text-center">Telefon raqam</th>
+                  <th scope="col" class="py-3 text-center">Fanlar</th>
+                  <th scope="col" class="py-3 text-center">Guruhlar</th>
+                  <th scope="col" class="py-3 text-center">To'liq</th>
                   <th></th>
                 </tr>
               </thead>
@@ -1031,25 +1031,25 @@
                 >
                   <td
                     scope="row"
-                    class="text-center px-5 py-4 font-medium whitespace-nowrap"
+                    class="px-5 py-4 font-medium text-center whitespace-nowrap"
                   >
                     {{ i.full_name }}
                   </td>
-                  <td class="text-center font-medium text-blue-800 px-5 py-4">
+                  <td class="px-5 py-4 font-medium text-center text-blue-800">
                     <p
                       class="bg-blue-100 min-w-fit rounded-[5px] px-2 py-1 whitespace-nowrap"
                     >
                       {{ i.role }}
                     </p>
                   </td>
-                  <td class="text-center font-medium text-red-800 px-5 py-4">
+                  <td class="px-5 py-4 font-medium text-center text-red-800">
                     <p class="bg-red-100 rounded-[5px] p-1 whitespace-nowrap">
                       {{ i.phone_number }}
                     </p>
                   </td>
                   <td
                     v-if="i.role == 'teacher'"
-                    class="text-center font-medium text-blue-800 px-5 py-4"
+                    class="px-5 py-4 font-medium text-center text-blue-800"
                   >
                     <div
                       class="flex gap-1 justify-between text-center bg-blue-100 min-w-fit rounded-[5px] px-2 py-1 whitespace-nowrap"
@@ -1061,19 +1061,19 @@
                       </p>
                       <i
                         @click="getOneProduct(i.id, 'subject')"
-                        class="bx bx-plus cursor-pointer bg-blue-800 ml-2 font-extrabold text-white p-1 rounded-md"
+                        class="p-1 ml-2 font-extrabold text-white bg-blue-800 rounded-md cursor-pointer bx bx-plus"
                       ></i>
                     </div>
                   </td>
                   <td
                     v-if="i.role != 'teacher'"
-                    class="text-center px-5 py-4 font-medium whitespace-nowrap"
+                    class="px-5 py-4 font-medium text-center whitespace-nowrap"
                   >
                     ...
                   </td>
                   <td
                     v-if="i.role == 'teacher'"
-                    class="text-center font-medium text-blue-800 px-5 py-4"
+                    class="px-5 py-4 font-medium text-center text-blue-800"
                   >
                     <div
                       class="flex gap-2 justify-between bg-blue-100 min-w-fit rounded-[5px] px-2 py-1 whitespace-nowrap"
@@ -1085,36 +1085,36 @@
                       </p>
                       <i
                         @click="getOneProduct(i.id, 'group')"
-                        class="bx bx-plus cursor-pointer bg-blue-800 ml-2 font-extrabold text-white p-1 rounded-md"
+                        class="p-1 ml-2 font-extrabold text-white bg-blue-800 rounded-md cursor-pointer bx bx-plus"
                       ></i>
                     </div>
                   </td>
                   <td
                     v-if="i.role != 'teacher'"
-                    class="text-center px-5 py-4 font-medium whitespace-nowrap"
+                    class="px-5 py-4 font-medium text-center whitespace-nowrap"
                   >
                     ...
                   </td>
-                  <td class="text-center font-medium px-5 py-4">
+                  <td class="px-5 py-4 font-medium text-center">
                     <button
                       @click="enterSlug(i.id)"
-                      class="btnKirish bg-blue-600 rounded-lg px-5 py-2.5 text-white focus:ring-2"
+                      class="btnKirish bg-blue-600 rounded-xl px-5 py-2.5 text-white focus:ring-2"
                     >
                       Kirish
                     </button>
                   </td>
                   <td
                     v-if="i.role != 'superadmin'"
-                    class="text-center whitespace-nowrap font-medium pr-5 py-4"
+                    class="py-4 pr-5 font-medium text-center whitespace-nowrap"
                   >
                     <i
                       @click="getOneProduct(i.id, 'edit')"
-                      class="bx bxs-pencil bg-blue-300 text-blue-600 rounded-lg p-2 mr-3 cursor-pointer focus:ring-2"
+                      class="p-2 mr-3 text-blue-600 bg-blue-300 cursor-pointer rounded-xl bx bxs-pencil focus:ring-2"
                     >
                     </i>
                     <i
                       @click="deleteFunc(i.id)"
-                      class="bx bxs-trash bg-red-300 cursor-pointer text-red-600 rounded-lg p-2 focus:ring-2"
+                      class="p-2 text-red-600 bg-red-300 cursor-pointer rounded-xl bx bxs-trash focus:ring-2"
                     >
                     </i>
                   </td>
@@ -1130,25 +1130,25 @@
                 >
                   <th
                     scope="row"
-                    class="text-center px-5 py-4 font-medium whitespace-nowrap"
+                    class="px-5 py-4 font-medium text-center whitespace-nowrap"
                   >
                     {{ i.full_name }}
                   </th>
-                  <td class="text-center font-medium text-blue-800 px-5 py-4">
+                  <td class="px-5 py-4 font-medium text-center text-blue-800">
                     <p
                       class="bg-blue-100 min-w-fit rounded-[5px] px-2 py-1 whitespace-nowrap"
                     >
                       {{ i.role }}
                     </p>
                   </td>
-                  <td class="text-center font-medium text-red-800 px-5 py-4">
+                  <td class="px-5 py-4 font-medium text-center text-red-800">
                     <p class="bg-red-100 rounded-[5px] p-1 whitespace-nowrap">
                       {{ i.phone_number }}
                     </p>
                   </td>
                   <td
                     v-if="i.role == 'teacher'"
-                    class="text-center font-medium text-blue-800 px-5 py-4"
+                    class="px-5 py-4 font-medium text-center text-blue-800"
                   >
                     <div
                       class="flex gap-1 justify-between text-center bg-blue-100 min-w-fit rounded-[5px] px-2 py-1 whitespace-nowrap"
@@ -1160,19 +1160,19 @@
                       </p>
                       <i
                         @click="getOneProduct(i.id, 'subject')"
-                        class="bx bx-plus cursor-pointer bg-blue-800 ml-2 font-extrabold text-white p-1 rounded-md"
+                        class="p-1 ml-2 font-extrabold text-white bg-blue-800 rounded-md cursor-pointer bx bx-plus"
                       ></i>
                     </div>
                   </td>
                   <td
                     v-if="i.role != 'teacher'"
-                    class="text-center px-5 py-4 font-medium whitespace-nowrap"
+                    class="px-5 py-4 font-medium text-center whitespace-nowrap"
                   >
                     ...
                   </td>
                   <td
                     v-if="i.role == 'teacher'"
-                    class="text-center font-medium text-blue-800 px-5 py-4"
+                    class="px-5 py-4 font-medium text-center text-blue-800"
                   >
                     <div
                       class="flex gap-2 justify-between bg-blue-100 min-w-fit rounded-[5px] px-2 py-1 whitespace-nowrap"
@@ -1184,36 +1184,36 @@
                       </p>
                       <i
                         @click="getOneProduct(i.id, 'group')"
-                        class="bx bx-plus cursor-pointer bg-blue-800 ml-2 font-extrabold text-white p-1 rounded-md"
+                        class="p-1 ml-2 font-extrabold text-white bg-blue-800 rounded-md cursor-pointer bx bx-plus"
                       ></i>
                     </div>
                   </td>
                   <td
                     v-if="i.role != 'teacher'"
-                    class="text-center px-5 py-4 font-medium whitespace-nowrap"
+                    class="px-5 py-4 font-medium text-center whitespace-nowrap"
                   >
                     ...
                   </td>
-                  <td class="text-center font-medium px-5 py-4">
+                  <td class="px-5 py-4 font-medium text-center">
                     <button
                       @click="enterSlug(i.id)"
-                      class="btnKirish bg-blue-600 rounded-lg px-5 py-4 text-white focus:ring-2"
+                      class="px-5 py-4 text-white bg-blue-600 rounded-xl btnKirish focus:ring-2"
                     >
                       Kirish
                     </button>
                   </td>
                   <td
                     v-if="i.role != 'superadmin'"
-                    class="text-center whitespace-nowrap font-medium pr-5 py-4"
+                    class="py-4 pr-5 font-medium text-center whitespace-nowrap"
                   >
                     <i
                       @click="getOneProduct(i.id, 'edit')"
-                      class="bx bxs-pencil bg-blue-300 text-blue-600 rounded-lg p-2 mr-3 cursor-pointer focus:ring-2"
+                      class="p-2 mr-3 text-blue-600 bg-blue-300 cursor-pointer rounded-xl bx bxs-pencil focus:ring-2"
                     >
                     </i>
                     <i
                       @click="deleteFunc(i.id)"
-                      class="bx bxs-trash bg-red-300 cursor-pointer text-red-600 rounded-lg p-2 focus:ring-2"
+                      class="p-2 text-red-600 bg-red-300 cursor-pointer rounded-xl bx bxs-trash focus:ring-2"
                     >
                     </i>
                   </td>
@@ -1222,7 +1222,7 @@
             </table>
             <div
               v-show="store.PageProduct.length === 0 || store.error"
-              class="w-full max-w-screen text-center p-20 text-2xl font-medium"
+              class="w-full p-20 text-2xl font-medium text-center max-w-screen"
             >
               <h1>Xodimlar ro'yhat bo'sh</h1>
             </div>
@@ -1230,7 +1230,7 @@
 
           <nav
             v-if="!store.searchList.length"
-            class="flex flex-row justify-between items-center space-y-0 p-4"
+            class="flex flex-row items-center justify-between p-4 space-y-0"
             aria-label="Table navigation"
           >
             <!-- Oldingi sahifa tugmasi -->
@@ -1240,7 +1240,7 @@
                   store.pagination === 1
                     ? 'pointer-events-none opacity-50'
                     : '',
-                  'flex font-bold text-black border-2 bg-white hover:bg-gray-300 items-center justify-center text-sm sm:py-2 sm:px-6 px-3 rounded-lg leading-tight cursor-pointer transition duration-200 ease-in-out',
+                  'flex font-bold text-black border-2 bg-white hover:bg-gray-300 items-center justify-center text-sm sm:py-2 sm:px-6 px-3 rounded-xl leading-tight cursor-pointer transition duration-200 ease-in-out',
                 ]"
                 @click="
                   if (store.pagination > 1) {
@@ -1250,7 +1250,7 @@
                 "
               >
                 <i
-                  class="md:hidden font-bold text-black text-2xl bx bx-chevron-left"
+                  class="text-2xl font-bold text-black md:hidden bx bx-chevron-left"
                 ></i>
                 <span class="hidden md:block">Oldingi</span>
               </li>
@@ -1277,7 +1277,7 @@
                   store.page[0] * 15 >= store.page[1]
                     ? 'pointer-events-none opacity-50'
                     : '',
-                  'flex font-bold text-black border-2 bg-white hover:bg-gray-300 items-center justify-center text-sm sm:py-2 sm:px-6 px-3 rounded-lg leading-tight cursor-pointer transition duration-200 ease-in-out',
+                  'flex font-bold text-black border-2 bg-white hover:bg-gray-300 items-center justify-center text-sm sm:py-2 sm:px-6 px-3 rounded-xl leading-tight cursor-pointer transition duration-200 ease-in-out',
                 ]"
                 @click="
                   if (store.page[0] * 15 < store.page[1]) {
@@ -1288,7 +1288,7 @@
               >
                 <span class="hidden md:block">Keyingi</span>
                 <i
-                  class="md:hidden font-bold text-black text-2xl bx bx-chevron-right"
+                  class="text-2xl font-bold text-black md:hidden bx bx-chevron-right"
                 ></i>
               </li>
             </ul>

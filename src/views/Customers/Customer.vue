@@ -12,7 +12,7 @@
         <div
           class="relative flex flex-col min-w-0 break-words shadow-soft-xl rounded-xl bg-clip-border"
           :class="{
-            'bg-[#1e293b]': navbar.userNav,
+            'bg-slate-900': navbar.userNav,
             'bg-white': !navbar.userNav,
           }"
         >
@@ -26,7 +26,7 @@
                   {{ j.social }}
                 </h3>
                 <h5
-                  class="p-1 px-3 text-sm font-bold text-blue-700 bg-blue-100 rounded-lg sm:text-md"
+                  class="p-1 px-3 text-sm font-bold text-blue-700 bg-blue-100 rounded-xl sm:text-md"
                 >
                   {{ j.count.toLocaleString("uz-UZ") }} ta
                 </h5>
@@ -51,8 +51,8 @@
       <div class="relative w-full h-auto max-w-3xl p-4">
         <!-- Modal content -->
         <div
-          class="relative p-4 rounded-lg shadow sm:p-5"
-          :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
+          class="relative p-4 shadow rounded-xl sm:p-5"
+          :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
         >
           <!-- Modal header -->
           <div
@@ -67,7 +67,7 @@
             <button
               @click="edit.modal = false"
               type="button"
-              class="bg-transparent hover:bg-gray-200 hover rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+              class="bg-transparent hover:bg-gray-200 hover rounded-xl text-sm p-1.5 ml-auto inline-flex items-center"
               :class="{ 'text-white': navbar.userNav }"
             >
               <svg
@@ -101,7 +101,7 @@
                   type="text"
                   name="parents_fullname"
                   id="parents_fullname"
-                  class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                  class="bg-gray-50 border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                   placeholder="Ota-ona ism familiyasi kiriting"
                   required
                 />
@@ -115,7 +115,7 @@
                   type="text"
                   name="parents_phone"
                   id="parents_phone"
-                  class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                  class="bg-gray-50 border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                   placeholder="Ota-ona raqamini kiriting"
                   required
                 />
@@ -127,7 +127,7 @@
                   type="text"
                   name="name"
                   id="name"
-                  class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                  class="bg-gray-50 border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                   placeholder="F . I . O"
                   required
                 />
@@ -141,7 +141,7 @@
                   type="text"
                   name="phone"
                   id="phone"
-                  class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                  class="bg-gray-50 border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                   placeholder="Telefon raqamini kiriting"
                   required
                 />
@@ -156,7 +156,7 @@
                 <select
                   v-model="edit.group_id"
                   id="name"
-                  class="bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                  class="bg-gray-50 border border-gray-300 rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                   required
                 >
                   <option value="" disabled selected>Guruh tanlang</option>
@@ -172,13 +172,13 @@
               <button
                 @click="edit.modal = false"
                 type="button"
-                class="border inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                class="border inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
               >
                 Bekor qilish
               </button>
               <button
                 type="submit"
-                class="btnAdd text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                class="btnAdd text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
               >
                 Qo'shish
               </button>
@@ -204,8 +204,8 @@
       <div class="relative w-full h-auto max-w-xl p-4">
         <!-- Modal content -->
         <div
-          class="relative p-4 rounded-lg shadow sm:p-5"
-          :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
+          class="relative p-4 shadow rounded-xl sm:p-5"
+          :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
         >
           <!-- Modal header -->
           <div
@@ -220,7 +220,7 @@
             <button
               @click="toggleModal"
               type="button"
-              class="bg-transparent hover:bg-gray-200 hover rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+              class="bg-transparent hover:bg-gray-200 hover rounded-xl text-sm p-1.5 ml-auto inline-flex items-center"
               :class="{ 'text-white': navbar.userNav }"
             >
               <svg
@@ -252,7 +252,7 @@
                   type="phone_number"
                   name="name"
                   id="name"
-                  class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                  class="bg-gray-50 border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                   placeholder="F . I . O"
                   required
                 />
@@ -266,7 +266,7 @@
                   type="phone_number"
                   name="phone"
                   id="phone"
-                  class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                  class="bg-gray-50 border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                   placeholder="Telefon raqamini kiriting"
                   required
                 />
@@ -276,7 +276,7 @@
                 <select
                   v-model="form.subject_id"
                   id="select"
-                  class="bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                  class="bg-gray-50 border border-gray-300 rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                   required
                 >
                   <option value="" disabled selected>Fani tanlang</option>
@@ -293,7 +293,7 @@
                   v-model="form.description"
                   name="description"
                   id="description"
-                  class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                  class="bg-gray-50 border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                   placeholder="Mijoz haqida ma'lumot"
                 ></textarea>
               </div>
@@ -304,7 +304,7 @@
                 <select
                   v-model="form.social_media_id"
                   id="select"
-                  class="bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                  class="bg-gray-50 border border-gray-300 rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                   required
                 >
                   <option value="" disabled selected>
@@ -326,13 +326,13 @@
               <button
                 @click="toggleModal"
                 type="button"
-                class="border inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                class="border inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
               >
                 Bekor qilish
               </button>
               <button
                 type="submit"
-                class="btnAdd text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                class="btnAdd text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
               >
                 Qo'shish
               </button>
@@ -354,8 +354,8 @@
       <div class="relative w-full h-auto max-w-xl p-4">
         <!-- Modal content -->
         <div
-          class="relative p-4 rounded-lg shadow sm:p-5"
-          :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
+          class="relative p-4 shadow rounded-xl sm:p-5"
+          :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
         >
           <!-- Modal header -->
           <div
@@ -370,7 +370,7 @@
             <button
               @click="edit.toggle = false"
               type="button"
-              class="bg-transparent hover:bg-gray-200 hover rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+              class="bg-transparent hover:bg-gray-200 hover rounded-xl text-sm p-1.5 ml-auto inline-flex items-center"
               :class="{ 'text-white': navbar.userNav }"
             >
               <svg
@@ -402,7 +402,7 @@
                   type="name"
                   name="name"
                   id="name"
-                  class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                  class="bg-gray-50 border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                   placeholder="F . I . O"
                   required
                 />
@@ -416,7 +416,7 @@
                   type="phone_number"
                   name="phone"
                   id="phone"
-                  class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                  class="bg-gray-50 border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                   placeholder="Telefon raqamini kiriting"
                   required
                 />
@@ -426,7 +426,7 @@
                 <select
                   v-model="edit.subject_id"
                   id="select"
-                  class="bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                  class="bg-gray-50 border border-gray-300 rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                   required
                 >
                   <option value="" disabled selected>Fani tanlang</option>
@@ -443,7 +443,7 @@
                   v-model="edit.description"
                   name="description"
                   id="description"
-                  class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                  class="bg-gray-50 border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                   placeholder="Mijoz haqida ma'lumot"
                 ></textarea>
               </div>
@@ -454,7 +454,7 @@
                 <select
                   v-model="edit.social_media_id"
                   id="select"
-                  class="bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                  class="bg-gray-50 border border-gray-300 rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                   required
                 >
                   <option value="" disabled selected>
@@ -476,13 +476,13 @@
               <button
                 @click="edit.toggle = false"
                 type="button"
-                class="border inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                class="border inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
               >
                 Bekor qilish
               </button>
               <button
                 type="submit"
-                class="btnAdd text-white inline-flex items-center bg-[#4141eb] hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-500 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                class="btnAdd text-white inline-flex items-center bg-[#4141eb] hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-500 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
               >
                 O'zgartirish
               </button>
@@ -504,8 +504,8 @@
       <div class="relative p-4 max-w-5xl min-w-[30%] h-auto">
         <!-- Modal content -->
         <div
-          class="relative p-4 rounded-lg shadow sm:p-5"
-          :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
+          class="relative p-4 shadow rounded-xl sm:p-5"
+          :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
         >
           <!-- Modal header -->
           <div
@@ -520,7 +520,7 @@
             <button
               @click="remove.toggle = false"
               type="button"
-              class="bg-transparent hover:bg-gray-200 hover rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+              class="bg-transparent hover:bg-gray-200 hover rounded-xl text-sm p-1.5 ml-auto inline-flex items-center"
               :class="navbar.userNav ? 'text-white' : 'text-black'"
             >
               <svg
@@ -556,13 +556,13 @@
                 <button
                   @click="remove.toggle = false"
                   type="button"
-                  class="border cursor-pointer inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                  class="border cursor-pointer inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                 >
                   Bekor qilish
                 </button>
                 <button
                   @click="deleteProduct"
-                  class="btnAdd cursor-pointer text-white inline-flex items-center bg-[#4141eb] hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-500 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                  class="btnAdd cursor-pointer text-white inline-flex items-center bg-[#4141eb] hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-500 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                 >
                   O'chirish
                 </button>
@@ -589,7 +589,7 @@
         <!------------------------------------------- Search ------------------------------------------->
         <div
           class="flex flex-col items-center justify-between p-4 mb-4 shadow rounded-xl lg:flex-row lg:space-x-4"
-          :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
+          :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
         >
           <div
             class="flex items-center justify-between w-full gap-5 pb-4 lg:justify-start lg:pb-0"
@@ -603,7 +603,7 @@
                 @click="toggleModal"
                 id=""
                 type="button"
-                class="flex items-center justify-center px-4 text-sm font-medium text-white bg-blue-600 rounded-lg btnAdd max-w-fit whitespace-nowrap hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 sm:py-2"
+                class="flex items-center justify-center px-4 text-sm font-medium text-white bg-blue-600 rounded-xl btnAdd max-w-fit whitespace-nowrap hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 sm:py-2"
               >
                 <span class="hidden sm:block">Mijoz qo'shish</span>
                 <i class="block text-lg sm:hidden bx bxs-user-plus"></i>
@@ -618,7 +618,7 @@
               <select
                 v-model="history.year"
                 id="name"
-                class="bg-white text-black rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-[7px]"
+                class="bg-white text-black rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-[7px]"
                 required
                 @change="getProduct(store.pagination)"
               >
@@ -636,7 +636,7 @@
               <select
                 v-model="history.month"
                 id="month"
-                class="bg-white text-black rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-[7px]"
+                class="bg-white text-black rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-[7px]"
                 @change="getProduct(store.pagination)"
               >
                 <option value="" disabled selected>Oyni tanlang</option>
@@ -684,7 +684,7 @@
                     "
                     type="search"
                     id="simple-search"
-                    class="block w-full p-2 pl-10 text-sm border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
+                    class="block w-full p-2 pl-10 text-sm border border-gray-300 rounded-xl bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
                     placeholder="Qidirish .."
                   />
                   <ul
@@ -712,13 +712,13 @@
         <!------------------------------------------- Search ------------------------------------------->
 
         <div
-          class="relative overflow-hidden rounded-lg shadow-md"
-          :class="navbar.userNav ? 'bg-[#1e293b] text-white' : 'bg-white'"
+          class="relative overflow-hidden shadow-md rounded-xl"
+          :class="navbar.userNav ? 'bg-slate-900 text-white' : 'bg-white'"
         >
           <div class="overflow-x-auto">
             <table class="w-full text-sm text-left">
               <thead
-                class="text-xs text-white uppercase rounded-lg btnAdd"
+                class="text-xs text-white uppercase rounded-xl btnAdd"
                 :class="navbar.userNav ? 'bg-gray-700' : 'bg-gray-50'"
               >
                 <tr>
@@ -783,7 +783,7 @@
                   <td class="px-8 py-3 font-medium text-center">
                     <button
                       @click="getOneProduct(i.id, 'student')"
-                      class="btnKirish bg-blue-600 rounded-lg px-5 py-2.5 text-white focus:ring-2 whitespace-nowrap"
+                      class="btnKirish bg-blue-600 rounded-xl px-5 py-2.5 text-white focus:ring-2 whitespace-nowrap"
                     >
                       O'quvchi qilish
                     </button>
@@ -794,12 +794,12 @@
                   >
                     <i
                       @click="getOneProduct(i.id, 'edit')"
-                      class="p-2 mr-3 text-blue-600 bg-blue-300 rounded-lg cursor-pointer bx bxs-pencil focus:ring-2"
+                      class="p-2 mr-3 text-blue-600 bg-blue-300 cursor-pointer rounded-xl bx bxs-pencil focus:ring-2"
                     >
                     </i>
                     <i
                       @click="deleteFunc(i.id)"
-                      class="p-2 text-red-600 bg-red-300 rounded-lg cursor-pointer bx bxs-trash focus:ring-2"
+                      class="p-2 text-red-600 bg-red-300 cursor-pointer rounded-xl bx bxs-trash focus:ring-2"
                     >
                     </i>
                   </td>
@@ -845,7 +845,7 @@
                   <td class="px-8 py-3 font-medium text-center">
                     <button
                       @click="getOneProduct(i.id, 'student')"
-                      class="btnKirish bg-blue-600 rounded-lg px-5 py-2.5 text-white focus:ring-2 whitespace-nowrap"
+                      class="btnKirish bg-blue-600 rounded-xl px-5 py-2.5 text-white focus:ring-2 whitespace-nowrap"
                     >
                       O'quvchi qilish
                     </button>
@@ -856,12 +856,12 @@
                   >
                     <i
                       @click="getOneProduct(i.id, 'edit')"
-                      class="p-2 mr-3 text-blue-600 bg-blue-300 rounded-lg cursor-pointer bx bxs-pencil focus:ring-2"
+                      class="p-2 mr-3 text-blue-600 bg-blue-300 cursor-pointer rounded-xl bx bxs-pencil focus:ring-2"
                     >
                     </i>
                     <i
                       @click="deleteFunc(i.id)"
-                      class="p-2 text-red-600 bg-red-300 rounded-lg cursor-pointer bx bxs-trash focus:ring-2"
+                      class="p-2 text-red-600 bg-red-300 cursor-pointer rounded-xl bx bxs-trash focus:ring-2"
                     >
                     </i>
                   </td>
@@ -887,7 +887,7 @@
                   store.pagination === 1
                     ? 'pointer-events-none opacity-50'
                     : '',
-                  'flex font-bold text-black border-2 bg-white hover:bg-gray-300 items-center justify-center text-sm sm:py-2 sm:px-6 px-3 rounded-lg leading-tight cursor-pointer transition duration-200 ease-in-out',
+                  'flex font-bold text-black border-2 bg-white hover:bg-gray-300 items-center justify-center text-sm sm:py-2 sm:px-6 px-3 rounded-xl leading-tight cursor-pointer transition duration-200 ease-in-out',
                 ]"
                 @click="
                   if (store.pagination > 1) {
@@ -924,7 +924,7 @@
                   store.page[0] * 15 >= store.page[1]
                     ? 'pointer-events-none opacity-50'
                     : '',
-                  'flex font-bold text-black border-2 bg-white hover:bg-gray-300 items-center justify-center text-sm sm:py-2 sm:px-6 px-3 rounded-lg leading-tight cursor-pointer transition duration-200 ease-in-out',
+                  'flex font-bold text-black border-2 bg-white hover:bg-gray-300 items-center justify-center text-sm sm:py-2 sm:px-6 px-3 rounded-xl leading-tight cursor-pointer transition duration-200 ease-in-out',
                 ]"
                 @click="
                   if (store.page[0] * 15 < store.page[1]) {
