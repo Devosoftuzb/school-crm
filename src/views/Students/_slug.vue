@@ -8,24 +8,24 @@
       </div>
       <div
         v-show="store.loading"
-        class="mt-10 rounded-lg p-[15px] mb-32"
-        :class="navbar.userNav ? 'bg-[#1e293b] text-white' : 'bg-white'"
+        class="mt-10 rounded-xl p-[15px] mb-32"
+        :class="navbar.userNav ? 'bg-slate-900 text-white' : 'bg-white'"
       >
-        <div class="flex justify-between items-center font-bold mb-5">
-          <h1 class="sm:text-lg text-sm text-blue-700">
+        <div class="flex items-center justify-between mb-5 font-bold">
+          <h1 class="text-sm text-blue-700 sm:text-lg">
             <span v-show="store.modalInfo">O'quvchining ma'lumotlari</span>
             <span v-show="store.modalGroup">O'quvchining guruhlari</span>
             <span v-show="store.modalPayment">O'quvchining to'lov tarixi</span>
           </h1>
           <button
             @click="router.back(-1)"
-            class="btn shadow-lg rounded-lg whitespace-nowrap px-5 py-2.5 text-white focus:ring-2 text-sm"
+            class="btn shadow-lg rounded-xl whitespace-nowrap px-5 py-2.5 text-white focus:ring-2 text-sm"
           >
             Orqaga qaytish
           </button>
         </div>
 
-        <div class="w-full bg-transparent rounded-lg">
+        <div class="w-full bg-transparent rounded-xl">
           <ul
             class="bg-[rgba(213,219,242,0.5)] flex flex-wrap sm:justify-end justify-center font-medium p-3 gap-2 text-center text-sm rounded-t-lg"
             id="defaultTab"
@@ -35,11 +35,11 @@
             <li>
               <button
                 @click="infoModal"
-                class="shadow-lg rounded-lg px-5 py-2.5 focus:ring-2 text-sm"
+                class="shadow-lg rounded-xl px-5 py-2.5 focus:ring-2 text-sm"
                 :class="
                   navbar.userNav
-                    ? 'bg-[#1e293b] text-white hover:bg-white hover:text-black'
-                    : 'bg-white hover:bg-[#1e293b] hover:text-white'
+                    ? 'bg-slate-900 text-white hover:bg-white hover:text-black'
+                    : 'bg-white hover:bg-slate-900 hover:text-white'
                 "
               >
                 Ma'lumot
@@ -48,11 +48,11 @@
             <li>
               <button
                 @click="groupModal"
-                class="shadow-lg rounded-lg px-5 py-2.5 focus:ring-2 text-sm"
+                class="shadow-lg rounded-xl px-5 py-2.5 focus:ring-2 text-sm"
                 :class="
                   navbar.userNav
-                    ? 'bg-[#1e293b] text-white hover:bg-white hover:text-black'
-                    : 'bg-white hover:bg-[#1e293b] hover:text-white'
+                    ? 'bg-slate-900 text-white hover:bg-white hover:text-black'
+                    : 'bg-white hover:bg-slate-900 hover:text-white'
                 "
               >
                 Guruhlar
@@ -61,11 +61,11 @@
             <li>
               <button
                 @click="paymentModal"
-                class="shadow-lg rounded-lg px-5 py-2.5 focus:ring-2 text-sm"
+                class="shadow-lg rounded-xl px-5 py-2.5 focus:ring-2 text-sm"
                 :class="
                   navbar.userNav
-                    ? 'bg-[#1e293b] text-white hover:bg-white hover:text-black'
-                    : 'bg-white hover:bg-[#1e293b] hover:text-white'
+                    ? 'bg-slate-900 text-white hover:bg-white hover:text-black'
+                    : 'bg-white hover:bg-slate-900 hover:text-white'
                 "
               >
                 To'lov tarixi
@@ -75,19 +75,19 @@
           <div
             v-show="store.modalInfo"
             id="defaultTabContent"
-            :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
+            :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
           >
             <div
-              class="p-4 rounded-lg md:p-8"
+              class="p-4 rounded-xl md:p-8"
               id="about"
               role="tabpanel"
               aria-labelledby="about-tab"
             >
-              <div class="flex flex-col lg:flex-row gap-10">
+              <div class="flex flex-col gap-10 lg:flex-row">
                 <img
                   src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
                   alt=""
-                  class="w-56 h-56 2xl:w-80 2xl:h-80 rounded-full object-cover mx-auto"
+                  class="object-cover w-56 h-56 mx-auto rounded-full 2xl:w-80 2xl:h-80"
                 />
                 <div
                   class="w-full lg:border-l border-[#4141eb] p-5 flex flex-col gap-3"
@@ -154,23 +154,23 @@
           </div>
           <div
             v-show="store.modalGroup"
-            class="relative shadow-md rounded-lg overflow-hidden m-5"
-            :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
+            class="relative m-5 overflow-hidden shadow-md rounded-xl"
+            :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
           >
             <div class="overflow-x-auto">
               <table class="w-full text-sm text-left">
-                <thead class="btn text-white text-xs rounded-lg uppercase">
+                <thead class="text-xs text-white uppercase rounded-xl btn">
                   <tr>
-                    <th scope="col" class="text-center py-3">Nomi</th>
-                    <th scope="col" class="text-center py-3">Fani</th>
-                    <th scope="col" class="text-center py-3">Narxi</th>
-                    <th scope="col" class="text-center py-3">
+                    <th scope="col" class="py-3 text-center">Nomi</th>
+                    <th scope="col" class="py-3 text-center">Fani</th>
+                    <th scope="col" class="py-3 text-center">Narxi</th>
+                    <th scope="col" class="py-3 text-center">
                       Boshlanish sanasi
                     </th>
-                    <th scope="col" class="text-center py-3">
+                    <th scope="col" class="py-3 text-center">
                       Qo'shilgan sanasi
                     </th>
-                    <th scope="col" class="text-center py-3">To'liq</th>
+                    <th scope="col" class="py-3 text-center">To'liq</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -184,12 +184,12 @@
                   >
                     <td
                       scope="row"
-                      class="text-center px-8 py-4 font-medium whitespace-nowrap"
+                      class="px-8 py-4 font-medium text-center whitespace-nowrap"
                     >
                       {{ i.name }}
                     </td>
                     <td
-                      class="text-center font-medium whitespace-nowrap text-blue-800 px-8 py-4"
+                      class="px-8 py-4 font-medium text-center text-blue-800 whitespace-nowrap"
                     >
                       <p class="bg-blue-100 rounded-[5px] p-1">
                         <span v-for="fan in i.subject" :key="fan.id"
@@ -198,30 +198,30 @@
                       </p>
                     </td>
                     <td
-                      class="text-center font-medium whitespace-nowrap text-red-800 px-8 py-4"
+                      class="px-8 py-4 font-medium text-center text-red-800 whitespace-nowrap"
                     >
                       <p class="bg-red-100 rounded-[5px] p-1">
                         {{ Number(i.price).toLocaleString("uz-UZ") }} so'm
                       </p>
                     </td>
                     <td
-                      class="text-center font-medium whitespace-nowrap text-blue-800 px-8 py-4"
+                      class="px-8 py-4 font-medium text-center text-blue-800 whitespace-nowrap"
                     >
                       <p class="bg-blue-100 rounded-[5px] p-1">
                         {{ i.start_date }}
                       </p>
                     </td>
                     <td
-                      class="text-center font-medium whitespace-nowrap text-blue-800 px-8 py-4"
+                      class="px-8 py-4 font-medium text-center text-blue-800 whitespace-nowrap"
                     >
                       <p class="bg-blue-100 rounded-[5px] p-1">
                         {{ i.student_date }}
                       </p>
                     </td>
-                    <td class="text-center font-medium px-8 py-4">
+                    <td class="px-8 py-4 font-medium text-center">
                       <button
                         @click="enterSlug(i.id, i.name.toLowerCase())"
-                        class="btn bg-blue-600 rounded-lg px-5 py-2.5 text-white focus:ring-2"
+                        class="btn bg-blue-600 rounded-xl px-5 py-2.5 text-white focus:ring-2"
                       >
                         Kirish
                       </button>
@@ -231,7 +231,7 @@
               </table>
               <div
                 v-show="store.group.length == 0"
-                class="w-full max-w-screen text-center p-20 text-2xl font-medium"
+                class="w-full p-20 text-2xl font-medium text-center max-w-screen"
               >
                 <h1>Guruhlar ro'yhati bo'sh</h1>
               </div>
@@ -239,19 +239,19 @@
           </div>
           <div
             v-show="store.modalPayment"
-            class="relative shadow-md rounded-lg overflow-hidden m-5"
-            :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
+            class="relative m-5 overflow-hidden shadow-md rounded-xl"
+            :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
           >
             <div class="overflow-x-auto">
               <table class="w-full text-sm text-left">
-                <thead class="btn text-white text-xs rounded-lg uppercase">
+                <thead class="text-xs text-white uppercase rounded-xl btn">
                   <tr>
-                    <th scope="col" class="text-center py-3">Guruh</th>
-                    <th scope="col" class="text-center py-3">Kurs narxi</th>
-                    <th scope="col" class="text-center py-3">To'lov turi</th>
-                    <th scope="col" class="text-center py-3">To'lov</th>
-                    <th scope="col" class="text-center py-3">Oy</th>
-                    <th scope="col" class="text-center py-3">To'lov sanasi</th>
+                    <th scope="col" class="py-3 text-center">Guruh</th>
+                    <th scope="col" class="py-3 text-center">Kurs narxi</th>
+                    <th scope="col" class="py-3 text-center">To'lov turi</th>
+                    <th scope="col" class="py-3 text-center">To'lov</th>
+                    <th scope="col" class="py-3 text-center">Oy</th>
+                    <th scope="col" class="py-3 text-center">To'lov sanasi</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -268,40 +268,40 @@
                   >
                     <td
                       scope="row"
-                      class="text-center px-8 py-4 font-medium whitespace-nowrap"
+                      class="px-8 py-4 font-medium text-center whitespace-nowrap"
                     >
                       {{ i.group_name }}
                     </td>
                     <td
-                      class="text-center font-medium whitespace-nowrap text-red-800 px-8 py-4"
+                      class="px-8 py-4 font-medium text-center text-red-800 whitespace-nowrap"
                     >
                       <p class="bg-red-100 rounded-[5px] p-1">
                         {{ Number(i.group_price).toLocaleString("uz-UZ") }} so'm
                       </p>
                     </td>
                     <td
-                      class="text-center font-medium whitespace-nowrap text-blue-800 px-8 py-4"
+                      class="px-8 py-4 font-medium text-center text-blue-800 whitespace-nowrap"
                     >
                       <p class="bg-blue-100 rounded-[5px] p-1">
                         {{ i.method }}
                       </p>
                     </td>
                     <td
-                      class="text-center font-medium whitespace-nowrap text-green-700 px-8 py-4"
+                      class="px-8 py-4 font-medium text-center text-green-700 whitespace-nowrap"
                     >
                       <p class="bg-green-100 rounded-[5px] p-1">
                         {{ i.price.toLocaleString("uz-UZ") }} so'm
                       </p>
                     </td>
                     <td
-                      class="text-center font-medium whitespace-nowrap text-blue-800 px-8 py-4"
+                      class="px-8 py-4 font-medium text-center text-blue-800 whitespace-nowrap"
                     >
                       <p class="bg-blue-100 rounded-[5px] p-1">
                         {{ monthNames(i.month) }}
                       </p>
                     </td>
                     <td
-                      class="text-center font-medium whitespace-nowrap text-red-800 px-8 py-4"
+                      class="px-8 py-4 font-medium text-center text-red-800 whitespace-nowrap"
                     >
                       <p class="bg-red-100 rounded-[5px] p-1">
                         {{ formatDateToNumeric(new Date(i.createdAt)) }}
@@ -312,7 +312,7 @@
               </table>
               <div
                 v-show="store.payment.length == 0"
-                class="w-full max-w-screen text-center p-20 text-2xl font-medium"
+                class="w-full p-20 text-2xl font-medium text-center max-w-screen"
               >
                 <h1>To'lov tarixi ro'yhati bo'sh</h1>
               </div>

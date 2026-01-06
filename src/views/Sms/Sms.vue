@@ -15,7 +15,7 @@
         <!------------------------------------------- Search ------------------------------------------->
         <div
           class="flex flex-col items-center justify-between gap-3 p-4 mb-4 shadow rounded-xl lg:flex-row lg:space-x-4"
-          :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
+          :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
         >
           <h1 class="w-full text-lg font-bold text-blue-700">
             Xabar jo'natish
@@ -29,7 +29,7 @@
         <!------------------------------------------- Search ------------------------------------------->
         <div
           class="flex flex-col justify-between gap-3 p-4 py-10 mb-4 shadow rounded-xl"
-          :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
+          :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
         >
           <div class="flex w-full gap-5 pb-2 2xl:w-5/12 sm:w-4/6 lg:pb-0">
             <form
@@ -68,7 +68,7 @@
                   "
                   type="search"
                   id="simple-search"
-                  class="block w-full p-2 pl-10 text-sm border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
+                  class="block w-full p-2 pl-10 text-sm border border-gray-300 rounded-xl bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
                   placeholder="Guruhni tanlang yoki qidirish..."
                 />
                 <ul
@@ -112,7 +112,7 @@
               >
                 <button
                   type="submit"
-                  class="btnAdd flex items-center sm:max-w-fit w-full justify-center whitespace-nowrap text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2.5"
+                  class="btnAdd flex items-center sm:max-w-fit w-full justify-center whitespace-nowrap text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-xl text-sm px-4 py-2.5"
                 >
                   <span class="">Yuborish</span>
                 </button>

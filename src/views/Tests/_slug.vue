@@ -12,12 +12,12 @@
       <div class="relative p-4 max-w-xl min-w-[30%] h-auto">
         <!-- Modal content -->
         <div
-          class="relative p-4 rounded-lg shadow sm:p-5"
-          :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
+          class="relative p-4 shadow rounded-xl sm:p-5"
+          :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
         >
           <!-- Modal header -->
           <div
-            class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5"
+            class="flex items-center justify-between pb-4 mb-4 border-b rounded-t sm:mb-5"
           >
             <h3
               class="text-lg"
@@ -28,7 +28,7 @@
             <button
               @click="cancelFunc1"
               type="button"
-              class="bg-transparent hover:bg-gray-200 hover rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+              class="bg-transparent hover:bg-gray-200 hover rounded-xl text-sm p-1.5 ml-auto inline-flex items-center"
               :class="navbar.userNav ? 'text-white' : 'text-black'"
             >
               <svg
@@ -51,13 +51,13 @@
             <div class="grid grid-cols-1 gap-5 mb-5">
               <div>
                 <label
-                  class="block text-sm mb-2"
+                  class="block mb-2 text-sm"
                   :class="navbar.userNav ? 'text-white' : 'text-black'"
                   for="file_input"
                   >File</label
                 >
                 <input
-                  class="block w-full cursor-pointer bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600"
+                  class="block w-full text-sm border border-gray-300 cursor-pointer rounded-xl bg-gray-50 focus:ring-blue-600 focus:border-blue-600"
                   id="file_input"
                   @change="(e) => setImg(e)"
                   type="file"
@@ -67,14 +67,14 @@
               <div class="">
                 <label
                   for="subject"
-                  class="block text-sm mb-2"
+                  class="block mb-2 text-sm"
                   :class="navbar.userNav ? 'text-white' : 'text-black'"
                   >Matn tanlang</label
                 >
                 <select
                   v-model="form.text_id"
                   id="subject"
-                  class="bg-gray-50 border border-gray-300 text-sm z-10 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2"
+                  class="z-10 block w-full p-2 text-sm border border-gray-300 rounded-xl bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
                 >
                   <option value="" disabled selected>Matn tanlang</option>
                   <option
@@ -99,7 +99,7 @@
                   id="question"
                   v-model="form.question"
                   rows="5"
-                  class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                  class="bg-gray-50 border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                   placeholder="Savolni yozing.."
                   required
                 ></textarea>
@@ -127,7 +127,7 @@
               >
                 <label
                   :for="'variant-' + index"
-                  class="block text-sm mb-2"
+                  class="block mb-2 text-sm"
                   :class="navbar.userNav ? 'text-white' : 'text-black'"
                 >
                   Variant {{ String.fromCharCode(65 + index) }}
@@ -136,7 +136,7 @@
                   v-model="form.variants[index]"
                   :id="'variant-' + index"
                   type="text"
-                  class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                  class="bg-gray-50 border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                   :placeholder="`Variant ${String.fromCharCode(
                     65 + index
                   )} ni kiriting`"
@@ -149,7 +149,7 @@
             <button
               type="button"
               @click="addVariant"
-              class="mb-5 cursor-pointer text-blue-700 text-end w-full underline"
+              class="w-full mb-5 text-blue-700 underline cursor-pointer text-end"
             >
               Variant qo‘shish
             </button>
@@ -170,24 +170,24 @@
                       form.true_answer === index,
                     'bg-gray-100': form.true_answer !== index,
                   }"
-                  class="cursor-pointer w-8 h-8 flex items-center justify-center rounded-full hover:bg-blue-300"
+                  class="flex items-center justify-center w-8 h-8 rounded-full cursor-pointer hover:bg-blue-300"
                 >
                   {{ String.fromCharCode(65 + index) }}
                 </span>
               </div>
             </div>
 
-            <div class="flex items-center justify-between border-t pt-5 mt-5">
+            <div class="flex items-center justify-between pt-5 mt-5 border-t">
               <button
                 @click="cancelFunc1"
                 type="button"
-                class="border cursor-pointer inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                class="border cursor-pointer inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
               >
                 Bekor qilish
               </button>
               <button
                 type="submit"
-                class="btnAdd cursor-pointer text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                class="btnAdd cursor-pointer text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
               >
                 Qo'shish
               </button>
@@ -209,15 +209,15 @@
           : 'hidden'
       "
     >
-      <div class="relative p-4 w-full max-w-lg h-auto">
+      <div class="relative w-full h-auto max-w-lg p-4">
         <!-- Modal content -->
         <div
-          class="relative p-4 rounded-lg shadow sm:p-5"
-          :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
+          class="relative p-4 shadow rounded-xl sm:p-5"
+          :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
         >
           <!-- Modal header -->
           <div
-            class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5"
+            class="flex items-center justify-between pb-4 mb-4 border-b rounded-t sm:mb-5"
           >
             <h3
               class="text-lg"
@@ -228,7 +228,7 @@
             <button
               @click="store.textModal = false"
               type="button"
-              class="bg-transparent hover:bg-gray-200 hover rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+              class="bg-transparent hover:bg-gray-200 hover rounded-xl text-sm p-1.5 ml-auto inline-flex items-center"
               :class="{ 'text-white': navbar.userNav }"
             >
               <svg
@@ -251,7 +251,7 @@
             @submit.prevent="createText"
             :class="{ darkForm: navbar.userNav }"
           >
-            <div class="grid font-medium gap-4 mb-4 grid-cols-1">
+            <div class="grid grid-cols-1 gap-4 mb-4 font-medium">
               <div class="">
                 <label
                   for="title"
@@ -264,7 +264,7 @@
                   type="text"
                   name="title"
                   id="title"
-                  class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                  class="bg-gray-50 border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                   placeholder="Matn mavzusini kiriting.."
                   required
                 />
@@ -280,7 +280,7 @@
                   id="question"
                   v-model="store.text"
                   rows="5"
-                  class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                  class="bg-gray-50 border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                   placeholder="Matnni yozing.."
                   required
                 ></textarea>
@@ -289,32 +289,32 @@
               <div v-for="i in store.textData" :key="i.id">
                 <div class="flex items-center justify-between gap-3">
                   <h2
-                    class="bg-gray-50 border border-gray-300 text-sm w-full p-2.5 rounded-lg"
+                    class="bg-gray-50 border border-gray-300 text-sm w-full p-2.5 rounded-xl"
                     :title="i.text"
                   >
                     {{ i.title }}
                   </h2>
                   <i
                     @click="deleteText(i.id)"
-                    class="bx bxs-trash bg-red-300 cursor-pointer text-red-600 rounded-lg sm:p-2 p-1.5 focus:ring-2"
+                    class="bx bxs-trash bg-red-300 cursor-pointer text-red-600 rounded-xl sm:p-2 p-1.5 focus:ring-2"
                   >
                   </i>
                 </div>
               </div>
             </div>
             <div
-              class="w-full flex items-center justify-between border-t pt-5 mt-5"
+              class="flex items-center justify-between w-full pt-5 mt-5 border-t"
             >
               <button
                 @click="store.textModal"
                 type="button"
-                class="border inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                class="border inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
               >
                 Bekor qilish
               </button>
               <button
                 type="submit"
-                class="btnAdd text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                class="btnAdd text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
               >
                 Qo'shish
               </button>
@@ -339,12 +339,12 @@
       <div class="relative p-4 max-w-xl min-w-[30%] h-auto">
         <!-- Modal content -->
         <div
-          class="relative p-4 rounded-lg shadow sm:p-5"
-          :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
+          class="relative p-4 shadow rounded-xl sm:p-5"
+          :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
         >
           <!-- Modal header -->
           <div
-            class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5"
+            class="flex items-center justify-between pb-4 mb-4 border-b rounded-t sm:mb-5"
           >
             <h3
               class="text-lg"
@@ -355,7 +355,7 @@
             <button
               @click="edit.toggle = false"
               type="button"
-              class="bg-transparent hover:bg-gray-200 hover rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+              class="bg-transparent hover:bg-gray-200 hover rounded-xl text-sm p-1.5 ml-auto inline-flex items-center"
               :class="navbar.userNav ? 'text-white' : 'text-black'"
             >
               <svg
@@ -378,13 +378,13 @@
             <div class="grid gap-5 mb-5">
               <div>
                 <label
-                  class="block text-sm mb-2"
+                  class="block mb-2 text-sm"
                   :class="navbar.userNav ? 'text-white' : 'text-black'"
                   for="file_input"
                   >File</label
                 >
                 <input
-                  class="block w-full cursor-pointer bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600"
+                  class="block w-full text-sm border border-gray-300 cursor-pointer rounded-xl bg-gray-50 focus:ring-blue-600 focus:border-blue-600"
                   id="file_input"
                   @change="(e) => setImg(e)"
                   type="file"
@@ -394,14 +394,14 @@
               <div class="">
                 <label
                   for="subject"
-                  class="block text-sm mb-2"
+                  class="block mb-2 text-sm"
                   :class="navbar.userNav ? 'text-white' : 'text-black'"
                   >Matn tanlang</label
                 >
                 <select
                   v-model="edit.text_id"
                   id="subject"
-                  class="bg-gray-50 border border-gray-300 text-sm z-10 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2"
+                  class="z-10 block w-full p-2 text-sm border border-gray-300 rounded-xl bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
                 >
                   <option value="" disabled selected>Matn tanlang</option>
                   <option
@@ -426,7 +426,7 @@
                   id="question"
                   v-model="edit.question"
                   rows="5"
-                  class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                  class="bg-gray-50 border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                   placeholder="Savolni yozing.."
                   required
                 ></textarea>
@@ -454,7 +454,7 @@
                 <div>
                   <label
                     :for="'variant-' + index"
-                    class="block text-sm mb-2"
+                    class="block mb-2 text-sm"
                     :class="navbar.userNav ? 'text-white' : 'text-black'"
                   >
                     Variant {{ String.fromCharCode(65 + index) }}
@@ -463,7 +463,7 @@
                     v-model="edit.variants[index].text"
                     :id="'variant-' + index"
                     type="text"
-                    class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                    class="bg-gray-50 border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                     :placeholder="`Variant ${String.fromCharCode(
                       65 + index
                     )} ni kiriting`"
@@ -472,7 +472,7 @@
                 </div>
                 <i
                   @click="deleteOption(variant.id)"
-                  class="bx bxs-trash mt-7 bg-red-300 cursor-pointer text-red-600 rounded-lg p-2 focus:ring-2"
+                  class="p-2 text-red-600 bg-red-300 cursor-pointer rounded-xl bx bxs-trash mt-7 focus:ring-2"
                 >
                 </i>
               </div>
@@ -482,7 +482,7 @@
             <button
               type="button"
               @click="addVariant2"
-              class="mb-5 cursor-pointer text-blue-700 text-end w-full underline"
+              class="w-full mb-5 text-blue-700 underline cursor-pointer text-end"
             >
               Variant qo‘shish
             </button>
@@ -503,24 +503,24 @@
                       edit.true_answer === index,
                     'bg-gray-100': edit.true_answer !== index,
                   }"
-                  class="cursor-pointer w-8 h-8 flex items-center justify-center rounded-full hover:bg-blue-300"
+                  class="flex items-center justify-center w-8 h-8 rounded-full cursor-pointer hover:bg-blue-300"
                 >
                   {{ String.fromCharCode(65 + index) }}
                 </span>
               </div>
             </div>
 
-            <div class="flex items-center justify-between border-t pt-5 mt-5">
+            <div class="flex items-center justify-between pt-5 mt-5 border-t">
               <button
                 @click="edit.toggle = false"
                 type="button"
-                class="border cursor-pointer inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                class="border cursor-pointer inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
               >
                 Bekor qilish
               </button>
               <button
                 type="submit"
-                class="btnAdd cursor-pointer text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                class="btnAdd cursor-pointer text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
               >
                 Qo'shish
               </button>
@@ -543,12 +543,12 @@
       <div class="relative p-4 max-w-5xl min-w-[30%] h-auto">
         <!-- Modal content -->
         <div
-          class="relative p-4 rounded-lg shadow sm:p-5"
-          :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
+          class="relative p-4 shadow rounded-xl sm:p-5"
+          :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
         >
           <!-- Modal header -->
           <div
-            class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5"
+            class="flex items-center justify-between pb-4 mb-4 border-b rounded-t sm:mb-5"
           >
             <h3
               class="text-lg"
@@ -559,7 +559,7 @@
             <button
               @click="remove.toggle = false"
               type="button"
-              class="bg-transparent hover:bg-gray-200 hover rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+              class="bg-transparent hover:bg-gray-200 hover rounded-xl text-sm p-1.5 ml-auto inline-flex items-center"
               :class="navbar.userNav ? 'text-white' : 'text-black'"
             >
               <svg
@@ -579,7 +579,7 @@
           </div>
           <!-- Modal body -->
           <div :class="{ darkForm: navbar.userNav }">
-            <div class="grid font-medium gap-4 mb-4 grid-cols-1">
+            <div class="grid grid-cols-1 gap-4 mb-4 font-medium">
               <div>
                 <div></div>
                 <h1
@@ -590,18 +590,18 @@
                 </h1>
               </div>
               <div
-                class="w-full flex items-center justify-between border-t pt-5 mt-5"
+                class="flex items-center justify-between w-full pt-5 mt-5 border-t"
               >
                 <button
                   @click="remove.toggle = false"
                   type="button"
-                  class="border cursor-pointer inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                  class="border cursor-pointer inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                 >
                   Bekor qilish
                 </button>
                 <button
                   @click="deleteProduct"
-                  class="btnAdd cursor-pointer text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                  class="btnAdd cursor-pointer text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                 >
                   O'chirish
                 </button>
@@ -625,21 +625,21 @@
       <div v-show="store.allProducts" class="w-full max-w-screen">
         <!-- Start coding here -->
         <div
-          class="shadow rounded-xl flex flex-col lg:flex-row items-center justify-between lg:space-x-4 p-4 mb-4"
-          :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
+          class="flex flex-col items-center justify-between p-4 mb-4 shadow rounded-xl lg:flex-row lg:space-x-4"
+          :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
         >
           <div
-            class="w-full flex sm:flex-row flex-col items-center lg:justify-start lg:pb-0 pb-4 justify-between gap-5"
+            class="flex flex-col items-center justify-between w-full gap-5 pb-4 sm:flex-row lg:justify-start lg:pb-0"
           >
-            <h1 class="text-blue-700 font-bold text-lg">Savollar</h1>
+            <h1 class="text-lg font-bold text-blue-700">Savollar</h1>
             <div
-              class="lg:w-auto w-full flex flex-row items-center justify-between gap-5 md:space-x-3"
+              class="flex flex-row items-center justify-between w-full gap-5 lg:w-auto md:space-x-3"
             >
               <button
                 @click="modal = true"
                 id=""
                 type="button"
-                class="btnAdd flex items-center w-full justify-center whitespace-nowrap text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2"
+                class="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-xl btnAdd whitespace-nowrap hover:bg-blue-700 focus:ring-4 focus:ring-blue-300"
               >
                 <span>Savol qo'shish</span>
               </button>
@@ -648,7 +648,7 @@
                 @click="store.textModal = true"
                 id=""
                 type="button"
-                class="btnAdd flex items-center w-full justify-center whitespace-nowrap text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2"
+                class="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-xl btnAdd whitespace-nowrap hover:bg-blue-700 focus:ring-4 focus:ring-blue-300"
               >
                 <span>Matn qo'shish</span>
               </button>
@@ -657,7 +657,7 @@
 
           <button
             @click="router.back(-1)"
-            class="btn sm:w-auto w-full shadow-lg rounded-lg whitespace-nowrap px-5 py-2.5 text-white focus:ring-2 text-sm"
+            class="btn sm:w-auto w-full shadow-lg rounded-xl whitespace-nowrap px-5 py-2.5 text-white focus:ring-2 text-sm"
           >
             Orqaga qaytish
           </button>
@@ -665,8 +665,8 @@
         <!------------------------------------------- Search ------------------------------------------->
 
         <div
-          class="relative shadow-md rounded-lg overflow-hidden p-5"
-          :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
+          class="relative p-5 overflow-hidden shadow-md rounded-xl"
+          :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
         >
           <div
             class="overflow-x-auto"
@@ -675,7 +675,7 @@
           >
             <div>
               <div
-                class="flex justify-between items-center w-full sm:gap-5 gap-2"
+                class="flex items-center justify-between w-full gap-2 sm:gap-5"
               >
                 <div
                   @click="accordion(i.id)"
@@ -684,9 +684,9 @@
                 >
                   <button
                     type="button"
-                    class="flex items-center justify-between w-full text-left rounded-lg bg-[rgba(213,219,242,0.5)] sm:py-[18px] sm:px-[20px] py-[14px] px-[14px]"
+                    class="flex items-center justify-between w-full text-left rounded-xl bg-[rgba(213,219,242,0.5)] sm:py-[18px] sm:px-[20px] py-[14px] px-[14px]"
                   >
-                    <div class="flex items-center sm:gap-5 gap-3">
+                    <div class="flex items-center gap-3 sm:gap-5">
                       <p
                         class="btn sm:min-w-[50px] sm:min-h-[50px] min-w-[30px] min-h-[30px] sm:h-[35px] 2xl:w-[55px] 2xl:h-[50px] flex items-center font-bold justify-center text-[14px] sm:text-[16px] 2xl:text-[20px] text-white rounded-full"
                       >
@@ -710,12 +710,12 @@
                 <div class="flex flex-col gap-2 mb-5">
                   <i
                     @click="getOneProduct(i.id)"
-                    class="bx bxs-pencil bg-blue-300 text-blue-600 rounded-lg sm:p-2 p-1.5 cursor-pointer focus:ring-2"
+                    class="bx bxs-pencil bg-blue-300 text-blue-600 rounded-xl sm:p-2 p-1.5 cursor-pointer focus:ring-2"
                   >
                   </i>
                   <i
                     @click="deleteFunc(i.id)"
-                    class="bx bxs-trash bg-red-300 cursor-pointer text-red-600 rounded-lg sm:p-2 p-1.5 focus:ring-2"
+                    class="bx bxs-trash bg-red-300 cursor-pointer text-red-600 rounded-xl sm:p-2 p-1.5 focus:ring-2"
                   >
                   </i>
                 </div>
@@ -751,18 +751,18 @@
                   </div>
                   <div
                     v-if="i.text"
-                    class="text-justify flex flex-col px-5 mb-10"
+                    class="flex flex-col px-5 mb-10 text-justify"
                   >
-                    <h3 class="font-bold mb-2">{{ i.text.title }}</h3>
+                    <h3 class="mb-2 font-bold">{{ i.text.title }}</h3>
                     <p class="whitespace-pre-line">{{ i.text.text }}</p>
                   </div>
-                  <h3 class="text-justify flex px-5">{{ i.question }}</h3>
+                  <h3 class="flex px-5 text-justify">{{ i.question }}</h3>
                 </div>
-                <div class="grid sm:grid-cols-2 gap-5">
+                <div class="grid gap-5 sm:grid-cols-2">
                   <div
                     v-for="(ans, ansIndex) in i.option"
                     :key="ansIndex"
-                    class="w-full text-justify text-black p-2.5 sm:pl-10 pl-5 text-sm rounded-lg"
+                    class="w-full text-justify text-black p-2.5 sm:pl-10 pl-5 text-sm rounded-xl"
                     :class="
                       ans.is_correct
                         ? 'bg-blue-300 text-blue-600'
@@ -778,13 +778,13 @@
           </div>
           <div
             v-show="store.allProducts && store.error"
-            class="w-full max-w-screen text-center p-20 text-2xl font-medium"
+            class="w-full p-20 text-2xl font-medium text-center max-w-screen"
           >
             <h1>{{ store.allProducts }}</h1>
           </div>
           <div
             v-show="store.guard == 'o\'quvchi'"
-            class="w-full max-w-screen text-center p-20 text-2xl font-medium"
+            class="w-full p-20 text-2xl font-medium text-center max-w-screen"
           >
             <h1>Siz savollarni ko'rish huququga ega emassiz!</h1>
           </div>

@@ -13,12 +13,12 @@
       <div class="relative p-4 max-w-5xl min-w-[30%] h-auto">
         <!-- Modal content -->
         <div
-          class="relative p-4 rounded-lg shadow sm:p-5"
-          :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
+          class="relative p-4 shadow rounded-xl sm:p-5"
+          :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
         >
           <!-- Modal header -->
           <div
-            class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5"
+            class="flex items-center justify-between pb-4 mb-4 border-b rounded-t sm:mb-5"
           >
             <h3
               class="text-lg"
@@ -29,7 +29,7 @@
             <button
               @click="toggleModal"
               type="button"
-              class="bg-transparent hover:bg-gray-200 hover rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+              class="bg-transparent hover:bg-gray-200 hover rounded-xl text-sm p-1.5 ml-auto inline-flex items-center"
               :class="navbar.userNav ? 'text-white' : 'text-black'"
             >
               <svg
@@ -52,7 +52,7 @@
             @submit.prevent="createProduct"
             :class="{ darkForm: navbar.userNav }"
           >
-            <div class="grid grid-cols-2 font-medium gap-4 mb-4">
+            <div class="grid grid-cols-2 gap-4 mb-4 font-medium">
               <div>
                 <label
                   for="name"
@@ -65,7 +65,7 @@
                   type="text"
                   name="name"
                   id="name"
-                  class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                  class="bg-gray-50 border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                   placeholder="Guruh nomi"
                   required
                 />
@@ -82,7 +82,7 @@
                   type="number"
                   name="price"
                   id="price"
-                  class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                  class="bg-gray-50 border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                   placeholder="Guruh narxi"
                   required
                 />
@@ -99,7 +99,7 @@
                   type="date"
                   name="phone"
                   id="phone"
-                  class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                  class="bg-gray-50 border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                   required
                 />
               </div>
@@ -117,7 +117,7 @@
                   name="start_time"
                   id="start_time"
                   step="60"
-                  class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                  class="bg-gray-50 border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                   placeholder="Boshlanish vaqti"
                   required
                 />
@@ -135,7 +135,7 @@
                   name="end_time"
                   id="end_time"
                   step="60"
-                  class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                  class="bg-gray-50 border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                   placeholder="Tugash vaqti"
                   required
                 />
@@ -150,7 +150,7 @@
                 <select
                   v-model="form.subject"
                   id="subject"
-                  class="bg-gray-50 border border-gray-300 text-md z-10 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2"
+                  class="z-10 block w-full p-2 border border-gray-300 rounded-xl bg-gray-50 text-md focus:ring-blue-500 focus:border-blue-500"
                   required
                 >
                   <option value="" disabled selected>Fan tanlang</option>
@@ -174,7 +174,7 @@
                 <select
                   v-model="form.employee"
                   id="teacher"
-                  class="bg-gray-50 border border-gray-300 text-md z-10 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2"
+                  class="z-10 block w-full p-2 border border-gray-300 rounded-xl bg-gray-50 text-md focus:ring-blue-500 focus:border-blue-500"
                   required
                 >
                   <option value="" disabled selected>O'qituvchi tanlang</option>
@@ -190,13 +190,13 @@
                 <button
                   @click="cancelFunc"
                   type="button"
-                  class="border cursor-pointer inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                  class="border cursor-pointer inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                 >
                   Bekor qilish
                 </button>
                 <button
                   type="submit"
-                  class="btnAdd cursor-pointer text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                  class="btnAdd cursor-pointer text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                 >
                   Qo'shish
                 </button>
@@ -220,12 +220,12 @@
       <div class="relative p-4 max-w-5xl min-w-[30%] h-auto">
         <!-- Modal content -->
         <div
-          class="relative p-4 rounded-lg shadow sm:p-5"
-          :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
+          class="relative p-4 shadow rounded-xl sm:p-5"
+          :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
         >
           <!-- Modal header -->
           <div
-            class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5"
+            class="flex items-center justify-between pb-4 mb-4 border-b rounded-t sm:mb-5"
           >
             <h3
               class="text-lg"
@@ -240,7 +240,7 @@
                 edit.description = '';
               "
               type="button"
-              class="bg-transparent hover:bg-gray-200 hover rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+              class="bg-transparent hover:bg-gray-200 hover rounded-xl text-sm p-1.5 ml-auto inline-flex items-center"
               :class="navbar.userNav ? 'text-white' : 'text-black'"
             >
               <svg
@@ -263,7 +263,7 @@
             @submit.prevent="editProduct"
             :class="{ darkForm: navbar.userNav }"
           >
-            <div class="grid font-medium gap-4 mb-4 grid-cols-2">
+            <div class="grid grid-cols-2 gap-4 mb-4 font-medium">
               <div>
                 <label
                   for="name"
@@ -276,7 +276,7 @@
                   type="text"
                   name="name"
                   id="name"
-                  class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                  class="bg-gray-50 border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                   placeholder="Guruh nomi"
                   required
                 />
@@ -293,7 +293,7 @@
                   type="number"
                   name="price"
                   id="price"
-                  class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                  class="bg-gray-50 border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                   placeholder="Guruh narxi"
                   required
                 />
@@ -310,7 +310,7 @@
                   type="date"
                   name="phone"
                   id="phone"
-                  class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                  class="bg-gray-50 border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                   required
                 />
               </div>
@@ -328,7 +328,7 @@
                   name="start_time"
                   id="start_time"
                   step="60"
-                  class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                  class="bg-gray-50 border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                   placeholder="Boshlanish vaqti"
                   required
                 />
@@ -346,7 +346,7 @@
                   name="end_time"
                   id="end_time"
                   step="60"
-                  class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                  class="bg-gray-50 border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                   placeholder="Tugash vaqti"
                   required
                 />
@@ -361,7 +361,7 @@
                 <select
                   v-model="edit.subject"
                   id="subject"
-                  class="bg-gray-50 border border-gray-300 text-md z-10 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2"
+                  class="z-10 block w-full p-2 border border-gray-300 rounded-xl bg-gray-50 text-md focus:ring-blue-500 focus:border-blue-500"
                   required
                 >
                   <option value="" disabled selected>Fan tanlang</option>
@@ -385,7 +385,7 @@
                 <select
                   v-model="edit.employee"
                   id="teacher"
-                  class="bg-gray-50 border border-gray-300 text-md z-10 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2"
+                  class="z-10 block w-full p-2 border border-gray-300 rounded-xl bg-gray-50 text-md focus:ring-blue-500 focus:border-blue-500"
                   required
                 >
                   <option value="" disabled selected>O'qituvchi tanlang</option>
@@ -401,13 +401,13 @@
                 <button
                   @click="cancelFunc1"
                   type="button"
-                  class="border cursor-pointer inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                  class="border cursor-pointer inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                 >
                   Bekor qilish
                 </button>
                 <button
                   type="submit"
-                  class="btnAdd cursor-pointer text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                  class="btnAdd cursor-pointer text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                 >
                   O'zgartirish
                 </button>
@@ -431,12 +431,12 @@
       <div class="relative p-4 max-w-5xl min-w-[30%] h-auto">
         <!-- Modal content -->
         <div
-          class="relative p-4 rounded-lg shadow sm:p-5"
-          :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
+          class="relative p-4 shadow rounded-xl sm:p-5"
+          :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
         >
           <!-- Modal header -->
           <div
-            class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5"
+            class="flex items-center justify-between pb-4 mb-4 border-b rounded-t sm:mb-5"
           >
             <h3
               class="text-lg"
@@ -447,7 +447,7 @@
             <button
               @click="remove.toggle = false"
               type="button"
-              class="bg-transparent hover:bg-gray-200 hover rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+              class="bg-transparent hover:bg-gray-200 hover rounded-xl text-sm p-1.5 ml-auto inline-flex items-center"
               :class="navbar.userNav ? 'text-white' : 'text-black'"
             >
               <svg
@@ -467,7 +467,7 @@
           </div>
           <!-- Modal body -->
           <div :class="{ darkForm: navbar.userNav }">
-            <div class="grid font-medium gap-4 mb-4 grid-cols-1">
+            <div class="grid grid-cols-1 gap-4 mb-4 font-medium">
               <div>
                 <div></div>
                 <h1
@@ -478,18 +478,18 @@
                 </h1>
               </div>
               <div
-                class="w-full flex items-center justify-between border-t pt-5 mt-5"
+                class="flex items-center justify-between w-full pt-5 mt-5 border-t"
               >
                 <button
                   @click="remove.toggle = false"
                   type="button"
-                  class="border cursor-pointer inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                  class="border cursor-pointer inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                 >
                   Bekor qilish
                 </button>
                 <button
                   @click="deleteProduct"
-                  class="btnAdd cursor-pointer text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                  class="btnAdd cursor-pointer text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                 >
                   O'chirish
                 </button>
@@ -521,22 +521,22 @@
       >
         <!-- Start coding here -->
         <div
-          class="shadow rounded-xl flex flex-col lg:flex-row items-center justify-between lg:space-x-4 p-4 mb-4"
-          :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
+          class="flex flex-col items-center justify-between p-4 mb-4 shadow rounded-xl lg:flex-row lg:space-x-4"
+          :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
         >
           <div
-            class="w-full flex items-center lg:justify-start lg:pb-0 pb-4 justify-between gap-5"
+            class="flex items-center justify-between w-full gap-5 pb-4 lg:justify-start lg:pb-0"
           >
-            <h1 class="text-blue-700 font-bold text-lg">Guruhlar</h1>
+            <h1 class="text-lg font-bold text-blue-700">Guruhlar</h1>
             <div
-              class="lg:w-auto flex flex-row items-center justify-end space-x-3"
+              class="flex flex-row items-center justify-end space-x-3 lg:w-auto"
             >
               <button
                 v-show="store.guard"
                 @click="toggleModal"
                 id=""
                 type="button"
-                class="btnAdd flex items-center max-w-fit justify-center whitespace-nowrap text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2"
+                class="flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-xl btnAdd max-w-fit whitespace-nowrap hover:bg-blue-700 focus:ring-4 focus:ring-blue-300"
               >
                 <span>Guruh qo'shish</span>
               </button>
@@ -544,7 +544,7 @@
           </div>
 
           <div v-show="store.guard" class="w-full lg:w-80">
-            <form class="flex items-center text-gray-900 font-medium">
+            <form class="flex items-center font-medium text-gray-900">
               <label for="simple-search" class="sr-only">Qidiruv</label>
               <div class="relative w-full">
                 <div
@@ -572,16 +572,16 @@
                   "
                   type="search"
                   id="simple-search"
-                  class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2"
+                  class="block w-full p-2 pl-10 text-sm border border-gray-300 rounded-xl bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
                   placeholder="Qidirish..."
                 />
                 <ul
                   v-show="store.filter_show"
-                  class="absolute z-10 max-h-80 overflow-y-auto overflow-hidden py-1 text-gray-600 rounded bg-white w-full"
+                  class="absolute z-10 w-full py-1 overflow-hidden overflow-y-auto text-gray-600 bg-white rounded max-h-80"
                   :class="{ hidden: !store.searchList.length }"
                 >
                   <li
-                    class="hover:bg-gray-100 cursor-pointer pl-2"
+                    class="pl-2 cursor-pointer hover:bg-gray-100"
                     v-for="(i, index) in store.searchList"
                     :key="index"
                     @click="
@@ -599,20 +599,20 @@
         <!------------------------------------------- Search ------------------------------------------->
 
         <div
-          class="relative shadow-md rounded-lg overflow-hidden mb-28"
-          :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
+          class="relative overflow-hidden shadow-md rounded-xl mb-28"
+          :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
         >
           <div class="overflow-x-auto">
             <table v-show="store.guard" class="w-full text-sm text-left">
-              <thead class="btnAdd text-white text-xs rounded-lg uppercase">
+              <thead class="text-xs text-white uppercase rounded-xl btnAdd">
                 <tr>
-                  <th scope="col" class="text-center py-3">Nomi</th>
-                  <th scope="col" class="text-center py-3">Fani</th>
-                  <th scope="col" class="text-center py-3">Narxi</th>
-                  <th scope="col" class="text-center py-3">
+                  <th scope="col" class="py-3 text-center">Nomi</th>
+                  <th scope="col" class="py-3 text-center">Fani</th>
+                  <th scope="col" class="py-3 text-center">Narxi</th>
+                  <th scope="col" class="py-3 text-center">
                     Boshlanish sanasi
                   </th>
-                  <th scope="col" class="text-center py-3">To'liq</th>
+                  <th scope="col" class="py-3 text-center">To'liq</th>
                   <th></th>
                 </tr>
               </thead>
@@ -628,12 +628,12 @@
                 >
                   <td
                     scope="row"
-                    class="text-center px-8 py-4 font-medium whitespace-nowrap"
+                    class="px-8 py-4 font-medium text-center whitespace-nowrap"
                   >
                     {{ i.name }}
                   </td>
                   <td
-                    class="text-center font-medium whitespace-nowrap text-blue-800 px-8 py-4"
+                    class="px-8 py-4 font-medium text-center text-blue-800 whitespace-nowrap"
                   >
                     <p class="bg-blue-100 rounded-[5px] p-1">
                       <span v-for="fan in i.subject" :key="fan.id"
@@ -642,38 +642,38 @@
                     </p>
                   </td>
                   <td
-                    class="text-center font-medium whitespace-nowrap text-red-800 px-8 py-4"
+                    class="px-8 py-4 font-medium text-center text-red-800 whitespace-nowrap"
                   >
                     <p class="bg-red-100 rounded-[5px] p-1">
                       {{ Number(i.price).toLocaleString("uz-UZ") }} so'm
                     </p>
                   </td>
                   <td
-                    class="text-center font-medium whitespace-nowrap text-blue-800 px-8 py-4"
+                    class="px-8 py-4 font-medium text-center text-blue-800 whitespace-nowrap"
                   >
                     <p class="bg-blue-100 rounded-[5px] p-1">
                       {{ i.start_date }}
                     </p>
                   </td>
-                  <td class="text-center font-medium px-8 py-4">
+                  <td class="px-8 py-4 font-medium text-center">
                     <button
                       @click="enterSlug(i.id, i.name.toLowerCase())"
-                      class="btnKirish bg-blue-600 rounded-lg px-5 py-2.5 text-white focus:ring-2"
+                      class="btnKirish bg-blue-600 rounded-xl px-5 py-2.5 text-white focus:ring-2"
                     >
                       Kirish
                     </button>
                   </td>
                   <td
-                    class="text-center whitespace-nowrap font-medium pr-5 py-4"
+                    class="py-4 pr-5 font-medium text-center whitespace-nowrap"
                   >
                     <i
                       @click="getOneProduct(i.id)"
-                      class="bx bxs-pencil bg-blue-300 text-blue-600 rounded-lg p-2 mr-3 cursor-pointer focus:ring-2"
+                      class="p-2 mr-3 text-blue-600 bg-blue-300 cursor-pointer rounded-xl bx bxs-pencil focus:ring-2"
                     >
                     </i>
                     <i
                       @click="deleteFunc(i.id)"
-                      class="bx bxs-trash bg-red-300 cursor-pointer text-red-600 rounded-lg p-2 focus:ring-2"
+                      class="p-2 text-red-600 bg-red-300 cursor-pointer rounded-xl bx bxs-trash focus:ring-2"
                     >
                     </i>
                   </td>
@@ -689,12 +689,12 @@
                 >
                   <td
                     scope="row"
-                    class="text-center px-8 py-4 font-medium whitespace-nowrap"
+                    class="px-8 py-4 font-medium text-center whitespace-nowrap"
                   >
                     {{ i.name }}
                   </td>
                   <td
-                    class="text-center font-medium whitespace-nowrap text-blue-800 px-8 py-4"
+                    class="px-8 py-4 font-medium text-center text-blue-800 whitespace-nowrap"
                   >
                     <p class="bg-blue-100 rounded-[5px] p-1">
                       <span v-for="fan in i.subject" :key="fan.id"
@@ -703,38 +703,38 @@
                     </p>
                   </td>
                   <td
-                    class="text-center font-medium whitespace-nowrap text-red-800 px-8 py-4"
+                    class="px-8 py-4 font-medium text-center text-red-800 whitespace-nowrap"
                   >
                     <p class="bg-red-100 rounded-[5px] p-1">
                       {{ i.price }} so'm
                     </p>
                   </td>
                   <td
-                    class="text-center font-medium whitespace-nowrap text-blue-800 px-8 py-4"
+                    class="px-8 py-4 font-medium text-center text-blue-800 whitespace-nowrap"
                   >
                     <p class="bg-blue-100 rounded-[5px] p-1">
                       {{ i.start_date }}
                     </p>
                   </td>
-                  <td class="text-center font-medium px-8 py-4">
+                  <td class="px-8 py-4 font-medium text-center">
                     <button
                       @click="enterSlug(i.id, i.name.toLowerCase())"
-                      class="btnKirish bg-blue-600 rounded-lg px-5 py-2.5 text-white focus:ring-2"
+                      class="btnKirish bg-blue-600 rounded-xl px-5 py-2.5 text-white focus:ring-2"
                     >
                       Kirish
                     </button>
                   </td>
                   <td
-                    class="text-center whitespace-nowrap font-medium pr-5 py-4"
+                    class="py-4 pr-5 font-medium text-center whitespace-nowrap"
                   >
                     <i
                       @click="getOneProduct(i.id)"
-                      class="bx bxs-pencil bg-blue-300 text-blue-600 rounded-lg p-2 mr-3 cursor-pointer focus:ring-2"
+                      class="p-2 mr-3 text-blue-600 bg-blue-300 cursor-pointer rounded-xl bx bxs-pencil focus:ring-2"
                     >
                     </i>
                     <i
                       @click="deleteFunc(i.id)"
-                      class="bx bxs-trash bg-red-300 cursor-pointer text-red-600 rounded-lg p-2 focus:ring-2"
+                      class="p-2 text-red-600 bg-red-300 cursor-pointer rounded-xl bx bxs-trash focus:ring-2"
                     >
                     </i>
                   </td>
@@ -742,18 +742,18 @@
               </tbody>
             </table>
             <table v-show="!store.guard" class="w-full text-sm text-left">
-              <thead class="btnAdd text-white text-xs rounded-lg uppercase">
+              <thead class="text-xs text-white uppercase rounded-xl btnAdd">
                 <tr>
-                  <th scope="col" class="text-center py-3">Nomi</th>
-                  <th scope="col" class="text-center py-3">Fani</th>
-                  <th scope="col" class="text-center py-3">Narxi</th>
-                  <th scope="col" class="text-center py-3">
+                  <th scope="col" class="py-3 text-center">Nomi</th>
+                  <th scope="col" class="py-3 text-center">Fani</th>
+                  <th scope="col" class="py-3 text-center">Narxi</th>
+                  <th scope="col" class="py-3 text-center">
                     Boshlanish sanasi
                   </th>
-                  <th scope="col" class="text-center py-3">
+                  <th scope="col" class="py-3 text-center">
                     Qo'shilgan sanasi
                   </th>
-                  <th scope="col" class="text-center py-3">To'liq</th>
+                  <th scope="col" class="py-3 text-center">To'liq</th>
                 </tr>
               </thead>
               <tbody>
@@ -767,12 +767,12 @@
                 >
                   <td
                     scope="row"
-                    class="text-center px-8 py-4 font-medium whitespace-nowrap"
+                    class="px-8 py-4 font-medium text-center whitespace-nowrap"
                   >
                     {{ i.name }}
                   </td>
                   <td
-                    class="text-center font-medium whitespace-nowrap text-blue-800 px-8 py-4"
+                    class="px-8 py-4 font-medium text-center text-blue-800 whitespace-nowrap"
                   >
                     <p class="bg-blue-100 rounded-[5px] p-1">
                       <span v-for="fan in i.subject" :key="fan.id"
@@ -781,30 +781,30 @@
                     </p>
                   </td>
                   <td
-                    class="text-center font-medium whitespace-nowrap text-red-800 px-8 py-4"
+                    class="px-8 py-4 font-medium text-center text-red-800 whitespace-nowrap"
                   >
                     <p class="bg-red-100 rounded-[5px] p-1">
                       {{ Number(i.price).toLocaleString("uz-UZ") }} so'm
                     </p>
                   </td>
                   <td
-                    class="text-center font-medium whitespace-nowrap text-blue-800 px-8 py-4"
+                    class="px-8 py-4 font-medium text-center text-blue-800 whitespace-nowrap"
                   >
                     <p class="bg-blue-100 rounded-[5px] p-1">
                       {{ i.start_date }}
                     </p>
                   </td>
                   <td
-                    class="text-center font-medium whitespace-nowrap text-blue-800 px-8 py-4"
+                    class="px-8 py-4 font-medium text-center text-blue-800 whitespace-nowrap"
                   >
                     <p class="bg-blue-100 rounded-[5px] p-1">
                       {{ i.student_date }}
                     </p>
                   </td>
-                  <td class="text-center font-medium px-8 py-4">
+                  <td class="px-8 py-4 font-medium text-center">
                     <button
                       @click="enterSlug(i.id, i.name.toLowerCase())"
-                      class="btnAdd bg-blue-600 rounded-lg px-5 py-2.5 text-white focus:ring-2"
+                      class="btnAdd bg-blue-600 rounded-xl px-5 py-2.5 text-white focus:ring-2"
                     >
                       Kirish
                     </button>
@@ -814,18 +814,18 @@
             </table>
             <div
               v-if="isEmpty(store.PageProduct) && isEmpty(store.allProducts)"
-              class="w-full max-w-screen text-center p-20 text-2xl font-medium"
+              class="w-full p-20 text-2xl font-medium text-center max-w-screen"
             >
               <h1>Guruhlar ro'yhati bo'sh</h1>
             </div>
-            <div v-show="store.error" class="flex w-full justify-center">
+            <div v-show="store.error" class="flex justify-center w-full">
               <h1 class="p-20 text-2xl font-medium">{{ store.allProducts }}</h1>
             </div>
           </div>
           <nav
             v-show="store.guard"
             v-if="!store.searchList.length"
-            class="flex flex-row justify-between items-center space-y-0 p-4"
+            class="flex flex-row items-center justify-between p-4 space-y-0"
             aria-label="Table navigation"
           >
             <!-- Oldingi sahifa tugmasi -->
@@ -835,7 +835,7 @@
                   store.pagination === 1
                     ? 'pointer-events-none opacity-50'
                     : '',
-                  'flex font-bold text-black border-2 bg-white hover:bg-gray-300 items-center justify-center text-sm sm:py-2 sm:px-6 px-3 rounded-lg leading-tight cursor-pointer transition duration-200 ease-in-out',
+                  'flex font-bold text-black border-2 bg-white hover:bg-gray-300 items-center justify-center text-sm sm:py-2 sm:px-6 px-3 rounded-xl leading-tight cursor-pointer transition duration-200 ease-in-out',
                 ]"
                 @click="
                   if (store.pagination > 1) {
@@ -845,7 +845,7 @@
                 "
               >
                 <i
-                  class="md:hidden font-bold text-black text-2xl bx bx-chevron-left"
+                  class="text-2xl font-bold text-black md:hidden bx bx-chevron-left"
                 ></i>
                 <span class="hidden md:block">Oldingi</span>
               </li>
@@ -872,7 +872,7 @@
                   store.page[0] * 15 >= store.page[1]
                     ? 'pointer-events-none opacity-50'
                     : '',
-                  'flex font-bold text-black border-2 bg-white hover:bg-gray-300 items-center justify-center text-sm sm:py-2 sm:px-6 px-3 rounded-lg leading-tight cursor-pointer transition duration-200 ease-in-out',
+                  'flex font-bold text-black border-2 bg-white hover:bg-gray-300 items-center justify-center text-sm sm:py-2 sm:px-6 px-3 rounded-xl leading-tight cursor-pointer transition duration-200 ease-in-out',
                 ]"
                 @click="
                   if (store.page[0] * 15 < store.page[1]) {
@@ -883,7 +883,7 @@
               >
                 <span class="hidden md:block">Keyingi</span>
                 <i
-                  class="md:hidden font-bold text-black text-2xl bx bx-chevron-right"
+                  class="text-2xl font-bold text-black md:hidden bx bx-chevron-right"
                 ></i>
               </li>
             </ul>

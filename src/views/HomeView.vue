@@ -9,7 +9,12 @@
         sidebar.sidebar = true;
         navbar.userInfo = false;
       "
-      class="bg-gray-200 mt-[70px] px-2 xl:ml-64 sm:pb-4 pb-28 overflow-y-auto max-h-[93vh] overflow-hidden min-h-screen"
+      :class="[
+        'pt-[70px] px-2 xl:ml-64 sm:pb-4 pb-28 overflow-y-auto h-screen transition-colors duration-300',
+        navbar.userNav
+          ? 'bg-slate-950'
+          : 'bg-gray-200',
+      ]"
     >
       <router-view></router-view>
     </main>

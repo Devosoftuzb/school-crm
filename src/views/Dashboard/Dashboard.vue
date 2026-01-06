@@ -1,33 +1,47 @@
 <template>
-  <section class="mb-28" :class="{ 'text-white': navbar.userNav }">
+  <section :class="{ 'text-white': navbar.userNav }">
     <!-- Cards Section -->
     <div v-show="store.loader">
       <Placeholder1 />
     </div>
-    <div v-show="!store.loader" class="pt-4 rounded-lg">
+    <div v-show="!store.loader" class="pt-4 rounded-xl">
       <!-- Cards -->
       <div
         v-show="store.guard"
-        class="grid grid-cols-1 gap-3 px-2 mb-5 cards xl:grid-cols-4 lg:grid-cols-2 sm:grid-cols-1 xl:mb-0 2xl:gap-5"
+        class="grid grid-cols-1 gap-4 px-2 mb-5 sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 2xl:gap-6"
       >
-        <div class="card" v-for="(i, index) in 4" :key="index">
+        <div
+          class="overflow-hidden transition-transform transform shadow-md card rounded-xl hover:scale-105"
+          v-for="(i, index) in 4"
+          :key="index"
+        >
           <div
-            class="relative flex flex-col min-w-0 break-words xl:mb-4 shadow-soft-xl sm:h-28 rounded-xl bg-clip-border"
+            class="relative flex flex-col min-w-0 p-5 break-words transition-colors duration-300 h-36 xl:h-40 rounded-xl bg-clip-border"
             :class="{
-              'bg-[#1e293b]': navbar.userNav,
-              'bg-white': !navbar.userNav,
+              'bg-slate-900 text-white': navbar.userNav,
+              'bg-white text-slate-900': !navbar.userNav,
             }"
           >
-            <div class="flex items-center justify-between p-5">
-              <p class="mb-0 font-semibold leading-normal 2xl:text-xl text-md">
+            <!-- Icon va Title -->
+            <div class="flex items-center gap-3 mb-4">
+              <div
+                class="flex items-center justify-center w-12 h-12 rounded-xl"
+                :class="getIconBg(index)"
+              >
+                <component :is="cardIcons[index]" class="w-6 h-6" />
+              </div>
+              <p class="font-semibold text-md 2xl:text-lg">
                 {{ getCardTitle(index) }}
               </p>
+            </div>
+
+            <div class="flex justify-end mt-auto">
               <h5
-                class="mb-0 2xl:text-[16px] sm:absolute bottom-5 right-5 bg-blue-100 text-blue-700 text-sm rounded-lg 2xl:px-5 py-2 px-3 max-w-fit font-bold"
+                class="flex items-center justify-center gap-1 px-3 py-1 text-sm font-bold text-blue-700 bg-blue-100 rounded-xl 2xl:px-5 2xl:py-2 max-w-fit"
               >
                 {{ getCardValue(index)?.toLocaleString("uz-UZ") }}
-                <span v-if="index == 3">so'm</span
-                ><span v-if="index != 3">ta</span>
+                <span v-if="index === 3">so'm</span>
+                <span v-else>ta</span>
               </h5>
             </div>
           </div>
@@ -36,26 +50,40 @@
 
       <div
         v-show="!store.guard"
-        class="grid grid-cols-1 gap-3 px-2 mb-5 cards xl:grid-cols-3 lg:grid-cols-3 sm:grid-cols-1 xl:mb-0 2xl:gap-5"
+        class="grid grid-cols-1 gap-4 px-2 mb-5 sm:grid-cols-1 lg:grid-cols-3 xl:grid-cols-3 2xl:gap-6"
       >
-        <div class="card" v-for="(i, index) in 3" :key="index">
+        <div
+          class="overflow-hidden transition-transform transform shadow-md card rounded-xl hover:scale-105"
+          v-for="(i, index) in 3"
+          :key="index"
+        >
           <div
-            class="relative flex flex-col min-w-0 break-words xl:mb-4 shadow-soft-xl sm:h-28 rounded-xl bg-clip-border"
+            class="relative flex flex-col min-w-0 p-5 break-words transition-colors duration-300 h-36 xl:h-40 rounded-xl bg-clip-border"
             :class="{
-              'bg-[#1e293b]': navbar.userNav,
-              'bg-white': !navbar.userNav,
+              'bg-slate-900 text-white': navbar.userNav,
+              'bg-white text-slate-900': !navbar.userNav,
             }"
           >
-            <div class="flex items-center justify-between p-5">
-              <p class="mb-0 font-semibold leading-normal 2xl:text-xl text-md">
+            <!-- Icon va Title -->
+            <div class="flex items-center gap-3 mb-4">
+              <div
+                class="flex items-center justify-center w-12 h-12 rounded-xl"
+                :class="getIconBg(index)"
+              >
+                <component :is="cardIcons[index]" class="w-6 h-6" />
+              </div>
+              <p class="font-semibold text-md 2xl:text-lg">
                 {{ getCardTitle(index) }}
               </p>
+            </div>
+
+            <div class="flex justify-end mt-auto">
               <h5
-                class="mb-0 2xl:text-[16px] sm:absolute bottom-5 right-5 bg-blue-100 text-blue-700 text-sm rounded-lg 2xl:px-5 py-2 px-3 max-w-fit font-bold"
+                class="flex items-center justify-center gap-1 px-3 py-1 text-sm font-bold text-blue-700 bg-blue-100 rounded-xl 2xl:px-5 2xl:py-2 max-w-fit"
               >
-                {{ getCardValue(index)?.toLocaleString("uz-UZ") }}
-                <span v-if="index == 2">so'm</span
-                ><span v-if="index != 2">ta</span>
+                {{ getCardValue(index)?.toLocaleString("uz-UZ") || 0 }}
+                <span v-if="index === 2">so'm</span>
+                <span v-else>ta</span>
               </h5>
             </div>
           </div>
@@ -68,10 +96,10 @@
         class="grid w-full gap-3 px-2 lg:grid-cols-2 2xl:gap-5"
       >
         <div
-          class="p-6 mt-8 rounded-lg shadow-md chart-container"
+          class="p-6 mt-8 shadow-md rounded-xl chart-container"
           :class="{
-            'bg-[#1e293b] text-white': navbar.userNav,
-            'bg-white text-gray-700': !navbar.userNav,
+            'bg-slate-900 text-white': navbar.userNav,
+            'bg-white text-slate-900': !navbar.userNav,
           }"
         >
           <div class="flex items-center justify-between w-full">
@@ -86,9 +114,9 @@
                 <select
                   v-model="store.year"
                   id="year"
-                  class="border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-1.5"
+                  class="border text-black border-gray-300 rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-1.5"
                   :class="{
-                    'bg-[#1e293b] text-white': navbar.userNav,
+                    'bg-slate-900 text-white': navbar.userNav,
                     'bg-white text-black': !navbar.userNav,
                   }"
                   required
@@ -111,10 +139,10 @@
 
         <!-- O'quvchilar To'lov Statistikasi -->
         <div
-          class="p-6 mt-8 rounded-lg shadow-md chart-container2"
+          class="p-6 mt-8 shadow-md rounded-xl chart-container2"
           :class="{
-            'bg-[#1e293b] text-white': navbar.userNav,
-            'bg-white text-gray-700': !navbar.userNav,
+            'bg-slate-900 text-white': navbar.userNav,
+            'bg-white text-slate-900': !navbar.userNav,
           }"
         >
           <div class="flex items-center justify-between w-full">
@@ -129,9 +157,9 @@
                 <select
                   v-model="store.month"
                   id="month"
-                  class="border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-1.5"
+                  class="border text-black border-gray-300 rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-1.5"
                   :class="{
-                    'bg-[#1e293b] text-white': navbar.userNav,
+                    'bg-slate-900 text-white': navbar.userNav,
                     'bg-white text-black': !navbar.userNav,
                   }"
                   required
@@ -166,6 +194,12 @@ import { onMounted, onBeforeMount, reactive, watch, computed } from "vue";
 import { useNavStore } from "../../stores/toggle";
 import axios from "../../services/axios";
 import Chart from "chart.js/auto";
+import {
+  UserIcon,
+  UsersIcon,
+  BookOpenIcon,
+  WalletIcon,
+} from "@heroicons/vue/24/solid";
 
 const userRole = localStorage.getItem("role");
 const navbar = useNavStore();
@@ -179,8 +213,28 @@ const store = reactive({
   year: hozirgiSana.getFullYear(),
   month: (hozirgiSana.getMonth() + 1).toString().padStart(2, "0"),
   guard: userRole == "_ow_sch_" || userRole == "_ad_sch_",
-  loader: true
+  loader: true,
 });
+
+const cardIcons = store.guard
+  ? [UserIcon, UsersIcon, BookOpenIcon, WalletIcon]
+  : [UserIcon, BookOpenIcon, WalletIcon];
+
+const getIconBg = (index) => {
+  const colors = store.guard
+    ? [
+        "bg-blue-500/30 text-blue-500",
+        "bg-emerald-500/30 text-emerald-500",
+        "bg-red-500/30 text-red-500",
+        "bg-amber-500/30 text-amber-500",
+      ]
+    : [
+        "bg-blue-500/30 text-blue-500",
+        "bg-red-500/30 text-red-500",
+        "bg-amber-500/30 text-amber-500",
+      ];
+  return colors[index] || "bg-gray-500";
+};
 
 const info = reactive({
   staff: 0,
@@ -238,7 +292,7 @@ const getStatistics = async () => {
     info.staff = res.data.employee_number;
     info.groups = res.data.group_number;
     info.payment = res.data.payment_sum;
-    store.loader = false
+    store.loader = false;
   } catch (err) {
     console.error("Statistikani olishda xato:", err);
   }
@@ -506,5 +560,15 @@ onMounted(() => {
   .chart-container {
     height: 250px; /* Mobil ekranlar uchun */
   }
+}
+
+.cards {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+.card {
+  transition: all 0.3s ease;
+}
+.card:hover {
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
 }
 </style>

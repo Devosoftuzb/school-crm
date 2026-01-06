@@ -10,8 +10,8 @@
       <PageLoader :loading="loading.excel" text="Excel tayyorlanmoqda..." />
       <div
         v-show="store.loading"
-        class="mt-10 rounded-lg p-[15px] mb-10 sm:mb-28"
-        :class="navbar.userNav ? 'bg-[#1e293b] text-white' : 'bg-white'"
+        class="mt-10 rounded-xl p-[15px] mb-10 sm:mb-28"
+        :class="navbar.userNav ? 'bg-slate-900 text-white' : 'bg-white'"
       >
         <div class="flex items-center justify-between mb-5 font-bold">
           <h1 class="text-sm text-blue-700 sm:text-lg">
@@ -21,7 +21,7 @@
           </h1>
           <button
             @click="router.back(-1)"
-            class="btn shadow-lg rounded-lg whitespace-nowrap px-5 py-2.5 text-white focus:ring-2 text-sm"
+            class="btn shadow-lg rounded-xl whitespace-nowrap px-5 py-2.5 text-white focus:ring-2 text-sm"
           >
             Orqaga qaytish
           </button>
@@ -39,8 +39,8 @@
             <div class="relative w-full h-auto max-w-2xl p-4">
               <!-- Modal content -->
               <div
-                class="relative p-4 rounded-lg shadow sm:p-5"
-                :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
+                class="relative p-4 shadow rounded-xl sm:p-5"
+                :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
               >
                 <!-- Modal header -->
                 <div
@@ -56,7 +56,7 @@
                     <button
                       @click="historyModal"
                       type="button"
-                      class="bg-transparent hover:bg-gray-200 hover rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+                      class="bg-transparent hover:bg-gray-200 hover rounded-xl text-sm p-1.5 ml-auto inline-flex items-center"
                       :class="{ 'text-white': navbar.userNav }"
                     >
                       <svg
@@ -75,33 +75,33 @@
                       <span class="sr-only">Close modal</span>
                     </button>
                   </div>
-                  <div class="w-full rounded-lg" id="navbar-sticky">
+                  <div class="w-full rounded-xl" id="navbar-sticky">
                     <ul
                       class="grid w-full grid-cols-2 gap-3 font-medium text-white lg:grid-cols-4"
                     >
                       <li
-                        class="cursor-pointer w-full h-[100%] whitespace-nowrap text-center bg-gray-600 hover:bg-gray-500 p-2 px-5 sm:text-md text-sm rounded-lg"
+                        class="cursor-pointer w-full h-[100%] whitespace-nowrap text-center bg-gray-600 hover:bg-gray-500 p-2 px-5 sm:text-md text-sm rounded-xl"
                         :class="history.dayModal ? 'btn' : 'bg-gray-600'"
                         @click="historyDayModal"
                       >
                         <span>Kun bo'yicha</span>
                       </li>
                       <li
-                        class="cursor-pointer w-full h-[100%] whitespace-nowrap text-center bg-gray-600 hover:bg-gray-500 p-2 px-5 sm:text-md text-sm rounded-lg"
+                        class="cursor-pointer w-full h-[100%] whitespace-nowrap text-center bg-gray-600 hover:bg-gray-500 p-2 px-5 sm:text-md text-sm rounded-xl"
                         :class="history.monthModal ? 'btn' : 'bg-gray-600'"
                         @click="historyMonthModal"
                       >
                         <span>Oy bo'yicha</span>
                       </li>
                       <li
-                        class="cursor-pointer w-full h-[100%] whitespace-nowrap text-center bg-gray-600 hover:bg-gray-500 p-2 px-5 sm:text-md text-sm rounded-lg"
+                        class="cursor-pointer w-full h-[100%] whitespace-nowrap text-center bg-gray-600 hover:bg-gray-500 p-2 px-5 sm:text-md text-sm rounded-xl"
                         :class="history.groupMonthModal ? 'btn' : 'bg-gray-600'"
                         @click="historyGroupMonthModal"
                       >
                         <span>Guruh bo'yicha</span>
                       </li>
                       <li
-                        class="cursor-pointer w-full h-[100%] whitespace-nowrap text-center bg-gray-600 hover:bg-gray-500 p-2 px-5 sm:text-md text-sm rounded-lg"
+                        class="cursor-pointer w-full h-[100%] whitespace-nowrap text-center bg-gray-600 hover:bg-gray-500 p-2 px-5 sm:text-md text-sm rounded-xl"
                         :class="history.yearModal ? 'btn' : 'bg-gray-600'"
                         @click="historyYearModal"
                       >
@@ -125,7 +125,7 @@
                       <select
                         v-model="history.year"
                         id="name"
-                        class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                        class="bg-white border text-black border-gray-300 rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                         required
                       >
                         <option value="" disabled selected>
@@ -147,7 +147,7 @@
                       <select
                         v-model="history.month"
                         id="month"
-                        class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                        class="bg-white border text-black border-gray-300 rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                         required
                       >
                         <option value="" disabled selected>Oyni tanlang</option>
@@ -173,7 +173,7 @@
                         v-model="history.day"
                         id="day"
                         type="number"
-                        class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full py-2.5 pl-3"
+                        class="bg-white border text-black border-gray-300 rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full py-2.5 pl-3"
                         placeholder="Kuni kiriting.."
                         min="1"
                         max="31"
@@ -188,7 +188,7 @@
                       :loading="loading.excel"
                       @click="exportToExcel"
                       type="button"
-                      class="btnAdd3 text-white inline-flex items-center justify-center bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                      class="btnAdd3 text-white inline-flex items-center justify-center bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                     >
                       Excelga yuklab olish
                     </ButtonLoader>
@@ -196,14 +196,14 @@
                       <button
                         @click="historyModal"
                         type="button"
-                        class="border inline-flex items-center hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                        class="border inline-flex items-center hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                       >
                         Bekor qilish
                       </button>
                       <ButtonLoader
                         :loading="loading.view"
                         type="submit"
-                        class="btn text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                        class="btn text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                       >
                         Ko'rish
                       </ButtonLoader>
@@ -223,7 +223,7 @@
                       <select
                         v-model="history.year"
                         id="name"
-                        class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                        class="bg-white border text-black border-gray-300 rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                         required
                       >
                         <option value="" disabled selected>
@@ -245,7 +245,7 @@
                       <select
                         v-model="history.month"
                         id="month"
-                        class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                        class="bg-white border text-black border-gray-300 rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                         required
                       >
                         <option value="" disabled selected>Oyni tanlang</option>
@@ -271,7 +271,7 @@
                       :loading="loading.excel"
                       @click="exportToExcel"
                       type="button"
-                      class="btnAdd3 text-white inline-flex items-center justify-center bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                      class="btnAdd3 text-white inline-flex items-center justify-center bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                     >
                       Excelga yuklab olish
                     </ButtonLoader>
@@ -279,14 +279,14 @@
                       <button
                         @click="historyModal"
                         type="button"
-                        class="border inline-flex items-center hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                        class="border inline-flex items-center hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                       >
                         Bekor qilish
                       </button>
                       <ButtonLoader
                         :loading="loading.view"
                         type="submit"
-                        class="btn text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                        class="btn text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                       >
                         Ko'rish
                       </ButtonLoader>
@@ -306,7 +306,7 @@
                       <select
                         v-model="history.year"
                         id="name"
-                        class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                        class="bg-white border text-black border-gray-300 rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                         required
                       >
                         <option value="" disabled selected>
@@ -328,7 +328,7 @@
                       <select
                         v-model="history.month"
                         id="month"
-                        class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                        class="bg-white border text-black border-gray-300 rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                         required
                       >
                         <option value="" disabled selected>Oyni tanlang</option>
@@ -384,7 +384,7 @@
                           "
                           type="search"
                           id="simple-search"
-                          class="block w-full p-2 pl-10 text-sm border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
+                          class="block w-full p-2 pl-10 text-sm border border-gray-300 rounded-xl bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
                           placeholder="Guruhni tanlang yoki qidirish..."
                         />
                         <ul
@@ -435,7 +435,7 @@
                       :loading="loading.excel"
                       @click="exportToExcel"
                       type="button"
-                      class="btnAdd3 text-white inline-flex items-center justify-center bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                      class="btnAdd3 text-white inline-flex items-center justify-center bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                     >
                       Excelga yuklab olish
                     </ButtonLoader>
@@ -443,14 +443,14 @@
                       <button
                         @click="historyModal"
                         type="button"
-                        class="border inline-flex items-center hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                        class="border inline-flex items-center hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                       >
                         Bekor qilish
                       </button>
                       <ButtonLoader
                         :loading="loading.view"
                         type="submit"
-                        class="btn text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                        class="btn text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                       >
                         Ko'rish
                       </ButtonLoader>
@@ -470,7 +470,7 @@
                       <select
                         v-model="history.year"
                         id="name"
-                        class="bg-white border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                        class="bg-white border text-black border-gray-300 rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                         required
                       >
                         <option value="" disabled selected>
@@ -493,7 +493,7 @@
                       :loading="loading.excel"
                       @click="exportToExcel"
                       type="button"
-                      class="btnAdd3 text-white inline-flex items-center justify-center bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                      class="btnAdd3 text-white inline-flex items-center justify-center bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                     >
                       Excelga yuklab olish
                     </ButtonLoader>
@@ -501,14 +501,14 @@
                       <button
                         @click="historyModal"
                         type="button"
-                        class="border inline-flex items-center hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                        class="border inline-flex items-center hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                       >
                         Bekor qilish
                       </button>
                       <ButtonLoader
                         :loading="loading.view"
                         type="submit"
-                        class="btn text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                        class="btn text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                       >
                         Ko'rish
                       </ButtonLoader>
@@ -520,7 +520,7 @@
           </transition>
         </div>
 
-        <div class="w-full bg-transparent rounded-lg">
+        <div class="w-full bg-transparent rounded-xl">
           <ul
             class="bg-[rgba(213,219,242,0.5)] flex flex-wrap sm:justify-end justify-center font-medium p-3 gap-2 text-center text-sm rounded-t-lg"
             id="defaultTab"
@@ -530,11 +530,11 @@
             <li>
               <button
                 @click="infoModal"
-                class="shadow-lg rounded-lg px-5 py-2.5 focus:ring-2 text-sm"
+                class="shadow-lg rounded-xl px-5 py-2.5 focus:ring-2 text-sm"
                 :class="
                   navbar.userNav
-                    ? 'bg-[#1e293b] text-white hover:bg-white hover:text-black'
-                    : 'bg-white hover:bg-[#1e293b] hover:text-white'
+                    ? 'bg-slate-900 text-white hover:bg-white hover:text-black'
+                    : 'bg-white hover:bg-slate-900 hover:text-white'
                 "
               >
                 Ma'lumot
@@ -543,11 +543,11 @@
             <li>
               <button
                 @click="groupModal"
-                class="shadow-lg rounded-lg px-5 py-2.5 focus:ring-2 text-sm"
+                class="shadow-lg rounded-xl px-5 py-2.5 focus:ring-2 text-sm"
                 :class="
                   navbar.userNav
-                    ? 'bg-[#1e293b] text-white hover:bg-white hover:text-black'
-                    : 'bg-white hover:bg-[#1e293b] hover:text-white'
+                    ? 'bg-slate-900 text-white hover:bg-white hover:text-black'
+                    : 'bg-white hover:bg-slate-900 hover:text-white'
                 "
               >
                 Guruhlar
@@ -556,11 +556,11 @@
             <li>
               <button
                 @click="paymentModal"
-                class="shadow-lg rounded-lg px-5 py-2.5 focus:ring-2 text-sm"
+                class="shadow-lg rounded-xl px-5 py-2.5 focus:ring-2 text-sm"
                 :class="
                   navbar.userNav
-                    ? 'bg-[#1e293b] text-white hover:bg-white hover:text-black'
-                    : 'bg-white hover:bg-[#1e293b] hover:text-white'
+                    ? 'bg-slate-900 text-white hover:bg-white hover:text-black'
+                    : 'bg-white hover:bg-slate-900 hover:text-white'
                 "
               >
                 Oylik hisobot
@@ -570,10 +570,10 @@
           <div
             v-show="store.modalInfo"
             id="defaultTabContent"
-            :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
+            :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
           >
             <div
-              class="p-4 rounded-lg md:p-8"
+              class="p-4 rounded-xl md:p-8"
               id="about"
               role="tabpanel"
               aria-labelledby="about-tab"
@@ -644,12 +644,12 @@
 
           <div
             v-show="store.modalGroup"
-            class="relative m-5 overflow-hidden rounded-lg shadow-md"
-            :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
+            class="relative m-5 overflow-hidden shadow-md rounded-xl"
+            :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
           >
             <div class="overflow-x-auto">
               <table class="w-full text-sm text-left">
-                <thead class="text-xs text-white uppercase rounded-lg btn">
+                <thead class="text-xs text-white uppercase rounded-xl btn">
                   <tr>
                     <th scope="col" class="py-3 text-center">Nomi</th>
                     <th scope="col" class="py-3 text-center">Fani</th>
@@ -711,7 +711,7 @@
                     <td class="px-8 py-4 font-medium text-center">
                       <button
                         @click="enterSlug(i.id, i.name.toLowerCase())"
-                        class="btn bg-blue-600 rounded-lg px-5 py-2.5 text-white focus:ring-2"
+                        class="btn bg-blue-600 rounded-xl px-5 py-2.5 text-white focus:ring-2"
                       >
                         Kirish
                       </button>
@@ -733,9 +733,9 @@
             class="grid w-full gap-3 p-5 lg:grid-cols-2 2xl:gap-5"
           >
             <div
-              class="p-6 mt-8 border border-blue-700 rounded-lg shadow-md chart-container"
+              class="p-6 mt-8 border border-blue-700 shadow-md rounded-xl chart-container"
               :class="{
-                'bg-[#1e293b] text-white': navbar.userNav,
+                'bg-slate-900 text-white': navbar.userNav,
                 'bg-white text-gray-700': !navbar.userNav,
               }"
             >
@@ -751,9 +751,9 @@
                     <select
                       v-model="store.year"
                       id="year"
-                      class="border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-1.5"
+                      class="border text-black border-gray-300 rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-1.5"
                       :class="{
-                        'bg-[#1e293b] text-white': navbar.userNav,
+                        'bg-slate-900 text-white': navbar.userNav,
                         'bg-white text-black': !navbar.userNav,
                       }"
                       required
@@ -776,9 +776,9 @@
 
             <!-- O'quvchilar To'lov Statistikasi -->
             <div
-              class="p-6 mt-8 border border-blue-700 rounded-lg shadow-md chart-container2"
+              class="p-6 mt-8 border border-blue-700 shadow-md rounded-xl chart-container2"
               :class="{
-                'bg-[#1e293b] text-white': navbar.userNav,
+                'bg-slate-900 text-white': navbar.userNav,
                 'bg-white text-gray-700': !navbar.userNav,
               }"
             >
@@ -794,9 +794,9 @@
                     <select
                       v-model="store.month"
                       id="month"
-                      class="border text-black border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-1.5"
+                      class="border text-black border-gray-300 rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-1.5"
                       :class="{
-                        'bg-[#1e293b] text-white': navbar.userNav,
+                        'bg-slate-900 text-white': navbar.userNav,
                         'bg-white text-black': !navbar.userNav,
                       }"
                       required
@@ -858,7 +858,7 @@
             <button
               @click="history.modal = true"
               type="button"
-              class="btn flex items-center w-full sm:max-w-fit justify-center whitespace-nowrap text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2.5"
+              class="btn flex items-center w-full sm:max-w-fit justify-center whitespace-nowrap text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-xl text-sm px-4 py-2.5"
             >
               <span class="">To'lov tarixi</span>
             </button>
@@ -866,12 +866,12 @@
 
           <div
             v-show="store.modalPayment"
-            class="relative m-5 overflow-hidden rounded-lg shadow-md"
-            :class="navbar.userNav ? 'bg-[#1e293b]' : 'bg-white'"
+            class="relative m-5 overflow-hidden shadow-md rounded-xl"
+            :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
           >
             <div class="overflow-x-auto">
               <table class="w-full text-sm text-left">
-                <thead class="text-xs text-white uppercase rounded-lg btn">
+                <thead class="text-xs text-white uppercase rounded-xl btn">
                   <tr>
                     <th scope="col" class="py-3 text-center whitespace-nowrap">
                       O'quvchi (F . I . O)
@@ -1002,7 +1002,7 @@
                     store.pagination === 1
                       ? 'pointer-events-none opacity-50'
                       : '',
-                    'flex font-bold text-black border-2 bg-white hover:bg-gray-300 items-center justify-center text-sm sm:py-2 sm:px-6 px-3 rounded-lg leading-tight cursor-pointer transition duration-200 ease-in-out',
+                    'flex font-bold text-black border-2 bg-white hover:bg-gray-300 items-center justify-center text-sm sm:py-2 sm:px-6 px-3 rounded-xl leading-tight cursor-pointer transition duration-200 ease-in-out',
                   ]"
                   @click="
                     if (store.pagination > 1) {
@@ -1039,7 +1039,7 @@
                     store.page[0] * 15 >= store.page[1]
                       ? 'pointer-events-none opacity-50'
                       : '',
-                    'flex font-bold text-black border-2 bg-white hover:bg-gray-300 items-center justify-center text-sm sm:py-2 sm:px-6 px-3 rounded-lg leading-tight cursor-pointer transition duration-200 ease-in-out',
+                    'flex font-bold text-black border-2 bg-white hover:bg-gray-300 items-center justify-center text-sm sm:py-2 sm:px-6 px-3 rounded-xl leading-tight cursor-pointer transition duration-200 ease-in-out',
                   ]"
                   @click="
                     if (store.page[0] * 15 < store.page[1]) {
@@ -1612,7 +1612,7 @@ const exportToExcel = async () => {
     return;
   }
 
-  const rawData = list.filter(item => item.status !== 'delete');
+  const rawData = list.filter((item) => item.status !== "delete");
 
   const dataToExport = rawData.map((item) => ({
     "O'quvchi (F . I . O)": item.student_name,
@@ -1622,6 +1622,7 @@ const exportToExcel = async () => {
     "To'lov turi": item.method,
     "To'langan summa": Number(item.price),
     "Chegirma (%)": item.discount + " %",
+    Yil: item.year + " yil",
     Oy: monthNames(item.month),
     "To'lov sanasi (Oy)": monthNames(
       String(new Date(item.createdAt).getMonth() + 1).padStart(2, "0")
@@ -1682,14 +1683,14 @@ const exportToExcel = async () => {
     { wpx: 180 },
     { wpx: 180 },
     { wpx: 200 },
-    { wpx: 100 },
-    { wpx: 100 },
-    { wpx: 100 },
-    { wpx: 100 },
-    { wpx: 100 },
     { wpx: 120 },
+    { wpx: 120 },
+    { wpx: 130 },
+    { wpx: 110 },
+    { wpx: 90 },
+    { wpx: 90 },
     { wpx: 160 },
-    { wpx: 100 },
+    { wpx: 90 },
   ];
 
   const wb = XLSX.utils.book_new();
