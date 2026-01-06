@@ -3356,7 +3356,6 @@ const calculatePaymentStatus = (paymentHistory, groupPrice) => {
     return `(${groupPrice}) so'm to'lanmagan`;
   }
 
-  console.log(paymentHistory[0])
 
   const totalDiscount = paymentHistory[0]?.discount || 0;
   const discountSum = paymentHistory[0]?.discountSum || 0;
