@@ -2,6 +2,7 @@
   <aside
     class="fixed top-0 left-0 z-40 w-64 h-screen transition-transform duration-700 -translate-x-full xl:translate-x-0"
     :class="sidebar.sidebar ? '-translate-x-full' : 'translate-x-0'"
+    @mousedown="sidebar.sidebar = true"
   >
     <div
       class="flex flex-col h-full px-3 py-4 pb-4 overflow-y-auto border-r"
@@ -10,9 +11,8 @@
         'bg-white border-slate-200': !navbar.userNav,
       }"
     >
-      <!-- Menu -->
       <ul class="space-y-2 font-medium mt-[70px]">
-        <li v-for="i in header" :key="item.id" v-show="showMenu(item)">
+        <li v-for="i in header" :key="i.id" v-show="showMenu(i)">
           <router-link
             :to="i.link"
             class="flex items-center gap-2 p-2 text-lg duration-500 cursor-pointer rounded-xl"
@@ -45,7 +45,6 @@ const navbar = useNavStore();
 const router = useRouter();
 const route = useRoute();
 
-// User info
 const role = localStorage.getItem("role");
 const school_name = localStorage.getItem("school_name");
 const store = reactive({
@@ -63,7 +62,6 @@ const store = reactive({
       : "Admin",
 });
 
-// Logout
 const Logout = () => {
   localStorage.removeItem("id");
   localStorage.removeItem("role");
@@ -72,16 +70,23 @@ const Logout = () => {
   router.push("/login");
 };
 
-// Show menu based on role
 const showMenu = (item) => {
+  if (!item || !item.role) return false;
+
   const roleArray = item.role.split(",").map((r) => r.trim());
-  return roleArray.includes(store.guard);
+
+  if (store.guard === "_sp_am_") return true;
+
+  if (!item.school) return roleArray.includes(store.guard);
+
+  const schoolArray = item.school.split(",").map((s) => s.trim());
+
+  return roleArray.includes(store.guard) && schoolArray.includes(store.school);
 };
 
-// Check active route
 const isActive = (link) => {
   if (link === "/") return route.path === "/";
-  return route.path === link || route.path.startsWith(link + "/");
+  return route.path.startsWith(link);
 };
 </script>
 
