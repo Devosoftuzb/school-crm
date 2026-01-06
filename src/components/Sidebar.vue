@@ -5,7 +5,7 @@
     @mousedown="sidebar.sidebar = true"
   >
     <div
-      class="flex flex-col justify-between h-full gap-10 px-3 py-4 pb-4 overflow-y-auto border-r"
+      class="flex flex-col h-full px-3 py-4 pb-4 overflow-y-auto border-r"
       :class="{
         'bg-slate-900 border-slate-700': navbar.userNav,
         'bg-white border-slate-200': !navbar.userNav,

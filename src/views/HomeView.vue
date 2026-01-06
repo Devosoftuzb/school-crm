@@ -10,7 +10,7 @@
         navbar.userInfo = false;
       "
       :class="[
-        'pt-[70px] px-2 xl:ml-64 sm:pb-4 pb-28 overflow-y-auto max-h-[93vh] min-h-screen transition-colors duration-300',
+        'pt-[70px] px-2 xl:ml-64 sm:pb-4 pb-28 min-h-screen transition-colors duration-300',
         navbar.userNav
           ? 'bg-slate-950'
           : 'bg-gray-200',
