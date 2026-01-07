@@ -109,7 +109,23 @@
                   required
                 />
               </div>
-              <div class="sm:w-[205%]">
+              <div>
+                <label
+                  for="date"
+                  class="block mb-2 text-sm"
+                  :class="navbar.userNav ? 'text-white' : 'text-black'"
+                  >Qo'shilgan sanasi</label
+                >
+                <input
+                  v-model="form.start_date"
+                  type="date"
+                  name="phone"
+                  id="phone"
+                  class="bg-gray-50 border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                  required
+                />
+              </div>
+              <div>
                 <label
                   for="name"
                   class="block mb-2 text-sm"
@@ -489,6 +505,22 @@
                   required
                 />
               </div>
+              <div class="w-[205%]">
+                <label
+                  for="date"
+                  class="block mb-2 text-sm"
+                  :class="navbar.userNav ? 'text-white' : 'text-black'"
+                  >Qo'shilgan sanasi</label
+                >
+                <input
+                  v-model="edit.start_date"
+                  type="date"
+                  name="phone"
+                  id="phone"
+                  class="bg-gray-50 border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                  required
+                />
+              </div>
             </div>
             <div
               class="flex items-center justify-between w-full pt-5 mt-5 border-t"
@@ -700,7 +732,7 @@
               class="flex items-center justify-end space-x-3 lg:w-auto md:space-y-0"
             >
               <button
-              v-show="store.guard"
+                v-show="store.guard"
                 @click="toggleModal"
                 id=""
                 type="button"
@@ -1090,6 +1122,7 @@ const form = reactive({
   full_name: "",
   phone_number: "+998",
   group: "",
+  start_date: "",
 });
 
 const edit = reactive({
@@ -1100,6 +1133,7 @@ const edit = reactive({
   group: "",
   id: "",
   toggle: false,
+  start_date: "",
 });
 
 const remove = reactive({
@@ -1156,6 +1190,7 @@ const resetForm = () => {
   form.parents_phone_number = "+998";
   form.full_name = "";
   form.phone_number = "+998";
+  form.start_date = "";
   form.group = "";
 };
 
@@ -1305,6 +1340,7 @@ const createProduct = async () => {
     full_name: form.full_name,
     phone_number: form.phone_number,
     status: true,
+    start_date: form.start_date,
     group: form.group || store.group[0],
   };
 
@@ -1323,6 +1359,7 @@ const editProduct = async () => {
     parents_phone_number: edit.parents_phone_number,
     full_name: edit.full_name,
     phone_number: edit.phone_number,
+    start_date: edit.start_date,
     group: edit.group,
   };
 

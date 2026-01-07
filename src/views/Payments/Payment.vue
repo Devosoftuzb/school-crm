@@ -224,7 +224,10 @@
 
                     <span class="flex flex-col items-end">
                       <span
-                        v-if="(form.discount !== 0 && form.discount !== '') || (form.discountSum !== 0 && form.discountSum !== '')"
+                        v-if="
+                          (form.discount !== 0 && form.discount !== '') ||
+                          (form.discountSum !== 0 && form.discountSum !== '')
+                        "
                         class="text-[10px] line-through"
                         id="coursePrice"
                         >{{ store.price?.toLocaleString("uz-UZ") }} so'm</span
@@ -249,7 +252,9 @@
                     class="flex justify-between py-1 text-sm border-b border-black border-dashed item"
                   >
                     <span class="font-semibold">Chegirma:</span>
-                    <span id="teacher">{{ form.discountSum.toLocaleString("uz-UZ") }} so'm</span>
+                    <span id="teacher"
+                      >{{ form.discountSum.toLocaleString("uz-UZ") }} so'm</span
+                    >
                   </div>
                   <div
                     class="flex justify-between py-1 text-sm border-b border-black border-dashed item"
@@ -432,7 +437,6 @@
                           required
                         />
                       </div>
-                      
                     </div>
                     <div>
                       <label for="description" class="block mb-2 text-sm"
@@ -449,6 +453,26 @@
                       >
                       </textarea>
                     </div>
+                  </div>
+                  <div class="mt-10">
+                    <p
+                      class="flex flex-wrap items-center gap-1 text-sm font-semibold"
+                      :class="
+                        navbar.userNav ? 'text-slate-300' : 'text-slate-700'
+                      "
+                    >
+                      Qo'shilgan sanasi:
+                      <span
+                        class="px-3 py-1 ml-2 text-sm rounded-lg"
+                        :class="
+                          navbar.userNav
+                            ? 'bg-slate-800 text-blue-400'
+                            : 'bg-blue-100 text-blue-700'
+                        "
+                      >
+                        {{ store.student_date || "Noma'lum" }}
+                      </span>
+                    </p>
                   </div>
                   <div
                     class="flex items-center justify-between w-full pt-5 mt-5 border-t"
@@ -572,7 +596,10 @@
 
                     <span class="flex flex-col items-end">
                       <span
-                        v-if="(form.discount !== 0 && form.discount !== '') || (form.discountSum !== 0 && form.discountSum !== '')"
+                        v-if="
+                          (form.discount !== 0 && form.discount !== '') ||
+                          (form.discountSum !== 0 && form.discountSum !== '')
+                        "
                         class="text-[10px] line-through"
                         id="coursePrice"
                         >{{ store.price?.toLocaleString("uz-UZ") }} so'm</span
@@ -799,6 +826,26 @@
                       >
                       </textarea>
                     </div>
+                  </div>
+                  <div class="mt-10">
+                    <p
+                      class="flex flex-wrap items-center gap-1 text-sm font-semibold"
+                      :class="
+                        navbar.userNav ? 'text-slate-300' : 'text-slate-700'
+                      "
+                    >
+                      Qo'shilgan sanasi:
+                      <span
+                        class="px-3 py-1 ml-2 text-sm rounded-lg"
+                        :class="
+                          navbar.userNav
+                            ? 'bg-slate-800 text-blue-400'
+                            : 'bg-blue-100 text-blue-700'
+                        "
+                      >
+                        {{ store.student_date || "Noma'lum" }}
+                      </span>
+                    </p>
                   </div>
                   <div
                     class="flex items-center justify-between w-full pt-5 mt-5 border-t"
@@ -2029,7 +2076,7 @@
                   >
                     <button
                       v-show="store.btn_lamp"
-                      @click="toggleModal(i.id, i.full_name)"
+                      @click="toggleModal(i.id, i.full_name, i.start_date)"
                       class="bg-green-600 rounded-xl py-2.5 px-5 text-white"
                     >
                       To'lov qilish
@@ -2623,6 +2670,7 @@ const store = reactive({
   isSubmitting: false,
   pay_price: 0,
   studentGroups: false,
+  student_date: "",
 });
 
 const statusCount = reactive({
@@ -2631,7 +2679,7 @@ const statusCount = reactive({
   discount: 0,
 });
 
-function toggleModal(id, name) {
+function toggleModal(id, name, start_date) {
   modal.value = !modal.value;
   form.year = hozirgiYil;
   form.month = hozirgiOy;
@@ -2641,6 +2689,7 @@ function toggleModal(id, name) {
   form.discount = 0;
   form.discountSum = 0;
   store.student_name = name;
+  store.student_date = start_date;
   formatDateToNumeric(new Date());
 }
 
@@ -3356,14 +3405,12 @@ const calculatePaymentStatus = (paymentHistory, groupPrice) => {
     return `(${groupPrice}) so'm to'lanmagan`;
   }
 
-
   const totalDiscount = paymentHistory[0]?.discount || 0;
   const discountSum = paymentHistory[0]?.discountSum || 0;
   let discountedPrice = Math.round(groupPrice * (1 - totalDiscount / 100));
   if (discountSum > 0) {
     discountedPrice = groupPrice - discountSum;
   }
-  
 
   let currentMonthPaid = 0;
   paymentHistory.forEach((payment) => {
@@ -3451,7 +3498,7 @@ const getOneProduct = async (id) => {
       notification.warning(
         "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
       );
-      console.log(error)
+      console.log(error);
     }
   }
 };
@@ -3468,11 +3515,12 @@ const getStudentGroups = async (student_id) => {
       headers
     );
     const studentFullName = studentResponse.data.full_name;
-
+    
     const groupsResponse = await axios.get(
       `/student/${schoolId}/${student_id}/studentGroup`,
       headers
     );
+    store.student_date = groupsResponse.data.start_date
     const groups = groupsResponse.data.group;
 
     const groupDetailsPromises = groups.map(async (group) => {
@@ -3575,31 +3623,28 @@ const checkOldPayment = async (
         payment.status !== "delete"
     );
 
-  
     const basePrice = store.price;
 
-  
-    const discountPercent =
-      studentPayments[0]?.discount ? studentPayments[0].discount : 0;
+    const discountPercent = studentPayments[0]?.discount
+      ? studentPayments[0].discount
+      : 0;
 
-   
-    const discountSum =
-      studentPayments[0]?.discountSum ? studentPayments[0].discountSum : 0;
+    const discountSum = studentPayments[0]?.discountSum
+      ? studentPayments[0].discountSum
+      : 0;
 
-   
-    const priceAfterPercent = Math.round(basePrice * (1 - discountPercent / 100));
+    const priceAfterPercent = Math.round(
+      basePrice * (1 - discountPercent / 100)
+    );
 
-   
     const finalPrice = Math.max(priceAfterPercent - discountSum, 0);
 
-    
     const totalPaid = studentPayments.reduce(
       (sum, payment) => sum + payment.price,
       0
     );
 
-    
-    return totalPaid < finalPrice; 
+    return totalPaid < finalPrice;
   } catch (error) {
     return false;
   }
@@ -4044,13 +4089,14 @@ const printReceipt = () => {
 
 const printChek = (id) => {
   const product = store.PageProduct.find((product) => product.id === id);
-  const priceDiscounted =
-  product.discount
-    ? (product.group_price - (product.group_price * product.discount) / 100).toFixed(2)
+  const priceDiscounted = product.discount
+    ? (
+        product.group_price -
+        (product.group_price * product.discount) / 100
+      ).toFixed(2)
     : product.discountSum
-      ? product.group_price - product.discountSum
-      : product.group_price;
-
+    ? product.group_price - product.discountSum
+    : product.group_price;
 
   formatDateToNumeric(new Date(product.createdAt));
   axios
@@ -4160,7 +4206,8 @@ const printChek = (id) => {
             <span class="bold">Kurs narxi:</span>
             <span class="card">
               ${
-                (product.discount !== 0 && product.discount !== "") || product.discountSum !== 0 && product.discountSum !== ""
+                (product.discount !== 0 && product.discount !== "") ||
+                (product.discountSum !== 0 && product.discountSum !== "")
                   ? `<span class="strike">${Number(
                       product.group_price
                     )?.toLocaleString("uz-UZ")} so'm</span>`
@@ -4184,7 +4231,9 @@ const printChek = (id) => {
               ? `
           <div class="row">
             <span class="bold">Chegirma:</span>
-            <span>${Number(product.discountSum)?.toLocaleString("uz-UZ")} so'm</span>
+            <span>${Number(product.discountSum)?.toLocaleString(
+              "uz-UZ"
+            )} so'm</span>
           </div>
           `
               : ""

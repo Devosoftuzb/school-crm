@@ -124,6 +124,22 @@
                   required
                 />
               </div>
+              <div class="w-[205%]">
+                <label
+                  for="date"
+                  class="block mb-2 text-sm"
+                  :class="navbar.userNav ? 'text-white' : 'text-black'"
+                  >Qo'shilgan sanasi</label
+                >
+                <input
+                  v-model="form.start_date"
+                  type="date"
+                  name="phone"
+                  id="phone"
+                  class="bg-gray-50 border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                  required
+                />
+              </div>
             </div>
             <div class="mt-10">
               <p
@@ -573,6 +589,7 @@ const form = reactive({
   id: "",
   modal: false,
   is_student: false,
+  start_date: "",
 });
 
 const getFileUrl = (file) => import.meta.env.VITE_API + "/" + file;
@@ -751,6 +768,7 @@ const createStudent = async () => {
       parents_phone_number: form.parents_phone_number,
       full_name: form.full_name,
       phone_number: form.phone_number,
+      start_date: form.start_date,
       status: true,
     };
     const res = await axios.post("/student", data, {
@@ -787,6 +805,7 @@ const addGroupsModal = async (id) => {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     });
     form.group_id = "";
+    sendSms(id);
   } catch (error) {
     notification.warning(
       "Xatolik! Internetni tekshirib qaytadan urinib ko‘ring!"
@@ -807,6 +826,21 @@ const editProduct = async () => {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       }
     );
+  } catch (error) {
+    notification.warning(
+      "Xatolik! Internetni tekshirib qaytadan urinib ko‘ring!"
+    );
+  }
+};
+
+const sendSms = async (id) => {
+  try {
+    const data = {
+      student_id: id,
+    };
+    await axios.post("/sms/group", data, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    });
   } catch (error) {
     notification.warning(
       "Xatolik! Internetni tekshirib qaytadan urinib ko‘ring!"

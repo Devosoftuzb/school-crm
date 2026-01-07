@@ -146,7 +146,23 @@
                   required
                 />
               </div>
-              <div class="sm:w-[205%]">
+              <div>
+                <label
+                  for="date"
+                  class="block mb-2 text-sm"
+                  :class="navbar.userNav ? 'text-white' : 'text-black'"
+                  >Qo'shilgan sanasi</label
+                >
+                <input
+                  v-model="edit.start_date"
+                  type="date"
+                  name="phone"
+                  id="phone"
+                  class="bg-gray-50 border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                  required
+                />
+              </div>
+              <div class="">
                 <label
                   for="name"
                   class="block mb-2 text-sm"
@@ -1009,6 +1025,7 @@ const edit = reactive({
   toggle: false,
   modal: false,
   is_student: false,
+  start_date: "",
 });
 
 const remove = reactive({
@@ -1241,6 +1258,7 @@ const createStudent = async () => {
       parents_phone_number: edit.parents_phone_number,
       full_name: edit.full_name,
       phone_number: edit.phone_number,
+      start_date: edit.start_date,
       status: true,
     };
     const res = await axios.post("/student", data, {
