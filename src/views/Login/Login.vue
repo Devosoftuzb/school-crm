@@ -26,9 +26,7 @@
           />
         </div>
         <div class="relative text-white">
-          <label for="password" class="block mb-2 font-semibold"
-            >Parol</label
-          >
+          <label for="password" class="block mb-2 font-semibold">Parol</label>
           <input
             :type="showPassword ? 'text' : 'password'"
             id="password"
@@ -108,7 +106,6 @@ import { useNotificationStore } from "@/stores/notification";
 const notification = useNotificationStore();
 const router = useRouter();
 
-const school = ref([]);
 const showPassword = ref(false);
 
 const form = reactive({
@@ -123,7 +120,7 @@ const handleSubmit = async () => {
   };
 
   try {
-    const loginResponse = await axios.post("/auth/login", data);
+    const loginResponse = await axios.post("/v1/auth/login", data);
     const { tokens, user } = loginResponse.data;
 
     form.login = "";
@@ -145,42 +142,27 @@ const handleSubmit = async () => {
     localStorage.setItem("id", user.id);
 
     const role = localStorage.getItem("role");
-    const token = localStorage.getItem("token");
 
     if (role === "_ow_sch_") {
-      const userId = localStorage.getItem("id");
-      const userResponse = await axios.get(`/user/${userId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      localStorage.setItem("school_id", userResponse.data.school[0].id);
+      localStorage.setItem("school_id", user.school[0].id);
       localStorage.setItem(
         "school_name",
-        userResponse.data.school[0].name
+        user.school[0].name
           .trim()
           .replace(/\s+/g, "_")
           .toLowerCase()
       );
     } else if (role === "_ad_sch_" || role === "_tch_sch_") {
-      localStorage.setItem("school_id", user.school_id);
-      const schoolName = await axios.get(
-        `/school/${localStorage.getItem("school_id")}`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
+      localStorage.setItem("school_id", user.school.id);
       localStorage.setItem(
         "school_name",
-        schoolName.data.name.trim().replace(/\s+/g, "_").toLowerCase()
+        user.school.name.trim().replace(/\s+/g, "_").toLowerCase()
       );
     }
 
     router.push("/");
   } catch (error) {
+    console.log(error)
     notification.warning(
       "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
     );

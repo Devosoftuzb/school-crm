@@ -202,7 +202,7 @@ const getOneProduct = () => {
     localStorage.getItem("role") == "_tch_sch_"
   ) {
     axios
-      .get(`/school/${localStorage.getItem("school_id")}`, {
+      .get(`/v1/school/navbar/${localStorage.getItem("school_id")}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },

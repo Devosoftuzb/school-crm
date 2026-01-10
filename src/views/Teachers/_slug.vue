@@ -398,13 +398,13 @@
                             v-for="(i, index) in history.searchList"
                             :key="index"
                             @mousedown.prevent="
-                              history.group_id = i.id;
-                              history.group_name = i.name;
+                              history.group_id = i.group.id;
+                              history.group_name = i.group.name;
                               history.filter_show = false;
-                              history.filter = i.name;
+                              history.filter = i.group.name;
                             "
                           >
-                            {{ i.name }}
+                            {{ i.group.name }}
                           </li>
                         </ul>
                         <ul
@@ -416,13 +416,13 @@
                             v-for="(i, index) in store.group"
                             :key="index"
                             @mousedown.prevent="
-                              history.group_id = i.id;
-                              history.group_name = i.name;
+                              history.group_id = i.group.id;
+                              history.group_name = i.group.name;
                               history.selectLamp = false;
-                              history.filter = i.name;
+                              history.filter = i.group.name;
                             "
                           >
-                            {{ i.name }}
+                            {{ i.group.name }}
                           </li>
                         </ul>
                       </div>
@@ -635,7 +635,7 @@
                     :class="navbar.userNav ? 'text-white' : 'text-[#1e293b]'"
                   >
                     <span class="w-full font-bold">Qo'shilgan vaqti :</span>
-                    <span class="w-full">{{ date }}</span>
+                    <span class="w-full">{{ store.addDate }}</span>
                   </h2>
                 </div>
               </div>
@@ -676,14 +676,14 @@
                       scope="row"
                       class="px-8 py-4 font-medium text-center whitespace-nowrap"
                     >
-                      {{ i.name }}
+                      {{ i.group.name }}
                     </td>
                     <td
                       class="px-8 py-4 font-medium text-center text-blue-800 whitespace-nowrap"
                     >
                       <p class="bg-blue-100 rounded-[5px] p-1">
-                        <span v-for="fan in i.subject" :key="fan.id"
-                          >{{ fan.subject_name }}
+                        <span v-for="fan in i.group.subject" :key="fan.id"
+                          >{{ fan.subject.name }}
                         </span>
                       </p>
                     </td>
@@ -691,21 +691,21 @@
                       class="px-8 py-4 font-medium text-center text-red-800 whitespace-nowrap"
                     >
                       <p class="bg-red-100 rounded-[5px] p-1">
-                        {{ Number(i.price).toLocaleString("uz-UZ") }} so'm
+                        {{ Number(i.group.price).toLocaleString("uz-UZ") }} so'm
                       </p>
                     </td>
                     <td
                       class="px-8 py-4 font-medium text-center text-blue-800 whitespace-nowrap"
                     >
                       <p class="bg-blue-100 rounded-[5px] p-1">
-                        {{ i.start_date }}
+                        {{ i.group.start_date }}
                       </p>
                     </td>
                     <td
                       class="px-8 py-4 font-medium text-center text-blue-800 whitespace-nowrap"
                     >
                       <p class="bg-blue-100 rounded-[5px] p-1">
-                        {{ i.student_date }}
+                        {{ i.createdAt.split("T")[0] }}
                       </p>
                     </td>
                     <td class="px-8 py-4 font-medium text-center">
@@ -1092,7 +1092,7 @@ const loading = reactive({
 });
 
 const store = reactive({
-  data: "",
+  data: [],
   group: [],
   payment: [],
   modalInfo: true,
@@ -1104,11 +1104,12 @@ const store = reactive({
   curentYil: [],
   year: hozirgiSana.getFullYear(),
   month: (hozirgiSana.getMonth() + 1).toString().padStart(2, "0"),
-  PageProduct: "",
+  PageProduct: [],
   page: [],
   pagination: 1,
   teacher_name: "",
   statistic: "",
+  addDate: "",
 });
 
 const info = reactive({
@@ -1116,13 +1117,11 @@ const info = reactive({
   StudentPayments: [],
 });
 
-const date = ref("");
-
 function searchHistoryFunc() {
   history.searchList = [];
   if (history.filter) {
     for (let i of store.group) {
-      if (i.name.toLowerCase().includes(history.filter.toLowerCase())) {
+      if (i.group.name.toLowerCase().includes(history.filter.toLowerCase())) {
         history.searchList.push(i);
       }
     }
@@ -1252,7 +1251,6 @@ const monthNames = (month) => {
   }
 };
 
-// API chaqiruvlarini umumiy qilish uchun yordamchi funksiya
 const fetchData = async (url, params = {}) => {
   const token = localStorage.getItem("token");
 
@@ -1275,34 +1273,14 @@ const getEmployee = async () => {
   const id = router.currentRoute.value.params.id;
 
   try {
-    const employeeData = await fetchData(`/employee/${schoolId}/${id}`);
-    store.data = employeeData;
-    date.value = store.data.createdAt.split("T")[0];
+    store.data = await fetchData(`/v1/employee/${schoolId}/${id}`);
     store.teacher_name = store.data.full_name;
+    store.group = store.data.group;
+    store.addDate = store.data.createdAt.split("T")[0]
 
-    const promises = [
-      ...employeeData.group.map((group) =>
-        getGroup(group.group_id, group.createdAt)
-      ),
-    ];
-
-    await Promise.all(promises);
     store.loading = true;
   } catch (error) {
     console.error("Xodim ma'lumotlarini olishda xato:", error);
-  }
-};
-
-const getGroup = async (id, date) => {
-  try {
-    const groupData = await fetchData(
-      `/group/${localStorage.getItem("school_id")}/${id}/not`
-    );
-    groupData.student_date = date.split("T")[0];
-    store.group.push(groupData);
-    return groupData;
-  } catch (error) {
-    console.error("Guruh ma'lumotlarini olishda xato:", error);
   }
 };
 
@@ -1310,9 +1288,9 @@ const getCurrentYearPayments = async () => {
   const id = router.currentRoute.value.params.id;
   try {
     const res = await axios.get(
-      `/statistic/teacher-salary/${localStorage.getItem("school_id")}/${id}/${
-        store.year
-      }`,
+      `/v1/statistic/teacher-salary/${localStorage.getItem(
+        "school_id"
+      )}/${id}/${store.year}`,
       {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -1330,7 +1308,7 @@ const getStudentPayments = async () => {
   const id = router.currentRoute.value.params.id;
   try {
     const res = await axios.get(
-      `/statistic/teacher-studentPayments/${localStorage.getItem(
+      `/v1/statistic/teacher-studentPayments/${localStorage.getItem(
         "school_id"
       )}/${id}/${store.month}`,
       {
@@ -1520,7 +1498,6 @@ const getHistory = async (page) => {
       if (records.length !== 0) {
         history.group_name = records[0].group_name;
       }
-      // history.dayPay = res.data?.data?.total_sum
       store.PageProduct = records;
       const pagination = res.data?.data?.pagination;
       store.page = [pagination.currentPage, pagination.total_count];
@@ -1612,7 +1589,7 @@ const exportToExcel = async () => {
     return;
   }
 
-  const rawData = list.filter(item => item.status !== 'delete');
+  const rawData = list.filter((item) => item.status !== "delete");
 
   const dataToExport = rawData.map((item) => ({
     "O'quvchi (F . I . O)": item.student_name,
