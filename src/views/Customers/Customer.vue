@@ -3,7 +3,7 @@
     <!-- ---------------------------------------- Statistic ------------------------------------- -->
 
     <div
-      v-show="store.pageData"
+      v-show="store.pageData && !store.loaderTime"
       v-for="i in store.statistic"
       :key="i"
       class="flex flex-wrap items-center justify-center cards gap-x-5 gap-y-5"
@@ -578,12 +578,12 @@
 
     <section class="pt-4">
       <!------------------------------------------- Search ------------------------------------------->
-      <div v-show="!store.pageData">
+      <div v-show="store.loaderTime">
         <Placeholder2 />
       </div>
       <!------------------------------------------- Search ------------------------------------------->
 
-      <div v-show="store.pageData" class="w-full max-w-screen mb-28">
+      <div v-show="store.pageData && !store.loaderTime" class="w-full max-w-screen mb-28">
         <!-- Start coding here -->
 
         <!------------------------------------------- Search ------------------------------------------->
@@ -971,6 +971,7 @@ const store = reactive({
   statistic: false,
   curentYil: [],
   searchTimer: null,
+  loaderTime: true,
 });
 
 const form = reactive({
@@ -1005,7 +1006,6 @@ const history = reactive({
   year: year,
   month: "",
 });
-
 
 const handleError = (
   message = "Xatolik! Internetni tekshirib qaytadan urinib ko'ring!"
@@ -1081,9 +1081,11 @@ const getPageCustomer = async (page) => {
     );
 
     store.error = false;
+    store.loaderTime = false;
   } catch {
     store.pageData = [];
     store.error = true;
+    store.loaderTime = false;
   }
 };
 

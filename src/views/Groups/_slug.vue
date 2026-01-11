@@ -24,19 +24,24 @@
             </h1>
             <p class="flex items-center gap-3 text-sm">
               <span class="font-bold">Boshlangan sana:</span>
-              {{ store.start_time?.slice(0, 10) }}
+              {{ store.groupData.start_time?.slice(0, 10) }}
             </p>
             <p class="flex items-center gap-3 text-sm">
               <span class="font-bold">Dars vaqti:</span>
-              {{ store.group_start_end_time }}
+              {{
+                store.groupData.start_time +
+                " dan - " +
+                store.groupData.end_time +
+                " gacha"
+              }}
             </p>
             <p class="flex items-center gap-3 text-sm">
               <span class="font-bold">Kurs narxi:</span>
-              {{ Number(store.group_price).toLocaleString("uz-UZ") }} so'm
+              {{ Number(store.groupData.price).toLocaleString("uz-UZ") }} so'm
             </p>
             <p class="flex items-center gap-3 text-sm">
               <span class="font-bold">O'quvchilar soni:</span>
-              {{ store.student_number }} ta
+              {{ store.studentCount }} ta
             </p>
           </div>
           <button
@@ -93,7 +98,7 @@
                 </thead>
                 <tbody>
                   <tr
-                    v-for="i in store.teachers"
+                    v-for="i in store.groupData.employee"
                     :key="i.id"
                     class="border-b"
                     :class="
@@ -104,30 +109,32 @@
                       scope="row"
                       class="px-8 py-3 font-medium text-center whitespace-nowrap"
                     >
-                      {{ i.full_name }}
+                      {{ i.employee.full_name }}
                     </th>
                     <td
                       class="px-8 py-2 font-medium text-center text-green-800"
                     >
-                      <p class="bg-green-100 rounded-[5px] p-1">{{ i.role }}</p>
+                      <p class="bg-green-100 rounded-[5px] p-1">
+                        {{ i.employee.role }}
+                      </p>
                     </td>
                     <td class="px-8 py-2 font-medium text-center text-red-800">
                       <p class="bg-red-100 rounded-[5px] p-1">
-                        {{ i.phone_number }}
+                        {{ i.employee.phone_number }}
                       </p>
                     </td>
                     <td
                       class="px-8 py-2 font-medium text-center text-blue-800 whitespace-nowrap"
                     >
                       <p class="bg-blue-100 rounded-[5px] p-1">
-                        {{ i.teachers_date }}
+                        {{ i.createdAt.split("T")[0] }}
                       </p>
                     </td>
                   </tr>
                 </tbody>
               </table>
               <div
-                v-show="store.teachers.length == 0"
+                v-show="!store.groupData.employee"
                 class="w-full p-20 text-2xl font-medium text-center max-w-screen"
               >
                 <h1>Xodimlar ro'yhati bo'sh</h1>
@@ -172,7 +179,6 @@
               <table class="w-full text-sm text-left">
                 <thead class="text-xs uppercase rounded-xl btn">
                   <tr class="text-white">
-                    <th scope="col" class="py-3 text-center">№</th>
                     <th scope="col" class="py-3 text-center">I . F . O</th>
                     <th scope="col" class="py-3 text-center">Telefon raqami</th>
                     <th scope="col" class="py-3 text-center">
@@ -183,42 +189,41 @@
                 </thead>
                 <tbody>
                   <tr
-                    v-for="i in store.students"
+                    v-for="i in store.groupData.student"
                     :key="i.id"
                     class="border-b"
                     :class="
                       navbar.userNav ? 'hover:bg-gray-700' : 'hover:bg-gray-50'
                     "
                   >
-                    <th
-                      scope="row"
-                      class="px-8 py-3 font-medium text-center whitespace-nowrap"
+                    <td
+                      class="px-8 py-2 font-medium text-center text-green-800"
                     >
-                      {{ i.students_number }}
-                    </th>
-                    <td class="px-8 py-2 font-medium text-center text-green-800">
                       <p class="bg-green-100 rounded-[5px] p-1">
-                        {{ i.full_name }}
+                        {{ i.student.full_name }}
                       </p>
                     </td>
                     <td class="px-8 py-2 font-medium text-center text-red-800">
                       <p class="bg-red-100 rounded-[5px] p-1">
-                        {{ i.phone_number }}
+                        {{ i.student.phone_number }}
                       </p>
                     </td>
                     <td
                       class="px-8 py-2 font-medium text-center text-blue-800 whitespace-nowrap"
                     >
                       <p class="bg-blue-100 rounded-[5px] p-1">
-                        {{ i.students_date }}
+                        {{ i.createdAt.split("T")[0] }}
                       </p>
                     </td>
                     <td class="px-8 py-4 font-medium text-center">
                       <button
                         @click="
                           enterSlug(
-                            i.id,
-                            i.full_name.split(' ').join('_').toLowerCase()
+                            i.student.id,
+                            i.student.full_name
+                              .split(' ')
+                              .join('_')
+                              .toLowerCase()
                           )
                         "
                         class="btn bg-blue-600 rounded-xl px-5 py-2.5 text-white focus:ring-2"
@@ -230,7 +235,7 @@
                 </tbody>
               </table>
               <div
-                v-show="store.students.length == 0"
+                v-show="!store.groupData.student"
                 class="w-full p-20 text-2xl font-medium text-center max-w-screen"
               >
                 <h1>O'quvchilar ro'yhati bo'sh</h1>
@@ -244,7 +249,7 @@
 </template>
 
 <script setup>
-import { onMounted, reactive } from "vue";
+import { onMounted, reactive, computed } from "vue";
 import { useNavStore } from "../../stores/toggle";
 import { useRouter } from "vue-router";
 import axios from "../../services/axios";
@@ -253,15 +258,17 @@ import { Placeholder2 } from "../../components";
 const navbar = useNavStore();
 const router = useRouter();
 
+const schoolId = computed(() => localStorage.getItem("school_id"));
+const token = computed(() => localStorage.getItem("token"));
+const groupId = computed(() => router.currentRoute.value.params.id);
+const authHeaders = computed(() => ({
+  Authorization: `Bearer ${token.value}`,
+}));
+
 const store = reactive({
   staff: false,
   student: false,
-  teachers: [],
-  students: [],
-  start_time: "",
-  group_price: "",
-  group_start_end_time: "",
-  student_number: "",
+  groupData: [],
   loading: false,
 });
 
@@ -270,70 +277,17 @@ function enterSlug(id, name) {
 }
 
 const getGroup = async () => {
-  const schoolId = localStorage.getItem("school_id");
-  const token = localStorage.getItem("token");
-  const id = router.currentRoute.value.params.id;
-
   try {
-    const res = await axios.get(`/group/${schoolId}/${id}/payment`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const res = await axios.get(
+      `/v1/group/one-all/${schoolId.value}/${groupId.value}`,
+      { headers: authHeaders.value }
+    );
 
-    const { start_date, price, start_time, end_time, employee, student } =
-      res.data;
-
-    store.start_time = start_date;
-    store.group_price = price;
-    store.group_start_end_time = `${start_time} dan - ${end_time} gacha`;
-    store.student_number = student.length;
-
-    // Fetch employees and students concurrently
-    await Promise.all([
-      ...employee.map((employee, index) =>
-        fetchUserData(
-          "/employee",
-          employee.employee_id,
-          employee.createdAt,
-          "teachers",
-          index + 1
-        )
-      ),
-      ...student.map((student, index) =>
-        fetchUserData(
-          "/student",
-          student.student_id,
-          student.createdAt,
-          "students",
-          index + 1
-        )
-      ),
-    ]);
-    store.students.sort((a, b) => a.students_number - b.students_number);
+    store.groupData = res.data;
+    store.studentCount = res.data.student?.length || 0;
     store.loading = true;
   } catch (error) {
     console.error("Error fetching group data:", error);
-  }
-};
-
-const fetchUserData = async (endpoint, id, date, storeCollection, number) => {
-  const schoolId = localStorage.getItem("school_id");
-  const token = localStorage.getItem("token");
-
-  try {
-    const res = await axios.get(`${endpoint}/${schoolId}/${id}/not`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    // Format date
-    res.data[`${storeCollection}_date`] = date.split("T")[0];
-    res.data[`${storeCollection}_number`] = number;
-    store[storeCollection].push(res.data);
-  } catch (error) {
-    console.error(`Error fetching ${storeCollection} data:`, error);
   }
 };
 

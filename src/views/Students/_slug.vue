@@ -146,7 +146,7 @@
                     :class="navbar.userNav ? 'text-white' : 'text-[#1e293b]'"
                   >
                     <span class="w-full font-bold">Qo'shilgan vaqti :</span>
-                    <span class="w-full">{{ date }}</span>
+                    <span class="w-full">{{ store.studentCreatedAt }}</span>
                   </h2>
                 </div>
               </div>
@@ -180,20 +180,20 @@
                       navbar.userNav ? 'hover:bg-gray-700' : 'hover:bg-gray-50'
                     "
                     v-for="i in store.group"
-                    :key="i.id"
+                    :key="i.group.id"
                   >
                     <td
                       scope="row"
                       class="px-8 py-4 font-medium text-center whitespace-nowrap"
                     >
-                      {{ i.name }}
+                      {{ i.group.name }}
                     </td>
                     <td
                       class="px-8 py-4 font-medium text-center text-blue-800 whitespace-nowrap"
                     >
                       <p class="bg-blue-100 rounded-[5px] p-1">
-                        <span v-for="fan in i.subject" :key="fan.id"
-                          >{{ fan.subject_name }}
+                        <span v-for="fan in i.group.subject" :key="fan.id"
+                          >{{ fan.subject.name }}
                         </span>
                       </p>
                     </td>
@@ -201,21 +201,21 @@
                       class="px-8 py-4 font-medium text-center text-red-800 whitespace-nowrap"
                     >
                       <p class="bg-red-100 rounded-[5px] p-1">
-                        {{ Number(i.price).toLocaleString("uz-UZ") }} so'm
+                        {{ Number(i.group.price).toLocaleString("uz-UZ") }} so'm
                       </p>
                     </td>
                     <td
                       class="px-8 py-4 font-medium text-center text-blue-800 whitespace-nowrap"
                     >
                       <p class="bg-blue-100 rounded-[5px] p-1">
-                        {{ i.start_date }}
+                        {{ i.group.start_date }}
                       </p>
                     </td>
                     <td
                       class="px-8 py-4 font-medium text-center text-blue-800 whitespace-nowrap"
                     >
                       <p class="bg-blue-100 rounded-[5px] p-1">
-                        {{ i.student_date }}
+                        {{ i.createdAt.split("T")[0] }}
                       </p>
                     </td>
                     <td class="px-8 py-4 font-medium text-center">
@@ -257,7 +257,6 @@
                 <tbody>
                   <tr
                     class="border-b"
-                 
                     :class="[
                       navbar.userNav ? 'hover:bg-gray-700' : 'hover:bg-gray-50',
                       i.status === 'update' ? 'btnAdd3' : '',
@@ -270,13 +269,13 @@
                       scope="row"
                       class="px-8 py-4 font-medium text-center whitespace-nowrap"
                     >
-                      {{ i.group_name }}
+                      {{ i.group.name }}
                     </td>
                     <td
                       class="px-8 py-4 font-medium text-center text-red-800 whitespace-nowrap"
                     >
                       <p class="bg-red-100 rounded-[5px] p-1">
-                        {{ Number(i.group_price).toLocaleString("uz-UZ") }} so'm
+                        {{ Number(i.group.price).toLocaleString("uz-UZ") }} so'm
                       </p>
                     </td>
                     <td
@@ -326,7 +325,7 @@
 </template>
 
 <script setup>
-import { onMounted, reactive, ref } from "vue";
+import { onMounted, reactive, ref, computed } from "vue";
 import { useRouter } from "vue-router";
 import { useNavStore } from "../../stores/toggle";
 import axios from "../../services/axios";
@@ -335,6 +334,11 @@ import { Placeholder2 } from "../../components";
 const navbar = useNavStore();
 const router = useRouter();
 
+
+const schoolId = computed(() => localStorage.getItem("school_id"));
+const token = computed(() => localStorage.getItem("token"));
+const studentId = computed(() => router.currentRoute.value.params.id);
+
 const store = reactive({
   data: "",
   group: [],
@@ -342,30 +346,21 @@ const store = reactive({
   modalInfo: true,
   modalGroup: false,
   modalPayment: false,
-  chekDate: false,
   paymentGroup: false,
   loading: false,
+  studentCreatedAt: "",
 });
 
-const date = ref("");
 
-const infoModal = () => {
-  store.modalInfo = true;
-  store.modalGroup = false;
-  store.modalPayment = false;
+const setActiveModal = (modalType) => {
+  store.modalInfo = modalType === "info";
+  store.modalGroup = modalType === "group";
+  store.modalPayment = modalType === "payment";
 };
 
-const groupModal = () => {
-  store.modalGroup = true;
-  store.modalInfo = false;
-  store.modalPayment = false;
-};
-
-const paymentModal = () => {
-  store.modalPayment = true;
-  store.modalInfo = false;
-  store.modalGroup = false;
-};
+const infoModal = () => setActiveModal("info");
+const groupModal = () => setActiveModal("group");
+const paymentModal = () => setActiveModal("payment");
 
 function enterSlug(id, name) {
   router.push(`/groups/${id}/${name}`);
@@ -399,17 +394,13 @@ const monthNames = (month) => {
   return months[parseInt(month) - 1] || "Notog'ri oy";
 };
 
-// API chaqiruvlarini umumiy qilish uchun yordamchi funksiya
 const fetchData = async (url, params = {}) => {
-  const schoolId = localStorage.getItem("school_id");
-  const token = localStorage.getItem("token");
-
   try {
     const response = await axios.get(url, {
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${token.value}`,
       },
-      params: params,
+      params,
     });
     return response.data;
   } catch (error) {
@@ -419,55 +410,20 @@ const fetchData = async (url, params = {}) => {
 };
 
 const getStudent = async () => {
-  const schoolId = localStorage.getItem("school_id");
-  const id = router.currentRoute.value.params.id;
-
   try {
-    const studentData = await fetchData(`/student/${schoolId}/${id}/group`);
-    store.data = studentData;
-    date.value = store.data.createdAt.split("T")[0];
+    const studentData = await fetchData(
+      `/v1/student/${schoolId.value}/${studentId.value}`
+    );
 
-    // Use a single promise array for both groups and payments
-    const promises = [
-      ...studentData.group.map((group) =>
-        getGroup(group.group_id, group.createdAt)
-      ),
-      ...studentData.payment.map((payment) =>
-        getPaymentGroup(payment.group_id, payment)
-      ),
-    ];
-
-    // Await all promises concurrently
-    await Promise.all(promises);
-    store.loading = true;
+    Object.assign(store, {
+      data: studentData,
+      studentCreatedAt: studentData.createdAt.split("T")[0],
+      group: studentData.group,
+      payment: studentData.payment,
+      loading: true,
+    });
   } catch (error) {
     console.error("Talaba ma'lumotlarini olishda xato:", error);
-  }
-};
-
-const getGroup = async (id, date) => {
-  try {
-    const groupData = await fetchData(
-      `/group/${localStorage.getItem("school_id")}/${id}/not`
-    );
-    groupData.student_date = date.split("T")[0];
-    store.group.push(groupData);
-    return groupData;
-  } catch (error) {
-    console.error("Guruh ma'lumotlarini olishda xato:", error);
-  }
-};
-
-const getPaymentGroup = async (id, payment) => {
-  try {
-    const groupData = await fetchData(
-      `/group/${localStorage.getItem("school_id")}/${id}/group`
-    );
-    payment.group_name = groupData.name;
-    payment.group_price = groupData.price;
-    store.payment.push(payment);
-  } catch (error) {
-    console.error("To'lov guruhi ma'lumotlarini olishda xato:", error);
   }
 };
 
@@ -488,5 +444,4 @@ onMounted(() => {
 .btnAdd3 {
   background-image: linear-gradient(to right, white -450%, #ff9800);
 }
-
 </style>

@@ -911,14 +911,14 @@
 
     <section class="pt-4" :class="{ 'text-white': navbar.userNav }">
       <!------------------------------------------- Placeholder ------------------------------------------->
-      <div v-show="!store.employeeData">
+      <div v-show="store.loaderTime">
         <Placeholder2 />
       </div>
       <!------------------------------------------- Placeholder ------------------------------------------->
 
       <!------------------------------------------- Search ------------------------------------------->
 
-      <div v-show="store.employeeData" class="w-full">
+      <div v-show="store.employeeData && !store.loaderTime" class="w-full">
         <!-- Start coding here -->
         <div
           class="flex flex-col items-center justify-between p-4 mb-4 shadow rounded-xl lg:flex-row lg:space-x-4"
@@ -1215,6 +1215,7 @@ const store = reactive({
   owner: localStorage.getItem("role") == "_ow_sch_",
   filter: "",
   searchTimer: null,
+  loaderTime: true,
 });
 
 const form = reactive({
@@ -1380,9 +1381,11 @@ const getPageEmployee = async (page) => {
     const pagination = res.data?.data?.pagination;
     store.page = [pagination.currentPage, pagination.total_count];
     store.error = false;
+    store.loaderTime = false;
   } catch (error) {
     store.employeeData = error.response?.data?.message || "Xatolik yuz berdi";
     store.error = true;
+    store.loaderTime = false;
   }
 };
 
