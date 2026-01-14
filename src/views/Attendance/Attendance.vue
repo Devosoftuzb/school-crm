@@ -662,25 +662,29 @@
 </template>
 
 <script setup>
-import { onMounted, reactive } from "vue";
+import { onMounted, reactive, computed } from "vue";
 import { useNavStore } from "../../stores/toggle";
 import { Placeholder2 } from "../../components";
 import { useNotificationStore } from "../../stores/notification";
 import axios from "@/services/axios";
 
-// Stores
 const notification = useNotificationStore();
 const navbar = useNavStore();
 const userRole = localStorage.getItem("role");
 
-// Current Date
 const hozirgiSana = new Date();
 const hozirgiYil = String(hozirgiSana.getFullYear());
 const orqaYil = hozirgiSana.getFullYear() - 2;
 let hozirgiOy = (hozirgiSana.getMonth() + 1).toString().padStart(2, "0");
 let hozirgiKun = hozirgiSana.getDate();
 
-// Store Reactive
+const schoolId = computed(() => localStorage.getItem("school_id"));
+const userId = computed(() => localStorage.getItem("id"));
+const token = computed(() => localStorage.getItem("token"));
+const authHeaders = computed(() => ({
+  Authorization: `Bearer ${token.value}`,
+}));
+
 const store = reactive({
   atPageData: [],
   page: [],
@@ -695,10 +699,8 @@ const store = reactive({
   uniqueDates: [],
   selectLamp: false,
   guard: userRole == "_ow_sch_" || userRole == "_ad_sch_",
-  method: "",
 });
 
-// Form Reactive
 const form = reactive({
   full_name: "",
   payment: "",
@@ -706,7 +708,6 @@ const form = reactive({
   group_id: "",
 });
 
-// History Reactive
 const history = reactive({
   year: hozirgiYil,
   month: hozirgiOy,
@@ -720,18 +721,25 @@ const history = reactive({
   searchList: [],
 });
 
-// Remove Reactive
 const remove = reactive({
   id: "",
   toggle: false,
 });
 
+const handleError = (
+  message = "Xatolik! Nimadir noto'g'ri. Internetni tekshirib qaytadan urinib ko'ring!"
+) => {
+  notification.warning(message);
+};
+
 const historyModal = () => {
-  history.modal = !history.modal;
-  history.year = hozirgiYil;
-  history.month = hozirgiOy;
-  history.day = hozirgiKun;
-  history.group_id = "";
+  Object.assign(history, {
+    modal: !history.modal,
+    year: hozirgiYil,
+    month: hozirgiOy,
+    day: hozirgiKun,
+    group_id: "",
+  });
 };
 
 function deleteFunc(id) {
@@ -739,7 +747,6 @@ function deleteFunc(id) {
   remove.toggle = true;
 }
 
-// Helper Functions
 const davomatToggle = (id, status) => {
   const student = store.atData.find((s) => s.id === id);
   if (student) student.attendance = status;
@@ -750,36 +757,28 @@ const getStudentStatus = (id) => {
   return student ? student.attendance : false;
 };
 
-const searchFunc = () => {
-  store.searchList = [];
-  if (store.filter) {
-    store.searchList = store.groupData.filter((i) =>
-      i.name.toLowerCase().includes(store.filter.toLowerCase())
-    );
-  }
+const createSearchFilter = (searchObj, data, key, filterProp = "filter") => {
+  searchObj.searchList = [];
+  if (!searchObj[filterProp]) return;
+
+  const filterLower = searchObj[filterProp].toLowerCase();
+  searchObj.searchList = data.filter((i) =>
+    i[key].toLowerCase().includes(filterLower)
+  );
 };
 
-function searchHistoryFunc() {
-  history.searchList = [];
-  if (history.filter) {
-    for (let i of store.groupData) {
-      if (i.name.toLowerCase().includes(history.filter.toLowerCase())) {
-        history.searchList.push(i);
-      }
-    }
-  }
-}
+const searchFunc = () => createSearchFilter(store, store.groupData, "name");
+const searchHistoryFunc = () =>
+  createSearchFilter(history, store.groupData, "name");
 
 const getUniqueDates = (records) => {
-  const dates = [];
+  const datesSet = new Set();
   records.forEach((record) => {
     record.attendance.forEach((att) => {
-      if (!dates.includes(att.date)) {
-        dates.push(att.date);
-      }
+      datesSet.add(att.date);
     });
   });
-  return dates.sort((a, b) => new Date(a) - new Date(b));
+  return Array.from(datesSet).sort((a, b) => new Date(a) - new Date(b));
 };
 
 const getAttendanceStatus = (attendance, date) => {
@@ -789,40 +788,17 @@ const getAttendanceStatus = (attendance, date) => {
 
 // API Functions
 const getGroups = async () => {
-  if (store.guard) {
-    try {
-      const res = await axios.get(
-        `/v1/group/add/${localStorage.getItem("school_id")}`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
-      store.groupData = res.data;
-      store.error = false;
-    } catch (error) {
-      store.groupData = error.response.data.message;
-      store.error = true;
-    }
-  } else {
-    try {
-      const res = await axios.get(
-        `/v1/group/teacher/${localStorage.getItem(
-          "school_id"
-        )}/${localStorage.getItem("id")}`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
-      store.groupData = res.data;
-      store.error = false;
-    } catch (error) {
-      store.groupData = error.response.data.message;
-      store.error = true;
-    }
+  try {
+    const endpoint = store.guard
+      ? `/v1/group/add/${schoolId.value}`
+      : `/v1/group/teacher/${schoolId.value}/${userId.value}`;
+
+    const res = await axios.get(endpoint, { headers: authHeaders.value });
+    store.groupData = res.data;
+    store.error = false;
+  } catch (error) {
+    store.groupData = error.response?.data?.message || [];
+    store.error = true;
   }
 };
 
@@ -830,25 +806,18 @@ const getOneProduct = async (id) => {
   history.group_id = "";
   try {
     const res = await axios.get(
-      `/v1/attendance/group/${localStorage.getItem("school_id")}/${id}`,
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      }
+      `/v1/attendance/group/${schoolId.value}/${id}`,
+      { headers: authHeaders.value }
     );
 
     store.atData = res.data[0];
-    store.method = res.data[1].method;
-    store.atPageData = []
+    store.atPageData = [];
 
-    if (store.method === "put") {
+    if (res.data[1]?.method === "put") {
       notification.warning("Bu guruhga oldin davomat qilingan");
     }
   } catch (error) {
-    notification.warning(
-      "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
-    );
+    handleError();
   }
 };
 
@@ -856,37 +825,24 @@ const addAttendance = async () => {
   try {
     const data = {
       list: store.atData.map((student) => ({
-        school_id: Number(localStorage.getItem("school_id")),
+        attendance_id: student?.attendance_id,
+        school_id: Number(schoolId.value),
         student_id: student.id,
         group_id: student.group_id,
         status: student.attendance,
       })),
     };
 
-    const url =
-      store.method == "post"
-        ? `/v1/attendance/${localStorage.getItem("school_id")}`
-        : "/v1/attendance";
-
-    await axios({
-      method: store.method,
-      url: url,
-      data: data,
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    });
+    await axios.post("/v1/attendance", data, { headers: authHeaders.value });
 
     notification.success("Davomat saqlandi");
 
-    setTimeout(function () {
+    setTimeout(() => {
       window.location.reload();
     }, 1000);
   } catch (error) {
     console.error(error);
-    notification.warning(
-      "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
-    );
+    handleError();
   }
 };
 
@@ -894,18 +850,12 @@ const getHistory = async (page) => {
   form.group_id = "";
   try {
     const res = await axios.get(
-      `/v1/attendance/${localStorage.getItem("school_id")}/${
-        history.group_id
-      }/${history.year}/${history.month}/page?page=${page}`,
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      }
+      `/v1/attendance/${schoolId.value}/${history.group_id}/${history.year}/${history.month}/page?page=${page}`,
+      { headers: authHeaders.value }
     );
 
     const records = res.data?.data?.records;
-    if (records && records.length !== 0) {
+    if (records?.length) {
       store.atPageData = records;
       store.uniqueDates = getUniqueDates(records);
       const pagination = res.data?.data?.pagination;
@@ -927,12 +877,8 @@ const getHistory = async (page) => {
 
 const deleteStudentGroup = async () => {
   try {
-    const token = localStorage.getItem("token");
-
     await axios.delete(`/v1/student-group/${remove.id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      headers: authHeaders.value,
     });
 
     notification.success("O'quvchi guruhdan o'chirildi");
@@ -945,22 +891,16 @@ const deleteStudentGroup = async () => {
 
     remove.toggle = false;
   } catch (error) {
-    // console.error(error);
-    notification.warning(
-      "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
-    );
+    handleError();
   }
 };
 
-// Component Lifecycle
 onMounted(() => {
-  for (let i = 0; i < 5; i++) {
-    let list = {
-      id: i,
-      name: String(orqaYil + i),
-    };
-    store.curentYil.push(list);
-  }
+  store.curentYil = Array.from({ length: 5 }, (_, i) => ({
+    id: i,
+    name: String(orqaYil + i),
+  }));
+
   getGroups();
 });
 </script>

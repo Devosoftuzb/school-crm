@@ -583,7 +583,10 @@
       </div>
       <!------------------------------------------- Search ------------------------------------------->
 
-      <div v-show="store.pageData && !store.loaderTime" class="w-full max-w-screen mb-28">
+      <div
+        v-show="store.pageData && !store.loaderTime"
+        class="w-full max-w-screen mb-28"
+      >
         <!-- Start coding here -->
 
         <!------------------------------------------- Search ------------------------------------------->
@@ -718,7 +721,6 @@
                   :class="
                     navbar.userNav ? 'hover:bg-gray-700' : 'hover:bg-gray-50'
                   "
-                  v-show="!store.searchData.length"
                   v-for="i in store.pageData"
                   :key="i"
                 >
@@ -745,13 +747,13 @@
                           i.description && i.description.split(" ").length > 3
                             ? i.description.split(" ").slice(0, 3).join(" ") +
                               "..."
-                            : i.description
+                            : i.description || "Izoh kiritilmagan"
                         }}
                       </p>
                       <span
                         class="absolute hidden max-w-xs p-2 mb-1 text-sm text-blue-800 -translate-x-1/2 bg-blue-100 rounded-md shadow-lg left-1/2 bottom-full w-max group-hover:block"
                       >
-                        {{ i.description }}
+                        {{ i.description || "Izoh kiritilmagan" }}
                       </span>
                     </div>
                   </td>
@@ -761,69 +763,6 @@
                       {{ i.social_media.name }}
                     </p>
                   </td>
-                  <td class="px-8 py-3 font-medium text-center">
-                    <button
-                      @click="getOneCustomer(i.id, 'student')"
-                      class="btnKirish bg-blue-600 rounded-xl px-5 py-2.5 text-white focus:ring-2 whitespace-nowrap"
-                    >
-                      O'quvchi qilish
-                    </button>
-                  </td>
-                  <td
-                    v-show="!store.guard"
-                    class="pr-5 font-medium text-center whitespace-nowrap"
-                  >
-                    <i
-                      @click="getOneCustomer(i.id, 'edit')"
-                      class="p-2 mr-3 text-blue-600 bg-blue-300 cursor-pointer rounded-xl bx bxs-pencil focus:ring-2"
-                    >
-                    </i>
-                    <i
-                      @click="deleteFunc(i.id)"
-                      class="p-2 text-red-600 bg-red-300 cursor-pointer rounded-xl bx bxs-trash focus:ring-2"
-                    >
-                    </i>
-                  </td>
-                </tr>
-
-                <tr
-                  class="border-b"
-                  :class="
-                    navbar.userNav ? 'hover:bg-gray-700' : 'hover:bg-gray-50'
-                  "
-                  v-show="store.searchData.length"
-                  v-for="i in store.searchData"
-                  :key="i"
-                >
-                  <th
-                    scope="row"
-                    class="px-8 py-3 font-medium text-center whitespace-nowrap"
-                  >
-                    <span>{{ i.full_name }}</span>
-                  </th>
-                  <td class="px-8 py-2 font-medium text-center text-red-800">
-                    <p class="bg-red-100 whitespace-nowrap rounded-[5px] p-1">
-                      {{ i.phone_number }}
-                    </p>
-                  </td>
-                  <td class="px-8 py-2 font-medium text-center text-blue-800">
-                    <p class="bg-blue-100 whitespace-nowrap rounded-[5px] p-1">
-                      {{ i.subject == null ? "..." : i.subject.name }}
-                    </p>
-                  </td>
-                  <td class="px-8 py-2 font-medium text-center">
-                    <p
-                      class="whitespace-nowrap rounded-[5px] p-1 truncate w-40 inline-flex justify-center"
-                    >
-                      {{ i.description === null ? "..." : i.description }}
-                    </p>
-                  </td>
-                  <td class="px-8 py-2 font-medium text-center text-blue-800">
-                    <p class="bg-blue-100 whitespace-nowrap rounded-[5px] p-1">
-                      {{ i.social_media.name }}
-                    </p>
-                  </td>
-
                   <td class="px-8 py-3 font-medium text-center">
                     <button
                       @click="getOneCustomer(i.id, 'student')"
@@ -858,7 +797,7 @@
             </div>
           </div>
           <nav
-            v-if="!store.searchData.length"
+            v-show="!store.searchLamp"
             class="flex flex-row items-center justify-between p-4 space-y-0"
             aria-label="Table navigation"
           >
@@ -961,7 +900,6 @@ const store = reactive({
   pageData: [],
   page: { current: 1, total: 1 },
   pagination: 1,
-  searchData: [],
   error: false,
   groups: [{ name: "Guruh yaratilmagan" }],
   social_link: [],
@@ -972,6 +910,7 @@ const store = reactive({
   curentYil: [],
   searchTimer: null,
   loaderTime: true,
+  searchLamp: false,
 });
 
 const form = reactive({
@@ -1041,11 +980,14 @@ const getStatistic = async (date) => {
 };
 
 const searchName = (name) => {
+  store.searchLamp = true;
   clearTimeout(store.searchTimer);
 
   store.searchTimer = setTimeout(async () => {
     if (!name) {
-      store.searchData = [];
+      store.pageData = [];
+      getPageCustomer(store.pagination);
+      store.searchLamp = false;
       return;
     }
 
@@ -1054,9 +996,10 @@ const searchName = (name) => {
         `/v1/customer/search/${schoolId.value}/${name}`,
         { headers: authHeaders.value }
       );
-      store.searchData = res.data;
+      store.pageData = res.data;
     } catch {
-      store.searchData = [];
+      store.pageData = [];
+      store.searchLamp = false;
     }
   }, 350);
 };
