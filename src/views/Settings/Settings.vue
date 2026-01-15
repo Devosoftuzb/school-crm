@@ -1021,17 +1021,16 @@ const pay = reactive({
 
 // ----------------------------------- axios --------------------------------
 
-const getOneProduct = () => {
+const getOneUser = () => {
   const school_id = localStorage.getItem("school_id");
   const user_id = localStorage.getItem("id");
   const token = localStorage.getItem("token");
 
-  // admin va teacher — employee API dan olinadi
   const employeeRoles = ["_ad_sch_", "_tch_sch_"];
 
   const url = employeeRoles.includes(userRole)
-    ? `/employee/${school_id}/${user_id}/not`
-    : `/user/${user_id}/not`;
+    ? `/v1/employee/${school_id}/${user_id}`
+    : `/v1/user/${user_id}`;
 
   axios
     .get(url, {
@@ -1047,7 +1046,6 @@ const getOneProduct = () => {
       edit.phone_number = res.data.phone_number;
       edit.login = res.data.login;
 
-      // faqat employee roli bo‘lsa role qo‘shamiz
       if (employeeRoles.includes(userRole)) {
         edit.role = res.data.role;
       }
@@ -1073,8 +1071,8 @@ const changeInfo = (id) => {
   }
 
   const url = employeeRoles.includes(userRole)
-    ? `/employee/${school_id}/${id}`
-    : `/user/${id}`;
+    ? `/v1/employee/${school_id}/${id}`
+    : `/v1/user/${id}`;
 
   axios
     .put(url, data, {
@@ -1082,7 +1080,7 @@ const changeInfo = (id) => {
     })
     .then(() => {
       notification.success("Ma'lumotlar tahrirlandi");
-      getOneProduct();
+      getOneUser();
     })
     .catch((error) => {
       const msg = error?.response?.data?.message || "";
@@ -1113,8 +1111,8 @@ const changePassword = (id) => {
   };
 
   const url = employeeRoles.includes(userRole)
-    ? `/employee/change-password/${school_id}/${id}`
-    : `/user/change-password/${id}`;
+    ? `/v1/employee/change-password/${school_id}/${id}`
+    : `/v1/user/change-password/${id}`;
 
   axios
     .post(url, data, {
@@ -1122,7 +1120,7 @@ const changePassword = (id) => {
     })
     .then(() => {
       notification.success("Parol yangilandi!");
-      getOneProduct();
+      getOneUser();
     })
     .catch((error) => {
       const message = error?.response?.data?.message || "";
@@ -1143,7 +1141,7 @@ const getSocialLink = () => {
     localStorage.getItem("role") == "_ow_sch_"
   ) {
     axios
-      .get(`/social-media/${localStorage.getItem("school_id")}`, {
+      .get(`/v1/social-media/add/${localStorage.getItem("school_id")}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -1161,7 +1159,7 @@ const addSocialLink = () => {
     name: social.name,
   };
   axios
-    .post(`/social-media`, data, {
+    .post(`/v1/social-media`, data, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
@@ -1180,7 +1178,7 @@ const addSocialLink = () => {
 
 const deleteSocialLink = () => {
   axios
-    .delete(`/social-media/${localStorage.getItem("school_id")}/${remove.id}`, {
+    .delete(`/v1/social-media/${localStorage.getItem("school_id")}/${remove.id}`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
@@ -1203,7 +1201,7 @@ const getPaymentMethod = () => {
     localStorage.getItem("role") == "_ow_sch_"
   ) {
     axios
-      .get(`/payment-method/${localStorage.getItem("school_id")}`, {
+      .get(`/v1/payment-method/${localStorage.getItem("school_id")}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -1221,7 +1219,7 @@ const addPaymentMethod = () => {
     name: pay.name,
   };
   axios
-    .post(`/payment-method`, data, {
+    .post(`/v1/payment-method`, data, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
@@ -1241,7 +1239,7 @@ const addPaymentMethod = () => {
 const deletePaymentMethod = () => {
   axios
     .delete(
-      `/payment-method/${localStorage.getItem("school_id")}/${remove.id}`,
+      `/v1/payment-method/${localStorage.getItem("school_id")}/${remove.id}`,
       {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -1261,7 +1259,7 @@ const deletePaymentMethod = () => {
 };
 
 onMounted(() => {
-  getOneProduct();
+  getOneUser();
   getSocialLink();
   getPaymentMethod();
 });
