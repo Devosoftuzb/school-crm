@@ -9,7 +9,7 @@
           : 'hidden'
       "
     >
-      <div class="relative p-4 max-w-xl min-w-[30%] h-auto">
+      <div class="relative p-4 max-w-xl min-w-[40%] h-auto">
         <!-- Modal content -->
         <div
           class="relative p-4 shadow rounded-xl sm:p-5"
@@ -835,10 +835,6 @@ const store = reactive({
   textTitle: "",
 });
 
-function enterSlug(name) {
-  router.push(`./tests/question/${name.toLowerCase()}`);
-}
-
 function deleteFunc(id) {
   remove.id = id;
   remove.toggle = true;
@@ -877,13 +873,11 @@ function addVariant() {
 }
 
 const addVariant2 = () => {
-  // Yangi variant yaratamiz
   const newVariant = {
     option: "",
     is_correct: false,
   };
 
-  // Ro'yxatga qo‘shamiz
   edit.variants.push(newVariant);
 };
 

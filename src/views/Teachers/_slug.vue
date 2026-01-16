@@ -1066,27 +1066,36 @@
 </template>
 
 <script setup>
-import { onMounted, reactive, ref, watch } from "vue";
+import { onMounted, reactive, ref, watch, computed } from "vue";
 import { useRouter } from "vue-router";
 import { useNavStore } from "../../stores/toggle";
 import axios from "../../services/axios";
-import { Placeholder2 } from "../../components";
+import { Placeholder2, ButtonLoader, PageLoader } from "../../components";
 import Chart from "chart.js/auto";
-import * as XLSX from "xlsx";
-import { saveAs } from "file-saver";
 import { useNotificationStore } from "../../stores/notification";
-import { ButtonLoader } from "../../components";
-import { PageLoader } from "../../components";
 
 const notification = useNotificationStore();
 const navbar = useNavStore();
 const router = useRouter();
+
 const hozirgiSana = new Date();
 const hozirgiYil = String(hozirgiSana.getFullYear());
 const orqaYil = hozirgiSana.getFullYear() - 2;
-let hozirgiOy = hozirgiSana.getMonth() + 1;
-hozirgiOy = hozirgiOy.toString().padStart(2, "0");
+let hozirgiOy = String(hozirgiSana.getMonth() + 1).padStart(2, "0");
 let hozirgiKun = hozirgiSana.getDate();
+
+// Computed properties
+const schoolId = computed(() => localStorage.getItem("school_id"));
+const employeeId = computed(() => router.currentRoute.value.params.id);
+const token = computed(() => localStorage.getItem("token"));
+const authHeaders = computed(() => ({ Authorization: `Bearer ${token.value}` }));
+
+// Chart theme computed
+const chartTheme = computed(() => ({
+  background: navbar.userNav ? "#1e293b" : "#ffffff",
+  textColor: navbar.userNav ? "#ffffff" : "#000000",
+  gridColor: navbar.userNav ? "rgba(255, 255, 255, 0.2)" : "rgba(0, 0, 0, 0.1)",
+}));
 
 const loading = reactive({
   view: false,
@@ -1105,7 +1114,7 @@ const store = reactive({
   loading: false,
   curentYil: [],
   year: hozirgiSana.getFullYear(),
-  month: (hozirgiSana.getMonth() + 1).toString().padStart(2, "0"),
+  month: String(hozirgiSana.getMonth() + 1).padStart(2, "0"),
   PageProduct: [],
   page: [],
   pagination: 1,
@@ -1118,73 +1127,6 @@ const info = reactive({
   PaymentStats: [],
   StudentPayments: [],
 });
-
-function searchHistoryFunc() {
-  history.searchList = [];
-  if (history.filter) {
-    for (let i of store.group) {
-      if (i.group.name.toLowerCase().includes(history.filter.toLowerCase())) {
-        history.searchList.push(i);
-      }
-    }
-  }
-}
-
-const infoModal = () => {
-  store.modalInfo = true;
-  store.modalGroup = false;
-  store.modalPayment = false;
-};
-
-const groupModal = () => {
-  store.modalGroup = true;
-  store.modalInfo = false;
-  store.modalPayment = false;
-};
-
-const paymentModal = () => {
-  store.modalPayment = true;
-  store.modalInfo = false;
-  store.modalGroup = false;
-};
-
-const historyDayModal = () => {
-  history.dayModal = true;
-  history.monthModal = false;
-  history.groupMonthModal = false;
-  history.yearModal = false;
-};
-
-const historyMonthModal = () => {
-  history.dayModal = false;
-  history.monthModal = true;
-  history.groupMonthModal = false;
-  history.yearModal = false;
-};
-
-const historyGroupMonthModal = () => {
-  history.groupMonthModal = true;
-  history.dayModal = false;
-  history.monthModal = false;
-  history.yearModal = false;
-};
-
-const historyYearModal = () => {
-  history.yearModal = true;
-  history.dayModal = false;
-  history.monthModal = false;
-  history.groupMonthModal = false;
-};
-
-const historyModal = () => {
-  history.modal = !history.modal;
-  history.year = hozirgiYil;
-  history.month = hozirgiOy;
-  history.day = hozirgiKun;
-  history.group_id = "";
-  historyDayModal();
-  getHistory(store.pagination);
-};
 
 const history = reactive({
   year: hozirgiYil,
@@ -1208,9 +1150,11 @@ const history = reactive({
   dayPay: 0,
 });
 
-function enterSlug(id, name) {
-  router.push(`/groups/${id}/${name}`);
-}
+// Helper functions
+const monthNames = (month) => {
+  const months = ["Yanvar", "Fevral", "Mart", "Aprel", "May", "Iyun", "Iyul", "Avgust", "Sentabr", "Oktabr", "Noyabr", "Dekabr"];
+  return months[parseInt(month) - 1] || "Notog'ri oy";
+};
 
 const formatDateToNumeric = (date) => {
   const year = date.getFullYear();
@@ -1218,50 +1162,65 @@ const formatDateToNumeric = (date) => {
   const day = String(date.getDate()).padStart(2, "0");
   const hour = String(date.getHours()).padStart(2, "0");
   const minute = String(date.getMinutes()).padStart(2, "0");
-
   return `${day}-${month}-${year}, ${hour}:${minute}`;
 };
 
-const monthNames = (month) => {
-  switch (month) {
-    case "01":
-      return "Yanvar";
-    case "02":
-      return "Fevral";
-    case "03":
-      return "Mart";
-    case "04":
-      return "Aprel";
-    case "05":
-      return "May";
-    case "06":
-      return "Iyun";
-    case "07":
-      return "Iyul";
-    case "08":
-      return "Avgust";
-    case "09":
-      return "Sentabr";
-    case "10":
-      return "Oktabr";
-    case "11":
-      return "Noyabr";
-    case "12":
-      return "Dekabr";
-    default:
-      return "Notog'ri oy";
+function searchHistoryFunc() {
+  if (!history.filter) {
+    history.searchList = [];
+    return;
   }
+  
+  const filterLower = history.filter.toLowerCase();
+  history.searchList = store.group.filter((i) =>
+    i.group.name.toLowerCase().includes(filterLower)
+  );
+}
+
+// Modal handlers
+const setActiveModal = (modalType) => {
+  store.modalInfo = modalType === 'info';
+  store.modalGroup = modalType === 'group';
+  store.modalPayment = modalType === 'payment';
 };
 
-const fetchData = async (url, params = {}) => {
-  const token = localStorage.getItem("token");
+const infoModal = () => setActiveModal('info');
+const groupModal = () => setActiveModal('group');
+const paymentModal = () => setActiveModal('payment');
 
+const setActiveHistoryModal = (type) => {
+  history.dayModal = type === 'day';
+  history.monthModal = type === 'month';
+  history.groupMonthModal = type === 'groupMonth';
+  history.yearModal = type === 'year';
+};
+
+const historyDayModal = () => setActiveHistoryModal('day');
+const historyMonthModal = () => setActiveHistoryModal('month');
+const historyGroupMonthModal = () => setActiveHistoryModal('groupMonth');
+const historyYearModal = () => setActiveHistoryModal('year');
+
+const historyModal = () => {
+  Object.assign(history, {
+    modal: !history.modal,
+    year: hozirgiYil,
+    month: hozirgiOy,
+    day: hozirgiKun,
+    group_id: "",
+  });
+  historyDayModal();
+  getHistory(store.pagination);
+};
+
+function enterSlug(id, name) {
+  router.push(`/groups/${id}/${name}`);
+}
+
+const fetchData = async (url, params = {}) => {
   try {
     const response = await axios.get(url, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      params: params,
+      headers: authHeaders.value,
+      params,
     });
     return response.data;
   } catch (error) {
@@ -1270,36 +1229,29 @@ const fetchData = async (url, params = {}) => {
   }
 };
 
+// API Functions
 const getEmployee = async () => {
-  const schoolId = localStorage.getItem("school_id");
-  const id = router.currentRoute.value.params.id;
-
   try {
-    store.data = await fetchData(`/v1/employee/${schoolId}/${id}`);
-    store.teacher_name = store.data.full_name;
-    store.group = store.data.group;
-    store.addDate = store.data.createdAt.split("T")[0];
-
-    store.loading = true;
+    const data = await fetchData(`/v1/employee/${schoolId.value}/${employeeId.value}`);
+    
+    Object.assign(store, {
+      data: data,
+      teacher_name: data.full_name,
+      group: data.group,
+      addDate: data.createdAt.split("T")[0],
+      loading: true,
+    });
   } catch (error) {
     console.error("Xodim ma'lumotlarini olishda xato:", error);
   }
 };
 
 const getCurrentYearPayments = async () => {
-  const id = router.currentRoute.value.params.id;
   try {
     const res = await axios.get(
-      `/v1/statistic/teacher-salary/${localStorage.getItem(
-        "school_id"
-      )}/${id}/${store.year}`,
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      }
+      `/v1/statistic/teacher-salary/${schoolId.value}/${employeeId.value}/${store.year}`,
+      { headers: authHeaders.value }
     );
-
     info.PaymentStats = res.data.PaymentStats;
   } catch (err) {
     console.error("Statistikani olishda xato:", err);
@@ -1307,34 +1259,22 @@ const getCurrentYearPayments = async () => {
 };
 
 const getStudentPayments = async () => {
-  const id = router.currentRoute.value.params.id;
   try {
     const res = await axios.get(
-      `/v1/statistic/teacher-studentPayments/${localStorage.getItem(
-        "school_id"
-      )}/${id}/${store.month}`,
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      }
+      `/v1/statistic/teacher-studentPayments/${schoolId.value}/${employeeId.value}/${store.month}`,
+      { headers: authHeaders.value }
     );
-
     info.StudentPayments = res.data.studentPayments;
   } catch (err) {
     console.error("Statistikani olishda xato:", err);
   }
 };
 
+// Chart management
 let paymentChart = null;
 const createPaymentChart = () => {
-  const ctx = document.getElementById("paymentChart").getContext("2d");
-
-  const chartBackground = navbar.userNav ? "#1e293b" : "#ffffff";
-  const chartTextColor = navbar.userNav ? "#ffffff" : "#000000";
-  const gridColor = navbar.userNav
-    ? "rgba(255, 255, 255, 0.2)"
-    : "rgba(0, 0, 0, 0.1)";
+  const ctx = document.getElementById("paymentChart")?.getContext("2d");
+  if (!ctx) return;
 
   if (paymentChart) {
     paymentChart.destroy();
@@ -1343,46 +1283,31 @@ const createPaymentChart = () => {
   paymentChart = new Chart(ctx, {
     type: "bar",
     data: {
-      labels: [
-        "Yanvar",
-        "Fevral",
-        "Mart",
-        "Aprel",
-        "May",
-        "Iyun",
-        "Iyul",
-        "Avgust",
-        "Sentabr",
-        "Oktabr",
-        "Noyabr",
-        "Dekabr",
-      ],
-      datasets: [
-        {
-          label: "Tushum (so'm)",
-          data: info.PaymentStats,
-          backgroundColor: "#1a56db",
-          borderColor: "rgba(54, 162, 235, 1)",
-          borderWidth: 1,
-        },
-      ],
+      labels: ["Yanvar", "Fevral", "Mart", "Aprel", "May", "Iyun", "Iyul", "Avgust", "Sentabr", "Oktabr", "Noyabr", "Dekabr"],
+      datasets: [{
+        label: "Tushum (so'm)",
+        data: info.PaymentStats,
+        backgroundColor: "#1a56db",
+        borderColor: "rgba(54, 162, 235, 1)",
+        borderWidth: 1,
+      }],
     },
     options: {
       responsive: true,
       scales: {
         x: {
-          grid: { color: gridColor },
-          ticks: { color: chartTextColor },
+          grid: { color: chartTheme.value.gridColor },
+          ticks: { color: chartTheme.value.textColor },
         },
         y: {
           beginAtZero: true,
-          grid: { color: gridColor },
-          ticks: { color: chartTextColor },
+          grid: { color: chartTheme.value.gridColor },
+          ticks: { color: chartTheme.value.textColor },
         },
       },
       plugins: {
         legend: {
-          labels: { color: chartTextColor },
+          labels: { color: chartTheme.value.textColor },
         },
       },
     },
@@ -1391,13 +1316,8 @@ const createPaymentChart = () => {
 
 let studentPaymentChart = null;
 const createStudentPaymentChart = () => {
-  const ctx = document.getElementById("studentPaymentChart").getContext("2d");
-
-  const chartBackground = navbar.userNav ? "#1e293b" : "#ffffff";
-  const chartTextColor = navbar.userNav ? "#ffffff" : "#000000";
-  const gridColor = navbar.userNav
-    ? "rgba(255, 255, 255, 0.2)"
-    : "rgba(0, 0, 0, 0.1)";
+  const ctx = document.getElementById("studentPaymentChart")?.getContext("2d");
+  if (!ctx) return;
 
   if (studentPaymentChart) {
     studentPaymentChart.destroy();
@@ -1407,26 +1327,24 @@ const createStudentPaymentChart = () => {
     type: "pie",
     data: {
       labels: ["To'liq To'lov", "Yarim To'lov", "To'lov Qilmaganlar"],
-      datasets: [
-        {
-          label: "O'quvchi",
-          data: [
-            info.StudentPayments.fullPayment,
-            info.StudentPayments.halfPayment,
-            info.StudentPayments.noPayment,
-          ],
-          backgroundColor: ["#1a56db", "#ff9800", "#e02424"],
-          borderColor: "#ffffff",
-          borderWidth: 0,
-          hoverOffset: 10,
-        },
-      ],
+      datasets: [{
+        label: "O'quvchi",
+        data: [
+          info.StudentPayments.fullPayment,
+          info.StudentPayments.halfPayment,
+          info.StudentPayments.noPayment,
+        ],
+        backgroundColor: ["#1a56db", "#ff9800", "#e02424"],
+        borderColor: "#ffffff",
+        borderWidth: 0,
+        hoverOffset: 10,
+      }],
     },
     options: {
       responsive: true,
       plugins: {
         legend: {
-          labels: { color: chartTextColor },
+          labels: { color: chartTheme.value.textColor },
         },
       },
     },
@@ -1435,74 +1353,56 @@ const createStudentPaymentChart = () => {
 
 const getHistory = async (page) => {
   loading.view = true;
-  const id = router.currentRoute.value.params.id;
-  const schoolId = localStorage.getItem("school_id");
-  const token = localStorage.getItem("token");
-  const config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
+
+  const urlMap = {
+    dayModal: `/v1/payment/employeeDay/${schoolId.value}/${employeeId.value}/${history.year}/${history.month}/${history.day}/page?page=${page}`,
+    monthModal: `/v1/payment/employeeMonth/${schoolId.value}/${employeeId.value}/${history.year}/${history.month}/page?page=${page}`,
+    groupMonthModal: `/v1/payment/groupMonth/${schoolId.value}/${history.group_id}/${history.year}/${history.month}/all/page?page=${page}`,
+    yearModal: `/v1/payment/employeeYear/${schoolId.value}/${employeeId.value}/${history.year}/page?page=${page}`,
   };
 
-  let url;
-  if (history.dayModal) {
-    url = `/v1/payment/employeeDay/${schoolId}/${id}/${history.year}/${history.month}/${history.day}/page?page=${page}`;
-  } else if (history.monthModal) {
-    url = `/v1/payment/employeeMonth/${schoolId}/${id}/${history.year}/${history.month}/page?page=${page}`;
-  } else if (history.groupMonthModal) {
-    url = `/v1/payment/groupMonth/${schoolId}/${history.group_id}/${history.year}/${history.month}/all/page?page=${page}`;
-  } else if (history.yearModal) {
-    url = `/v1/payment/employeeYear/${schoolId}/${id}/${history.year}/page?page=${page}`;
-  } else {
-    return;
-  }
+  const activeModal = Object.keys(urlMap).find(key => history[key]);
+  if (!activeModal) return;
 
-  await axios
-    .get(url, config)
-    .then((res) => {
-      const records = res.data?.data?.records;
-      if (records.length !== 0) {
-        history.group_name = records[0].group_name;
-      }
-      store.PageProduct = records;
-      const pagination = res.data?.data?.pagination;
-      store.page = [pagination.currentPage, pagination.total_count];
-      loading.view = false;
-      history.modal = false;
-    })
-    .catch((error) => {
-      loading.view = false;
-      store.PageProduct = error.response?.data?.message;
-    });
+  try {
+    const res = await axios.get(urlMap[activeModal], { headers: authHeaders.value });
+    const records = res.data?.data?.records || [];
+    
+    if (records.length !== 0) {
+      history.group_name = records[0].group_name;
+    }
+    
+    store.PageProduct = records;
+    const pagination = res.data?.data?.pagination;
+    store.page = [pagination.currentPage, pagination.total_count];
+    loading.view = false;
+    history.modal = false;
+  } catch (error) {
+    loading.view = false;
+    store.PageProduct = error.response?.data?.message || [];
+  }
 };
 
 const exportToExcel = async () => {
-  const id = router.currentRoute.value.params.id;
-  const schoolId = localStorage.getItem("school_id");
-  const token = localStorage.getItem("token");
   const config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
+    headers: authHeaders.value,
     responseType: "blob",
   };
 
-  let urlBase = `/v1/payment/history/teacher/excel?school_id=${schoolId}`;
+  let urlBase = `/v1/payment/history/teacher/excel?school_id=${schoolId.value}`;
   let fileName = "payment";
 
   if (history.dayModal) {
-    urlBase += `&year=${history.year}&month=${history.month}&day=${history.day}&employee_id=${id}`;
-    fileName = `payment_${history.year}_${monthNames(history.month)}_${
-      history.day
-    }`;
+    urlBase += `&year=${history.year}&month=${history.month}&day=${history.day}&employee_id=${employeeId.value}`;
+    fileName = `payment_${history.year}_${monthNames(history.month)}_${history.day}`;
   } else if (history.monthModal) {
-    urlBase += `&year=${history.year}&month=${history.month}&employee_id=${id}`;
+    urlBase += `&year=${history.year}&month=${history.month}&employee_id=${employeeId.value}`;
     fileName = `payment_${history.year}_${monthNames(history.month)}`;
   } else if (history.groupMonthModal) {
-    urlBase = `/v1/payment/history/excel?school_id=${schoolId}&year=${history.year}&month=${history.month}&group_id=${history.group_id}`;
+    urlBase = `/v1/payment/history/excel?school_id=${schoolId.value}&year=${history.year}&month=${history.month}&group_id=${history.group_id}`;
     fileName = `payment_${history.year}_${monthNames(history.month)}_group`;
   } else if (history.yearModal) {
-    urlBase += `&year=${history.year}&employee_id=${id}`;
+    urlBase += `&year=${history.year}&employee_id=${employeeId.value}`;
     fileName = `payment_${history.year}`;
   } else {
     return;
@@ -1522,27 +1422,19 @@ const exportToExcel = async () => {
   }
 };
 
-watch(
-  () => navbar.userNav,
-  () => {
-    setTimeout(createPaymentChart, 300);
-    setTimeout(createStudentPaymentChart, 300);
-  }
-);
+// Watchers
+watch(() => navbar.userNav, () => {
+  setTimeout(createPaymentChart, 300);
+  setTimeout(createStudentPaymentChart, 300);
+});
 
-watch(
-  () => info.PaymentStats,
-  () => {
-    setTimeout(createPaymentChart, 300);
-  }
-);
+watch(() => info.PaymentStats, () => {
+  setTimeout(createPaymentChart, 300);
+});
 
-watch(
-  () => info.StudentPayments,
-  () => {
-    setTimeout(createStudentPaymentChart, 300);
-  }
-);
+watch(() => info.StudentPayments, () => {
+  setTimeout(createStudentPaymentChart, 300);
+});
 
 onMounted(() => {
   setTimeout(createPaymentChart, 300);
@@ -1551,13 +1443,11 @@ onMounted(() => {
   getStudentPayments();
   getEmployee();
   getHistory(store.pagination);
-  for (let i = 0; i < 5; i++) {
-    let list = {
-      id: i,
-      name: String(orqaYil + i),
-    };
-    store.curentYil.push(list);
-  }
+  
+  store.curentYil = Array.from({ length: 5 }, (_, i) => ({
+    id: i,
+    name: String(orqaYil + i),
+  }));
 });
 </script>
 

@@ -1793,13 +1793,13 @@
                 <ul
                   v-show="
                     store.filter_showStudent &&
-                    store.searchListStudent.length > 0
+                    store.searchList.length > 0
                   "
                   class="absolute z-10 w-full py-1 overflow-hidden overflow-y-auto text-gray-600 bg-white rounded max-h-80"
                 >
                   <li
                     class="pl-2 cursor-pointer hover:bg-blue-600 hover:text-white"
-                    v-for="(i, index) in store.searchListStudent"
+                    v-for="(i, index) in store.searchList"
                     :key="index"
                     @mousedown.prevent="
                       form.id = i.id;
@@ -2049,6 +2049,7 @@
                           i.teacher_name,
                           i.group_price,
                           i.group_name,
+                          i.group_start_date,
                           i.debt
                         )
                       "
@@ -2333,9 +2334,10 @@
                           i.student_name,
                           i.group_id,
                           i.group_price,
-                          i.remaining_debt,
+                          i.debt,
                           i.teacher_name,
-                          i.group_name
+                          i.group_name,
+                          i.group_start_date,
                         )
                       "
                       class="bg-green-600 rounded-xl py-2.5 px-5 text-white"
@@ -2434,14 +2436,14 @@
 <script setup>
 import { onMounted, ref, reactive, computed } from "vue";
 import { useNavStore } from "../../stores/toggle";
-import { Placeholder2 } from "../../components";
-import { Placeholder3 } from "../../components";
+import {
+  Placeholder2,
+  Placeholder3,
+  ButtonLoader,
+  PageLoader,
+} from "../../components";
 import { useNotificationStore } from "../../stores/notification";
 import axios from "@/services/axios";
-import * as XLSX from "xlsx";
-import { saveAs } from "file-saver";
-import { ButtonLoader } from "../../components";
-import { PageLoader } from "../../components";
 
 const notification = useNotificationStore();
 const navbar = useNavStore();
@@ -2450,9 +2452,16 @@ const modal = ref(false);
 const hozirgiSana = new Date();
 const hozirgiYil = String(hozirgiSana.getFullYear());
 const orqaYil = hozirgiSana.getFullYear() - 2;
-let hozirgiOy = hozirgiSana.getMonth() + 1;
-hozirgiOy = hozirgiOy.toString().padStart(2, "0");
+let hozirgiOy = String(hozirgiSana.getMonth() + 1).padStart(2, "0");
 let hozirgiKun = hozirgiSana.getDate();
+
+// Computed properties
+const schoolId = computed(() => localStorage.getItem("school_id"));
+const token = computed(() => localStorage.getItem("token"));
+const authHeaders = computed(() => ({
+  Authorization: `Bearer ${token.value}`,
+}));
+const apiUrl = computed(() => import.meta.env.VITE_API);
 
 const loading = reactive({
   view: false,
@@ -2473,7 +2482,6 @@ const store = reactive({
   filter_show: false,
   filter_showStudent: false,
   searchList: [],
-  searchListStudent: [],
   price: 0,
   date: "",
   curentYil: [],
@@ -2482,7 +2490,7 @@ const store = reactive({
   student_name: "",
   teacher_name: "",
   school_logo: "",
-  logo_link: import.meta.env.VITE_API + "/",
+  logo_link: `${apiUrl.value}/`,
   school_name: "",
   btn_lamp: true,
   statistic: false,
@@ -2493,153 +2501,11 @@ const store = reactive({
   checkOldPay: "",
 });
 
-const handleSubmit = () => {
-  if (form.group_id) {
-    getGroupStudents(form.group_id);
-  } else if (form.id) {
-    getStudentGroups(form.id);
-  }
-};
-
 const statusCount = reactive({
   payment: 0,
   halfPayment: 0,
   discount: 0,
 });
-
-function toggleModal(id, name) {
-  modal.value = !modal.value;
-  form.year = hozirgiYil;
-  form.month = hozirgiOy;
-  form.method = "";
-  form.price = store.price;
-  form.id = id;
-  form.discount = 0;
-  form.discountSum = 0;
-  store.student_name = name;
-  formatDateToNumeric(new Date());
-}
-
-function toggleModalStudent(
-  id,
-  groupID,
-  studentName,
-  teacherName,
-  groupPrice,
-  groupName,
-  debt
-) {
-  modal.value = !modal.value;
-  form.year = hozirgiYil;
-  form.month = hozirgiOy;
-  form.method = "";
-  form.price = groupPrice;
-  form.id = id;
-  form.group_id = groupID;
-  store.student_name = studentName;
-  store.price = groupPrice;
-  store.teacher_name = teacherName;
-  store.group_name = groupName;
-  store.checkOldPay = debt === "To'langan" ? true : false;
-  formatDateToNumeric(new Date());
-  getMethod();
-}
-
-function paymentDebtor(
-  id,
-  name,
-  group_id,
-  group_price,
-  debtorPay,
-  teacher_name,
-  group_name
-) {
-  getSchool();
-  modal.value = !modal.value;
-  form.year = hozirgiYil;
-  form.month = hozirgiOy;
-  form.price = debtorPay;
-  store.price = group_price;
-  store.teacher_name = teacher_name;
-  store.group_name = group_name;
-  form.group_id = group_id;
-  form.id = id;
-  store.student_name = name;
-  getMethod();
-}
-
-const cenecleEdit = () => {
-  edit.modal = false;
-  cancelFunc();
-};
-
-function cancelFunc() {
-  form.year = "";
-  form.month = "";
-  form.method = "";
-  form.price = store.price;
-  form.discount = 0;
-  form.discountSum = 0;
-  modal.value = false;
-}
-
-const onInput = (e) => {
-  let val = Number(e.target.value);
-  if (val > store.price) val = store.price;
-  if (val < 0) val = 0;
-  form.price = val;
-  store.pay_price = val;
-};
-
-// ---------------------------- search ------------------------------------
-function searchFunc() {
-  store.searchList = [];
-  if (store.filter) {
-    for (let i of store.groups) {
-      if (i.name.toLowerCase().includes(store.filter.toLowerCase())) {
-        store.searchList.push(i);
-      }
-    }
-  }
-}
-
-function searchHistoryFunc() {
-  history.searchList = [];
-  if (history.filter) {
-    for (let i of store.groups) {
-      if (i.name.toLowerCase().includes(history.filter.toLowerCase())) {
-        history.searchList.push(i);
-      }
-    }
-  }
-}
-
-function searchDebtorFunc() {
-  debtor.searchList = [];
-  if (debtor.filter) {
-    for (let i of store.groups) {
-      if (i.name.toLowerCase().includes(debtor.filter.toLowerCase())) {
-        debtor.searchList.push(i);
-      }
-    }
-  }
-}
-
-function searchFuncStudent() {
-  store.searchListStudent = [];
-  if (store.filterStudent) {
-    for (let i of store.students) {
-      if (
-        i.full_name.toLowerCase().includes(store.filterStudent.toLowerCase())
-      ) {
-        store.searchListStudent.push(i);
-      }
-    }
-  }
-}
-// ---------------------------- search end ------------------------------------
-
-// ----------------------------------- forms -----------------------------------
 
 const form = reactive({
   year: hozirgiYil,
@@ -2658,93 +2524,10 @@ const edit = reactive({
   id: false,
 });
 
-function deleteFunc(id) {
-  remove.id = id;
-  remove.toggle = true;
-}
-
 const remove = reactive({
   id: "",
   toggle: false,
 });
-
-const historyDayModal = () => {
-  history.dayModal = true;
-  history.monthModal = false;
-  history.groupMonthModal = false;
-  history.yearModal = false;
-};
-
-const historyMonthModal = () => {
-  history.dayModal = false;
-  history.monthModal = true;
-  history.groupMonthModal = false;
-  history.yearModal = false;
-};
-
-const historyGroupMonthModal = () => {
-  history.groupMonthModal = true;
-  history.dayModal = false;
-  history.monthModal = false;
-  history.yearModal = false;
-};
-
-const historyYearModal = () => {
-  history.yearModal = true;
-  history.dayModal = false;
-  history.monthModal = false;
-  history.groupMonthModal = false;
-};
-
-const historyModal = () => {
-  history.modal = !history.modal;
-  history.year = hozirgiYil;
-  history.month = hozirgiOy;
-  history.day = hozirgiKun;
-  history.group_id = "";
-  historyDayModal();
-  getHistory(store.pagination);
-};
-
-const statusPaymentAllModal = () => {
-  history.status = "all";
-  history.statusPaymentAll = true;
-  history.statusPayment = false;
-  history.statusHalfPayment = false;
-  history.statusDiscount = false;
-  history.loader = true;
-  getHistory(1);
-};
-
-const statusPaymentModal = () => {
-  history.status = "payment";
-  history.statusPayment = true;
-  history.statusPaymentAll = false;
-  history.statusHalfPayment = false;
-  history.statusDiscount = false;
-  history.loader = true;
-  getHistory(1);
-};
-
-const statusHalfPaymentModal = () => {
-  history.status = "halfPayment";
-  history.statusHalfPayment = true;
-  history.statusPaymentAll = false;
-  history.statusPayment = false;
-  history.statusDiscount = false;
-  history.loader = true;
-  getHistory(1);
-};
-
-const statusDiscountModal = () => {
-  history.status = "discount";
-  history.statusDiscount = true;
-  history.statusPaymentAll = false;
-  history.statusPayment = false;
-  history.statusHalfPayment = false;
-  history.loader = true;
-  getHistory(1);
-};
 
 const history = reactive({
   year: hozirgiYil,
@@ -2774,26 +2557,6 @@ const history = reactive({
   statistic: false,
 });
 
-const debtorDayModal = () => {
-  debtor.dayModal = true;
-  debtor.monthModal = false;
-};
-
-const debtorMonthModal = () => {
-  debtor.dayModal = false;
-  debtor.monthModal = true;
-};
-
-const debtorModal = () => {
-  debtor.modal = !debtor.modal;
-  debtor.year = hozirgiYil;
-  debtor.month = hozirgiOy;
-  debtor.day = hozirgiKun;
-  debtor.group_id = "";
-  debtorDayModal();
-  getHistory(store.pagination);
-};
-
 const debtor = reactive({
   year: hozirgiYil,
   month: hozirgiOy,
@@ -2811,52 +2574,39 @@ const debtor = reactive({
   exportList: "",
 });
 
-const monthNames = (month) => {
-  switch (month) {
-    case "01":
-      return "Yanvar";
-    case "02":
-      return "Fevral";
-    case "03":
-      return "Mart";
-    case "04":
-      return "Aprel";
-    case "05":
-      return "May";
-    case "06":
-      return "Iyun";
-    case "07":
-      return "Iyul";
-    case "08":
-      return "Avgust";
-    case "09":
-      return "Sentabr";
-    case "10":
-      return "Oktabr";
-    case "11":
-      return "Noyabr";
-    case "12":
-      return "Dekabr";
-    default:
-      return "Notog'ri oy";
-  }
+// Helper functions
+const handleError = (
+  message = "Xatolik! Nimadir noto'g'ri. Internetni tekshirib qaytadan urinib ko'ring!"
+) => {
+  notification.warning(message);
 };
 
-// ----------------------------------- axios --------------------------------
+const monthNames = (month) => {
+  const months = [
+    "Yanvar",
+    "Fevral",
+    "Mart",
+    "Aprel",
+    "May",
+    "Iyun",
+    "Iyul",
+    "Avgust",
+    "Sentabr",
+    "Oktabr",
+    "Noyabr",
+    "Dekabr",
+  ];
+  return months[parseInt(month) - 1] || "Notog'ri oy";
+};
 
-const discountedPrice = computed(() => {
-  let discountAmount = 0;
-  if (form.discount !== 0 && form.discount !== "") {
-    discountAmount = (store.price * form.discount) / 100;
-    form.price = store.price - discountAmount;
-    // store.pay_price = store.price - discountAmount;
-  } else if (form.discountSum !== 0 && form.discountSum !== "") {
-    discountAmount = form.discountSum;
-    form.price = store.price - discountAmount;
-    // store.pay_price = store.price - discountAmount;
-  }
-  return store.price - discountAmount;
-});
+const formatDateToNumeric = (date) => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  const hour = String(date.getHours()).padStart(2, "0");
+  const minute = String(date.getMinutes()).padStart(2, "0");
+  store.chekDate = `${year}-${month}-${day}, ${hour}:${minute}`;
+};
 
 const chekDateFormat = (date) => {
   const year = date.getFullYear();
@@ -2864,35 +2614,237 @@ const chekDateFormat = (date) => {
   const day = String(date.getDate()).padStart(2, "0");
   const hour = String(date.getHours()).padStart(2, "0");
   const minute = String(date.getMinutes()).padStart(2, "0");
-
   return `${year}-${month}-${day}, ${hour}:${minute}`;
 };
 
+// Search functions
+const createSearchFilter = (searchObj, data, key, filterProp = "filter") => {
+  searchObj.searchList = [];
+  if (!searchObj[filterProp]) return;
+
+  const filterLower = searchObj[filterProp].toLowerCase();
+  searchObj.searchList = data.filter((i) =>
+    i[key].toLowerCase().includes(filterLower)
+  );
+};
+
+const searchFunc = () => createSearchFilter(store, store.groups, "name");
+const searchHistoryFunc = () =>
+  createSearchFilter(history, store.groups, "name");
+const searchDebtorFunc = () => createSearchFilter(debtor, store.groups, "name");
+const searchFuncStudent = () =>
+  createSearchFilter(store, store.students, "full_name", "filterStudent");
+
+// Modal handlers
+const setActiveHistoryModal = (type) => {
+  history.dayModal = type === "day";
+  history.monthModal = type === "month";
+  history.groupMonthModal = type === "groupMonth";
+  history.yearModal = type === "year";
+};
+
+const historyDayModal = () => setActiveHistoryModal("day");
+const historyMonthModal = () => setActiveHistoryModal("month");
+const historyGroupMonthModal = () => setActiveHistoryModal("groupMonth");
+const historyYearModal = () => setActiveHistoryModal("year");
+
+const setActiveStatusModal = (status) => {
+  history.status = status;
+  history.statusPaymentAll = status === "all";
+  history.statusPayment = status === "payment";
+  history.statusHalfPayment = status === "halfPayment";
+  history.statusDiscount = status === "discount";
+  history.loader = true;
+  getHistory(1);
+};
+
+const statusPaymentAllModal = () => setActiveStatusModal("all");
+const statusPaymentModal = () => setActiveStatusModal("payment");
+const statusHalfPaymentModal = () => setActiveStatusModal("halfPayment");
+const statusDiscountModal = () => setActiveStatusModal("discount");
+
+const setActiveDebtorModal = (type) => {
+  debtor.dayModal = type === "day";
+  debtor.monthModal = type === "month";
+};
+
+const debtorDayModal = () => setActiveDebtorModal("day");
+const debtorMonthModal = () => setActiveDebtorModal("month");
+
+const historyModal = () => {
+  Object.assign(history, {
+    modal: !history.modal,
+    year: hozirgiYil,
+    month: hozirgiOy,
+    day: hozirgiKun,
+    group_id: "",
+  });
+  historyDayModal();
+  getHistory(store.pagination);
+};
+
+const debtorModal = () => {
+  Object.assign(debtor, {
+    modal: !debtor.modal,
+    year: hozirgiYil,
+    month: hozirgiOy,
+    day: hozirgiKun,
+    group_id: "",
+  });
+  debtorDayModal();
+  getHistory(store.pagination);
+};
+
+const handleSubmit = () => {
+  if (form.group_id) {
+    getGroupStudents(form.group_id);
+  } else if (form.id) {
+    getStudentGroups(form.id);
+  }
+};
+
+function toggleModal(id, name) {
+  modal.value = !modal.value;
+  Object.assign(form, {
+    year: hozirgiYil,
+    month: hozirgiOy,
+    method: "",
+    price: store.price,
+    id: id,
+    discount: 0,
+    discountSum: 0,
+  });
+  store.student_name = name;
+  formatDateToNumeric(new Date());
+}
+
+function toggleModalStudent(
+  id,
+  groupID,
+  studentName,
+  teacherName,
+  groupPrice,
+  groupName,
+  groupStartData,
+  debt
+) {
+  modal.value = !modal.value;
+  Object.assign(form, {
+    year: hozirgiYil,
+    month: hozirgiOy,
+    method: "",
+    price: groupPrice,
+    id: id,
+    group_id: groupID,
+  });
+  Object.assign(store, {
+    student_name: studentName,
+    price: groupPrice,
+    teacher_name: teacherName,
+    group_name: groupName,
+    date: groupStartData,
+    checkOldPay: debt === "To'langan",
+  });
+  formatDateToNumeric(new Date());
+  getMethod();
+}
+
+function paymentDebtor(
+  id,
+  name,
+  group_id,
+  group_price,
+  debtorPay,
+  teacher_name,
+  group_name,
+  groupStartDate
+) {
+  getSchool();
+  modal.value = !modal.value;
+  Object.assign(form, {
+    year: hozirgiYil,
+    month: hozirgiOy,
+    price: Number(debtorPay),
+    group_id: group_id,
+    id: id,
+  });
+  Object.assign(store, {
+    price: Number(group_price),
+    teacher_name: teacher_name,
+    group_name: group_name,
+    student_name: name,
+    date: groupStartDate,
+  });
+  formatDateToNumeric(new Date());
+  getMethod();
+}
+
+const cenecleEdit = () => {
+  edit.modal = false;
+  cancelFunc();
+};
+
+function cancelFunc() {
+  Object.assign(form, {
+    year: "",
+    month: "",
+    method: "",
+    price: store.price,
+    discount: 0,
+    discountSum: 0,
+  });
+  modal.value = false;
+}
+
+function deleteFunc(id) {
+  remove.id = id;
+  remove.toggle = true;
+}
+
+const onInput = (e) => {
+  let val = Number(e.target.value);
+  if (val > store.price) val = store.price;
+  if (val < 0) val = 0;
+  form.price = val;
+  store.pay_price = val;
+};
+
+const discountedPrice = computed(() => {
+  let discountAmount = 0;
+  if (form.discount !== 0 && form.discount !== "") {
+    discountAmount = (store.price * form.discount) / 100;
+    form.price = store.price - discountAmount;
+  } else if (form.discountSum !== 0 && form.discountSum !== "") {
+    discountAmount = form.discountSum;
+    form.price = store.price - discountAmount;
+  }
+  return store.price - discountAmount;
+});
+
+// Export functions
 const exportExcelHistory = async () => {
-  const schoolId = localStorage.getItem("school_id");
-  const token = localStorage.getItem("token");
   const config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-    responseType: 'blob',
+    headers: authHeaders.value,
+    responseType: "blob",
   };
 
-  let urlBase = `/v1/payment/history/excel?school_id=${schoolId}`;
-  let fileName = 'payment';
+  let urlBase = `/v1/payment/history/excel?school_id=${schoolId.value}`;
+  let fileName = "payment";
 
   if (history.dayModal) {
     urlBase += `&year=${history.year}&month=${history.month}&day=${history.day}`;
-    fileName = `payment_${history.year}_${monthNames(history.month)}_${history.day}`
+    fileName = `payment_${history.year}_${monthNames(history.month)}_${
+      history.day
+    }`;
   } else if (history.monthModal) {
     urlBase += `&year=${history.year}&month=${history.month}`;
-    fileName = `payment_${history.year}_${monthNames(history.month)}`
+    fileName = `payment_${history.year}_${monthNames(history.month)}`;
   } else if (history.groupMonthModal) {
     urlBase += `&year=${history.year}&month=${history.month}&group_id=${history.group_id}`;
-    fileName = `payment_${history.year}_${monthNames(history.month)}_group`
+    fileName = `payment_${history.year}_${monthNames(history.month)}_group`;
   } else if (history.yearModal) {
     urlBase += `&year=${history.year}`;
-    fileName = `payment_${history.year}`
+    fileName = `payment_${history.year}`;
   } else {
     return;
   }
@@ -2900,9 +2852,9 @@ const exportExcelHistory = async () => {
   try {
     const response = await axios.get(urlBase, config);
     const url = window.URL.createObjectURL(new Blob([response.data]));
-    const link = document.createElement('a');
+    const link = document.createElement("a");
     link.href = url;
-    link.setAttribute('download', `${fileName}.xlsx`);
+    link.setAttribute("download", `${fileName}.xlsx`);
     document.body.appendChild(link);
     link.click();
     link.remove();
@@ -2912,24 +2864,20 @@ const exportExcelHistory = async () => {
 };
 
 const exportToExcelDebtor = async () => {
-  const schoolId = localStorage.getItem("school_id");
-  const token = localStorage.getItem("token");
   const config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-    responseType: 'blob',
+    headers: authHeaders.value,
+    responseType: "blob",
   };
 
-  let urlBase = `/v1/payment/debtor/excel?school_id=${schoolId}`;
-  let fileName = 'debtor';
-  
+  let urlBase = `/v1/payment/debtor/excel?school_id=${schoolId.value}`;
+  let fileName = "debtor";
+
   if (debtor.dayModal) {
     urlBase += `&year=${debtor.year}&month=${debtor.month}`;
-    fileName = `debtor_${debtor.year}_${monthNames(debtor.month)}`
+    fileName = `debtor_${debtor.year}_${monthNames(debtor.month)}`;
   } else if (debtor.monthModal) {
     urlBase += `&year=${debtor.year}&month=${debtor.month}&group_id=${debtor.group_id}`;
-    fileName = `debtor_${debtor.year}_${monthNames(debtor.month)}_group`
+    fileName = `debtor_${debtor.year}_${monthNames(debtor.month)}_group`;
   } else {
     return;
   }
@@ -2937,9 +2885,9 @@ const exportToExcelDebtor = async () => {
   try {
     const response = await axios.get(urlBase, config);
     const url = window.URL.createObjectURL(new Blob([response.data]));
-    const link = document.createElement('a');
+    const link = document.createElement("a");
     link.href = url;
-    link.setAttribute('download', `${fileName}.xlsx`);
+    link.setAttribute("download", `${fileName}.xlsx`);
     document.body.appendChild(link);
     link.click();
     link.remove();
@@ -2948,150 +2896,108 @@ const exportToExcelDebtor = async () => {
   }
 };
 
-const getSchool = () => {
-  axios
-    .get(`/v1/school/navbar/${localStorage.getItem("school_id")}`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    })
-    .then((res) => {
-      store.school_name = res.data.name;
-      store.school_logo = res.data.image;
-    })
-    .catch((error) => {});
+// API Functions
+const getSchool = async () => {
+  try {
+    const res = await axios.get(`/v1/school/navbar/${schoolId.value}`, {
+      headers: authHeaders.value,
+    });
+    store.school_name = res.data.name;
+    store.school_logo = res.data.image;
+  } catch (error) {}
 };
 
-const getGroups = () => {
-  axios
-    .get(`/v1/group/add/${localStorage.getItem("school_id")}`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    })
-    .then((res) => {
-      store.groups = res.data.sort((a, b) => b.id - a.id);
-      store.error = false;
-    })
-    .catch((error) => {
-      store.groups = error.response.data.message;
-      store.error = true;
+const getGroups = async () => {
+  try {
+    const res = await axios.get(`/v1/group/add/${schoolId.value}`, {
+      headers: authHeaders.value,
     });
+    store.groups = res.data.sort((a, b) => b.id - a.id);
+    store.error = false;
+  } catch (error) {
+    store.groups = error.response?.data?.message || [];
+    store.error = true;
+  }
 };
 
-const getStudents = () => {
-  axios
-    .get(`/v1/student/${localStorage.getItem("school_id")}/search`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    })
-    .then((res) => {
-      store.students = res.data.sort((a, b) => b.id - a.id);
-      store.error = false;
-    })
-    .catch((error) => {
-      store.students = error.response.data.message;
-      store.error = true;
+const getStudents = async () => {
+  try {
+    const res = await axios.get(`/v1/student/${schoolId.value}/search`, {
+      headers: authHeaders.value,
     });
+    store.students = res.data.sort((a, b) => b.id - a.id);
+    store.error = false;
+  } catch (error) {
+    store.students = error.response?.data?.message || [];
+    store.error = true;
+  }
 };
 
 const getStatistic = async (date) => {
-  await axios
-    .get(
-      `/v1/statistic/payment-day/${localStorage.getItem("school_id")}/${date}`,
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      }
-    )
-    .then((res) => {
-      if (loading.excel) {
-        history.statistic = res.data;
-      } else {
-        store.statistic = res.data;
-      }
-    })
-    .catch((error) => {});
+  try {
+    const res = await axios.get(
+      `/v1/statistic/payment-day/${schoolId.value}/${date}`,
+      { headers: authHeaders.value }
+    );
+    if (loading.excel) {
+      history.statistic = res.data;
+    } else {
+      store.statistic = res.data;
+    }
+  } catch (error) {}
 };
 
 const getStatisticGroup = async (group_id, date) => {
-  await axios
-    .get(
-      `/v1/statistic/payment-day/${localStorage.getItem(
-        "school_id"
-      )}/${group_id}/${date}`,
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      }
-    )
-    .then((res) => {
-      if (loading.excel) {
-        history.statistic = res.data;
-      } else {
-        store.statistic = res.data;
-      }
-    })
-    .catch((error) => {});
+  try {
+    const res = await axios.get(
+      `/v1/statistic/payment-day/${schoolId.value}/${group_id}/${date}`,
+      { headers: authHeaders.value }
+    );
+    if (loading.excel) {
+      history.statistic = res.data;
+    } else {
+      store.statistic = res.data;
+    }
+  } catch (error) {}
 };
 
 const getGroupStudents = async (group_id) => {
   debtor.isTable = false;
   try {
-    const schoolId = localStorage.getItem("school_id");
-    const token = localStorage.getItem("token");
-    const headers = { headers: { Authorization: `Bearer ${token}` } };
-
     const res = await axios.get(
-      `/v1/payment/group/${schoolId}/${group_id}`,
-      headers
+      `/v1/payment/group/${schoolId.value}/${group_id}`,
+      { headers: authHeaders.value }
     );
     store.payData = res.data[0];
   } catch (error) {
-    notification.warning(
-      "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
-    );
+    handleError();
   }
 };
 
 const getStudentGroups = async (student_id) => {
   debtor.isTable = false;
   try {
-    const schoolId = localStorage.getItem("school_id");
-    const token = localStorage.getItem("token");
-    const headers = { headers: { Authorization: `Bearer ${token}` } };
-
     const res = await axios.get(
-      `/v1/payment/student/${schoolId}/${student_id}`,
-      headers
+      `/v1/payment/student/${schoolId.value}/${student_id}`,
+      { headers: authHeaders.value }
     );
     store.payData = res.data;
   } catch (error) {
-    notification.warning(
-      "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
-    );
+    handleError();
   }
 };
 
 const checkPayment = (year, month, groupStartDate) => {
   const paymentYear = parseInt(year, 10);
   const paymentMonth = parseInt(month, 10);
-
   const groupStart = new Date(groupStartDate);
   const groupStartYear = groupStart.getFullYear();
   const groupStartMonth = groupStart.getMonth() + 1;
 
-  if (
-    paymentYear < groupStartYear ||
-    (paymentYear === groupStartYear && paymentMonth < groupStartMonth)
-  ) {
-    return false;
-  } else {
-    return true;
-  }
+  return (
+    paymentYear > groupStartYear ||
+    (paymentYear === groupStartYear && paymentMonth >= groupStartMonth)
+  );
 };
 
 const addPayment = async () => {
@@ -3099,7 +3005,7 @@ const addPayment = async () => {
   store.isSubmitting = true;
 
   const data = {
-    school_id: Number(localStorage.getItem("school_id")),
+    school_id: Number(schoolId.value),
     student_id: form.id,
     group_id: Number(form.group_id),
     year: form.year,
@@ -3111,10 +3017,9 @@ const addPayment = async () => {
     description: form.description,
   };
 
-  const check = checkPayment(form.year, form.month, store.date);
-
-  if (!check) {
+  if (!checkPayment(form.year, form.month, store.date)) {
     notification.warning("To'lov qilmoqchi bo'lgan sanada guruh boshlanmagan");
+    store.isSubmitting = false;
     return;
   }
 
@@ -3122,19 +3027,15 @@ const addPayment = async () => {
     notification.warning(
       "To'lov qilmoqchi bo'lgan sanaga oldin to'lov qilingan"
     );
+    store.isSubmitting = false;
     return;
   }
 
   try {
-    await axios.post("/v1/payment", data, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    });
-
+    await axios.post("/v1/payment", data, { headers: authHeaders.value });
     printReceipt();
     notification.success("To'lov qilindi!");
-    store.isSubmitting = false;
+
     if (debtor.isTable) {
       getDebtor(store.pagination);
     } else if (store.payData) {
@@ -3144,156 +3045,137 @@ const addPayment = async () => {
     }
     cancelFunc();
   } catch (error) {
-    notification.warning(
-      "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
-    );
+    handleError();
+  } finally {
+    store.isSubmitting = false;
   }
 };
 
-const getHistory = (page) => {
+const getHistory = async (page) => {
   loading.view = true;
   debtor.isTable = false;
   store.payData = false;
-  const schoolId = localStorage.getItem("school_id");
-  const token = localStorage.getItem("token");
-  const config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  };
 
   let url;
   if (history.dayModal) {
-    url = `/v1/payment/day/${schoolId}/${history.year}/${history.month}/${history.day}/${history.status}/page?page=${page}`;
+    url = `/v1/payment/day/${schoolId.value}/${history.year}/${history.month}/${history.day}/${history.status}/page?page=${page}`;
     getStatistic(`${history.year}-${history.month}-${history.day}`);
   } else if (history.monthModal) {
-    url = `/v1/payment/month/${schoolId}/${history.year}/${history.month}/${history.status}/page?page=${page}`;
+    url = `/v1/payment/month/${schoolId.value}/${history.year}/${history.month}/${history.status}/page?page=${page}`;
     getStatistic(`${history.year}-${history.month}`);
   } else if (history.groupMonthModal) {
-    url = `/v1/payment/groupMonth/${schoolId}/${history.group_id}/${history.year}/${history.month}/${history.status}/page?page=${page}`;
+    url = `/v1/payment/groupMonth/${schoolId.value}/${history.group_id}/${history.year}/${history.month}/${history.status}/page?page=${page}`;
     getStatisticGroup(history.group_id, `${history.year}-${history.month}`);
   } else if (history.yearModal) {
-    url = `/v1/payment/year/${schoolId}/${history.year}/${history.status}/page?page=${page}`;
-    // getStatistic(`${history.year}-${history.month}`);
+    url = `/v1/payment/year/${schoolId.value}/${history.year}/${history.status}/page?page=${page}`;
   } else {
     return;
   }
 
-  axios
-    .get(url, config)
-    .then((res) => {
-      const records = res.data?.data?.records;
-      if (records.length !== 0) {
-        history.group_name = records[0].group_name;
-      }
-      store.studentGroups = false;
-      statusCount.payment = res.data?.data?.summary.paymentCount;
-      statusCount.halfPayment = res.data?.data?.summary.halfPaymentCount;
-      statusCount.discount = res.data?.data?.summary.discountCount;
-      store.payHistoryData = records;
-      const pagination = res.data?.data?.pagination;
-      store.page = [pagination.currentPage, pagination.total_count];
-      store.error = false;
-      loading.view = false;
-      history.modal = false;
-      history.loader = false;
-    })
-    .catch((error) => {
-      store.payHistoryData = error.response?.data?.message;
-      store.error = true;
-    });
+  try {
+    const res = await axios.get(url, { headers: authHeaders.value });
+    const records = res.data?.data?.records || [];
+
+    if (records.length !== 0) {
+      history.group_name = records[0].group_name;
+    }
+
+    store.studentGroups = false;
+    const summary = res.data?.data?.summary || {};
+    statusCount.payment = summary.paymentCount || 0;
+    statusCount.halfPayment = summary.halfPaymentCount || 0;
+    statusCount.discount = summary.discountCount || 0;
+
+    store.payHistoryData = records;
+    const pagination = res.data?.data?.pagination;
+    store.page = [pagination.currentPage, pagination.total_count];
+    store.error = false;
+    loading.view = false;
+    history.modal = false;
+    history.loader = false;
+  } catch (error) {
+    store.payHistoryData = error.response?.data?.message || [];
+    store.error = true;
+  }
 };
 
-const getDebtor = (page) => {
+const getDebtor = async (page) => {
   store.payData = false;
-  const schoolId = localStorage.getItem("school_id");
-  const token = localStorage.getItem("token");
-  const config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  };
 
   let url;
   if (debtor.dayModal) {
-    url = `/v1/payment/debtor/${schoolId}/${debtor.year}/${debtor.month}/page?page=${page}`;
+    url = `/v1/payment/debtor/${schoolId.value}/${debtor.year}/${debtor.month}/page?page=${page}`;
   } else if (debtor.monthModal) {
-    url = `/v1/payment/debtor-group/${schoolId}/${debtor.group_id}/${debtor.year}/${debtor.month}/page?page=${page}`;
+    url = `/v1/payment/debtor-group/${schoolId.value}/${debtor.group_id}/${debtor.year}/${debtor.month}/page?page=${page}`;
   } else {
     return;
   }
 
-  axios
-    .get(url, config)
-    .then((res) => {
-      const records = res.data?.data?.records;
-      if (records.length !== 0) {
-        history.group_name = records[0].group_name;
-      }
-      store.payHistoryData = records;
-      const pagination = res.data?.data?.pagination;
-      store.page = [pagination.currentPage, pagination.total_count];
-      store.error = false;
-      debtor.isTable = true;
-      debtor.modal = false;
-    })
-    .catch((error) => {
-      store.payHistoryData = error.response?.data?.message;
-      store.error = true;
-    });
+  try {
+    const res = await axios.get(url, { headers: authHeaders.value });
+    const records = res.data?.data?.records || [];
+
+    if (records.length !== 0) {
+      history.group_name = records[0].group_name;
+    }
+
+    store.payHistoryData = records;
+    const pagination = res.data?.data?.pagination;
+    store.page = [pagination.currentPage, pagination.total_count];
+    store.error = false;
+    debtor.isTable = true;
+    debtor.modal = false;
+  } catch (error) {
+    store.payHistoryData = error.response?.data?.message || [];
+    store.error = true;
+  }
 };
 
-const getMethod = () => {
-  axios
-    .get(`/v1/payment-method/${localStorage.getItem("school_id")}`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    })
-    .then((res) => {
-      store.method = res.data;
-    })
-    .catch((error) => {
-      store.method = [{ name: "To'lov turi yaratilmagan" }];
+const getMethod = async () => {
+  try {
+    const res = await axios.get(`/v1/payment-method/${schoolId.value}`, {
+      headers: authHeaders.value,
     });
+    store.method = res.data;
+  } catch (error) {
+    store.method = [{ name: "To'lov turi yaratilmagan" }];
+  }
 };
 
-const getOnePayment = (id) => {
-  axios
-    .get(`/v1/payment/${localStorage.getItem("school_id")}/${id}`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    })
-    .then((res) => {
-      getMethod();
-      edit.id = id;
-      form.year = res.data.year;
-      form.month = res.data.month;
-      store.pay_price = res.data.price;
-      form.discount = res.data.discount;
-      form.discountSum = res.data.discountSum;
-      form.method = res.data.method;
-      form.description = res.data.description;
-      form.id = res.data.student.id;
-      form.group_id = res.data.group.id;
-      formatDateToNumeric(new Date(res.data.createdAt));
-      store.student_name = res.data.student.full_name;
-      store.group_name = res.data.group.name;
-      store.price = res.data.group.price;
-      store.teacher_name = res.data.group.employee[0].employee.full_name;
-      edit.modal = true;
-    })
-    .catch((error) => {
-      notification.warning(
-        "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
-      );
+const getOnePayment = async (id) => {
+  try {
+    const res = await axios.get(`/v1/payment/${schoolId.value}/${id}`, {
+      headers: authHeaders.value,
     });
+
+    getMethod();
+    edit.id = id;
+    Object.assign(form, {
+      year: res.data.year,
+      month: res.data.month,
+      method: res.data.method,
+      discount: res.data.discount,
+      discountSum: res.data.discountSum,
+      id: res.data.student.id,
+      group_id: res.data.group.id,
+      description: res.data.description,
+    });
+
+    store.pay_price = res.data.price;
+    formatDateToNumeric(new Date(res.data.createdAt));
+    store.student_name = res.data.student.full_name;
+    store.group_name = res.data.group.name;
+    store.price = res.data.group.price;
+    store.teacher_name = res.data.group.employee[0].employee.full_name;
+    edit.modal = true;
+  } catch (error) {
+    handleError();
+  }
 };
 
-const editPayment = () => {
+const editPayment = async () => {
   const data = {
-    school_id: Number(localStorage.getItem("school_id")),
+    school_id: Number(schoolId.value),
     student_id: form.id,
     group_id: Number(form.group_id),
     year: form.year,
@@ -3304,162 +3186,74 @@ const editPayment = () => {
     price: store.pay_price,
   };
 
-  const check = checkPayment(form.year, form.month, store.date);
-
-  if (!check) {
+  if (!checkPayment(form.year, form.month, store.date)) {
     notification.warning("To'lov qilmoqchi bo'lgan sanada guruh boshlanmagan");
-  } else {
-    axios
-      .put(
-        `/v1/payment/${localStorage.getItem("school_id")}/${edit.id}`,
-        data,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      )
-      .then((res) => {
-        printReceipt();
-        notification.success("To'lov tahrirlandi!");
-        getHistory(store.pagination);
-        cancelFunc();
-        cenecleEdit();
-      })
-      .catch((error) => {
-        notification.warning(
-          "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
-        );
-      });
+    return;
+  }
+
+  try {
+    await axios.put(`/v1/payment/${schoolId.value}/${edit.id}`, data, {
+      headers: authHeaders.value,
+    });
+    printReceipt();
+    notification.success("To'lov tahrirlandi!");
+    getHistory(store.pagination);
+    cancelFunc();
+    cenecleEdit();
+  } catch (error) {
+    handleError();
   }
 };
 
-const deletePayment = () => {
-  axios
-    .delete(`/v1/payment/${localStorage.getItem("school_id")}/${remove.id}`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    })
-    .then((res) => {
-      notification.success("To'lov o'chirildi");
-      getHistory(store.pagination);
-      remove.toggle = false;
-    })
-    .catch((error) => {
-      notification.warning(
-        "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
-      );
+const deletePayment = async () => {
+  try {
+    await axios.delete(`/v1/payment/${schoolId.value}/${remove.id}`, {
+      headers: authHeaders.value,
     });
-};
-
-const formatDateToNumeric = (date) => {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate()).padStart(2, "0");
-  const hour = String(date.getHours()).padStart(2, "0");
-  const minute = String(date.getMinutes()).padStart(2, "0");
-
-  store.chekDate = `${year}-${month}-${day}, ${hour}:${minute}`;
+    notification.success("To'lov o'chirildi");
+    getHistory(store.pagination);
+    remove.toggle = false;
+  } catch (error) {
+    handleError();
+  }
 };
 
 const printReceipt = () => {
   const printWindow = window.open("", "_blank");
-
   printWindow.document.write(`
     <html>
       <head>
         <title>Chek</title>
         <style>
-          body {
-            background-color: #f3f4f6;
-            font-family: Arial, sans-serif;
-          }
-          .container {
-            max-width: 320px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 8px;
-            padding: 20px;
-          }
-          .title {
-            text-align: center;
-            font-size: 18px;
-            font-weight: bold;
-            text-transform: uppercase;
-            margin-bottom: 15px;
-          }
-          .logo {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 5px;
-          }
-          .logo img {
-            width: 30px;
-            border-radius: 50%;
-          }
-          .row {
-            display: flex;
-            justify-content: space-between;
-            border-bottom: 1px dashed black;
-            padding: 8px 0;
-            font-size: 12px;
-          }
-          .bold {
-            font-weight: bold;
-          }
-          .strike {
-            text-decoration: line-through;
-            font-size: 10px;
-          }
-          .card {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-          }
-          .footer {
-            text-align: center;
-            font-size: 10px;
-            margin-top: 15px;
-          }
-          .brand_box {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            font-size: 8px;
-            margin-top: 20px;
-          }
-          .brand_box h5 {
-            font-size: 10px;
-            font-weight: 600;
-            margin: 0;
-          }
-          .phone_number {
-            font-size: 7px;
-            font-weight: 600;
-            text-align: end;
-          }
+          body { background-color: #f3f4f6; font-family: Arial, sans-serif; }
+          .container { max-width: 320px; margin: 0 auto; background: white; border-radius: 8px; padding: 20px; }
+          .title { text-align: center; font-size: 18px; font-weight: bold; text-transform: uppercase; margin-bottom: 15px; }
+          .logo { display: flex; align-items: center; justify-content: center; gap: 5px; }
+          .logo img { width: 30px; border-radius: 50%; }
+          .row { display: flex; justify-content: space-between; border-bottom: 1px dashed black; padding: 8px 0; font-size: 12px; }
+          .bold { font-weight: bold; }
+          .strike { text-decoration: line-through; font-size: 10px; }
+          .card { display: flex; flex-direction: column; align-items: flex-end; }
+          .brand_box { display: flex; flex-direction: column; align-items: flex-end; font-size: 8px; margin-top: 20px; }
+          .brand_box h5 { font-size: 10px; font-weight: 600; margin: 0; }
+          .phone_number { font-size: 7px; font-weight: 600; text-align: end; }
         </style>
       </head>
       <body>
         <div class="container">
           <div class="logo">
-            <img src="${import.meta.env.VITE_API}/${store.school_logo}" alt="">
+            <img src="${apiUrl.value}/${store.school_logo}" alt="">
             <h2 class="title">${store.school_name}</h2>
           </div>
-          <div class="row">
-            <span class="bold">To'lov turi:</span>
-            <span>${form.method}</span>
-          </div>
-          <div class="row">
-            <span class="bold">Talaba:</span>
-            <span>${store.student_name}</span>
-          </div>
-          <div class="row">
-            <span class="bold">Guruh nomi:</span>
-            <span>${store.group_name}</span>
-          </div>
+          <div class="row"><span class="bold">To'lov turi:</span><span>${
+            form.method
+          }</span></div>
+          <div class="row"><span class="bold">Talaba:</span><span>${
+            store.student_name
+          }</span></div>
+          <div class="row"><span class="bold">Guruh nomi:</span><span>${
+            store.group_name
+          }</span></div>
           <div class="row">
             <span class="bold">Kurs narxi:</span>
             <span class="card">
@@ -3475,36 +3269,22 @@ const printReceipt = () => {
           </div>
           ${
             form.discount !== 0 && form.discount !== ""
-              ? `
-          <div class="row">
-            <span class="bold">Chegirma:</span>
-            <span>${form.discount}%</span>
-          </div>
-          `
+              ? `<div class="row"><span class="bold">Chegirma:</span><span>${form.discount}%</span></div>`
               : ""
           }
-          <div class="row">
-            <span class="bold">Ustoz:</span>
-            <span>${store.teacher_name}</span>
-          </div>
-          <div class="row">
-            <span class="bold">Oy:</span>
-            <span class="bold">${monthNames(form.month)}</span>
-          </div>
-          <div class="row">
-            <span class="bold">To'lov:</span>
-            <span class="bold">${Number(form.price)?.toLocaleString(
-              "uz-UZ"
-            )} so'm</span>
-          </div>
-          <div class="row">
-            <span class="bold">Sana:</span>
-            <span>${store.chekDate}</span>
-          </div>
-          <div class="brand_box">
-            <h5>Devosoft Group</h5>
-            <span class="phone_number">+998933279137</span>
-          </div>
+          <div class="row"><span class="bold">Ustoz:</span><span>${
+            store.teacher_name
+          }</span></div>
+          <div class="row"><span class="bold">Oy:</span><span class="bold">${monthNames(
+            form.month
+          )}</span></div>
+          <div class="row"><span class="bold">To'lov:</span><span class="bold">${Number(
+            form.price
+          )?.toLocaleString("uz-UZ")} so'm</span></div>
+          <div class="row"><span class="bold">Sana:</span><span>${
+            store.chekDate
+          }</span></div>
+          <div class="brand_box"><h5>Devosoft Group</h5><span class="phone_number">+998933279137</span></div>
         </div>
       </body>
     </html>
@@ -3513,13 +3293,10 @@ const printReceipt = () => {
   printWindow.document.close();
   printWindow.focus();
   printWindow.print();
-
-  printWindow.onafterprint = () => {
-    printWindow.close();
-  };
+  printWindow.onafterprint = () => printWindow.close();
 };
 
-const printChek = (id) => {
+const printChek = async (id) => {
   const product = store.payHistoryData.find((product) => product.id === id);
   const priceDiscounted = product.discount
     ? (
@@ -3531,190 +3308,97 @@ const printChek = (id) => {
     : product.group_price;
 
   formatDateToNumeric(new Date(product.createdAt));
-  axios
-    .get(`/school/${localStorage.getItem("school_id")}`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    })
-    .then((res) => {
-      const printWindow = window.open("", "_blank");
 
-      printWindow.document.write(`
-    <html>
-      <head>
-        <title>Chek</title>
-        <style>
-          body {
-            background-color: #f3f4f6;
-            font-family: Arial, sans-serif;
-          }
-          .container {
-            max-width: 320px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 8px;
-            padding: 20px;
-          }
-          .title {
-            text-align: center;
-            font-size: 18px;
-            font-weight: bold;
-            text-transform: uppercase;
-            margin-bottom: 15px;
-          }
-          .logo {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 5px;
-          }
-          .logo img {
-            width: 30px;
-            border-radius: 50%;
-          }
-          .row {
-            display: flex;
-            justify-content: space-between;
-            border-bottom: 1px dashed black;
-            padding: 8px 0;
-            font-size: 12px;
-          }
-          .bold {
-            font-weight: bold;
-          }
-          .strike {
-            text-decoration: line-through;
-            font-size: 10px;
-          }
-          .card {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-          }
-          .footer {
-            text-align: center;
-            font-size: 10px;
-            margin-top: 15px;
-          }
-          .brand_box {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            font-size: 8px;
-            margin-top: 20px;
-          }
-          .brand_box h5 {
-            font-size: 10px;
-            font-weight: 600;
-            margin: 0;
-          }
-          .phone_number {
-            font-size: 7px;
-            font-weight: 600;
-            text-align: end;
-          }
-        </style>
-      </head>
-      <body>
-        <div class="container">
-          <div class="logo">
-            <img src="${import.meta.env.VITE_API}/${res.data.image}" alt="">
-            <h2 class="title">${res.data.name}</h2>
-          </div>
-          <div class="row">
-            <span class="bold">To'lov turi:</span>
-            <span>${product.method}</span>
-          </div>
-          <div class="row">
-            <span class="bold">Talaba:</span>
-            <span>${product.student_name}</span>
-          </div>
-          <div class="row">
-            <span class="bold">Guruh nomi:</span>
-            <span>${product.group_name}</span>
-          </div>
-          <div class="row">
-            <span class="bold">Kurs narxi:</span>
-            <span class="card">
-              ${
-                (product.discount !== 0 && product.discount !== "") ||
-                (product.discountSum !== 0 && product.discountSum !== "")
-                  ? `<span class="strike">${Number(
-                      product.group_price
-                    )?.toLocaleString("uz-UZ")} so'm</span>`
-                  : ""
-              }
-              ${Number(priceDiscounted)?.toLocaleString("uz-UZ")} so'm
-            </span>
-          </div>
-          ${
-            product.discount !== 0 && product.discount !== ""
-              ? `
-          <div class="row">
-            <span class="bold">Chegirma:</span>
-            <span>${product.discount}%</span>
-          </div>
-          `
-              : ""
-          }
-          ${
-            product.discountSum !== 0 && product.discountSum !== ""
-              ? `
-          <div class="row">
-            <span class="bold">Chegirma:</span>
-            <span>${Number(product.discountSum)?.toLocaleString(
-              "uz-UZ"
-            )} so'm</span>
-          </div>
-          `
-              : ""
-          }
-          <div class="row">
-            <span class="bold">Ustoz:</span>
-            <span>${product.teacher_name}</span>
-          </div>
-          <div class="row">
-            <span class="bold">Oy:</span>
-            <span class="bold">${monthNames(product.month)}</span>
-          </div>
-          <div class="row">
-            <span class="bold">To'lov:</span>
-            <span class="bold">${product.price?.toLocaleString(
-              "uz-UZ"
-            )} so'm</span>
-          </div>
-          <div class="row">
-            <span class="bold">Sana:</span>
-            <span>${store.chekDate}</span>
-          </div>
-          <div class="footer">
-            <span>IT ni it deb o'qima, <br> Ingliz tili va AyTi ni <strong>${
-              res.data.name
-            }</strong> da o'rgan!</span>
-          </div>
-          <div class="brand_box">
-            <h5>Devosoft Group</h5>
-            <span class="phone_number">+998933279137</span>
-          </div>
-        </div>
-      </body>
-    </html>
-  `);
-
-      printWindow.document.close();
-      printWindow.focus();
-      printWindow.print();
-
-      printWindow.onafterprint = () => {
-        printWindow.close();
-      };
-    })
-    .catch((error) => {
-      notification.warning(
-        "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
-      );
+  try {
+    const res = await axios.get(`/school/${schoolId.value}`, {
+      headers: authHeaders.value,
     });
+    const printWindow = window.open("", "_blank");
+    printWindow.document.write(`
+      <html>
+        <head>
+          <title>Chek</title>
+          <style>
+            body { background-color: #f3f4f6; font-family: Arial, sans-serif; }
+            .container { max-width: 320px; margin: 0 auto; background: white; border-radius: 8px; padding: 20px; }
+            .title { text-align: center; font-size: 18px; font-weight: bold; text-transform: uppercase; margin-bottom: 15px; }
+            .logo { display: flex; align-items: center; justify-content: center; gap: 5px; }
+            .logo img { width: 30px; border-radius: 50%; }
+            .row { display: flex; justify-content: space-between; border-bottom: 1px dashed black; padding: 8px 0; font-size: 12px; }
+            .bold { font-weight: bold; }
+            .strike { text-decoration: line-through; font-size: 10px; }
+            .card { display: flex; flex-direction: column; align-items: flex-end; }
+            .brand_box { display: flex; flex-direction: column; align-items: flex-end; font-size: 8px; margin-top: 20px; }
+            .brand_box h5 { font-size: 10px; font-weight: 600; margin: 0; }
+            .phone_number { font-size: 7px; font-weight: 600; text-align: end; }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <div class="logo">
+              <img src="${apiUrl.value}/${res.data.image}" alt="">
+              <h2 class="title">${res.data.name}</h2>
+            </div>
+            <div class="row"><span class="bold">To'lov turi:</span><span>${
+              product.method
+            }</span></div>
+            <div class="row"><span class="bold">Talaba:</span><span>${
+              product.student_name
+            }</span></div>
+            <div class="row"><span class="bold">Guruh nomi:</span><span>${
+              product.group_name
+            }</span></div>
+            <div class="row">
+              <span class="bold">Kurs narxi:</span>
+              <span class="card">
+                ${
+                  (product.discount !== 0 && product.discount !== "") ||
+                  (product.discountSum !== 0 && product.discountSum !== "")
+                    ? `<span class="strike">${Number(
+                        product.group_price
+                      )?.toLocaleString("uz-UZ")} so'm</span>`
+                    : ""
+                }
+                ${Number(priceDiscounted)?.toLocaleString("uz-UZ")} so'm
+              </span>
+            </div>
+            ${
+              product.discount !== 0 && product.discount !== ""
+                ? `<div class="row"><span class="bold">Chegirma:</span><span>${product.discount}%</span></div>`
+                : ""
+            }
+            ${
+              product.discountSum !== 0 && product.discountSum !== ""
+                ? `<div class="row"><span class="bold">Chegirma:</span><span>${Number(
+                    product.discountSum
+                  )?.toLocaleString("uz-UZ")} so'm</span></div>`
+                : ""
+            }
+            <div class="row"><span class="bold">Ustoz:</span><span>${
+              product.teacher_name
+            }</span></div>
+            <div class="row"><span class="bold">Oy:</span><span class="bold">${monthNames(
+              product.month
+            )}</span></div>
+            <div class="row"><span class="bold">To'lov:</span><span class="bold">${product.price?.toLocaleString(
+              "uz-UZ"
+            )} so'm</span></div>
+            <div class="row"><span class="bold">Sana:</span><span>${
+              store.chekDate
+            }</span></div>
+            <div class="brand_box"><h5>Devosoft Group</h5><span class="phone_number">+998933279137</span></div>
+          </div>
+        </body>
+      </html>
+    `);
+
+    printWindow.document.close();
+    printWindow.focus();
+    printWindow.print();
+    printWindow.onafterprint = () => printWindow.close();
+  } catch (error) {
+    handleError();
+  }
 };
 
 onMounted(() => {
@@ -3722,13 +3406,11 @@ onMounted(() => {
   getGroups();
   getStudents();
   getHistory(store.pagination);
-  for (let i = 0; i < 5; i++) {
-    let list = {
-      id: i,
-      name: String(orqaYil + i),
-    };
-    store.curentYil.push(list);
-  }
+
+  store.curentYil = Array.from({ length: 5 }, (_, i) => ({
+    id: i,
+    name: String(orqaYil + i),
+  }));
 });
 </script>
 

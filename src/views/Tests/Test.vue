@@ -582,7 +582,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref, reactive } from "vue";
+import { onMounted, ref, reactive, computed } from "vue";
 import { useRouter } from "vue-router";
 import { useNavStore } from "../../stores/toggle";
 import { Placeholder2 } from "../../components";
@@ -594,6 +594,13 @@ const navbar = useNavStore();
 const router = useRouter();
 
 const modal = ref(false);
+
+// Computed properties
+const schoolId = computed(() => localStorage.getItem("school_id"));
+const token = computed(() => localStorage.getItem("token"));
+const authHeaders = computed(() => ({
+  Authorization: `Bearer ${token.value}`,
+}));
 
 const store = reactive({
   testData: "",
@@ -607,32 +614,15 @@ const store = reactive({
   searchTimer: null,
 });
 
-function enterSlug(id) {
-  router.push(`./tests/question/${id}`);
-}
+// Helper function
+const handleError = (
+  message = "Xatolik! Nimadir noto'g'ri. Internetni tekshirib qaytadan urinib ko'ring!"
+) => {
+  notification.warning(message);
+};
 
-function cancelFunc1() {
-  edit.toggle = false;
-  edit.subject_id = "";
-  edit.count = "";
-  edit.time = "";
-  edit.id = "";
-}
-
-function cancelFunc2() {
-  modal.value = false;
-  form.subject_id = "";
-  form.count = "";
-  form.time = "";
-}
-
-function deleteFunc(id) {
-  remove.id = id;
-  remove.toggle = true;
-}
-
-// ----------------------------------- forms -----------------------------------
-const form = reactive({
+// Reset form data
+const resetFormData = () => ({
   count: "",
   time: "",
   subject_id: "",
@@ -645,6 +635,37 @@ const form = reactive({
   test_group_id: "",
   question_id: "",
 });
+
+function enterSlug(id) {
+  router.push(`./tests/question/${id}`);
+}
+
+function cancelFunc1() {
+  Object.assign(edit, {
+    toggle: false,
+    subject_id: "",
+    count: "",
+    time: "",
+    id: "",
+  });
+}
+
+function cancelFunc2() {
+  modal.value = false;
+  Object.assign(form, {
+    subject_id: "",
+    count: "",
+    time: "",
+  });
+}
+
+function deleteFunc(id) {
+  remove.id = id;
+  remove.toggle = true;
+}
+
+// ----------------------------------- forms -----------------------------------
+const form = reactive(resetFormData());
 
 const edit = reactive({
   subject_id: "",
@@ -674,12 +695,8 @@ const searchName = (name) => {
 
     try {
       const data = await axios.get(
-        `/v1/test/search/${localStorage.getItem("school_id")}/${name}`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
+        `/v1/test/search/${schoolId.value}/${name}`,
+        { headers: authHeaders.value }
       );
       store.testData = data.data;
     } catch (err) {
@@ -689,134 +706,101 @@ const searchName = (name) => {
   }, 350);
 };
 
-const getProduct = (page) => {
-  axios
-    .get(`/v1/test/${localStorage.getItem("school_id")}/page?page=${page}`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    })
-    .then((res) => {
-      store.testData = res.data?.data.records;
-      const pagination = res.data?.data?.pagination;
-      store.page = [pagination.currentPage, pagination.total_count];
+const getProduct = async (page) => {
+  try {
+    const res = await axios.get(
+      `/v1/test/${schoolId.value}/page?page=${page}`,
+      { headers: authHeaders.value }
+    );
 
-      store.error = false;
-    })
-    .catch((error) => {
-      notification.warning(
-        "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
-      );
-    });
+    store.testData = res.data?.data.records || [];
+    const pagination = res.data?.data?.pagination;
+    store.page = [pagination.currentPage, pagination.total_count];
+    store.error = false;
+  } catch (error) {
+    handleError();
+  }
 };
 
-function createProduct() {
+const createProduct = async () => {
   const data = {
-    school_id: Number(localStorage.getItem("school_id")),
+    school_id: Number(schoolId.value),
     subject_id: form.subject_id,
     count: form.count,
     time: form.time,
   };
 
-  axios
-    .post("/v1/test", data, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    })
-    .then((res) => {
-      notification.success("Test yaratildi");
-      form.test_group_id = res.data.id;
-      cancelFunc2();
-      getProduct(1);
-    })
-    .catch((error) => {
-      notification.warning(
-        "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
-      );
+  try {
+    const res = await axios.post("/v1/test", data, {
+      headers: authHeaders.value,
     });
-}
-
-const getOneProduct = (id) => {
-  axios
-    .get(`/v1/test/not/${id}`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    })
-    .then((res) => {
-      edit.count = res.data.count;
-      edit.time = res.data.time;
-      edit.subject_id = res.data.subject_id;
-      edit.id = id;
-      edit.toggle = true;
-    })
-    .catch((error) => {
-      notification.warning(
-        "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
-      );
-    });
+    notification.success("Test yaratildi");
+    form.test_group_id = res.data.id;
+    cancelFunc2();
+    getProduct(1);
+  } catch (error) {
+    handleError();
+  }
 };
 
-const getSubject = () => {
-  axios
-    .get(`/v1/subject/add/${localStorage.getItem("school_id")}`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    })
-    .then((res) => {
-      store.subjects = res.data || [{ title: "Fan yaratilmagan" }];
-    })
-    .catch((error) => {
-      notification.warning(
-        "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
-      );
+const getOneProduct = async (id) => {
+  try {
+    const res = await axios.get(`/v1/test/not/${id}`, {
+      headers: authHeaders.value,
     });
+
+    Object.assign(edit, {
+      count: res.data.count,
+      time: res.data.time,
+      subject_id: res.data.subject_id,
+      id: id,
+      toggle: true,
+    });
+  } catch (error) {
+    handleError();
+  }
 };
 
-const editProduct = () => {
+const getSubject = async () => {
+  try {
+    const res = await axios.get(`/v1/subject/add/${schoolId.value}`, {
+      headers: authHeaders.value,
+    });
+    store.subjects = res.data || [{ title: "Fan yaratilmagan" }];
+  } catch (error) {
+    handleError();
+  }
+};
+
+const editProduct = async () => {
   const data = {
-    school_id: Number(localStorage.getItem("school_id")),
+    school_id: Number(schoolId.value),
     count: edit.count,
     time: edit.time,
     subject_id: edit.subject_id,
   };
-  axios
-    .put(`/v1/test/${edit.id}`, data, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    })
-    .then((res) => {
-      notification.success("Test tahrirlandi");
-      getProduct(store.pagination);
-      cancelFunc1();
-    })
-    .catch((error) => {
-      notification.warning(
-        "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
-      );
+
+  try {
+    await axios.put(`/v1/test/${edit.id}`, data, {
+      headers: authHeaders.value,
     });
+    notification.success("Test tahrirlandi");
+    getProduct(store.pagination);
+    cancelFunc1();
+  } catch (error) {
+    handleError();
+  }
 };
 
-const deleteProduct = () => {
-  axios
-    .delete(`/v1/test/${remove.id}`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    })
-    .then((res) => {
-      notification.success("Test o'chirildi");
-      getProduct(store.pagination);
-      remove.toggle = false;
-    })
-    .catch((error) => {
-      notification.warning(
-        "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
-      );
-    });
+const deleteProduct = async () => {
+  try {
+    await axios.delete(`/v1/test/${remove.id}`, { headers: authHeaders.value });
+    notification.success("Test o'chirildi");
+    getProduct(store.pagination);
+    remove.toggle = false;
+  } catch (error) {
+    handleError();
+  }
 };
 
 onMounted(() => {
