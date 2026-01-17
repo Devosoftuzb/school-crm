@@ -1792,8 +1792,7 @@
                 />
                 <ul
                   v-show="
-                    store.filter_showStudent &&
-                    store.searchList.length > 0
+                    store.filter_showStudent && store.searchList.length > 0
                   "
                   class="absolute z-10 w-full py-1 overflow-hidden overflow-y-auto text-gray-600 bg-white rounded max-h-80"
                 >
@@ -2050,7 +2049,7 @@
                           i.group_price,
                           i.group_name,
                           i.group_start_date,
-                          i.debt
+                          i.debt,
                         )
                       "
                       class="bg-green-600 rounded-xl py-2.5 px-5 text-white"
@@ -2195,9 +2194,9 @@
                           !i.description || i.description.trim() === ""
                             ? "Izoh yo'q"
                             : i.description.split(" ").length > 3
-                            ? i.description.split(" ").slice(0, 3).join(" ") +
-                              "..."
-                            : i.description
+                              ? i.description.split(" ").slice(0, 3).join(" ") +
+                                "..."
+                              : i.description
                         }}
                       </p>
                       <span
@@ -2576,7 +2575,7 @@ const debtor = reactive({
 
 // Helper functions
 const handleError = (
-  message = "Xatolik! Nimadir noto'g'ri. Internetni tekshirib qaytadan urinib ko'ring!"
+  message = "Xatolik! Nimadir noto'g'ri. Internetni tekshirib qaytadan urinib ko'ring!",
 ) => {
   notification.warning(message);
 };
@@ -2624,7 +2623,7 @@ const createSearchFilter = (searchObj, data, key, filterProp = "filter") => {
 
   const filterLower = searchObj[filterProp].toLowerCase();
   searchObj.searchList = data.filter((i) =>
-    i[key].toLowerCase().includes(filterLower)
+    i[key].toLowerCase().includes(filterLower),
   );
 };
 
@@ -2726,7 +2725,7 @@ function toggleModalStudent(
   groupPrice,
   groupName,
   groupStartData,
-  debt
+  debt,
 ) {
   modal.value = !modal.value;
   Object.assign(form, {
@@ -2757,7 +2756,7 @@ function paymentDebtor(
   debtorPay,
   teacher_name,
   group_name,
-  groupStartDate
+  groupStartDate,
 ) {
   getSchool();
   modal.value = !modal.value;
@@ -2937,7 +2936,7 @@ const getStatistic = async (date) => {
   try {
     const res = await axios.get(
       `/v1/statistic/payment-day/${schoolId.value}/${date}`,
-      { headers: authHeaders.value }
+      { headers: authHeaders.value },
     );
     if (loading.excel) {
       history.statistic = res.data;
@@ -2951,7 +2950,7 @@ const getStatisticGroup = async (group_id, date) => {
   try {
     const res = await axios.get(
       `/v1/statistic/payment-day/${schoolId.value}/${group_id}/${date}`,
-      { headers: authHeaders.value }
+      { headers: authHeaders.value },
     );
     if (loading.excel) {
       history.statistic = res.data;
@@ -2966,7 +2965,7 @@ const getGroupStudents = async (group_id) => {
   try {
     const res = await axios.get(
       `/v1/payment/group/${schoolId.value}/${group_id}`,
-      { headers: authHeaders.value }
+      { headers: authHeaders.value },
     );
     store.payData = res.data[0];
   } catch (error) {
@@ -2979,7 +2978,7 @@ const getStudentGroups = async (student_id) => {
   try {
     const res = await axios.get(
       `/v1/payment/student/${schoolId.value}/${student_id}`,
-      { headers: authHeaders.value }
+      { headers: authHeaders.value },
     );
     store.payData = res.data;
   } catch (error) {
@@ -3025,7 +3024,7 @@ const addPayment = async () => {
 
   if (store.checkOldPay && form.year == hozirgiYil && form.month == hozirgiOy) {
     notification.warning(
-      "To'lov qilmoqchi bo'lgan sanaga oldin to'lov qilingan"
+      "To'lov qilmoqchi bo'lgan sanaga oldin to'lov qilingan",
     );
     store.isSubmitting = false;
     return;
@@ -3051,29 +3050,42 @@ const addPayment = async () => {
   }
 };
 
-const getHistory = async (page) => {
+const getHistory = async (page = 1) => {
   loading.view = true;
   debtor.isTable = false;
   store.payData = false;
 
-  let url;
+  const url = `/v1/payment/history`;
+
+  const params = {
+    school_id: schoolId.value,
+    page,
+    status: history.status,
+  };
+
   if (history.dayModal) {
-    url = `/v1/payment/day/${schoolId.value}/${history.year}/${history.month}/${history.day}/${history.status}/page?page=${page}`;
+    params.year = history.year;
+    params.month = history.month;
+    params.day = history.day;
     getStatistic(`${history.year}-${history.month}-${history.day}`);
   } else if (history.monthModal) {
-    url = `/v1/payment/month/${schoolId.value}/${history.year}/${history.month}/${history.status}/page?page=${page}`;
+    params.year = history.year;
+    params.month = history.month;
     getStatistic(`${history.year}-${history.month}`);
   } else if (history.groupMonthModal) {
-    url = `/v1/payment/groupMonth/${schoolId.value}/${history.group_id}/${history.year}/${history.month}/${history.status}/page?page=${page}`;
+    params.year = history.year;
+    params.month = history.month;
+    params.group_id = history.group_id;
     getStatisticGroup(history.group_id, `${history.year}-${history.month}`);
   } else if (history.yearModal) {
-    url = `/v1/payment/year/${schoolId.value}/${history.year}/${history.status}/page?page=${page}`;
+    params.year = history.year;
   } else {
+    loading.view = false;
     return;
   }
 
   try {
-    const res = await axios.get(url, { headers: authHeaders.value });
+    const res = await axios.get(url, { headers: authHeaders.value, params });
     const records = res.data?.data?.records || [];
 
     if (records.length !== 0) {
@@ -3096,32 +3108,54 @@ const getHistory = async (page) => {
   } catch (error) {
     store.payHistoryData = error.response?.data?.message || [];
     store.error = true;
+    loading.view = false;
   }
 };
 
-const getDebtor = async (page) => {
+const getDebtor = async (page = 1) => {
   store.payData = false;
 
-  let url;
-  if (debtor.dayModal) {
-    url = `/v1/payment/debtor/${schoolId.value}/${debtor.year}/${debtor.month}/page?page=${page}`;
-  } else if (debtor.monthModal) {
-    url = `/v1/payment/debtor-group/${schoolId.value}/${debtor.group_id}/${debtor.year}/${debtor.month}/page?page=${page}`;
-  } else {
-    return;
+  const schoolId = localStorage.getItem("school_id");
+  const token = localStorage.getItem("token");
+
+  if (!schoolId) return;
+
+  const params = {
+    school_id: schoolId,
+    year: debtor.year,
+    month: debtor.month,
+    page: page,
+  };
+
+  if (debtor.monthModal) {
+    params.group_id = debtor.group_id;
+  }
+  if (debtor.employee_id) {
+    params.employee_id = debtor.employee_id;
   }
 
   try {
-    const res = await axios.get(url, { headers: authHeaders.value });
+    const res = await axios.get(`/v1/payment/history/debtor`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      params: params,
+    });
+
     const records = res.data?.data?.records || [];
 
-    if (records.length !== 0) {
-      history.group_name = records[0].group_name;
+    if (records.length > 0) {
+      debtor.group_name = records[0].group_name;
     }
 
     store.payHistoryData = records;
-    const pagination = res.data?.data?.pagination;
+
+    const pagination = res.data?.data?.pagination || {
+      currentPage: 1,
+      total_count: 0,
+    };
     store.page = [pagination.currentPage, pagination.total_count];
+
     store.error = false;
     debtor.isTable = true;
     debtor.modal = false;
@@ -3260,7 +3294,7 @@ const printReceipt = () => {
               ${
                 form.discount !== 0 && form.discount !== ""
                   ? `<span class="strike">${store.price?.toLocaleString(
-                      "uz-UZ"
+                      "uz-UZ",
                     )} so'm</span>`
                   : ""
               }
@@ -3276,10 +3310,10 @@ const printReceipt = () => {
             store.teacher_name
           }</span></div>
           <div class="row"><span class="bold">Oy:</span><span class="bold">${monthNames(
-            form.month
+            form.month,
           )}</span></div>
           <div class="row"><span class="bold">To'lov:</span><span class="bold">${Number(
-            form.price
+            form.price,
           )?.toLocaleString("uz-UZ")} so'm</span></div>
           <div class="row"><span class="bold">Sana:</span><span>${
             store.chekDate
@@ -3304,8 +3338,8 @@ const printChek = async (id) => {
         (product.group_price * product.discount) / 100
       ).toFixed(2)
     : product.discountSum
-    ? product.group_price - product.discountSum
-    : product.group_price;
+      ? product.group_price - product.discountSum
+      : product.group_price;
 
   formatDateToNumeric(new Date(product.createdAt));
 
@@ -3355,7 +3389,7 @@ const printChek = async (id) => {
                   (product.discount !== 0 && product.discount !== "") ||
                   (product.discountSum !== 0 && product.discountSum !== "")
                     ? `<span class="strike">${Number(
-                        product.group_price
+                        product.group_price,
                       )?.toLocaleString("uz-UZ")} so'm</span>`
                     : ""
                 }
@@ -3370,7 +3404,7 @@ const printChek = async (id) => {
             ${
               product.discountSum !== 0 && product.discountSum !== ""
                 ? `<div class="row"><span class="bold">Chegirma:</span><span>${Number(
-                    product.discountSum
+                    product.discountSum,
                   )?.toLocaleString("uz-UZ")} so'm</span></div>`
                 : ""
             }
@@ -3378,10 +3412,10 @@ const printChek = async (id) => {
               product.teacher_name
             }</span></div>
             <div class="row"><span class="bold">Oy:</span><span class="bold">${monthNames(
-              product.month
+              product.month,
             )}</span></div>
             <div class="row"><span class="bold">To'lov:</span><span class="bold">${product.price?.toLocaleString(
-              "uz-UZ"
+              "uz-UZ",
             )} so'm</span></div>
             <div class="row"><span class="bold">Sana:</span><span>${
               store.chekDate

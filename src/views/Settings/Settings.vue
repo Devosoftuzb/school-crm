@@ -1029,7 +1029,7 @@ const getOneUser = () => {
   const employeeRoles = ["_ad_sch_", "_tch_sch_"];
 
   const url = employeeRoles.includes(userRole)
-    ? `/v1/employee/${school_id}/${user_id}`
+    ? `/v1/employee/${school_id}/${user_id}/not`
     : `/v1/user/${user_id}`;
 
   axios

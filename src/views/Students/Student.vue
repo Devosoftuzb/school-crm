@@ -796,7 +796,7 @@
                     >
                       <p>
                         <span v-for="id in i.group" :key="id.id"
-                          >{{ id.group.name }},
+                          >{{ id.group?.name }},
                         </span>
                       </p>
                       <i
@@ -1099,6 +1099,7 @@ const searchName = (name) => {
         : `/v1/student/search-teacher/${schoolId.value}/${userId.value}/${name}`;
 
       store.studentData = await fetchData(endpoint);
+      console.log(store.studentData)
     } catch {
       store.searchLamp = false;
       getPageStudent(store.pagination);
