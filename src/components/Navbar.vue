@@ -116,7 +116,7 @@
               @click="navbar.userInfo = false"
               class="absolute right-0 z-50 w-56 overflow-hidden border shadow-2xl top-14 rounded-xl backdrop-blur-lg"
               :class="{
-                'bg-slate-800/95 border-slate-700': navbar.userNav,
+                'bg-slate-900/95 border-slate-700': navbar.userNav,
                 'bg-white/95 border-slate-200': !navbar.userNav,
               }"
             >
