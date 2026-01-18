@@ -1155,7 +1155,7 @@ const createStudent = async () => {
       group_id: edit.group_id,
     };
 
-    await axios.post("/student", data, { headers: authHeaders.value });
+    await axios.post("/v1/student", data, { headers: authHeaders.value });
 
     notification.success("Mijoz o'quvchiga qo'shildi");
     edit.is_student = true;

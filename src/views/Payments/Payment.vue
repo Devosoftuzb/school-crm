@@ -2357,7 +2357,7 @@
           </div>
 
           <nav
-            v-show="!store.payData"
+            v-show="!store.payData && debtor.isTable"
             class="flex flex-row items-center justify-between p-4 space-y-0"
             aria-label="Table navigation"
           >
@@ -2411,6 +2411,72 @@
                   if (store.page[0] * 15 < store.page[1]) {
                     store.pagination += 1;
                     getDebtor(store.pagination);
+                  }
+                "
+              >
+                <span class="hidden md:block">Keyingi</span>
+                <i
+                  class="text-2xl font-bold text-black md:hidden bx bx-chevron-right"
+                ></i>
+              </li>
+            </ul>
+          </nav>
+
+                    <nav
+            v-show="!store.payData && !debtor.isTable"
+            class="flex flex-row items-center justify-between p-4 space-y-0"
+            aria-label="Table navigation"
+          >
+            <!-- Oldingi sahifa tugmasi -->
+            <ul class="flex items-center">
+              <li
+                :class="[
+                  store.pagination === 1
+                    ? 'pointer-events-none opacity-50'
+                    : '',
+                  'flex font-bold text-black border-2 bg-white hover:bg-gray-300 items-center justify-center text-sm sm:py-2 sm:px-6 px-3 rounded-xl leading-tight cursor-pointer transition duration-200 ease-in-out',
+                ]"
+                @click="
+                  if (store.pagination > 1) {
+                    store.pagination -= 1;
+                    getHistory(store.pagination);
+                  }
+                "
+              >
+                <i
+                  class="text-2xl font-bold text-black md:hidden bx bx-chevron-left"
+                ></i>
+                <span class="hidden md:block">Oldingi</span>
+              </li>
+            </ul>
+
+            <!-- Sahifa raqami -->
+            <span class="text-sm font-normal text-center">
+              Sahifa
+              <span class="font-semibold">
+                <span>{{ store.page[0] * 15 - 14 }}</span> -
+                <span v-if="store.page[0] * 15 < store.page[1]">{{
+                  store.page[0] * 15
+                }}</span
+                ><span v-else>{{ store.page[1] }}</span>
+              </span>
+              dan
+              <span class="font-semibold">{{ store.page[1] }}</span>
+            </span>
+
+            <!-- Keyingi sahifa tugmasi -->
+            <ul class="flex items-center">
+              <li
+                :class="[
+                  store.page[0] * 15 >= store.page[1]
+                    ? 'pointer-events-none opacity-50'
+                    : '',
+                  'flex font-bold text-black border-2 bg-white hover:bg-gray-300 items-center justify-center text-sm sm:py-2 sm:px-6 px-3 rounded-xl leading-tight cursor-pointer transition duration-200 ease-in-out',
+                ]"
+                @click="
+                  if (store.page[0] * 15 < store.page[1]) {
+                    store.pagination += 1;
+                    getHistory(store.pagination);
                   }
                 "
               >
