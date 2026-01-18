@@ -1286,14 +1286,24 @@
                 <div
                   class="flex flex-col justify-center w-full gap-5 pt-5 mt-5 border-t"
                 >
+                  <div class="flex flex-col items-center justify-between w-full gap-5 sm:flex-row">
                   <ButtonLoader
                     :loading="loading.excel"
                     @click="exportExcelHistory"
                     type="button"
-                    class="btnAdd3 text-white inline-flex items-center justify-center bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
+                    class="btnAdd3 text-white w-full inline-flex items-center justify-center bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                   >
-                    Excelga yuklab olish
+                    {{ history.year }} - Excelga yuklab olish
                   </ButtonLoader>
+                <ButtonLoader
+                    :loading="loading.excel"
+                    @click="exportExcelAllHistory"
+                    type="button"
+                    class="btnAdd3 text-white w-full inline-flex items-center justify-center bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
+                  >
+                    Barchasini Excelga yuklab olish
+                  </ButtonLoader>
+                </div>
                   <div class="flex items-center justify-between w-full">
                     <button
                       @click="historyModal"
@@ -2883,7 +2893,31 @@ const discountedPrice = computed(() => {
 });
 
 // Export functions
+
+const exportExcelAllHistory = async () => {
+  loading.excel = true;
+  const config = {
+    headers: authHeaders.value,
+    responseType: "blob",
+  };
+  try {
+    const response = await axios.get(`/v2/payment/history/all/excel?school_id=${schoolId.value}`, config);
+    const url = window.URL.createObjectURL(new Blob([response.data]));
+    const link = document.createElement("a");
+    link.href = url;
+    let fileName = "payment-all";
+    link.setAttribute("download", `${fileName}.xlsx`);
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    loading.excel = false;
+  } catch (err) {
+    handleError();
+  }
+};
+
 const exportExcelHistory = async () => {
+  loading.excel = true;
   const config = {
     headers: authHeaders.value,
     responseType: "blob",
@@ -2919,12 +2953,15 @@ const exportExcelHistory = async () => {
     document.body.appendChild(link);
     link.click();
     link.remove();
+    loading.excel = false;
   } catch (err) {
-    console.error("Export uchun malumotlarni olishda xatolik:", err);
+    loading.excel = false;
+    handleError()
   }
 };
 
 const exportToExcelDebtor = async () => {
+  loading.excel = true;
   const config = {
     headers: authHeaders.value,
     responseType: "blob",
@@ -2952,8 +2989,10 @@ const exportToExcelDebtor = async () => {
     document.body.appendChild(link);
     link.click();
     link.remove();
+    loading.excel = false;
   } catch (err) {
-    console.error("Export uchun malumotlarni olishda xatolik:", err);
+    loading.excel = false;
+    handleError()
   }
 };
 

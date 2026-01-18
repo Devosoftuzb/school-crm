@@ -1439,6 +1439,7 @@ const getHistory = async (page = 1) => {
 };
 
 const exportToExcel = async () => {
+  loading.excel = true;
   const config = {
     headers: authHeaders.value,
     responseType: "blob",
@@ -1472,8 +1473,9 @@ const exportToExcel = async () => {
     document.body.appendChild(link);
     link.click();
     link.remove();
+    loading.excel = false;
   } catch (err) {
-    console.error("Export uchun malumotlarni olishda xatolik:", err);
+    loading.excel = false;
   }
 };
 
