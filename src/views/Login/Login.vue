@@ -27,14 +27,7 @@
         </div>
 
         <div class="relative text-white">
-<<<<<<< HEAD
-          <label for="password" class="block mb-2 font-semibold"
-
-            >Parol</label
-          >
-=======
           <label for="password" class="block mb-2 font-semibold">Parol</label>
->>>>>>> be1da431f65bea74335b1fd097930e09686264df
           <input
             :type="showPassword ? 'text' : 'password'"
             id="password"
