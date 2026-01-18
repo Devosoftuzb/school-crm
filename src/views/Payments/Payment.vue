@@ -3012,7 +3012,7 @@ const addPayment = async () => {
     method: form.method,
     discount: form.discount,
     discountSum: form.discountSum,
-    price: form.price,
+    price: Number(form.price),
     description: form.description,
   };
 
