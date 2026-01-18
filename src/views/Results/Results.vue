@@ -68,7 +68,7 @@
                   Bekor qilish
                 </button>
                 <button
-                  @click="deleteProduct"
+                  @click="deleteResult"
                   class="btnAdd cursor-pointer text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                 >
                   O'chirish
@@ -128,7 +128,7 @@
           </div>
           <!-- Modal body -->
           <form
-            @submit.prevent="editProduct"
+            @submit.prevent="editResult"
             :class="{ darkForm: navbar.userNav }"
           >
             <div class="grid gap-4 mb-4 font-medium">
@@ -165,14 +165,14 @@
     <!-- Placeholder -->
     <section :class="{ 'text-white': navbar.userNav }">
       <!------------------------------------------- Placeholder ------------------------------------------->
-      <div v-show="!store.PageProduct">
+      <div v-show="!store.resultData">
         <Placeholder2 />
       </div>
       <!------------------------------------------- Placeholder ------------------------------------------->
 
       <!------------------------------------------- Search ------------------------------------------->
 
-      <div v-show="store.PageProduct" class="w-full mb-20 max-w-screen">
+      <div v-show="store.resultData" class="w-full mb-20 max-w-screen">
         <!-- Start coding here -->
         <div
           class="flex flex-col items-center justify-between p-4 mb-4 shadow rounded-xl lg:flex-row lg:space-x-4"
@@ -184,20 +184,18 @@
             <h1 class="text-lg font-bold text-blue-700">Test natijalari</h1>
           </div>
 
-          <div class="w-full lg:w-80">
-            <form class="flex items-center font-medium text-gray-900">
-              <label for="simple-search" class="sr-only">Qidiruv</label>
+          <div class="flex w-full">
+            <form
+              class="flex items-center w-full font-medium text-gray-900"
+              @submit.prevent
+            >
+              <label class="sr-only">Qidiruv</label>
+
               <div class="relative w-full">
                 <div
                   class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"
                 >
-                  <svg
-                    aria-hidden="true"
-                    class="w-5 h-5"
-                    fill="currentColor"
-                    viewbox="0 0 20 20"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
+                  <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                     <path
                       fill-rule="evenodd"
                       d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
@@ -207,32 +205,11 @@
                 </div>
                 <input
                   v-model="store.filter"
-                  @input="
-                    store.filter_show = true;
-                    searchFunc();
-                  "
+                  @input="searchName(store.filter)"
                   type="search"
-                  id="simple-search"
                   class="block w-full p-2 pl-10 text-sm border border-gray-300 rounded-xl bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
                   placeholder="Qidirish..."
                 />
-                <ul
-                  v-show="store.filter_show"
-                  class="absolute z-10 w-full py-1 overflow-hidden overflow-y-auto text-gray-600 bg-white rounded max-h-80"
-                  :class="{ hidden: !store.searchList.length }"
-                >
-                  <li
-                    class="pl-2 cursor-pointer hover:bg-gray-100"
-                    v-for="(i, index) in store.searchList"
-                    :key="index"
-                    @click="
-                      store.filter = i.customer.full_name;
-                      searchFunc();
-                    "
-                  >
-                    {{ i.customer.full_name }}
-                  </li>
-                </ul>
               </div>
             </form>
           </div>
@@ -286,8 +263,7 @@
                   :class="
                     navbar.userNav ? 'hover:bg-gray-700' : 'hover:bg-gray-50'
                   "
-                  v-show="!store.searchList.length"
-                  v-for="i in store.PageProduct"
+                  v-for="i in store.resultData"
                   :key="i"
                 >
                   <th
@@ -307,7 +283,7 @@
                     class="px-8 py-4 font-medium text-center text-blue-800 whitespace-nowrap"
                   >
                     <p class="bg-blue-100 rounded-[5px] p-1">
-                      {{ i.subject_name }}
+                      {{ i.test.subject.name }}
                     </p>
                   </td>
                   <td
@@ -349,7 +325,7 @@
                   </td>
                   <td class="px-5 py-2 font-medium text-center text-blue-800">
                     <div
-                      @click="getOneProduct(i.id)"
+                      @click="getOneResult(i.id)"
                       class="relative group flex gap-2 cursor-pointer justify-between bg-blue-100 min-w-fit rounded-[5px] px-2 py-1 whitespace-nowrap"
                     >
                       <p>
@@ -369,109 +345,6 @@
                     </div>
                   </td>
 
-                  <td class="px-8 py-3 font-medium text-center">
-                    <button
-                      @click="enterSlug(i.id)"
-                      class="btnKirish bg-blue-600 rounded-xl px-5 py-2.5 text-white focus:ring-2"
-                    >
-                      Kirish
-                    </button>
-                  </td>
-                  <td class="pr-5 font-medium text-center whitespace-nowrap">
-                    <i
-                      @click="deleteFunc(i.id)"
-                      class="p-2 text-red-600 bg-red-300 cursor-pointer rounded-xl bx bxs-trash focus:ring-2"
-                    >
-                    </i>
-                  </td>
-                </tr>
-                <tr
-                  class="border-b"
-                  :class="
-                    navbar.userNav ? 'hover:bg-gray-700' : 'hover:bg-gray-50'
-                  "
-                  v-show="store.searchList.length"
-                  v-for="i in store.searchList"
-                  :key="i"
-                >
-                  <th
-                    scope="row"
-                    class="px-8 py-3 font-medium text-center whitespace-nowrap"
-                  >
-                    {{ i.customer.full_name }}
-                  </th>
-                  <td
-                    class="px-8 py-4 font-medium text-center text-blue-800 whitespace-nowrap"
-                  >
-                    <p class="bg-blue-100 rounded-[5px] p-1">
-                      {{ i.customer.phone_number }}
-                    </p>
-                  </td>
-                  <td
-                    class="px-8 py-4 font-medium text-center text-blue-800 whitespace-nowrap"
-                  >
-                    <p class="bg-blue-100 rounded-[5px] p-1">
-                      {{ i.subject_name }}
-                    </p>
-                  </td>
-                  <td
-                    class="px-8 py-4 font-medium text-center text-red-800 whitespace-nowrap"
-                  >
-                    <p class="bg-red-100 rounded-[5px] p-1">
-                      {{ i.teacher_name }}
-                    </p>
-                  </td>
-                  <td
-                    class="px-8 py-4 font-medium text-center text-blue-800 whitespace-nowrap"
-                  >
-                    <p class="bg-blue-100 rounded-[5px] p-1">
-                      {{ i.time }}
-                    </p>
-                  </td>
-                  <td
-                    class="px-8 py-4 font-medium text-center text-blue-800 whitespace-nowrap"
-                  >
-                    <p class="bg-blue-100 rounded-[5px] p-1">
-                      {{ i.result }}
-                    </p>
-                  </td>
-                  <td
-                    v-show="!i.customer.is_student"
-                    class="px-8 py-4 font-medium text-center text-red-800 whitespace-nowrap"
-                  >
-                    <p class="bg-red-100 rounded-[5px] p-1">
-                      O'quvchi bo'lmagan
-                    </p>
-                  </td>
-                  <td
-                    v-show="i.customer.is_student"
-                    class="px-8 py-4 font-medium text-center text-green-700 whitespace-nowrap"
-                  >
-                    <p class="bg-green-100 rounded-[5px] p-1">
-                      O'quvchi bo'lgan
-                    </p>
-                  </td>
-                  <td class="px-5 py-2 font-medium text-center text-blue-800">
-                    <div
-                      @click="getOneProduct(i.id)"
-                      class="relative group flex gap-2 cursor-pointer justify-between bg-blue-100 min-w-fit rounded-[5px] px-2 py-1 whitespace-nowrap"
-                    >
-                      <p>
-                        <span>
-                          {{
-                            i.description && i.description.split(" ").length > 3
-                              ? i.description.split(" ").slice(0, 3).join(" ") +
-                                "..."
-                              : i.description
-                          }}
-                        </span>
-                      </p>
-
-                      <i
-                        class="p-1 ml-2 font-extrabold text-white bg-blue-800 rounded-md cursor-pointer bx bxs-pencil"
-                      ></i>
-                    </div>
-                  </td>
                   <td class="px-8 py-3 font-medium text-center">
                     <button
                       @click="enterSlug(i.id)"
@@ -491,14 +364,14 @@
               </tbody>
             </table>
             <div
-              v-show="store.PageProduct.length === 0"
+              v-show="store.resultData.length === 0"
               class="w-full p-20 text-2xl font-medium text-center max-w-screen"
             >
               <h1>Natijalar ro'yhati bo'sh</h1>
             </div>
           </div>
           <nav
-            v-if="!store.searchList.length"
+            v-if="!store.searchLamp"
             class="flex flex-row items-center justify-between p-4 space-y-0"
             aria-label="Table navigation"
           >
@@ -514,7 +387,7 @@
                 @click="
                   if (store.pagination > 1) {
                     store.pagination -= 1;
-                    getProduct(store.pagination);
+                    getPageResult(store.pagination);
                   }
                 "
               >
@@ -551,7 +424,7 @@
                 @click="
                   if (store.page[0] * 15 < store.page[1]) {
                     store.pagination += 1;
-                    getProduct(store.pagination);
+                    getPageResult(store.pagination);
                   }
                 "
               >
@@ -580,16 +453,21 @@ const notification = useNotificationStore();
 const navbar = useNavStore();
 const router = useRouter();
 
+const schoolId = computed(() => localStorage.getItem("school_id"));
+const token = computed(() => localStorage.getItem("token"));
+const authHeaders = computed(() => ({
+  Authorization: `Bearer ${token.value}`,
+}));
+
 const store = reactive({
-  PageProduct: "",
+  resultData: "",
   page: [1, 0],
   pagination: 1,
-  allProducts: [],
   error: false,
   filter: "",
   filter_show: false,
-  searchList: [],
-  subjects: [],
+  searchTimer: null,
+  searchLamp: false,
 });
 
 const edit = reactive({
@@ -603,209 +481,134 @@ const remove = reactive({
   toggle: false,
 });
 
+const handleError = (
+  message = "Xatolik! Nimadir noto'g'ri. Internetni tekshirib qaytadan urinib ko'ring!",
+) => {
+  notification.warning(message);
+};
+
+const enrichRecords = (records) => {
+  return records.map((record) => {
+    const description = record.customer?.description || "";
+    const [time, ...teacherParts] = description.split(" ");
+    const teacher_name = teacherParts.join(" ");
+
+    return {
+      ...record,
+      time: time || "Noma'lum",
+      teacher_name: teacher_name || "Noma'lum",
+    };
+  });
+};
+
 function deleteFunc(id) {
   remove.id = id;
   remove.toggle = true;
 }
 
-// ---------------------------- search ------------------------------------
-function searchFunc() {
-  store.searchList = [];
-  for (let i of store.allProducts) {
-    if (
-      i.customer.full_name.toLowerCase().includes(store.filter.toLowerCase())
-    ) {
-      store.searchList.push(i);
-    }
-  }
-
-  if (!store.filter.length) {
-    store.searchList = [];
-  }
-}
-// ---------------------------- search ------------------------------------
-
-const chekDateFormat = (date) => {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate()).padStart(2, "0");
-  const hour = String(date.getHours()).padStart(2, "0");
-  const minute = String(date.getMinutes()).padStart(2, "0");
-
-  return `${year}-${month}-${day}, ${hour}:${minute}`;
-};
-
-// ----------------------------------- axios --------------------------------
-const getAllProduct = () => {
-  axios
-    .get(`/customer-test/getSchoolId/${localStorage.getItem("school_id")}`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    })
-    .then((res) => {
-      const records = res.data;
-      const localSchoolId = Number(localStorage.getItem("school_id"));
-
-      const enrichedRecords = records
-        .filter((record) => record.customer?.school_id === localSchoolId)
-        .map((record) => {
-          const [time, ...teacherParts] =
-            record.customer.description.split(" ");
-          const teacher_name = teacherParts.join(" ");
-
-          const subjectId = record.customer?.subject_id;
-          const subject = store.subjects.find((s) => s.id === subjectId);
-          return {
-            ...record,
-            subject_name: subject ? subject.name : "Noma'lum",
-            time: time ? time : "Noma'lum",
-            teacher_name: teacher_name ? teacher_name : "Noma'lum",
-          };
-        });
-
-      // store.PageProduct = enrichedRecords;
-      store.allProducts = enrichedRecords;
-      store.error = false;
-    })
-    .catch((error) => {
-      console.error(error);
-      store.error = true;
-    });
-};
-
-const getSubject = () => {
-  axios
-    .get(`/subject/${localStorage.getItem("school_id")}`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    })
-    .then((res) => {
-      store.subjects = res.data;
-    })
-    .catch((error) => {
-      notification.warning(
-        "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
-      );
-    });
-};
-
-const getOneProduct = (id) => {
-  axios
-    .get(`/customer-test/${id}`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    })
-    .then((res) => {
-      edit.id = id;
-      edit.description = res.data.description;
-      edit.toggle = true;
-    })
-    .catch((error) => {
-      notification.warning(
-        "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
-      );
-    });
-};
-
-const getProduct = (page) => {
-  axios
-    .get(
-      `/customer-test/${localStorage.getItem("school_id")}/page?page=${page}`,
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      }
-    )
-    .then((res) => {
-      const records = res.data?.data?.records || [];
-      const localSchoolId = Number(localStorage.getItem("school_id"));
-
-      const enrichedRecords = records
-        .filter((record) => record.customer?.school_id === localSchoolId)
-        .map((record) => {
-          const [time, ...teacherParts] =
-            record.customer.description.split(" ");
-          const teacher_name = teacherParts.join(" ");
-
-          const subjectId = record.customer?.subject_id;
-          const subject = store.subjects.find((s) => s.id === subjectId);
-
-          return {
-            ...record,
-            subject_name: subject ? subject.name : "Noma'lum",
-            time: time || "Noma'lum",
-            teacher_name: teacher_name || "Noma'lum",
-          };
-        });
-
-      store.PageProduct = enrichedRecords;
-      store.page = [page, enrichedRecords.length];
-      store.error = false;
-    })
-    .catch((error) => {
-      console.error(error);
-      store.error = true;
-    });
-};
-
-const editProduct = () => {
-  const data = {
-    description: edit.description,
-  };
-  axios
-    .put(`/customer-test/${edit.id}`, data, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    })
-    .then((res) => {
-      edit.toggle = false;
-      notification.success("Mijoz haqida izoh qo'shildi");
-      getProduct(store.pagination);
-    })
-    .catch((error) => {
-      notification.warning(
-        "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
-      );
-    });
-};
-
-const deleteProduct = () => {
-  axios
-    .delete(`/customer-test/${remove.id}`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    })
-    .then((res) => {
-      notification.success("Test natijasi o'chirildi");
-      getProduct(store.pagination);
-      remove.toggle = false;
-    })
-    .catch((error) => {
-      notification.warning(
-        "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
-      );
-    });
-};
-
-onMounted(() => {
-  getSubject();
-  getProduct(1);
-  getAllProduct();
-});
-
 function enterSlug(id) {
   router.push(`./results/${id}`);
 }
 
-// Computed property for filtered PageProduct
-const filteredPageProduct = computed(() => {
-  return store.searchList.length ? store.searchList : store.PageProduct;
+// ----------------------------------- axios --------------------------------
+
+const searchName = (name) => {
+  store.searchLamp = true;
+  clearTimeout(store.searchTimer);
+
+  store.searchTimer = setTimeout(async () => {
+    if (!name) {
+      store.resultData = [];
+      getPageResult(store.pagination);
+      store.searchLamp = false;
+      return;
+    }
+
+    try {
+      const res = await axios.get(
+        `/v1/customer-test/search/${schoolId.value}/${name}`,
+        { headers: authHeaders.value },
+      );
+
+      const records = res.data || [];
+      store.resultData = enrichRecords(records);
+    } catch {
+      store.resultData = [];
+      store.searchLamp = false;
+      getPageResult(store.pagination);
+    }
+  }, 350);
+};
+
+const getOneResult = async (id) => {
+  try {
+    const res = await axios.get(`/v1/customer-test/note/${id}`, {
+      headers: authHeaders.value,
+    });
+
+    Object.assign(edit, {
+      id: id,
+      description: res.data.description,
+      toggle: true,
+    });
+  } catch (error) {
+    handleError();
+  }
+};
+
+const getPageResult = async (page) => {
+  try {
+    const res = await axios.get(
+      `/v1/customer-test/${schoolId.value}/page?page=${page}`,
+      { headers: authHeaders.value },
+    );
+
+    const records = res.data?.data?.records || [];
+    const enrichedRecords = enrichRecords(records);
+
+    store.resultData = enrichedRecords;
+    store.page = [page, enrichedRecords.length];
+    store.error = false;
+  } catch (error) {
+    console.error(error);
+    store.error = true;
+  }
+};
+
+const editResult = async () => {
+  const data = {
+    description: edit.description,
+  };
+
+  try {
+    await axios.put(`/v1/customer-test/${edit.id}`, data, {
+      headers: authHeaders.value,
+    });
+
+    edit.toggle = false;
+    notification.success("Mijoz haqida izoh qo'shildi");
+    getPageResult(store.pagination);
+  } catch (error) {
+    handleError();
+  }
+};
+
+const deleteResult = async () => {
+  try {
+    await axios.delete(`/v1/customer-test/${remove.id}`, {
+      headers: authHeaders.value,
+    });
+
+    notification.success("Test natijasi o'chirildi");
+    getPageResult(store.pagination);
+    remove.toggle = false;
+  } catch (error) {
+    handleError();
+  }
+};
+
+onMounted(() => {
+  getPageResult(1);
 });
 </script>
 

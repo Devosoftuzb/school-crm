@@ -50,7 +50,7 @@
           </div>
           <!-- Modal body -->
           <form
-            @submit.prevent="createProduct"
+            @submit.prevent="createSubject"
             :class="{ darkForm: navbar.userNav }"
           >
             <div class="grid grid-cols-1 gap-4 mb-4 font-medium">
@@ -137,7 +137,7 @@
           </div>
           <!-- Modal body -->
           <form
-            @submit.prevent="editProduct"
+            @submit.prevent="editSubject"
             :class="{ darkForm: navbar.userNav }"
           >
             <div class="grid grid-cols-1 gap-4 mb-4 font-medium">
@@ -242,7 +242,7 @@
                   Bekor qilish
                 </button>
                 <button
-                  @click="deleteProduct"
+                  @click="deleteSubject"
                   class="btnAdd cursor-pointer text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                 >
                   O'chirish
@@ -259,12 +259,12 @@
 
     <section class="pt-4">
       <!------------------------------------------- Search ------------------------------------------->
-      <div v-show="!store.PageProduct">
+      <div v-show="store.loaderTime">
         <Placeholder2 />
       </div>
       <!------------------------------------------- Search ------------------------------------------->
 
-      <div v-show="store.PageProduct" class="w-full max-w-screen">
+      <div v-show="!store.loaderTime" class="w-full max-w-screen">
         <!-- Start coding here -->
 
         <!------------------------------------------- Search ------------------------------------------->
@@ -286,25 +286,22 @@
                 class="flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-xl btnAdd max-w-fit whitespace-nowrap hover:bg-blue-700 focus:ring-4 focus:ring-blue-300"
               >
                 <span>Fan qo'shish</span>
-                
               </button>
             </div>
           </div>
 
-          <div class="w-full lg:w-80">
-            <form class="flex items-center font-medium text-gray-900">
-              <label for="simple-search" class="sr-only">Qidiruv</label>
+          <div class="flex w-full">
+            <form
+              class="flex items-center w-full font-medium text-gray-900"
+              @submit.prevent
+            >
+              <label class="sr-only">Qidiruv</label>
+
               <div class="relative w-full">
                 <div
                   class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"
                 >
-                  <svg
-                    aria-hidden="true"
-                    class="w-5 h-5"
-                    fill="currentColor"
-                    viewbox="0 0 20 20"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
+                  <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                     <path
                       fill-rule="evenodd"
                       d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
@@ -314,32 +311,11 @@
                 </div>
                 <input
                   v-model="store.filter"
-                  @input="
-                    store.filter_show = true;
-                    searchFunc();
-                  "
+                  @input="searchName(store.filter)"
                   type="search"
-                  id="simple-search"
                   class="block w-full p-2 pl-10 text-sm border border-gray-300 rounded-xl bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
                   placeholder="Qidirish..."
                 />
-                <ul
-                  v-show="store.filter_show"
-                  class="absolute z-10 w-full py-1 overflow-hidden overflow-y-auto text-gray-600 bg-white rounded max-h-80"
-                  :class="{ hidden: !store.searchList.length }"
-                >
-                  <li
-                    class="pl-2 cursor-pointer hover:bg-gray-100"
-                    v-for="(i, index) in store.searchList"
-                    :key="index"
-                    @click="
-                      store.filter = i.name;
-                      searchFunc();
-                    "
-                  >
-                    {{ i.name }}
-                  </li>
-                </ul>
               </div>
             </form>
           </div>
@@ -358,7 +334,7 @@
                     Fan nomi
                   </th>
                   <th scope="col" class="py-3 text-center">Ochilgan sana</th>
-                  <th v-show="!store.guard"></th>
+                  <th></th>
                 </tr>
               </thead>
               <tbody v-show="!store.error">
@@ -367,8 +343,7 @@
                   :class="
                     navbar.userNav ? 'hover:bg-gray-700' : 'hover:bg-gray-50'
                   "
-                  v-show="!store.searchList.length"
-                  v-for="i in store.PageProduct"
+                  v-for="i in store.subjectData"
                   :key="i.id"
                 >
                   <td
@@ -387,43 +362,7 @@
                     class="py-4 pr-5 font-medium text-center whitespace-nowrap"
                   >
                     <i
-                      @click="getOneProduct(i.id)"
-                      class="p-2 mr-3 text-blue-600 bg-blue-300 cursor-pointer rounded-xl bx bxs-pencil focus:ring-2"
-                    >
-                    </i>
-                    <i
-                      @click="deleteFunc(i.id)"
-                      class="p-2 text-red-600 bg-red-300 cursor-pointer rounded-xl bx bxs-trash focus:ring-2"
-                    >
-                    </i>
-                  </td>
-                </tr>
-                <tr
-                  class="border-b"
-                  :class="
-                    navbar.userNav ? 'hover:bg-gray-700' : 'hover:bg-gray-50'
-                  "
-                  v-show="store.searchList.length"
-                  v-for="i in store.searchList"
-                  :key="i"
-                >
-                  <td
-                    class="px-8 py-4 font-medium text-center whitespace-nowrap"
-                  >
-                    <span>{{ i.name }}</span>
-                  </td>
-                  <td
-                    class="px-8 py-4 font-medium text-center text-blue-800 whitespace-nowrap"
-                  >
-                    <span class="bg-blue-100 rounded-[5px] p-1 px-10">{{
-                      i.createdAt.slice(0, 10)
-                    }}</span>
-                  </td>
-                  <td
-                    class="py-4 pr-5 font-medium text-center whitespace-nowrap"
-                  >
-                    <i
-                      @click="getOneProduct(i.id)"
+                      @click="getOneSubject(i.id)"
                       class="p-2 mr-3 text-blue-600 bg-blue-300 cursor-pointer rounded-xl bx bxs-pencil focus:ring-2"
                     >
                     </i>
@@ -437,16 +376,15 @@
               </tbody>
             </table>
 
-            <div v-show="store.error" class="flex justify-center w-full">
+            <div v-show="!store.subjectData" class="flex justify-center w-full">
               <h1 class="p-20 text-2xl font-medium">Fanlar ro'yhati bo'sh</h1>
             </div>
           </div>
           <nav
-            v-if="!store.searchList.length"
+            v-if="!store.searchLamp"
             class="flex flex-row items-center justify-between p-4 space-y-0"
             aria-label="Table navigation"
           >
-            <!-- Oldingi sahifa tugmasi -->
             <ul class="flex items-center">
               <li
                 :class="[
@@ -458,7 +396,7 @@
                 @click="
                   if (store.pagination > 1) {
                     store.pagination -= 1;
-                    getProduct(store.pagination);
+                    getPageSubject(store.pagination);
                   }
                 "
               >
@@ -469,7 +407,6 @@
               </li>
             </ul>
 
-            <!-- Sahifa raqami -->
             <span class="text-sm font-normal text-center">
               Sahifa
               <span class="font-semibold">
@@ -483,7 +420,6 @@
               <span class="font-semibold">{{ store.page[1] }}</span>
             </span>
 
-            <!-- Keyingi sahifa tugmasi -->
             <ul class="flex items-center">
               <li
                 :class="[
@@ -495,7 +431,7 @@
                 @click="
                   if (store.page[0] * 15 < store.page[1]) {
                     store.pagination += 1;
-                    getProduct(store.pagination);
+                    getPageSubject(store.pagination);
                   }
                 "
               >
@@ -515,45 +451,37 @@
 </template>
 
 <script setup>
-import { onMounted, ref, reactive } from "vue";
-import { useRouter } from "vue-router";
+import { onMounted, ref, reactive, computed } from "vue";
 import { useNavStore } from "../../stores/toggle";
 import { useNotificationStore } from "../../stores/notification";
 import axios from "@/services/axios";
 
-// Notification and navigation stores
 const notification = useNotificationStore();
 const navbar = useNavStore();
-const router = useRouter();
 
-// Modal state management
 const modal = ref(false);
+
+const schoolId = computed(() => localStorage.getItem("school_id"));
+const token = computed(() => localStorage.getItem("token"));
+const authHeaders = computed(() => ({
+  Authorization: `Bearer ${token.value}`,
+}));
+
 const toggleModal = () => {
   modal.value = !modal.value;
   form.title = "";
 };
 
-// Reactive store for managing products and pagination
 const store = reactive({
-  PageProduct: "",
+  subjectData: [],
   page: [],
   pagination: 1,
-  allProducts: false,
-  groups: false,
   error: false,
   filter: "",
-  searchList: [],
+  loaderTime: true,
+  searchLamp: false,
+  searchTimer: null,
 });
-
-// ---------------------------- Search ------------------------------------
-function searchFunc() {
-  store.searchList = store.filter
-    ? store.allProducts.filter((i) =>
-        i.name.toLowerCase().includes(store.filter.toLowerCase())
-      )
-    : [];
-}
-// ---------------------------- Search ------------------------------------
 
 function cancelFunc() {
   form.title = "";
@@ -571,136 +499,131 @@ function deleteFunc(id) {
   remove.toggle = true;
 }
 
-// ---------------------------- Forms ------------------------------------
 const form = reactive({ title: "" });
 const edit = reactive({ title: "", id: "", toggle: false });
 const remove = reactive({ id: "", toggle: false });
 
-// ---------------------------- Axios ------------------------------------
+const handleError = (
+  message = "Xatolik! Nimadir noto'g'ri. Internetni tekshirib qaytadan urinib ko'ring!"
+) => {
+  notification.warning(message);
+};
 
 const fetchData = async (url, params = {}) => {
-  const token = localStorage.getItem("token");
-  const schoolId = localStorage.getItem("school_id");
   try {
     const { data } = await axios.get(url, {
-      headers: { Authorization: `Bearer ${token}` },
-      params: { school_id: schoolId, ...params },
+      headers: authHeaders.value,
+      params: { school_id: schoolId.value, ...params },
     });
     return data;
   } catch (error) {
-    notification.warning(
-      "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
-    );
+    handleError();
     throw error;
   }
 };
 
-const getAllProduct = async () => {
+const searchName = (name) => {
+  store.searchLamp = true;
+  clearTimeout(store.searchTimer);
+
+  store.searchTimer = setTimeout(async () => {
+    if (!name) {
+      getPageSubject(store.pagination);
+      store.searchLamp = false;
+      return;
+    }
+
+    try {
+      const data = await fetchData(
+        `/v1/subject/search/${schoolId.value}/${name}`
+      );
+      store.subjectData = data;
+    } catch {
+      getPageSubject(store.pagination);
+      store.searchLamp = false;
+    }
+  }, 350);
+};
+
+const getPageSubject = async (page) => {
   try {
-    const res = await fetchData(
-      `/subject/${localStorage.getItem("school_id")}`
-    );
-    store.allProducts = res;
+    const res = await fetchData(`/v1/subject/${schoolId.value}/page`, { page });
+
+    const pagination = res?.data?.pagination || {};
+    store.subjectData = res?.data?.records || [];
+    store.page = [pagination.currentPage || 1, pagination.total_count || 0];
     store.error = false;
+    store.loaderTime = false;
   } catch (error) {
-    store.allProducts =
-      error.response?.data?.message || "Error fetching products";
+    store.subjectData = "Error fetching products";
     store.error = true;
+    store.loaderTime = false;
   }
 };
 
-const getProduct = async (page) => {
+const getOneSubject = async (id) => {
   try {
-    const res = await fetchData(
-      `/subject/${localStorage.getItem("school_id")}/page`,
-      { page }
-    );
+    const res = await fetchData(`/v1/subject/${schoolId.value}/${id}`);
 
-    store.PageProduct = res?.data?.records;
-    store.page = [
-      res?.data?.pagination?.currentPage || 1,
-      res?.data?.pagination?.total_count || 0,
-    ];
-    store.error = false;
+    Object.assign(edit, {
+      title: res.name,
+      id: id,
+      toggle: true,
+    });
   } catch (error) {
-    store.PageProduct = "Error fetching products";
-    store.error = true;
+    handleError();
   }
 };
 
-const getOneProduct = async (id) => {
-  try {
-    const res = await fetchData(
-      `/subject/${localStorage.getItem("school_id")}/${id}`
-    );
-    edit.title = res.name;
-    edit.id = id;
-    edit.toggle = true;
-  } catch (error) {
-    notification.warning("Error fetching product details.");
-  }
-};
-
-const createProduct = async () => {
+const createSubject = async () => {
   try {
     const data = {
-      school_id: JSON.parse(localStorage.getItem("school_id")),
+      school_id: Number(schoolId.value),
       name: form.title,
     };
-    await axios.post("/subject", data, {
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-    });
+
+    await axios.post("/v1/subject", data, { headers: authHeaders.value });
     notification.success("Fan qo'shildi");
-    getProduct(store.pagination);
-    getAllProduct();
+    getPageSubject(store.pagination);
     cancelFunc();
   } catch (error) {
-    notification.warning("Error creating product.");
+    handleError();
   }
 };
 
-const editProduct = async () => {
+const editSubject = async () => {
   try {
     const data = {
-      school_id: Number(localStorage.getItem("school_id")),
+      school_id: Number(schoolId.value),
       name: edit.title,
     };
-    await axios.put(
-      `/subject/${localStorage.getItem("school_id")}/${edit.id}`,
-      data,
-      {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      }
-    );
+
+    await axios.put(`/v1/subject/${schoolId.value}/${edit.id}`, data, {
+      headers: authHeaders.value,
+    });
     notification.success("Fan tahrirlandi");
-    getProduct(store.pagination);
-    getAllProduct();
+    getPageSubject(store.pagination);
     cancelEdit();
   } catch (error) {
-    notification.warning("Error editing product.");
+    handleError();
   }
 };
 
-const deleteProduct = async () => {
+const deleteSubject = async () => {
   try {
-    await axios.delete(
-      `/subject/${localStorage.getItem("school_id")}/${remove.id}`,
-      {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      }
-    );
+    await axios.delete(`/v1/subject/${schoolId.value}/${remove.id}`, {
+      headers: authHeaders.value,
+    });
     notification.success("Fan o'chirildi");
-    getProduct(store.pagination);
-    getAllProduct();
+    getPageSubject(store.pagination);
     remove.toggle = false;
   } catch (error) {
-    notification.warning("Error deleting product.");
+    handleError();
   }
 };
 
 onMounted(() => {
-  getProduct(store.pagination);
-  getAllProduct();
+  getPageSubject(store.pagination);
 });
 </script>
 

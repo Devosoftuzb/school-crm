@@ -357,14 +357,14 @@
 
     <section class="py-4" :class="{ 'text-white': navbar.userNav }">
       <!------------------------------------------- Placeholder ------------------------------------------->
-      <div v-show="!store.PageProduct">
+      <div v-show="!store.testData">
         <Placeholder2 />
       </div>
       <!------------------------------------------- Placeholder ------------------------------------------->
 
       <!------------------------------------------- Search ------------------------------------------->
 
-      <div v-show="store.PageProduct" class="w-full max-w-screen">
+      <div v-show="store.testData" class="w-full max-w-screen">
         <!-- Start coding here -->
         <div
           class="flex flex-col items-center justify-between p-4 mb-4 shadow rounded-xl lg:flex-row lg:space-x-4"
@@ -388,20 +388,18 @@
             </div>
           </div>
 
-          <div class="w-full lg:w-80">
-            <form class="flex items-center font-medium text-gray-900">
-              <label for="simple-search" class="sr-only">Qidiruv</label>
+          <div class="flex w-full">
+            <form
+              class="flex items-center w-full font-medium text-gray-900"
+              @submit.prevent
+            >
+              <label class="sr-only">Qidiruv</label>
+
               <div class="relative w-full">
                 <div
                   class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"
                 >
-                  <svg
-                    aria-hidden="true"
-                    class="w-5 h-5"
-                    fill="currentColor"
-                    viewbox="0 0 20 20"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
+                  <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                     <path
                       fill-rule="evenodd"
                       d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
@@ -411,32 +409,11 @@
                 </div>
                 <input
                   v-model="store.filter"
-                  @input="
-                    store.filter_show = true;
-                    searchFunc();
-                  "
+                  @input="searchName(store.filter)"
                   type="search"
-                  id="simple-search"
                   class="block w-full p-2 pl-10 text-sm border border-gray-300 rounded-xl bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
                   placeholder="Qidirish..."
                 />
-                <ul
-                  v-show="store.filter_show"
-                  class="absolute z-10 w-full py-1 overflow-hidden overflow-y-auto text-gray-600 bg-white rounded max-h-80"
-                  :class="{ hidden: !store.searchList.length }"
-                >
-                  <li
-                    class="pl-2 cursor-pointer hover:bg-gray-100"
-                    v-for="(i, index) in store.searchList"
-                    :key="index"
-                    @click="
-                      store.filter = i.subject?.name;
-                      searchFunc();
-                    "
-                  >
-                    {{ i.subject?.name }}
-                  </li>
-                </ul>
               </div>
             </form>
           </div>
@@ -478,58 +455,7 @@
                   :class="
                     navbar.userNav ? 'hover:bg-gray-700' : 'hover:bg-gray-50'
                   "
-                  v-show="!store.searchList.length"
-                  v-for="i in store.PageProduct"
-                  :key="i"
-                >
-                  <th
-                    scope="row"
-                    class="px-8 py-3 font-medium text-center whitespace-nowrap"
-                  >
-                    {{ i.subject?.name }}
-                  </th>
-                  <td
-                    class="px-8 py-4 font-medium text-center text-blue-800 whitespace-nowrap"
-                  >
-                    <p class="bg-blue-100 rounded-[5px] p-1">
-                      {{ i.count }}
-                    </p>
-                  </td>
-                  <td
-                    class="px-8 py-4 font-medium text-center text-red-800 whitespace-nowrap"
-                  >
-                    <p class="bg-red-100 rounded-[5px] p-1">
-                      {{ i.time }} daqiqa
-                    </p>
-                  </td>
-                  <td class="px-8 py-3 font-medium text-center">
-                    <button
-                      @click="enterSlug(i.id)"
-                      class="btnKirish bg-blue-600 rounded-xl px-5 py-2.5 text-white focus:ring-2"
-                    >
-                      Qo'shish
-                    </button>
-                  </td>
-                  <td class="pr-5 font-medium text-center whitespace-nowrap">
-                    <i
-                      @click="getOneProduct(i.id)"
-                      class="p-2 mr-3 text-blue-600 bg-blue-300 cursor-pointer rounded-xl bx bxs-pencil focus:ring-2"
-                    >
-                    </i>
-                    <i
-                      @click="deleteFunc(i.id)"
-                      class="p-2 text-red-600 bg-red-300 cursor-pointer rounded-xl bx bxs-trash focus:ring-2"
-                    >
-                    </i>
-                  </td>
-                </tr>
-                <tr
-                  class="border-b"
-                  :class="
-                    navbar.userNav ? 'hover:bg-gray-700' : 'hover:bg-gray-50'
-                  "
-                  v-show="store.searchList.length"
-                  v-for="i in store.searchList"
+                  v-for="i in store.testData"
                   :key="i"
                 >
                   <th
@@ -576,14 +502,14 @@
               </tbody>
             </table>
             <div
-              v-show="store.PageProduct.length === 0"
+              v-show="store.testData.length === 0"
               class="w-full p-20 text-2xl font-medium text-center max-w-screen"
             >
               <h1>Testlar ro'yhati bo'sh</h1>
             </div>
           </div>
           <nav
-            v-if="!store.searchList.length"
+            v-if="!store.searchLamp"
             class="flex flex-row items-center justify-between p-4 space-y-0"
             aria-label="Table navigation"
           >
@@ -656,7 +582,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref, reactive } from "vue";
+import { onMounted, ref, reactive, computed } from "vue";
 import { useRouter } from "vue-router";
 import { useNavStore } from "../../stores/toggle";
 import { Placeholder2 } from "../../components";
@@ -669,60 +595,34 @@ const router = useRouter();
 
 const modal = ref(false);
 
+// Computed properties
+const schoolId = computed(() => localStorage.getItem("school_id"));
+const token = computed(() => localStorage.getItem("token"));
+const authHeaders = computed(() => ({
+  Authorization: `Bearer ${token.value}`,
+}));
+
 const store = reactive({
-  PageProduct: "",
+  testData: "",
   page: [],
   pagination: 1,
-  allProducts: false,
   error: false,
   subjects: [{ title: "Fan yaratilmagan" }],
-  guard: false,
   filter: "",
   filter_show: false,
-  searchList: [],
+  searchLamp: false,
+  searchTimer: null,
 });
 
-// ---------------------------- search ------------------------------------
-function searchFunc() {
-  store.searchList = [];
-  for (let i of store.allProducts) {
-    if (i.subject?.name.toLowerCase().includes(store.filter.toLowerCase())) {
-      store.searchList.push(i);
-    }
-  }
+// Helper function
+const handleError = (
+  message = "Xatolik! Nimadir noto'g'ri. Internetni tekshirib qaytadan urinib ko'ring!"
+) => {
+  notification.warning(message);
+};
 
-  if (!store.filter.length) {
-    store.searchList = [];
-  }
-}
-// ---------------------------- search ------------------------------------
-
-function enterSlug(id) {
-  router.push(`./tests/question/${id}`);
-}
-
-function cancelFunc1() {
-  edit.toggle = false;
-  edit.subject_id = "";
-  edit.count = "";
-  edit.time = "";
-  edit.id = "";
-}
-
-function cancelFunc2() {
-  modal.value = false;
-  form.subject_id = "";
-  form.count = "";
-  form.time = "";
-}
-
-function deleteFunc(id) {
-  remove.id = id;
-  remove.toggle = true;
-}
-
-// ----------------------------------- forms -----------------------------------
-const form = reactive({
+// Reset form data
+const resetFormData = () => ({
   count: "",
   time: "",
   subject_id: "",
@@ -735,6 +635,37 @@ const form = reactive({
   test_group_id: "",
   question_id: "",
 });
+
+function enterSlug(id) {
+  router.push(`./tests/question/${id}`);
+}
+
+function cancelFunc1() {
+  Object.assign(edit, {
+    toggle: false,
+    subject_id: "",
+    count: "",
+    time: "",
+    id: "",
+  });
+}
+
+function cancelFunc2() {
+  modal.value = false;
+  Object.assign(form, {
+    subject_id: "",
+    count: "",
+    time: "",
+  });
+}
+
+function deleteFunc(id) {
+  remove.id = id;
+  remove.toggle = true;
+}
+
+// ----------------------------------- forms -----------------------------------
+const form = reactive(resetFormData());
 
 const edit = reactive({
   subject_id: "",
@@ -750,159 +681,130 @@ const remove = reactive({
 });
 
 // ----------------------------------- axios --------------------------------
-const getAllProduct = () => {
-  axios
-    .get(`/test/getSchoolId/${localStorage.getItem("school_id")}`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    })
-    .then((res) => {
-      store.allProducts = res.data;
-      store.error = false;
-    })
-    .catch((error) => {
-      store.error = true;
-      store.allProducts = error.response.data.message;
-      notification.warning(
-        "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
+
+const searchName = (name) => {
+  store.searchLamp = true;
+  clearTimeout(store.searchTimer);
+
+  store.searchTimer = setTimeout(async () => {
+    if (!name) {
+      getProduct(store.pagination);
+      store.searchLamp = false;
+      return;
+    }
+
+    try {
+      const data = await axios.get(
+        `/v1/test/search/${schoolId.value}/${name}`,
+        { headers: authHeaders.value }
       );
-    });
+      store.testData = data.data;
+    } catch (err) {
+      getProduct(store.pagination);
+      store.searchLamp = false;
+    }
+  }, 350);
 };
 
-const getProduct = (page) => {
-  axios
-    .get(`/test/${localStorage.getItem("school_id")}/page?page=${page}`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    })
-    .then((res) => {
-      store.PageProduct = res.data?.data.records;
-      const pagination = res.data?.data?.pagination;
-      store.page = [pagination.currentPage, pagination.total_count];
+const getProduct = async (page) => {
+  try {
+    const res = await axios.get(
+      `/v1/test/${schoolId.value}/page?page=${page}`,
+      { headers: authHeaders.value }
+    );
 
-      store.error = false;
-    })
-    .catch((error) => {
-      notification.warning(
-        "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
-      );
-    });
+    store.testData = res.data?.data.records || [];
+    const pagination = res.data?.data?.pagination;
+    store.page = [pagination.currentPage, pagination.total_count];
+    store.error = false;
+  } catch (error) {
+    handleError();
+  }
 };
 
-function createProduct() {
+const createProduct = async () => {
   const data = {
-    school_id: Number(localStorage.getItem("school_id")),
+    school_id: Number(schoolId.value),
     subject_id: form.subject_id,
     count: form.count,
     time: form.time,
   };
 
-  axios
-    .post("/test", data, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    })
-    .then((res) => {
-      notification.success("Test yaratildi");
-      form.test_group_id = res.data.id;
-      cancelFunc2();
-      getProduct(1);
-    })
-    .catch((error) => {
-      notification.warning(
-        "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
-      );
+  try {
+    const res = await axios.post("/v1/test", data, {
+      headers: authHeaders.value,
     });
-}
-
-const getOneProduct = (id) => {
-  axios
-    .get(`/test/${id}`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    })
-    .then((res) => {
-      edit.count = res.data.count;
-      edit.time = res.data.time;
-      edit.subject_id = res.data.subject_id;
-      edit.id = id;
-      edit.toggle = true;
-    })
-    .catch((error) => {
-      notification.warning(
-        "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
-      );
-    });
+    notification.success("Test yaratildi");
+    form.test_group_id = res.data.id;
+    cancelFunc2();
+    getProduct(1);
+  } catch (error) {
+    handleError();
+  }
 };
 
-const getSubject = () => {
-  axios
-    .get(`/subject/${localStorage.getItem("school_id")}`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    })
-    .then((res) => {
-      store.subjects = res.data || [{ title: "Fan yaratilmagan" }];
-    })
-    .catch((error) => {
-      notification.warning(
-        "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
-      );
+const getOneProduct = async (id) => {
+  try {
+    const res = await axios.get(`/v1/test/not/${id}`, {
+      headers: authHeaders.value,
     });
+
+    Object.assign(edit, {
+      count: res.data.count,
+      time: res.data.time,
+      subject_id: res.data.subject_id,
+      id: id,
+      toggle: true,
+    });
+  } catch (error) {
+    handleError();
+  }
 };
 
-const editProduct = () => {
+const getSubject = async () => {
+  try {
+    const res = await axios.get(`/v1/subject/add/${schoolId.value}`, {
+      headers: authHeaders.value,
+    });
+    store.subjects = res.data || [{ title: "Fan yaratilmagan" }];
+  } catch (error) {
+    handleError();
+  }
+};
+
+const editProduct = async () => {
   const data = {
-    school_id: Number(localStorage.getItem("school_id")),
+    school_id: Number(schoolId.value),
     count: edit.count,
     time: edit.time,
     subject_id: edit.subject_id,
   };
-  axios
-    .put(`/test/${edit.id}`, data, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    })
-    .then((res) => {
-      notification.success("Test tahrirlandi");
-      getProduct(store.pagination);
-      cancelFunc1();
-    })
-    .catch((error) => {
-      notification.warning(
-        "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
-      );
+
+  try {
+    await axios.put(`/v1/test/${edit.id}`, data, {
+      headers: authHeaders.value,
     });
+    notification.success("Test tahrirlandi");
+    getProduct(store.pagination);
+    cancelFunc1();
+  } catch (error) {
+    handleError();
+  }
 };
 
-const deleteProduct = () => {
-  axios
-    .delete(`/test/${remove.id}`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    })
-    .then((res) => {
-      notification.success("Test o'chirildi");
-      getProduct(store.pagination);
-      remove.toggle = false;
-    })
-    .catch((error) => {
-      notification.warning(
-        "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
-      );
-    });
+const deleteProduct = async () => {
+  try {
+    await axios.delete(`/v1/test/${remove.id}`, { headers: authHeaders.value });
+    notification.success("Test o'chirildi");
+    getProduct(store.pagination);
+    remove.toggle = false;
+  } catch (error) {
+    handleError();
+  }
 };
 
 onMounted(() => {
   getProduct(1);
-  getAllProduct();
   getSubject();
 });
 </script>

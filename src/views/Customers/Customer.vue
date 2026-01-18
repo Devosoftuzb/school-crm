@@ -3,7 +3,7 @@
     <!-- ---------------------------------------- Statistic ------------------------------------- -->
 
     <div
-      v-show="store.PageProduct"
+      v-show="store.pageData && !store.loaderTime"
       v-for="i in store.statistic"
       :key="i"
       class="flex flex-wrap items-center justify-center cards gap-x-5 gap-y-5"
@@ -241,7 +241,7 @@
           </div>
           <!-- Modal body -->
           <form
-            @submit.prevent="createProduct"
+            @submit.prevent="createCustomer"
             :class="{ darkForm: navbar.userNav }"
           >
             <div class="grid grid-cols-1 gap-4 mb-4 font-medium">
@@ -391,7 +391,7 @@
           </div>
           <!-- Modal body -->
           <form
-            @submit.prevent="editProduct"
+            @submit.prevent="editCustomer"
             :class="{ darkForm: navbar.userNav }"
           >
             <div class="grid grid-cols-1 gap-4 mb-4 font-medium">
@@ -561,7 +561,7 @@
                   Bekor qilish
                 </button>
                 <button
-                  @click="deleteProduct"
+                  @click="deleteCustomer"
                   class="btnAdd cursor-pointer text-white inline-flex items-center bg-[#4141eb] hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-500 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                 >
                   O'chirish
@@ -578,12 +578,15 @@
 
     <section class="pt-4">
       <!------------------------------------------- Search ------------------------------------------->
-      <div v-show="!store.PageProduct">
+      <div v-show="store.loaderTime">
         <Placeholder2 />
       </div>
       <!------------------------------------------- Search ------------------------------------------->
 
-      <div v-show="store.PageProduct" class="w-full max-w-screen mb-28">
+      <div
+        v-show="store.pageData && !store.loaderTime"
+        class="w-full max-w-screen mb-28"
+      >
         <!-- Start coding here -->
 
         <!------------------------------------------- Search ------------------------------------------->
@@ -620,7 +623,7 @@
                 id="name"
                 class="bg-white text-black rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-[7px]"
                 required
-                @change="getProduct(store.pagination)"
+                @change="getPageCustomer(store.pagination)"
               >
                 <option value="" disabled selected>Yilni tanlang</option>
                 <option
@@ -637,7 +640,7 @@
                 v-model="history.month"
                 id="month"
                 class="bg-white text-black rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-[7px]"
-                @change="getProduct(store.pagination)"
+                @change="getPageCustomer(store.pagination)"
               >
                 <option value="" disabled selected>Oyni tanlang</option>
                 <option value="01">Yanvar</option>
@@ -656,18 +659,20 @@
             </div>
 
             <div class="flex w-full">
-              <form class="flex items-center w-full font-medium text-gray-900">
-                <label for="simple-search" class="sr-only">Qidiruv</label>
+              <form
+                class="flex items-center w-full font-medium text-gray-900"
+                @submit.prevent
+              >
+                <label class="sr-only">Qidiruv</label>
+
                 <div class="relative w-full">
                   <div
                     class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"
                   >
                     <svg
-                      aria-hidden="true"
                       class="w-5 h-5"
                       fill="currentColor"
-                      viewbox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 20 20"
                     >
                       <path
                         fill-rule="evenodd"
@@ -678,32 +683,11 @@
                   </div>
                   <input
                     v-model="store.filter"
-                    @input="
-                      store.filter_show = true;
-                      searchFunc();
-                    "
+                    @input="searchName(store.filter)"
                     type="search"
-                    id="simple-search"
                     class="block w-full p-2 pl-10 text-sm border border-gray-300 rounded-xl bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
-                    placeholder="Qidirish .."
+                    placeholder="Qidirish..."
                   />
-                  <ul
-                    v-show="store.filter_show"
-                    class="absolute z-10 w-full py-1 overflow-hidden overflow-y-auto text-gray-600 bg-white rounded max-h-80"
-                    :class="{ hidden: !store.searchList.length }"
-                  >
-                    <li
-                      class="pl-2 cursor-pointer hover:bg-gray-100"
-                      v-for="(i, index) in store.searchList"
-                      :key="index"
-                      @click="
-                        store.filter = i.full_name;
-                        searchFunc();
-                      "
-                    >
-                      {{ i.full_name }}
-                    </li>
-                  </ul>
                 </div>
               </form>
             </div>
@@ -737,8 +721,7 @@
                   :class="
                     navbar.userNav ? 'hover:bg-gray-700' : 'hover:bg-gray-50'
                   "
-                  v-show="!store.searchList.length"
-                  v-for="i in store.PageProduct"
+                  v-for="i in store.pageData"
                   :key="i"
                 >
                   <th
@@ -764,13 +747,13 @@
                           i.description && i.description.split(" ").length > 3
                             ? i.description.split(" ").slice(0, 3).join(" ") +
                               "..."
-                            : i.description
+                            : i.description || "Izoh kiritilmagan"
                         }}
                       </p>
                       <span
                         class="absolute hidden max-w-xs p-2 mb-1 text-sm text-blue-800 -translate-x-1/2 bg-blue-100 rounded-md shadow-lg left-1/2 bottom-full w-max group-hover:block"
                       >
-                        {{ i.description }}
+                        {{ i.description || "Izoh kiritilmagan" }}
                       </span>
                     </div>
                   </td>
@@ -782,7 +765,7 @@
                   </td>
                   <td class="px-8 py-3 font-medium text-center">
                     <button
-                      @click="getOneProduct(i.id, 'student')"
+                      @click="getOneCustomer(i.id, 'student')"
                       class="btnKirish bg-blue-600 rounded-xl px-5 py-2.5 text-white focus:ring-2 whitespace-nowrap"
                     >
                       O'quvchi qilish
@@ -793,69 +776,7 @@
                     class="pr-5 font-medium text-center whitespace-nowrap"
                   >
                     <i
-                      @click="getOneProduct(i.id, 'edit')"
-                      class="p-2 mr-3 text-blue-600 bg-blue-300 cursor-pointer rounded-xl bx bxs-pencil focus:ring-2"
-                    >
-                    </i>
-                    <i
-                      @click="deleteFunc(i.id)"
-                      class="p-2 text-red-600 bg-red-300 cursor-pointer rounded-xl bx bxs-trash focus:ring-2"
-                    >
-                    </i>
-                  </td>
-                </tr>
-                <tr
-                  class="border-b"
-                  :class="
-                    navbar.userNav ? 'hover:bg-gray-700' : 'hover:bg-gray-50'
-                  "
-                  v-show="store.searchList.length"
-                  v-for="i in store.searchList"
-                  :key="i"
-                >
-                  <th
-                    scope="row"
-                    class="px-8 py-3 font-medium text-center whitespace-nowrap"
-                  >
-                    <span>{{ i.full_name }}</span>
-                  </th>
-                  <td class="px-8 py-2 font-medium text-center text-red-800">
-                    <p class="bg-red-100 whitespace-nowrap rounded-[5px] p-1">
-                      {{ i.phone_number }}
-                    </p>
-                  </td>
-                  <td class="px-8 py-2 font-medium text-center text-blue-800">
-                    <p class="bg-blue-100 whitespace-nowrap rounded-[5px] p-1">
-                      {{ i.subject == null ? "..." : i.subject.name }}
-                    </p>
-                  </td>
-                  <td class="px-8 py-2 font-medium text-center">
-                    <p
-                      class="whitespace-nowrap rounded-[5px] p-1 truncate w-40 inline-flex justify-center"
-                    >
-                      {{ i.description === null ? "..." : i.description }}
-                    </p>
-                  </td>
-                  <td class="px-8 py-2 font-medium text-center text-blue-800">
-                    <p class="bg-blue-100 whitespace-nowrap rounded-[5px] p-1">
-                      {{ i.social_media.name }}
-                    </p>
-                  </td>
-
-                  <td class="px-8 py-3 font-medium text-center">
-                    <button
-                      @click="getOneProduct(i.id, 'student')"
-                      class="btnKirish bg-blue-600 rounded-xl px-5 py-2.5 text-white focus:ring-2 whitespace-nowrap"
-                    >
-                      O'quvchi qilish
-                    </button>
-                  </td>
-                  <td
-                    v-show="!store.guard"
-                    class="pr-5 font-medium text-center whitespace-nowrap"
-                  >
-                    <i
-                      @click="getOneProduct(i.id, 'edit')"
+                      @click="getOneCustomer(i.id, 'edit')"
                       class="p-2 mr-3 text-blue-600 bg-blue-300 cursor-pointer rounded-xl bx bxs-pencil focus:ring-2"
                     >
                     </i>
@@ -869,18 +790,17 @@
               </tbody>
             </table>
             <div
-              v-show="!store.PageProduct || store.PageProduct.length === 0"
+              v-show="!store.pageData || store.pageData.length === 0"
               class="w-full p-20 text-2xl font-medium text-center max-w-screen"
             >
               <h1>Mijozlar ro'yhati bo'sh</h1>
             </div>
           </div>
           <nav
-            v-if="!store.searchList.length"
+            v-show="!store.searchLamp"
             class="flex flex-row items-center justify-between p-4 space-y-0"
             aria-label="Table navigation"
           >
-            <!-- Oldingi sahifa tugmasi -->
             <ul class="flex items-center">
               <li
                 :class="[
@@ -890,10 +810,8 @@
                   'flex font-bold text-black border-2 bg-white hover:bg-gray-300 items-center justify-center text-sm sm:py-2 sm:px-6 px-3 rounded-xl leading-tight cursor-pointer transition duration-200 ease-in-out',
                 ]"
                 @click="
-                  if (store.pagination > 1) {
-                    store.pagination -= 1;
-                    getProduct(store.pagination);
-                  }
+                  store.pagination = store.page.current - 1;
+                  getPageCustomer(store.pagination);
                 "
               >
                 <i
@@ -903,34 +821,27 @@
               </li>
             </ul>
 
-            <!-- Sahifa raqami -->
-            <span class="text-sm font-normal text-center">
+            <span class="text-sm text-center">
               Sahifa
               <span class="font-semibold">
-                <span>{{ store.page[0] * 15 - 14 }}</span> -
-                <span v-if="store.page[0] * 15 < store.page[1]">{{
-                  store.page[0] * 15
-                }}</span
-                ><span v-else>{{ store.page[1] }}</span>
+                {{ (store.page.current - 1) * 15 + 1 }} -
+                {{ Math.min(store.page.current * 15, store.page.total) }}
               </span>
               dan
-              <span class="font-semibold">{{ store.page[1] }}</span>
+              <span class="font-semibold">{{ store.page.total }}</span>
             </span>
 
-            <!-- Keyingi sahifa tugmasi -->
             <ul class="flex items-center">
               <li
                 :class="[
-                  store.page[0] * 15 >= store.page[1]
+                  store.page.current * 15 >= store.page.total
                     ? 'pointer-events-none opacity-50'
                     : '',
                   'flex font-bold text-black border-2 bg-white hover:bg-gray-300 items-center justify-center text-sm sm:py-2 sm:px-6 px-3 rounded-xl leading-tight cursor-pointer transition duration-200 ease-in-out',
                 ]"
                 @click="
-                  if (store.page[0] * 15 < store.page[1]) {
-                    store.pagination += 1;
-                    getProduct(store.pagination);
-                  }
+                  store.pagination = store.page.current + 1;
+                  getPageCustomer(store.pagination);
                 "
               >
                 <span class="hidden md:block">Keyingi</span>
@@ -949,7 +860,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref, reactive } from "vue";
+import { onMounted, ref, reactive, computed } from "vue";
 import { useNavStore } from "../../stores/toggle";
 import { Placeholder2 } from "../../components";
 import { useNotificationStore } from "../../stores/notification";
@@ -964,28 +875,42 @@ const now = new Date();
 const year = now.getFullYear();
 const orqaYil = now.getFullYear() - 2;
 
+const schoolId = computed(() => localStorage.getItem("school_id"));
+const token = computed(() => localStorage.getItem("token"));
+const authHeaders = computed(() => ({
+  Authorization: `Bearer ${token.value}`,
+}));
+
 const toggleModal = () => {
   modal.value = !modal.value;
-  form.full_name = "";
-  form.phone_number = "+998";
-  form.social_media_id = "";
-  form.subject_id = "";
-  form.description = "";
+
+  Object.assign(form, {
+    full_name: "",
+    phone_number: "+998",
+    social_media_id: "",
+    subject_id: "",
+    description: "",
+  });
+
+  if (!store.subject.length) getSubjects();
+  if (!store.social_link.length) getSocialLink();
 };
 
 const store = reactive({
-  PageProduct: "",
-  page: [],
+  pageData: [],
+  page: { current: 1, total: 1 },
   pagination: 1,
-  allProducts: [],
   error: false,
   groups: [{ name: "Guruh yaratilmagan" }],
-  social_link: "",
+  social_link: [],
   filter: "",
   searchList: [],
-  subject: "",
+  subject: [],
   statistic: false,
   curentYil: [],
+  searchTimer: null,
+  loaderTime: true,
+  searchLamp: false,
 });
 
 const form = reactive({
@@ -1021,23 +946,20 @@ const history = reactive({
   month: "",
 });
 
-// ---------------------------- qidiruv funksiyasi ------------------------------------
-function searchFunc() {
-  store.searchList = store.allProducts.filter((i) =>
-    i.full_name.toLowerCase().includes(store.filter.toLowerCase())
-  );
-
-  if (!store.filter.length) {
-    store.searchList = [];
-  }
-}
+const handleError = (
+  message = "Xatolik! Internetni tekshirib qaytadan urinib ko'ring!"
+) => {
+  notification.warning(message);
+};
 
 function cancelFunc() {
-  form.full_name = "";
-  form.phone_number = "+998";
-  form.social_media_id = "";
-  form.subject_id = "";
-  form.description = "";
+  Object.assign(form, {
+    full_name: "",
+    phone_number: "+998",
+    social_media_id: "",
+    subject_id: "",
+    description: "",
+  });
   modal.value = false;
 }
 
@@ -1048,73 +970,72 @@ function deleteFunc(id) {
 
 // ----------------------------------- axios so'rovlari --------------------------------
 const getStatistic = async (date) => {
-  await axios
-    .get(`/statistic/customer/${localStorage.getItem("school_id")}/${date}`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    })
-    .then((res) => {
-      store.statistic = res.data;
-    })
-    .catch((error) => {});
-};
-
-const getAllProduct = async () => {
   try {
     const res = await axios.get(
-      `/customer/${localStorage.getItem("school_id")}`,
-      {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      }
+      `/v1/statistic/customer/${schoolId.value}/${date}`,
+      { headers: authHeaders.value }
     );
-    store.allProducts = res.data;
-    store.error = false;
-  } catch (error) {
-    store.allProducts = [];
-    store.error = true;
-  }
+    store.statistic = res.data;
+  } catch {}
 };
 
-const getProduct = async (page) => {
-  try {
-    let res = null;
-    if (history.month && history.month !== "") {
-      res = await axios.get(
-        `/customer/month/${localStorage.getItem("school_id")}/${history.year}/${
-          history.month
-        }/page?page=${page}`,
-        {
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-        }
-      );
-      getStatistic(`${history.year}-${history.month}`);
-    } else {
-      res = await axios.get(
-        `/customer/year/${localStorage.getItem("school_id")}/${
-          history.year
-        }/page?page=${page}`,
-        {
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-        }
-      );
-      getStatistic(history.year);
+const searchName = (name) => {
+  store.searchLamp = true;
+  clearTimeout(store.searchTimer);
+
+  store.searchTimer = setTimeout(async () => {
+    if (!name) {
+      store.pageData = [];
+      getPageCustomer(store.pagination);
+      store.searchLamp = false;
+      return;
     }
 
-    store.PageProduct = res.data?.data?.records;
-    const pagination = res.data?.data?.pagination;
-    store.page = [pagination.currentPage, pagination.total_count];
+    try {
+      const res = await axios.get(
+        `/v1/customer/search/${schoolId.value}/${name}`,
+        { headers: authHeaders.value }
+      );
+      store.pageData = res.data;
+    } catch {
+      store.pageData = [];
+      store.searchLamp = false;
+    }
+  }, 350);
+};
+
+const getPageCustomer = async (page) => {
+  try {
+    const url = history.month
+      ? `/v1/customer/month/${schoolId.value}/${history.year}/${history.month}/page?page=${page}`
+      : `/v1/customer/year/${schoolId.value}/${history.year}/page?page=${page}`;
+
+    const res = await axios.get(url, { headers: authHeaders.value });
+
+    const pagination = res.data.data.pagination;
+    store.pageData = res.data.data.records;
+    store.page = {
+      current: pagination.currentPage,
+      total: pagination.total_count,
+    };
+
+    getStatistic(
+      history.month ? `${history.year}-${history.month}` : history.year
+    );
+
     store.error = false;
-  } catch (error) {
-    store.PageProduct = [];
+    store.loaderTime = false;
+  } catch {
+    store.pageData = [];
     store.error = true;
+    store.loaderTime = false;
   }
 };
 
 const getGroups = async () => {
   try {
-    const res = await axios.get(`/group/${localStorage.getItem("school_id")}`, {
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    const res = await axios.get(`/v1/group/add/${schoolId.value}`, {
+      headers: authHeaders.value,
     });
     store.groups = res.data;
   } catch (error) {
@@ -1122,14 +1043,11 @@ const getGroups = async () => {
   }
 };
 
-const getSubject = async () => {
+const getSubjects = async () => {
   try {
-    const res = await axios.get(
-      `/subject/${localStorage.getItem("school_id")}`,
-      {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      }
-    );
+    const res = await axios.get(`/v1/subject/add/${schoolId.value}`, {
+      headers: authHeaders.value,
+    });
     store.subject = res.data || [{ name: "Fan yaratilmagan" }];
   } catch (error) {
     store.subject = [{ name: "Fan yaratilmagan" }];
@@ -1138,167 +1056,142 @@ const getSubject = async () => {
 
 const getSocialLink = async () => {
   try {
-    const res = await axios.get(
-      `/social-media/${localStorage.getItem("school_id")}`,
-      {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      }
-    );
+    const res = await axios.get(`/v1/social-media/add/${schoolId.value}`, {
+      headers: authHeaders.value,
+    });
     store.social_link = res.data;
   } catch (error) {
     store.social_link = "";
   }
 };
 
-const getOneProduct = async (id, modal) => {
+const getOneCustomer = async (id, modal) => {
   try {
-    const res = await axios.get(
-      `/customer/${localStorage.getItem("school_id")}/${id}`,
-      {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      }
-    );
-    const data = res.data;
-    Object.assign(edit, data, {
+    const res = await axios.get(`/v1/customer/${schoolId.value}/${id}`, {
+      headers: authHeaders.value,
+    });
+
+    Object.assign(edit, res.data, {
       id,
       toggle: modal === "edit",
       modal: modal === "student",
     });
-    if (modal === "student") remove.id = id;
+
+    if (modal === "student") {
+      getGroups();
+      remove.id = id;
+    } else {
+      getSubjects();
+      getSocialLink();
+    }
   } catch (error) {
-    notification.warning(
-      "Xatolik! Internetni tekshirib qaytadan urinib ko‘ring!"
-    );
+    handleError();
   }
 };
 
-const createProduct = async () => {
+const createCustomer = async () => {
   try {
     const data = {
       ...form,
-      school_id: Number(localStorage.getItem("school_id")),
+      school_id: Number(schoolId.value),
     };
-    await axios.post("/customer", data, {
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-    });
+
+    await axios.post("/v1/customer", data, { headers: authHeaders.value });
+
     notification.success("Mijoz qo'shildi");
-    getProduct(store.pagination);
+    getPageCustomer(store.pagination);
     cancelFunc();
-  } catch (error) {
-    console.log(error);
-    notification.warning(
-      "Xatolik! Internetni tekshirib qaytadan urinib ko‘ring!"
-    );
+  } catch {
+    handleError();
   }
 };
 
-const editProduct = async () => {
+const editCustomer = async () => {
   try {
     const data = {
-      ...edit,
-      school_id: Number(localStorage.getItem("school_id")),
+      full_name: edit.full_name,
+      phone_number: edit.phone_number,
+      social_media_id: edit.social_media_id,
+      subject_id: edit.subject_id,
+      description: edit.description,
+      school_id: Number(schoolId.value),
     };
-    await axios.put(
-      `/customer/${localStorage.getItem("school_id")}/${edit.id}`,
-      data,
-      {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      }
-    );
+
+    await axios.put(`/v1/customer/${schoolId.value}/${edit.id}`, data, {
+      headers: authHeaders.value,
+    });
+
     notification.success("Mijoz tahrirlandi");
-    getProduct(store.pagination);
+    getPageCustomer(store.pagination);
     edit.toggle = false;
-  } catch (error) {
-    notification.warning(
-      "Xatolik! Internetni tekshirib qaytadan urinib ko‘ring!"
-    );
+  } catch {
+    handleError();
   }
 };
 
-const deleteProduct = async () => {
+const deleteCustomer = async () => {
   try {
-    await axios.delete(
-      `/customer/${localStorage.getItem("school_id")}/${remove.id}`,
-      {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      }
-    );
+    await axios.delete(`/v1/customer/${schoolId.value}/${remove.id}`, {
+      headers: authHeaders.value,
+    });
+
     if (remove.toggle) notification.success("Mijoz o'chirildi");
     remove.toggle = false;
-    getProduct(store.pagination);
+    getPageCustomer(store.pagination);
   } catch (error) {
-    notification.warning(
-      "Xatolik! Internetni tekshirib qaytadan urinib ko‘ring!"
-    );
+    handleError();
   }
 };
 
 const createStudent = async () => {
   try {
     const data = {
-      school_id: Number(localStorage.getItem("school_id")),
+      school_id: Number(schoolId.value),
       parents_full_name: edit.parents_full_name,
       parents_phone_number: edit.parents_phone_number,
       full_name: edit.full_name,
       phone_number: edit.phone_number,
       status: true,
+      group_id: edit.group_id,
     };
-    const res = await axios.post("/student", data, {
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-    });
+
+    await axios.post("/student", data, { headers: authHeaders.value });
+
     notification.success("Mijoz o'quvchiga qo'shildi");
     edit.is_student = true;
-    editProduct();
-    addGroupsModal(res.data.student.id);
+    updateStatus();
+
     edit.parents_full_name = "Hurmatli ota-ona";
     edit.parents_phone_number = "+998";
     edit.modal = false;
   } catch (error) {
-    notification.warning(
-      "Xatolik! Internetni tekshirib qaytadan urinib ko‘ring!"
-    );
+    handleError();
   }
 };
 
-const addGroupsModal = async (id) => {
+const updateStatus = async () => {
   try {
-    const groupRes = await axios.get(
-      `/group/${localStorage.getItem("school_id")}/${edit.group_id}/group`,
-      {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      }
-    );
     const data = {
-      student_id: id,
-      group_id: Number(edit.group_id),
-      group_name: groupRes.data.name,
+      is_student: edit.is_student,
     };
-    await axios.post("/student-group", data, {
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+
+    await axios.put(`/v1/customer/status/${schoolId.value}/${edit.id}`, data, {
+      headers: authHeaders.value,
     });
-    edit.group_id = "";
-    getProduct(store.pagination);
+
+    getPageCustomer(store.pagination);
   } catch (error) {
-    notification.warning(
-      "Xatolik! Internetni tekshirib qaytadan urinib ko‘ring!"
-    );
+    handleError();
   }
 };
 
 onMounted(() => {
-  getProduct(store.pagination);
-  getAllProduct();
-  getGroups();
-  getSubject();
-  getSocialLink();
-  getStatistic(history.year);
-  for (let i = 0; i < 5; i++) {
-    let list = {
-      id: i,
-      name: String(orqaYil + i),
-    };
-    store.curentYil.push(list);
-  }
+  getPageCustomer(store.pagination);
+
+  store.curentYil = Array.from({ length: 5 }, (_, i) => ({
+    id: i,
+    name: String(orqaYil + i),
+  }));
 });
 </script>
 

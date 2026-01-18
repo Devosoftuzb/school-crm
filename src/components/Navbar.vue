@@ -116,7 +116,7 @@
               @click="navbar.userInfo = false"
               class="absolute right-0 z-50 w-56 overflow-hidden border shadow-2xl top-14 rounded-xl backdrop-blur-lg"
               :class="{
-                'bg-slate-800/95 border-slate-700': navbar.userNav,
+                'bg-slate-900/95 border-slate-700': navbar.userNav,
                 'bg-white/95 border-slate-200': !navbar.userNav,
               }"
             >
@@ -127,7 +127,7 @@
                 }"
               >
                 <p class="text-lg font-bold capitalize">{{ store.name }}</p>
-                <p class="mt-1 text-sm opacity-70">Admin Panel</p>
+                <p class="mt-1 text-sm opacity-70">{{ store.name }} Panel</p>
               </div>
               <ul class="py-2">
                 <li
@@ -202,7 +202,7 @@ const getOneProduct = () => {
     localStorage.getItem("role") == "_tch_sch_"
   ) {
     axios
-      .get(`/school/${localStorage.getItem("school_id")}`, {
+      .get(`/v1/school/navbar/${localStorage.getItem("school_id")}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },

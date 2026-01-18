@@ -38,11 +38,10 @@ import { header } from "../constants/sidebar";
 import { useNavStore } from "../stores/toggle";
 import { useSidebarStore } from "../stores/sidebar.js";
 import { reactive } from "vue";
-import { useRouter, useRoute } from "vue-router";
+import { useRoute } from "vue-router";
 
 const sidebar = useSidebarStore();
 const navbar = useNavStore();
-const router = useRouter();
 const route = useRoute();
 
 const role = localStorage.getItem("role");
@@ -62,26 +61,18 @@ const store = reactive({
       : "Admin",
 });
 
-const Logout = () => {
-  localStorage.removeItem("id");
-  localStorage.removeItem("role");
-  localStorage.removeItem("token");
-  localStorage.removeItem("school_id");
-  router.push("/login");
-};
-
 const showMenu = (item) => {
   if (!item || !item.role) return false;
 
   const roleArray = item.role.split(",").map((r) => r.trim());
 
-  if (store.guard === "_sp_am_") return true;
+  if (!roleArray.includes(store.guard)) return false;
 
-  if (!item.school) return roleArray.includes(store.guard);
+  if (!item.school || !store.school) return true;
 
   const schoolArray = item.school.split(",").map((s) => s.trim());
+  return schoolArray.includes(store.school);
 
-  return roleArray.includes(store.guard) && schoolArray.includes(store.school);
 };
 
 const isActive = (link) => {
