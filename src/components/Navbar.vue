@@ -127,7 +127,7 @@
                 }"
               >
                 <p class="text-lg font-bold capitalize">{{ store.name }}</p>
-                <p class="mt-1 text-sm opacity-70">Admin Panel</p>
+                <p class="mt-1 text-sm opacity-70">{{ store.name }} Panel</p>
               </div>
               <ul class="py-2">
                 <li
