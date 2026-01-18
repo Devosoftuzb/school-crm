@@ -1777,7 +1777,7 @@
                     </select>
                   </div>
                 </div>
-                
+
                 <div
                   class="flex flex-col justify-center w-full gap-5 pt-5 mt-5 border-t"
                 >
@@ -1865,7 +1865,7 @@
                       :class="navbar.userNav ? 'text-white' : 'text-black'"
                       >Guruhni tanlang</label
                     >
-                    <div class="relative w-full">
+                    <div class="relative w-full text-black">
                       <div
                         class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"
                       >
@@ -1896,14 +1896,14 @@
                         "
                         type="search"
                         id="simple-search"
-                        class="block w-full p-2 pl-10 text-sm border border-gray-300 rounded-xl bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
+                        class="block w-full p-2 pl-10 text-sm text-black border border-gray-300 rounded-xl bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
                         placeholder="Guruhni tanlang yoki qidirish..."
                       />
                       <ul
                         v-show="
                           debtor.filter_show && debtor.searchList.length > 0
                         "
-                        class="absolute z-10 w-full py-1 overflow-hidden overflow-y-auto text-gray-600 bg-white rounded max-h-80 bottom-full"
+                        class="absolute z-10 w-full py-1 overflow-hidden overflow-y-auto text-black bg-white rounded max-h-80 bottom-full"
                       >
                         <li
                           class="pl-2 cursor-pointer hover:bg-blue-600 hover:text-white"
@@ -1921,7 +1921,7 @@
                       </ul>
                       <ul
                         v-show="debtor.selectLamp && !debtor.filter"
-                        class="absolute z-10 w-full py-1 overflow-hidden overflow-y-auto text-gray-600 bg-white rounded max-h-80 bottom-full"
+                        class="absolute z-10 w-full py-1 overflow-hidden overflow-y-auto text-black bg-white rounded max-h-80 bottom-full"
                       >
                         <li
                           class="pl-2 cursor-pointer hover:bg-blue-600 hover:text-white whitespace-nowrap"
@@ -2274,9 +2274,11 @@
                             !i.description || i.description.trim() === ""
                               ? "Izoh yo'q"
                               : i.description.split(" ").length > 3
-                              ? i.description.split(" ").slice(0, 3).join(" ") +
-                                "..."
-                              : i.description
+                                ? i.description
+                                    .split(" ")
+                                    .slice(0, 3)
+                                    .join(" ") + "..."
+                                : i.description
                           }}
                         </p>
                         <span
@@ -2527,9 +2529,9 @@
                           !i.description || i.description.trim() === ""
                             ? "Izoh yo'q"
                             : i.description.split(" ").length > 3
-                            ? i.description.split(" ").slice(0, 3).join(" ") +
-                              "..."
-                            : i.description
+                              ? i.description.split(" ").slice(0, 3).join(" ") +
+                                "..."
+                              : i.description
                         }}
                       </p>
                       <span
@@ -3005,9 +3007,11 @@
                             !i.description || i.description.trim() === ""
                               ? "Izoh yo'q"
                               : i.description.split(" ").length > 3
-                              ? i.description.split(" ").slice(0, 3).join(" ") +
-                                "..."
-                              : i.description
+                                ? i.description
+                                    .split(" ")
+                                    .slice(0, 3)
+                                    .join(" ") + "..."
+                                : i.description
                           }}
                         </p>
                         <span
@@ -3129,26 +3133,29 @@
 </template>
 
 <script setup>
-import { reactive, onMounted } from "vue";
+import { reactive, onMounted, computed } from "vue";
 import { useNavStore } from "../../stores/toggle";
-import { Placeholder2 } from "../../components";
+import { Placeholder2, ButtonLoader, PageLoader } from "../../components";
 import axios from "@/services/axios";
 import { useNotificationStore } from "../../stores/notification";
-import * as XLSX from "xlsx";
-import { saveAs } from "file-saver";
-import { ButtonLoader } from "../../components";
-import { PageLoader } from "../../components";
 
 const notification = useNotificationStore();
 const navbar = useNavStore();
+
 const hozirgiSana = new Date();
 const hozirgiYil = String(hozirgiSana.getFullYear());
 const orqaYil = hozirgiSana.getFullYear() - 2;
-let hozirgiOy = hozirgiSana.getMonth() + 1;
-hozirgiOy = hozirgiOy.toString().padStart(2, "0");
-let hozirgiKun = hozirgiSana.getDate();
+const hozirgiOy = String(hozirgiSana.getMonth() + 1).padStart(2, "0");
+const hozirgiKun = hozirgiSana.getDate();
 
 const userRole = localStorage.getItem("role");
+
+const schoolId = computed(() => localStorage.getItem("school_id"));
+const userId = computed(() => localStorage.getItem("id"));
+const token = computed(() => localStorage.getItem("token"));
+const authHeaders = computed(() => ({
+  Authorization: `Bearer ${token.value}`,
+}));
 
 const loading = reactive({
   view: false,
@@ -3224,100 +3231,6 @@ const costHistory = reactive({
   costList: "",
 });
 
-const costCategoryModal = () => {
-  costCategory.modal = !costCategory.modal;
-  costCategory.categoryName = "";
-};
-
-const costModal = () => {
-  cost.modal = !cost.modal;
-  cost.month = hozirgiOy;
-  cost.category_id = "";
-  cost.price = "";
-  cost.method = "";
-  cost.description = "";
-};
-
-const costUpdateModal = () => {
-  cost.updateModal = !cost.updateModal;
-  cost.id = "";
-  cost.category_id = "";
-  cost.month = hozirgiOy;
-  cost.price = "";
-  cost.method = "";
-  cost.description = "";
-};
-
-const deleteCostCategoryFunc = (id) => {
-  costCategory.id = id;
-  costCategory.remove = true;
-};
-
-const deleteCostFunc = (id) => {
-  cost.id = id;
-  cost.remove = true;
-};
-
-const salaryModal = () => {
-  salary.modal = !salary.modal;
-  salary.month = hozirgiOy;
-  salary.teacher_id = "";
-  salary.price = "";
-  salary.method = "";
-};
-
-const salaryUpdateModal = () => {
-  salary.updateModal = !salary.updateModal;
-  salary.id = "";
-  salary.month = hozirgiOy;
-  salary.price = "";
-  salary.method = "";
-  salary.description = "";
-};
-
-const deleteSalaryFunc = (id) => {
-  salary.id = id;
-  salary.remove = true;
-};
-
-const historyDayModal = () => {
-  history.dayModal = true;
-  history.monthModal = false;
-  history.groupMonthModal = false;
-  history.yearModal = false;
-};
-
-const historyMonthModal = () => {
-  history.dayModal = false;
-  history.monthModal = true;
-  history.groupMonthModal = false;
-  history.yearModal = false;
-};
-
-const historyGroupMonthModal = () => {
-  history.groupMonthModal = true;
-  history.dayModal = false;
-  history.monthModal = false;
-  history.yearModal = false;
-};
-
-const historyYearModal = () => {
-  history.yearModal = true;
-  history.dayModal = false;
-  history.monthModal = false;
-  history.groupMonthModal = false;
-};
-
-const historyModal = () => {
-  history.modal = !history.modal;
-  history.year = hozirgiYil;
-  history.month = hozirgiOy;
-  history.day = hozirgiKun;
-  history.group_id = "";
-  historyDayModal();
-  getHistory(store.teacherPagination);
-};
-
 const history = reactive({
   year: hozirgiYil,
   month: hozirgiOy,
@@ -3352,26 +3265,6 @@ const history = reactive({
   dayPay: 0,
 });
 
-const debtorDayModal = () => {
-  debtor.dayModal = true;
-  debtor.monthModal = false;
-};
-
-const debtorMonthModal = () => {
-  debtor.dayModal = false;
-  debtor.monthModal = true;
-};
-
-const debtorModal = () => {
-  debtor.modal = !debtor.modal;
-  debtor.year = hozirgiYil;
-  debtor.month = hozirgiOy;
-  debtor.day = hozirgiKun;
-  debtor.group_id = "";
-  debtorDayModal();
-  getHistory(store.teacherPagination);
-};
-
 const debtor = reactive({
   year: hozirgiYil,
   month: hozirgiOy,
@@ -3389,82 +3282,47 @@ const debtor = reactive({
   exportList: "",
 });
 
-const monthNames = (month) => {
-  switch (month) {
-    case "01":
-      return "Yanvar";
-    case "02":
-      return "Fevral";
-    case "03":
-      return "Mart";
-    case "04":
-      return "Aprel";
-    case "05":
-      return "May";
-    case "06":
-      return "Iyun";
-    case "07":
-      return "Iyul";
-    case "08":
-      return "Avgust";
-    case "09":
-      return "Sentabr";
-    case "10":
-      return "Oktabr";
-    case "11":
-      return "Noyabr";
-    case "12":
-      return "Dekabr";
-    default:
-      return "Notog'ri oy";
-  }
+const handleError = (
+  message = "Xatolik! Nimadir noto'g'ri. Internetni tekshirib qaytadan urinib ko'ring!",
+) => {
+  notification.warning(message);
 };
 
-function searchHistoryFunc() {
-  history.searchList = [];
-  if (history.filter) {
-    for (let i of store.group) {
-      if (i.name.toLowerCase().includes(history.filter.toLowerCase())) {
-        history.searchList.push(i);
-      }
-    }
-  }
-}
+const monthNames = (month) => {
+  const months = [
+    "Yanvar",
+    "Fevral",
+    "Mart",
+    "Aprel",
+    "May",
+    "Iyun",
+    "Iyul",
+    "Avgust",
+    "Sentabr",
+    "Oktabr",
+    "Noyabr",
+    "Dekabr",
+  ];
+  return months[parseInt(month) - 1] || "Notog'ri oy";
+};
 
-function searchHistoryTeacherFunc() {
-  history.searchList_teacher = [];
-  if (history.filter_teacher) {
-    for (let i of store.employee) {
-      if (
-        i.full_name.toLowerCase().includes(history.filter_teacher.toLowerCase())
-      ) {
-        history.searchList_teacher.push(i);
-      }
-    }
-  }
-}
+const createSearchFilter = (searchObj, data, key, filterProp = "filter") => {
+  searchObj.searchList = [];
+  if (!searchObj[filterProp]) return;
 
-function searchHistoryCostFunc() {
-  history.searchList_cost = [];
-  if (history.filter_cost) {
-    for (let i of store.costCategory) {
-      if (i.name.toLowerCase().includes(history.filter_cost.toLowerCase())) {
-        history.searchList_cost.push(i);
-      }
-    }
-  }
-}
+  const filterLower = searchObj[filterProp].toLowerCase();
+  searchObj.searchList = data.filter((i) =>
+    i[key].toLowerCase().includes(filterLower),
+  );
+};
 
-function searchDebtorFunc() {
-  debtor.searchList = [];
-  if (debtor.filter) {
-    for (let i of store.group) {
-      if (i.name.toLowerCase().includes(debtor.filter.toLowerCase())) {
-        debtor.searchList.push(i);
-      }
-    }
-  }
-}
+const searchHistoryFunc = () =>
+  createSearchFilter(history, store.group, "name");
+const searchHistoryTeacherFunc = () =>
+  createSearchFilter(history, store.employee, "full_name", "filter_teacher");
+const searchHistoryCostFunc = () =>
+  createSearchFilter(history, store.costCategory, "name", "filter_cost");
+const searchDebtorFunc = () => createSearchFilter(debtor, store.group, "name");
 
 const chekDateFormat = (date) => {
   const year = date.getFullYear();
@@ -3472,1166 +3330,694 @@ const chekDateFormat = (date) => {
   const day = String(date.getDate()).padStart(2, "0");
   const hour = String(date.getHours()).padStart(2, "0");
   const minute = String(date.getMinutes()).padStart(2, "0");
-
   return `${year}-${month}-${day}, ${hour}:${minute}`;
 };
 
-// ------------ axios get ------------- //
 
+const setActiveHistoryModal = (type) => {
+  history.dayModal = type === "day";
+  history.monthModal = type === "month";
+  history.groupMonthModal = type === "groupMonth";
+  history.yearModal = type === "year";
+};
+
+const historyDayModal = () => setActiveHistoryModal("day");
+const historyMonthModal = () => setActiveHistoryModal("month");
+const historyGroupMonthModal = () => setActiveHistoryModal("groupMonth");
+const historyYearModal = () => setActiveHistoryModal("year");
+
+const historyModal = () => {
+  Object.assign(history, {
+    modal: !history.modal,
+    year: hozirgiYil,
+    month: hozirgiOy,
+    day: hozirgiKun,
+    group_id: "",
+  });
+  historyDayModal();
+  getHistory(store.teacherPagination);
+};
+
+const setActiveDebtorModal = (type) => {
+  debtor.dayModal = type === "day";
+  debtor.monthModal = type === "month";
+};
+
+const debtorDayModal = () => setActiveDebtorModal("day");
+const debtorMonthModal = () => setActiveDebtorModal("month");
+
+const debtorModal = () => {
+  Object.assign(debtor, {
+    modal: !debtor.modal,
+    year: hozirgiYil,
+    month: hozirgiOy,
+    day: hozirgiKun,
+    group_id: "",
+  });
+  debtorDayModal();
+  getHistory(store.teacherPagination);
+};
+
+const costCategoryModal = () => {
+  costCategory.modal = !costCategory.modal;
+  costCategory.categoryName = "";
+};
+
+const costModal = () => {
+  Object.assign(cost, {
+    modal: !cost.modal,
+    month: hozirgiOy,
+    category_id: "",
+    price: "",
+    method: "",
+    description: "",
+  });
+};
+
+const costUpdateModal = () => {
+  Object.assign(cost, {
+    updateModal: !cost.updateModal,
+    id: "",
+    category_id: "",
+    month: hozirgiOy,
+    price: "",
+    method: "",
+    description: "",
+  });
+};
+
+const salaryModal = () => {
+  Object.assign(salary, {
+    modal: !salary.modal,
+    month: hozirgiOy,
+    teacher_id: "",
+    price: "",
+    method: "",
+  });
+};
+
+const salaryUpdateModal = () => {
+  Object.assign(salary, {
+    updateModal: !salary.updateModal,
+    id: "",
+    month: hozirgiOy,
+    price: "",
+    method: "",
+    description: "",
+  });
+};
+
+const deleteCostCategoryFunc = (id) => {
+  costCategory.id = id;
+  costCategory.remove = true;
+};
+
+const deleteCostFunc = (id) => {
+  cost.id = id;
+  cost.remove = true;
+};
+
+const deleteSalaryFunc = (id) => {
+  salary.id = id;
+  salary.remove = true;
+};
+
+// API Functions - GET
 const getStatistic = async () => {
-  await axios
-    .get(`/statistic/finance/${localStorage.getItem("school_id")}`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    })
-    .then((res) => {
-      store.statistic = res.data;
-    })
-    .catch((error) => {});
+  try {
+    const res = await axios.get(`/v1/statistic/finance/${schoolId.value}`, {
+      headers: authHeaders.value,
+    });
+    store.statistic = res.data;
+  } catch (error) {}
 };
 
 const getStatisticTeacher = async (teacher_id, date) => {
-  await axios
-    .get(
-      `/statistic/payment-day-employee/${localStorage.getItem(
-        "school_id"
-      )}/${teacher_id}/${date}`,
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      }
-    )
-    .then((res) => {
-      store.statisticTeacher = res.data;
-      store.statistic = res.data;
-    })
-    .catch((error) => {});
+  try {
+    const res = await axios.get(
+      `/v1/statistic/payment-day-employee/${schoolId.value}/${teacher_id}/${date}`,
+      { headers: authHeaders.value },
+    );
+    store.statisticTeacher = res.data;
+    store.statistic = res.data;
+  } catch (error) {}
 };
 
 const getStatisticGroup = async (group_id, date) => {
-  await axios
-    .get(
-      `/statistic/payment-day/${localStorage.getItem(
-        "school_id"
-      )}/${group_id}/${date}`,
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      }
-    )
-    .then((res) => {
-      store.statisticTeacher = res.data;
-      store.statistic = res.data;
-    })
-    .catch((error) => {});
+  try {
+    const res = await axios.get(
+      `/v1/statistic/payment-day/${schoolId.value}/${group_id}/${date}`,
+      { headers: authHeaders.value },
+    );
+    store.statisticTeacher = res.data;
+    store.statistic = res.data;
+  } catch (error) {}
 };
 
 const getCostCategory = async () => {
-  await axios
-    .get(`/cost-category/${localStorage.getItem("school_id")}`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    })
-    .then((res) => {
-      store.costCategory = res.data;
-    })
-    .catch((error) => {
-      store.costCategory = [{ name: "Kategoriya yaratilmagan" }];
-    });
-};
-
-const getCost = async (page) => {
-  loading.view = true;
   try {
-    let url;
-    if (history.category_id && history.category_id !== "") {
-      url = `/cost/${localStorage.getItem("school_id")}/${costHistory.year}/${
-        costHistory.month
-      }/${history.category_id}/page?page=${page}`;
-    } else if (costHistory.month && costHistory.month !== "") {
-      url = `/cost/${localStorage.getItem("school_id")}/${costHistory.year}/${
-        costHistory.month
-      }/page?page=${page}`;
-    } else {
-      url = `/cost/${localStorage.getItem("school_id")}/${
-        costHistory.year
-      }/page?page=${page}`;
-    }
-
-    const res = await axios.get(url, {
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    const res = await axios.get(`/v1/cost-category/${schoolId.value}`, {
+      headers: authHeaders.value,
     });
-    store.CostPageProduct = res.data?.data?.records;
-    store.costPage = [
-      res.data?.data?.pagination.currentPage,
-      res.data?.data?.pagination.total_count,
-    ];
-    loading.view = false;
-    store.error = false;
+    store.costCategory = res.data;
   } catch (error) {
-    console.log(error);
-    loading.view = false;
-    store.CostPageProduct = error.response.data.message;
-    store.error = true;
+    store.costCategory = [{ name: "Kategoriya yaratilmagan" }];
   }
 };
 
-const getSalary = async (page) => {
+const getCost = async (page = 1) => {
   loading.view = true;
-  try {
-    let url;
-    if (history.teacher_id && history.teacher_id !== "") {
-      url = `/salary/teacherSalary/${localStorage.getItem("school_id")}/${
-        history.teacher_id
-      }/${salaryHistory.year}/${salaryHistory.month}/page?page=${page}`;
-    } else if (salaryHistory.month && salaryHistory.month !== "") {
-      url = `/salary/${localStorage.getItem("school_id")}/${
-        salaryHistory.year
-      }/${salaryHistory.month}/page?page=${page}`;
-    } else {
-      url = `/salary/${localStorage.getItem("school_id")}/${
-        salaryHistory.year
-      }/page?page=${page}`;
-    }
 
-    const res = await axios.get(url, {
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+  try {
+    const params = { page };
+
+    if (costHistory.year) params.year = costHistory.year;
+    if (costHistory.month) params.month = costHistory.month;
+    if (history.category_id) params.category_id = history.category_id;
+
+    const res = await axios.get(`/v1/cost/${schoolId.value}`, {
+      params,
+      headers: authHeaders.value,
     });
 
-    store.SalaryPageProduct = res.data?.data?.records;
-    store.salaryPage = [
-      res.data?.data?.pagination.currentPage,
-      res.data?.data?.pagination.total_count,
-    ];
-    loading.view = false;
+    const pagination = res.data?.data?.pagination;
+    store.CostPageProduct = res.data?.data?.records || [];
+    store.costPage = [pagination.currentPage, pagination.total_count];
     store.error = false;
   } catch (error) {
-    loading.view = false;
-    store.SalaryPageProduct = error.response?.data?.message || error.message;
+    console.error(error);
+    store.CostPageProduct =
+      error?.response?.data?.message || "Xatolik yuz berdi";
     store.error = true;
+  } finally {
+    loading.view = false;
+  }
+};
+
+const getSalary = async (page = 1) => {
+  loading.view = true;
+
+  try {
+    const params = { page };
+
+    if (salaryHistory.year) params.year = salaryHistory.year;
+    if (salaryHistory.month) params.month = salaryHistory.month;
+
+    if (!store.guard) {
+      params.teacher_id = userId.value;
+    } else if (history.teacher_id) {
+      params.teacher_id = history.teacher_id;
+    }
+
+    const res = await axios.get(`/v1/salary/${schoolId.value}`, {
+      params,
+      headers: authHeaders.value,
+    });
+
+    const pagination = res.data?.data?.pagination;
+    store.SalaryPageProduct = res.data?.data?.records || [];
+    store.salaryPage = [pagination.currentPage, pagination.total_count];
+    store.error = false;
+  } catch (error) {
+    console.error(error);
+    store.SalaryPageProduct =
+      error?.response?.data?.message || "Xatolik yuz berdi";
+    store.error = true;
+  } finally {
+    loading.view = false;
   }
 };
 
 const getMethod = async () => {
-  await axios
-    .get(`/payment-method/${localStorage.getItem("school_id")}`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    })
-    .then((res) => {
-      store.method = res.data;
-    })
-    .catch((error) => {
-      store.method = [{ name: "To'lov turi yaratilmagan" }];
+  try {
+    const res = await axios.get(`/v1/payment-method/${schoolId.value}`, {
+      headers: authHeaders.value,
     });
+    store.method = res.data;
+  } catch (error) {
+    store.method = [{ name: "To'lov turi yaratilmagan" }];
+  }
 };
 
 const getEmployee = async () => {
-  await axios
-    .get(`/employee/${localStorage.getItem("school_id")}`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    })
-    .then((res) => {
-      store.employee = res.data.filter(
-        (record) => record.role == "teacher"
-      ) || [{ name: "O'qituvchi yaratilmagan" }];
-    })
-    .catch((error) => {
-      store.employee = error.response.data.message;
+  try {
+    const res = await axios.get(`/v1/employee/add/${schoolId.value}`, {
+      headers: authHeaders.value,
     });
+    store.employee = res.data;
+  } catch (error) {
+    store.employee = error.response?.data?.message || [];
+  }
 };
 
 const getOneCost = async (id) => {
   try {
-    const res = await axios.get(
-      `/cost/${localStorage.getItem("school_id")}/${id}`,
-      {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      }
-    );
+    const res = await axios.get(`/v1/cost/${schoolId.value}/${id}`, {
+      headers: authHeaders.value,
+    });
 
-    cost.id = res.data.id;
-    cost.category_id = res.data.category_id;
-    cost.price = res.data.price;
-    cost.method = res.data.method;
-    cost.month = res.data.month;
-    cost.description = res.data.description;
-    cost.updateModal = true;
+    Object.assign(cost, {
+      id: res.data.id,
+      category_id: res.data.category_id,
+      price: res.data.price,
+      method: res.data.method,
+      month: res.data.month,
+      description: res.data.description,
+      updateModal: true,
+    });
   } catch (error) {
-    notification.warning(
-      "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
-    );
+    handleError();
   }
 };
 
 const getOneSalary = async (id) => {
   try {
-    const res = await axios.get(
-      `/salary/${localStorage.getItem("school_id")}/${id}`,
-      {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      }
-    );
+    const res = await axios.get(`/v1/salary/${schoolId.value}/${id}`, {
+      headers: authHeaders.value,
+    });
 
-    salary.id = res.data.id;
-    salary.teacher_id = res.data.teacher_id;
-    salary.price = res.data.price;
-    salary.method = res.data.method;
-    salary.month = res.data.month;
-    salary.description = res.data.description;
-    salary.updateModal = true;
+    Object.assign(salary, {
+      id: res.data.id,
+      teacher_id: res.data.teacher_id,
+      price: res.data.price,
+      method: res.data.method,
+      month: res.data.month,
+      description: res.data.description,
+      updateModal: true,
+    });
   } catch (error) {
-    notification.warning(
-      "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
-    );
+    handleError();
   }
 };
 
-const getHistory = async (page) => {
+const getHistory = async (page = 1) => {
   loading.view = true;
   debtor.isTable = false;
-  const id = localStorage.getItem("id");
-  const schoolId = localStorage.getItem("school_id");
-  const token = localStorage.getItem("token");
+
+  if (!userId.value || !schoolId.value) return;
+
   const config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
+    headers: authHeaders.value,
+    params: {
+      school_id: schoolId.value,
+      employee_id: userId.value,
+      page,
+      status: history.status || "all",
     },
   };
 
-  let url;
   if (history.dayModal) {
-    url = `/payment/employeeDay/${schoolId}/${id}/${history.year}/${history.month}/${history.day}/page?page=${page}`;
+    Object.assign(config.params, {
+      year: history.year,
+      month: history.month,
+      day: history.day,
+    });
     await getStatisticTeacher(
-      id,
-      `${history.year}-${history.month}-${history.day}`
+      userId.value,
+      `${history.year}-${history.month}-${history.day}`,
     );
   } else if (history.monthModal) {
-    url = `/payment/employeeMonth/${schoolId}/${id}/${history.year}/${history.month}/page?page=${page}`;
-    await getStatisticTeacher(id, `${history.year}-${history.month}`);
+    Object.assign(config.params, {
+      year: history.year,
+      month: history.month,
+    });
+    await getStatisticTeacher(userId.value, `${history.year}-${history.month}`);
   } else if (history.groupMonthModal) {
-    url = `/payment/groupMonth/${schoolId}/${history.group_id}/${history.year}/${history.month}/all/page?page=${page}`;
+    Object.assign(config.params, {
+      group_id: history.group_id,
+      year: history.year,
+      month: history.month,
+    });
     await getStatisticGroup(
       history.group_id,
-      `${history.year}-${history.month}`
+      `${history.year}-${history.month}`,
     );
   } else if (history.yearModal) {
-    url = `/payment/employeeYear/${schoolId}/${id}/${history.year}/page?page=${page}`;
+    config.params.year = history.year;
   } else {
+    loading.view = false;
     return;
   }
 
-  await axios
-    .get(url, config)
-    .then((res) => {
-      const records = res.data.data.records;
-      if (records.length !== 0) {
-        history.group_name = records[0].group_name;
-      }
-      history.dayPay = res.data?.data?.total_sum;
-      store.PageProduct = records;
-      const pagination = res.data?.data?.pagination;
-      store.teacherPage = [pagination.currentPage, pagination.total_count];
-      loading.view = false;
-      history.modal = false;
-    })
-    .catch((error) => {
-      loading.view = false;
-      store.PageProduct = error.response?.data?.message;
-    });
-};
+  try {
+    const res = await axios.get(`/v1/payment/history`, config);
+    const records = res.data?.data?.records || [];
 
-const getGroups = async () => {
-  if (store.guard) {
-    // try {
-    //   const res = await axios.get(
-    //     `/group/${localStorage.getItem("school_id")}/find`,
-    //     {
-    //       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-    //     }
-    //   );
-    //   store.allProducts = res.data.sort((a, b) => b.id - a.id);
-    //   store.error = false;
-    // } catch (error) {
-    //   store.allProducts = error.response.data.message;
-    //   store.error = true;
-    // }
-  } else {
-    const schoolId = localStorage.getItem("school_id");
-    const token = localStorage.getItem("token");
-    const id = localStorage.getItem("id");
+    if (records.length) history.group_name = records[0].group_name;
+    history.dayPay = res.data?.data?.total_sum || 0;
 
-    try {
-      const employeeRes = await axios.get(`/employee/${schoolId}/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      const employeeData = employeeRes.data;
+    store.PageProduct = records;
+    const pagination = res.data?.data?.pagination;
+    store.teacherPage = [pagination.currentPage, pagination.total_count];
 
-      store.teacher_name = employeeData.full_name;
-
-      const groupPromises = employeeData.group.map(async (group) => {
-        const groupRes = await axios.get(
-          `/group/${schoolId}/${group.group_id}/not`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
-        const groupData = groupRes.data;
-        store.groupList.push(groupData);
-        return groupData;
-      });
-
-      await Promise.all(groupPromises);
-
-      store.group = store.groupList;
-    } catch (error) {
-      console.error("Xodim va guruh ma'lumotlarini olishda xato:", error);
-    }
+    loading.view = false;
+    history.modal = false;
+  } catch (error) {
+    loading.view = false;
+    store.PageProduct = error.response?.data?.message || [];
   }
 };
 
-const getTeacherSalary = async (page) => {
+const getGroups = async () => {
   try {
-    let res;
+    const res = await axios.get(
+      `/v1/group/teacher/${schoolId.value}/${userId.value}`,
+      { headers: authHeaders.value },
+    );
+    store.group = res.data;
+  } catch (error) {
+    console.error("Xodim va guruh ma'lumotlarini olishda xato:", error);
+  }
+};
 
-    if (salaryHistory.month && salaryHistory.month !== "") {
-      res = await axios.get(
-        `/salary/teacherSalary/${localStorage.getItem(
-          "school_id"
-        )}/${localStorage.getItem("id")}/${salaryHistory.year}/${
-          salaryHistory.month
-        }/page?page=${page}`,
-        {
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-        }
-      );
-    } else {
-      res = await axios.get(
-        `/salary/teacherSalary/${localStorage.getItem(
-          "school_id"
-        )}/${localStorage.getItem("id")}/${
-          salaryHistory.year
-        }/page?page=${page}`,
-        {
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-        }
-      );
+const getDebtor = async (page = 1) => {
+  loading.view = true;
+  store.allProducts = false;
+
+  if (!schoolId.value || !userId.value || !debtor.year || !debtor.month) {
+    console.error("school_id, employee_id, year va month majburiy");
+    loading.view = false;
+    return;
+  }
+
+  const params = {
+    school_id: schoolId.value,
+    employee_id: userId.value,
+    year: debtor.year,
+    month: debtor.month,
+    page,
+  };
+
+  if (debtor.monthModal && debtor.group_id) {
+    params.group_id = debtor.group_id;
+  }
+
+  try {
+    const res = await axios.get(`/v1/payment/history/debtor`, {
+      headers: authHeaders.value,
+      params,
+    });
+
+    const records = res.data?.data?.records || [];
+    if (records.length > 0) {
+      history.group_name = records[0].group_name;
     }
 
-    // Endi res mavjud
-    store.SalaryPageProduct = res.data?.data?.records;
-    store.salaryPage = [
-      res.data?.data?.pagination.currentPage,
-      res.data?.data?.pagination.total_count,
-    ];
+    store.PageProduct = records;
+    const pagination = res.data?.data?.pagination || {
+      currentPage: 1,
+      total_count: 0,
+    };
+    store.debtorPage = [pagination.currentPage, pagination.total_count];
+
     store.error = false;
+    debtor.isTable = true;
+    loading.view = false;
+    debtor.modal = false;
   } catch (error) {
-    store.SalaryPageProduct =
-      error.response?.data?.message || "Xatolik yuz berdi";
+    loading.view = false;
+    store.PageProduct = error.response?.data?.message || [];
     store.error = true;
   }
 };
 
-const getAllHistoryForExport = async () => {
-  const id = localStorage.getItem("id");
-  const schoolId = localStorage.getItem("school_id");
-  const token = localStorage.getItem("token");
-  const config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  };
-
-  let urlBase;
-  if (history.dayModal) {
-    urlBase = `/payment/employeeDay/${schoolId}/${id}/${history.year}/${history.month}/${history.day}/page`;
-    await getStatisticTeacher(
-      id,
-      `${history.year}-${history.month}-${history.day}`
-    );
-  } else if (history.monthModal) {
-    urlBase = `/payment/employeeMonth/${schoolId}/${id}/${history.year}/${history.month}/page`;
-    await getStatisticTeacher(id, `${history.year}-${history.month}`);
-  } else if (history.groupMonthModal) {
-    urlBase = `/payment/groupMonth/${schoolId}/${history.group_id}/${history.year}/${history.month}/all/page`;
-    await getStatisticGroup(
-      history.group_id,
-      `${history.year}-${history.month}`
-    );
-  } else if (history.yearModal) {
-    urlBase = `/payment/employeeYear/${schoolId}/${id}/${history.year}/page`;
-  } else {
-    return;
-  }
-
-  let allData = [];
-  let page = 1;
-  let hasMore = true;
-
-  while (hasMore) {
-    try {
-      const res = await axios.get(`${urlBase}?page=${page}`, config);
-      const records = res.data?.data?.records || [];
-      if (records.length > 0) {
-        allData = allData.concat(records);
-        page++;
-        hasMore = records.length === 15;
-      } else {
-        hasMore = false;
-      }
-    } catch (err) {
-      console.error("Export uchun malumotlarni olishda xatolik:", err);
-      hasMore = false;
-    }
-  }
-
-  if (history.dayModal) {
-    history.dayList = allData;
-  } else if (history.monthModal) {
-    history.monthList = allData;
-  } else if (history.groupMonthModal) {
-    history.groupMonthList = allData;
-  } else if (history.yearModal) {
-    history.yearList = allData;
-  }
-};
-
+// Export functions
 const exportToExcel = async () => {
-  loading.excel = true;
-  await getAllHistoryForExport();
+  const config = {
+    headers: authHeaders.value,
+    responseType: "blob",
+  };
 
-  const list = history.dayModal
-    ? history.dayList
-    : history.monthModal
-    ? history.monthList
-    : history.groupMonthModal
-    ? history.groupMonthList
-    : history.yearList;
+  let urlBase = `/v1/payment/history/teacher/excel?school_id=${schoolId.value}`;
+  let fileName = "payment";
 
-  if (!list || list.length === 0) {
-    loading.excel = false;
-    notification.warning("Yuklash uchun ma'lumot topilmadi");
+  if (history.dayModal) {
+    urlBase += `&year=${history.year}&month=${history.month}&day=${history.day}&employee_id=${userId.value}`;
+    fileName = `payment_${history.year}_${monthNames(history.month)}_${history.day}`;
+  } else if (history.monthModal) {
+    urlBase += `&year=${history.year}&month=${history.month}&employee_id=${userId.value}`;
+    fileName = `payment_${history.year}_${monthNames(history.month)}`;
+  } else if (history.groupMonthModal) {
+    urlBase = `/v1/payment/history/excel?school_id=${schoolId.value}&year=${history.year}&month=${history.month}&group_id=${history.group_id}`;
+    fileName = `payment_${history.year}_${monthNames(history.month)}_group`;
+  } else if (history.yearModal) {
+    urlBase += `&year=${history.year}&employee_id=${userId.value}`;
+    fileName = `payment_${history.year}`;
+  } else {
     return;
   }
 
-  const rawData = list.filter((item) => item.status !== "delete");
-
-  const dataToExport = rawData.map((item) => ({
-    "O'quvchi (F . I . O)": item.student_name,
-    "Guruh nomi": item.group_name,
-    "Guruh narxi": Number(item.group_price).toLocaleString("uz-UZ") + " so'm",
-    "To'lov turi": item.method,
-    "To'langan summa": Number(item.price),
-    "Chegirma (%)": item.discount + " %",
-    Oy: monthNames(item.month),
-    "To'lov sanasi": chekDateFormat(new Date(item.createdAt)),
-    Izoh: item.description,
-    Holati:
-      item.status === "delete"
-        ? "O'chirilgan"
-        : item.status === "update"
-        ? "O'zgartirilgan"
-        : "Tasdiqlangan",
-  }));
-
-  const ws = XLSX.utils.json_to_sheet(dataToExport, { origin: "A1" });
-
-  const lastRow = dataToExport.length + 1;
-
-  if (
-    !history.yearModal &&
-    store.statisticTeacher.statistics &&
-    store.statisticTeacher.statistics.length > 0
-  ) {
-    const startRow = lastRow + 4;
-
-    ws[`A${startRow}`] = { t: "s", v: "To'lov turi" };
-    ws[`B${startRow}`] = { t: "s", v: "To'lovlar soni" };
-    ws[`C${startRow}`] = { t: "s", v: "Jami summa" };
-
-    store.statisticTeacher.statistics.forEach((stat, idx) => {
-      const row = startRow + idx + 1;
-      ws[`A${row}`] = { t: "s", v: stat.method };
-      ws[`B${row}`] = {
-        t: "s",
-        v: Number(stat.count).toLocaleString("uz-UZ") + " ta",
-      };
-      ws[`C${row}`] = {
-        t: "s",
-        v: Number(stat.sum).toLocaleString("uz-UZ") + " so'm",
-      };
-    });
-
-    const numColumns = Object.keys(dataToExport[0]).length;
-    const maxRow = startRow + store.statisticTeacher.statistics.length;
-    ws["!ref"] = XLSX.utils.encode_range({
-      s: { c: 0, r: 0 },
-      e: { c: numColumns - 1, r: maxRow - 1 },
-    });
-  } else {
-    const numColumns = Object.keys(dataToExport[0]).length;
-    ws["!ref"] = XLSX.utils.encode_range({
-      s: { c: 0, r: 0 },
-      e: { c: numColumns - 1, r: dataToExport.length },
-    });
+  try {
+    const response = await axios.get(urlBase, config);
+    const url = window.URL.createObjectURL(new Blob([response.data]));
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", `${fileName}.xlsx`);
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+  } catch (err) {
+    console.error("Export uchun malumotlarni olishda xatolik:", err);
   }
-
-  ws["!cols"] = [
-    { wpx: 180 },
-    { wpx: 180 },
-    { wpx: 200 },
-    { wpx: 120 },
-    { wpx: 120 },
-    { wpx: 130 },
-    { wpx: 110 },
-    { wpx: 90 },
-    { wpx: 160 },
-    { wpx: 90 },
-  ];
-
-  const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, "To'lov Tarixi");
-
-  const fileName = history.dayModal
-    ? `kunlik_tolov_tarixi_${store.teacher_name}-${history.year}-${history.month}-${history.day}.xlsx`
-    : history.monthModal
-    ? `oylik_tolov_tarixi_${store.teacher_name}-${history.year}-${history.month}.xlsx`
-    : history.groupMonthModal
-    ? `guruhni_oylik_tolov_tarixi_${store.teacher_name}-${history.year}-${history.month}-${history.group_name}.xlsx`
-    : `barcha_tolov_tarixi_${store.teacher_name}-${history.year}.xlsx`;
-
-  const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
-  const blob = new Blob([excelBuffer], { type: "application/octet-stream" });
-  saveAs(blob, fileName);
-  loading.excel = false;
-  history.modal = !history.modal;
-  notification.success("Excel fayl yuklab olindi!");
-};
-
-const getAllHistoryForExportCost = async () => {
-  const schoolId = localStorage.getItem("school_id");
-  const token = localStorage.getItem("token");
-  const config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  };
-
-  let urlBase;
-  if (history.category_id && history.category_id !== "") {
-    urlBase = `/cost/${schoolId}/${costHistory.year}/${costHistory.month}/${history.category_id}/page`;
-  } else if (costHistory.month && costHistory.month !== "") {
-    urlBase = `/cost/${schoolId}/${costHistory.year}/${costHistory.month}/page`;
-  } else {
-    urlBase = `/cost/${schoolId}/${costHistory.year}/page`;
-  }
-
-  let allData = [];
-  let page = 1;
-  let hasMore = true;
-
-  while (hasMore) {
-    try {
-      const res = await axios.get(`${urlBase}?page=${page}`, config);
-      const records = res.data?.data?.records || [];
-      if (records.length > 0) {
-        allData = allData.concat(records);
-        page++;
-        hasMore = records.length === 15;
-      } else {
-        hasMore = false;
-      }
-    } catch (err) {
-      console.error("Export uchun malumotlarni olishda xatolik:", err);
-      hasMore = false;
-    }
-  }
-
-  costHistory.costList = allData;
 };
 
 const exportToExcelCost = async () => {
-  loading.excel = true;
-  await getAllHistoryForExportCost();
+  try {
+    const params = {};
 
-  const rawData = costHistory.costList;
+    if (costHistory.year) params.year = costHistory.year;
+    if (costHistory.month && costHistory.month !== "")
+      params.month = costHistory.month;
+    if (history.category_id && history.category_id !== "")
+      params.category_id = history.category_id;
 
-  if (!rawData || rawData.length === 0) {
-    loading.excel = false;
-    notification.warning("Yuklash uchun ma'lumot topilmadi");
-    return;
+    const res = await axios.get(`/v1/cost/excel/${schoolId.value}`, {
+      params,
+      responseType: "blob",
+      headers: authHeaders.value,
+    });
+
+    const blob = new Blob([res.data], {
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    });
+
+    const link = document.createElement("a");
+    link.href = window.URL.createObjectURL(blob);
+    link.download = `cost_${costHistory.year}${costHistory.month ? "_" + costHistory.month : ""}.xlsx`;
+    link.click();
+    window.URL.revokeObjectURL(link.href);
+  } catch (error) {
+    console.error("Excel export error:", error);
   }
-
-  const dataToExport = rawData.map((item) => ({
-    Kategoriya: item.costCategory.name,
-    Suma: item.price,
-    "To'lov turi": item.method,
-    Oy: monthNames(item.month),
-    Izoh: item.description,
-    "To'lov sanasi": chekDateFormat(new Date(item.createdAt)),
-  }));
-
-  const ws = XLSX.utils.json_to_sheet(dataToExport, { origin: "A1" });
-
-  // const lastRow = dataToExport.length + 1;
-
-  // if (
-  //   store.statisticTeacher.statistics &&
-  //   store.statisticTeacher.statistics.length > 0
-  // ) {
-  //   const startRow = lastRow + 4;
-
-  //   ws[`A${startRow}`] = { t: "s", v: "To'lov turi" };
-  //   ws[`B${startRow}`] = { t: "s", v: "To'lovlar soni" };
-  //   ws[`C${startRow}`] = { t: "s", v: "Jami summa" };
-
-  //   store.statisticTeacher.statistics.forEach((stat, idx) => {
-  //     const row = startRow + idx + 1;
-  //     ws[`A${row}`] = { t: "s", v: stat.method };
-  //     ws[`B${row}`] = {
-  //       t: "s",
-  //       v: Number(stat.count).toLocaleString("uz-UZ") + " ta",
-  //     };
-  //     ws[`C${row}`] = {
-  //       t: "s",
-  //       v: Number(stat.sum).toLocaleString("uz-UZ") + " so'm",
-  //     };
-  //   });
-
-  //   const numColumns = Object.keys(dataToExport[0]).length;
-  //   const maxRow = startRow + store.statisticTeacher.statistics.length;
-  //   ws["!ref"] = XLSX.utils.encode_range({
-  //     s: { c: 0, r: 0 },
-  //     e: { c: numColumns - 1, r: maxRow - 1 },
-  //   });
-  // } else {
-  //   const numColumns = Object.keys(dataToExport[0]).length;
-  //   ws["!ref"] = XLSX.utils.encode_range({
-  //     s: { c: 0, r: 0 },
-  //     e: { c: numColumns - 1, r: dataToExport.length },
-  //   });
-  // }
-
-  const numColumns = Object.keys(dataToExport[0]).length;
-  ws["!ref"] = XLSX.utils.encode_range({
-    s: { c: 0, r: 0 },
-    e: { c: numColumns - 1, r: dataToExport.length },
-  });
-
-  ws["!cols"] = [
-    { wpx: 180 },
-    { wpx: 180 },
-    { wpx: 200 },
-    { wpx: 120 },
-    { wpx: 120 },
-    { wpx: 130 },
-    { wpx: 110 },
-    { wpx: 90 },
-    { wpx: 160 },
-    { wpx: 90 },
-  ];
-
-  const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, "Chiqim Tarixi");
-
-  const fileName =
-    history.category_id && history.category_id !== ""
-      ? `kategoriya_oylik_chiqim_tarixi_${costHistory.year}-${costHistory.month}-${history.category_name}.xlsx`
-      : costHistory.month && costHistory.month !== ""
-      ? `oylik_chiqim_tarixi_${costHistory.year}-${costHistory.month}.xlsx`
-      : `oylik_chiqim_tarixi_${costHistory.year}.xlsx`;
-
-  const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
-  const blob = new Blob([excelBuffer], { type: "application/octet-stream" });
-  saveAs(blob, fileName);
-  loading.excel = false;
-  notification.success("Excel fayl yuklab olindi!");
-};
-
-const getAllHistoryForExportSalary = async () => {
-  const schoolId = localStorage.getItem("school_id");
-  const token = localStorage.getItem("token");
-  const config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  };
-
-  let urlBase;
-  if (history.teacher_id && history.teacher_id !== "") {
-    urlBase = `/salary/teacherSalary/${schoolId}/${history.teacher_id}/${salaryHistory.year}/${salaryHistory.month}/page`;
-  } else if (salaryHistory.month && salaryHistory.month !== "") {
-    if (store.guard) {
-      urlBase = `/salary/${schoolId}/${salaryHistory.year}/${salaryHistory.month}/page`;
-    } else {
-      urlBase = `/salary/teacherSalary/${schoolId}/${localStorage.getItem(
-        "id"
-      )}/${salaryHistory.year}/${salaryHistory.month}/page`;
-    }
-  } else {
-    if (store.guard) {
-      urlBase = `/salary/${schoolId}/${salaryHistory.year}/page`;
-    } else {
-      urlBase = `/salary/teacherSalary/${schoolId}/${localStorage.getItem(
-        "id"
-      )}/${salaryHistory.year}/page`;
-    }
-  }
-
-  let allData = [];
-  let page = 1;
-  let hasMore = true;
-
-  while (hasMore) {
-    try {
-      const res = await axios.get(`${urlBase}?page=${page}`, config);
-      const records = res.data?.data?.records || [];
-      if (records.length > 0) {
-        allData = allData.concat(records);
-        page++;
-        hasMore = records.length === 15;
-      } else {
-        hasMore = false;
-      }
-    } catch (err) {
-      console.error("Export uchun malumotlarni olishda xatolik:", err);
-      hasMore = false;
-    }
-  }
-
-  salaryHistory.salaryList = allData;
 };
 
 const exportToExcelSalary = async () => {
-  loading.excel = true;
-  await getAllHistoryForExportSalary();
+  try {
+    const params = { year: salaryHistory.year };
 
-  const rawData = salaryHistory.salaryList;
-
-  if (!rawData || rawData.length === 0) {
-    loading.excel = false;
-    notification.warning("Yuklash uchun ma'lumot topilmadi");
-    return;
-  }
-
-  const dataToExport = rawData.map((item) => ({
-    "O'qituvchi (F . I . O)": item.teacher.full_name,
-    Suma: item.price,
-    "To'lov turi": item.method,
-    Oy: monthNames(item.month),
-    Izoh: item.description,
-    "To'lov sanasi": chekDateFormat(new Date(item.createdAt)),
-  }));
-
-  const ws = XLSX.utils.json_to_sheet(dataToExport, { origin: "A1" });
-
-  // const lastRow = dataToExport.length + 1;
-
-  // if (
-  //   store.statisticTeacher.statistics &&
-  //   store.statisticTeacher.statistics.length > 0
-  // ) {
-  //   const startRow = lastRow + 4;
-
-  //   ws[`A${startRow}`] = { t: "s", v: "To'lov turi" };
-  //   ws[`B${startRow}`] = { t: "s", v: "To'lovlar soni" };
-  //   ws[`C${startRow}`] = { t: "s", v: "Jami summa" };
-
-  //   store.statisticTeacher.statistics.forEach((stat, idx) => {
-  //     const row = startRow + idx + 1;
-  //     ws[`A${row}`] = { t: "s", v: stat.method };
-  //     ws[`B${row}`] = {
-  //       t: "s",
-  //       v: Number(stat.count).toLocaleString("uz-UZ") + " ta",
-  //     };
-  //     ws[`C${row}`] = {
-  //       t: "s",
-  //       v: Number(stat.sum).toLocaleString("uz-UZ") + " so'm",
-  //     };
-  //   });
-
-  //   const numColumns = Object.keys(dataToExport[0]).length;
-  //   const maxRow = startRow + store.statisticTeacher.statistics.length;
-  //   ws["!ref"] = XLSX.utils.encode_range({
-  //     s: { c: 0, r: 0 },
-  //     e: { c: numColumns - 1, r: maxRow - 1 },
-  //   });
-  // } else {
-  //   const numColumns = Object.keys(dataToExport[0]).length;
-  //   ws["!ref"] = XLSX.utils.encode_range({
-  //     s: { c: 0, r: 0 },
-  //     e: { c: numColumns - 1, r: dataToExport.length },
-  //   });
-  // }
-
-  const numColumns = Object.keys(dataToExport[0]).length;
-  ws["!ref"] = XLSX.utils.encode_range({
-    s: { c: 0, r: 0 },
-    e: { c: numColumns - 1, r: dataToExport.length },
-  });
-
-  ws["!cols"] = [
-    { wpx: 180 },
-    { wpx: 180 },
-    { wpx: 200 },
-    { wpx: 120 },
-    { wpx: 120 },
-    { wpx: 130 },
-    { wpx: 110 },
-    { wpx: 90 },
-    { wpx: 160 },
-    { wpx: 90 },
-  ];
-
-  const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, "Maoshlar Tarixi");
-
-  const fileName =
-    history.teacher_id && history.teacher_id !== ""
-      ? `xodimning_oylik_maosh_tarixi_${salaryHistory.year}-${salaryHistory.month}-${history.teacher_name}.xlsx`
-      : salaryHistory.month && salaryHistory.month !== ""
-      ? `oylik_maosh_tarixi_${salaryHistory.year}-${salaryHistory.month}.xlsx`
-      : `oylik_maosh_tarixi_${salaryHistory.year}.xlsx`;
-
-  const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
-  const blob = new Blob([excelBuffer], { type: "application/octet-stream" });
-  saveAs(blob, fileName);
-  loading.excel = false;
-  notification.success("Excel fayl yuklab olindi!");
-};
-
-const getDebtor = (page) => {
-  loading.view = true;
-  store.allProducts = false;
-  const id = localStorage.getItem("id");
-  const schoolId = localStorage.getItem("school_id");
-  const token = localStorage.getItem("token");
-  const config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  };
-
-  let url;
-  if (debtor.dayModal) {
-    url = `/payment/employee-debtor/${schoolId}/${id}/${debtor.year}/${debtor.month}/page?page=${page}`;
-  } else if (debtor.monthModal) {
-    url = `/payment/debtor-group/${schoolId}/${debtor.group_id}/${debtor.year}/${debtor.month}/page?page=${page}`;
-  } else {
-    return;
-  }
-
-  axios
-    .get(url, config)
-    .then((res) => {
-      const records = res.data?.data?.records;
-      if (records.length !== 0) {
-        history.group_name = records[0].group_name;
-      }
-
-      store.PageProduct = records;
-      const pagination = res.data?.data?.pagination;
-      store.debtorPage = [pagination.currentPage, pagination.total_count];
-      store.error = false;
-      debtor.isTable = true;
-      loading.view = false;
-      debtor.modal = false;
-    })
-    .catch((error) => {
-      loading.view = false;
-      store.PageProduct = error.response?.data?.message;
-      store.error = true;
-    });
-};
-
-const getAllHistoryForExportDebtor = async () => {
-  const id = localStorage.getItem("id");
-  const schoolId = localStorage.getItem("school_id");
-  const token = localStorage.getItem("token");
-  const config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  };
-
-  let urlBase;
-  if (debtor.dayModal) {
-    urlBase = `/payment/employee-debtor/${schoolId}/${id}/${debtor.year}/${debtor.month}/page`;
-  } else if (debtor.monthModal) {
-    urlBase = `/payment/debtor-group/${schoolId}/${debtor.group_id}/${debtor.year}/${debtor.month}/page`;
-  } else {
-    return;
-  }
-
-  let allData = [];
-  let page = 1;
-  let hasMore = true;
-
-  while (hasMore) {
-    try {
-      const res = await axios.get(`${urlBase}?page=${page}`, config);
-      const records = res.data?.data?.records || [];
-      if (records.length > 0) {
-        allData = allData.concat(records);
-        page++;
-        hasMore = records.length === 15;
-      } else {
-        hasMore = false;
-      }
-    } catch (err) {
-      console.error("Export uchun malumotlarni olishda xatolik:", err);
-      hasMore = false;
+    if (salaryHistory.month) params.month = salaryHistory.month;
+    if (history.teacher_id) {
+      params.teacher_id = history.teacher_id;
+    } else if (!store.guard) {
+      params.teacher_id = userId.value;
     }
+
+    const res = await axios.get(`/v1/salary/excel/${schoolId.value}`, {
+      params,
+      responseType: "blob",
+      headers: authHeaders.value,
+    });
+
+    const blob = new Blob([res.data], {
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    });
+
+    const link = document.createElement("a");
+    link.href = window.URL.createObjectURL(blob);
+    link.download = `salary_${salaryHistory.year}${salaryHistory.month ? "_" + salaryHistory.month : ""}.xlsx`;
+    link.click();
+    window.URL.revokeObjectURL(link.href);
+  } catch (e) {
+    console.error("Salary excel export error", e);
   }
-  debtor.exportList = allData;
 };
 
 const exportToExcelDebtor = async () => {
-  loading.excel = true;
-  await getAllHistoryForExportDebtor();
+  const config = {
+    headers: authHeaders.value,
+    responseType: "blob",
+  };
 
-  const rawData = debtor.exportList;
+  let urlBase = `/v1/payment/debtor/excel?school_id=${schoolId.value}&employee_id=${userId.value}&year=${debtor.year}&month=${debtor.month}`;
+  let fileName = `debtor_${debtor.year}_${monthNames(debtor.month)}`;
 
-  if (!rawData || rawData.length === 0) {
-    loading.excel = false;
-    notification.warning("Yuklash uchun ma'lumot topilmadi");
-    return;
+  if (debtor.monthModal && debtor.group_id) {
+    urlBase += `&group_id=${debtor.group_id}`;
+    fileName += `_group`;
   }
 
-  const dataToExport = rawData.map((item) => ({
-    "O'quvchi (F . I . O)": item.student_name,
-    "O'qituvchi (F . I . O)": item.teacher_name,
-    "Guruh nomi": item.group_name,
-    "Guruh narxi": Number(item.group_price).toLocaleString("uz-UZ") + " so'm",
-    "Qarzdorlik suma": Number(item.debt),
-  }));
-
-  const ws = XLSX.utils.json_to_sheet(dataToExport, { origin: "A1" });
-
-  const numColumns = Object.keys(dataToExport[0]).length;
-  ws["!ref"] = XLSX.utils.encode_range({
-    s: { c: 0, r: 0 },
-    e: { c: numColumns - 1, r: dataToExport.length },
-  });
-
-  ws["!cols"] = [
-    { wpx: 180 },
-    { wpx: 180 },
-    { wpx: 180 },
-    { wpx: 200 },
-    { wpx: 120 },
-  ];
-
-  const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, "Qarzdorlar Tarixi");
-
-  const fileName = debtor.dayModal
-    ? `qarzdorlar_tarixi_${debtor.year}-${debtor.month}.xlsx`
-    : `guruhni_qarzdorlar_tarixi_${debtor.year}-${debtor.month}-${debtor.group_name}.xlsx`;
-
-  const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
-  const blob = new Blob([excelBuffer], { type: "application/octet-stream" });
-  saveAs(blob, fileName);
-  loading.excel = false;
-  debtor.modal = !debtor.modal;
-  notification.success("Excel fayl yuklab olindi!");
+  try {
+    const response = await axios.get(urlBase, config);
+    const url = window.URL.createObjectURL(new Blob([response.data]));
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", `${fileName}.xlsx`);
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+  } catch (err) {
+    console.error("Export uchun malumotlarni olishda xatolik:", err);
+  }
 };
 
-// ------------ axios post ------------- //
-
+// API Functions - POST
 const createCostCategory = async () => {
   const data = {
-    school_id: Number(localStorage.getItem("school_id")),
+    school_id: Number(schoolId.value),
     name: costCategory.categoryName,
   };
+
   try {
-    await axios.post("/cost-category", data, {
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-    });
+    await axios.post("/v1/cost-category", data, { headers: authHeaders.value });
     notification.success("Kategoriya kiritildi");
     getCostCategory();
     costCategoryModal();
     getStatistic();
   } catch (error) {
-    notification.warning(
-      "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
-    );
+    handleError();
   }
 };
 
 const createCost = async () => {
   const data = {
-    school_id: Number(localStorage.getItem("school_id")),
+    school_id: Number(schoolId.value),
     category_id: cost.category_id,
     price: cost.price,
     method: cost.method,
     month: cost.month,
     description: cost.description,
   };
-  try {
-    await axios.post("/cost", data, {
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-    });
-    notification.success("Chiqim kiritildi");
 
+  try {
+    await axios.post("/v1/cost", data, { headers: authHeaders.value });
+    notification.success("Chiqim kiritildi");
     await getCost(store.costPagination);
     getStatistic();
     costModal();
   } catch (error) {
-    notification.warning(
-      "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
-    );
+    handleError();
   }
 };
 
 const createSalary = async () => {
   const data = {
-    school_id: Number(localStorage.getItem("school_id")),
+    school_id: Number(schoolId.value),
     teacher_id: salary.teacher_id,
     price: salary.price,
     method: salary.method,
     month: salary.month,
     description: salary.description,
   };
-  try {
-    await axios.post("/salary", data, {
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-    });
-    notification.success("Maosh kiritildi");
 
+  try {
+    await axios.post("/v1/salary", data, { headers: authHeaders.value });
+    notification.success("Maosh kiritildi");
     await getSalary(store.salaryPagination);
     getStatistic();
     salaryModal();
   } catch (error) {
-    notification.warning(
-      "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
-    );
+    handleError();
   }
 };
 
-// ------------ axios update ------------ //
-
+// API Functions - PUT
 const updateCost = async () => {
   const data = {
-    school_id: Number(localStorage.getItem("school_id")),
+    school_id: Number(schoolId.value),
     category_id: cost.category_id,
     price: cost.price,
     method: cost.method,
     month: cost.month,
     description: cost.description,
   };
-  try {
-    await axios.put(
-      `/cost/${localStorage.getItem("school_id")}/${cost.id}`,
-      data,
-      {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      }
-    );
-    notification.success("Chiqim o'zgartirildi");
 
+  try {
+    await axios.put(`/v1/cost/${schoolId.value}/${cost.id}`, data, {
+      headers: authHeaders.value,
+    });
+    notification.success("Chiqim o'zgartirildi");
     await getCost(store.costPagination);
     getStatistic();
     costUpdateModal();
   } catch (error) {
-    notification.warning(
-      "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
-    );
+    handleError();
   }
 };
 
 const updateSalary = async () => {
   const data = {
-    school_id: Number(localStorage.getItem("school_id")),
+    school_id: Number(schoolId.value),
     teacher_id: salary.teacher_id,
     price: salary.price,
     method: salary.method,
     month: salary.month,
     description: salary.description,
   };
-  try {
-    await axios.put(
-      `/salary/${localStorage.getItem("school_id")}/${salary.id}`,
-      data,
-      {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      }
-    );
-    notification.success("Berilgan maosh o'zgartirildi");
 
+  try {
+    await axios.put(`/v1/salary/${schoolId.value}/${salary.id}`, data, {
+      headers: authHeaders.value,
+    });
+    notification.success("Berilgan maosh o'zgartirildi");
     await getSalary(store.costPagination);
     getStatistic();
     salaryUpdateModal();
   } catch (error) {
-    notification.warning(
-      "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
-    );
+    handleError();
   }
 };
 
-// ------------ axios delete ------------ //
-
+// API Functions - DELETE
 const deleteCostCategory = async () => {
   try {
     await axios.delete(
-      `/cost-category/${localStorage.getItem("school_id")}/${costCategory.id}`,
-      {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      }
+      `/v1/cost-category/${schoolId.value}/${costCategory.id}`,
+      { headers: authHeaders.value },
     );
     costCategory.remove = false;
     getCostCategory();
     getStatistic();
     notification.success("Kategoriya o'chirildi");
   } catch (error) {
-    notification.warning(
-      "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
-    );
+    handleError();
   }
 };
 
 const deleteCost = async () => {
   try {
-    await axios.delete(
-      `/cost/${localStorage.getItem("school_id")}/${cost.id}`,
-      {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      }
-    );
+    await axios.delete(`/v1/cost/${schoolId.value}/${cost.id}`, {
+      headers: authHeaders.value,
+    });
     cost.remove = false;
     getCost(store.costPagination);
     getStatistic();
     notification.success("Chiqim o'chirildi");
   } catch (error) {
-    notification.warning(
-      "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
-    );
+    handleError();
   }
 };
 
 const deleteSalary = async () => {
   try {
-    await axios.delete(
-      `/salary/${localStorage.getItem("school_id")}/${salary.id}`,
-      {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      }
-    );
+    await axios.delete(`/v1/salary/${schoolId.value}/${salary.id}`, {
+      headers: authHeaders.value,
+    });
     salary.remove = false;
     getSalary(store.salaryPagination);
     getStatistic();
     notification.success("Berilgan maosh o'chirildi");
   } catch (error) {
-    notification.warning(
-      "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
-    );
+    handleError();
   }
 };
 
@@ -4646,15 +4032,13 @@ onMounted(() => {
   } else {
     getHistory(store.teacherPagination);
     getGroups();
-    getTeacherSalary(store.salaryPagination);
+    getSalary(store.salaryPagination);
   }
-  for (let i = 0; i < 5; i++) {
-    let list = {
-      id: i,
-      name: String(orqaYil + i),
-    };
-    store.curentYil.push(list);
-  }
+
+  store.curentYil = Array.from({ length: 5 }, (_, i) => ({
+    id: i,
+    name: String(orqaYil + i),
+  }));
 });
 </script>
 

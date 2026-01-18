@@ -49,7 +49,7 @@
           </div>
           <!-- Modal body -->
           <form
-            @submit.prevent="createProduct"
+            @submit.prevent="createGroup"
             :class="{ darkForm: navbar.userNav }"
           >
             <div class="grid grid-cols-2 gap-4 mb-4 font-medium">
@@ -174,11 +174,7 @@
                   required
                 >
                   <option value="" disabled selected>Fan tanlang</option>
-                  <option
-                    v-for="i in store.subject"
-                    :key="i.id"
-                    :value="i.name"
-                  >
+                  <option v-for="i in store.subject" :key="i.id" :value="i.id">
                     {{ i.name }}
                   </option>
                 </select>
@@ -280,7 +276,7 @@
           </div>
           <!-- Modal body -->
           <form
-            @submit.prevent="editProduct"
+            @submit.prevent="editGroup"
             :class="{ darkForm: navbar.userNav }"
           >
             <div class="grid grid-cols-2 gap-4 mb-4 font-medium">
@@ -391,50 +387,6 @@
                   required
                 />
               </div>
-              <div class="w-[206%]">
-                <label
-                  for="subject"
-                  class="block mb-2 text-sm"
-                  :class="navbar.userNav ? 'text-white' : 'text-black'"
-                  >Fan tanlang</label
-                >
-                <select
-                  v-model="edit.subject"
-                  id="subject"
-                  class="z-10 block w-full p-2 border border-gray-300 rounded-xl bg-gray-50 text-md focus:ring-blue-500 focus:border-blue-500"
-                  required
-                >
-                  <option value="" disabled selected>Fan tanlang</option>
-                  <option
-                    v-for="i in store.subject"
-                    :key="i.id"
-                    :value="i.name"
-                  >
-                    {{ i.name }}
-                  </option>
-                </select>
-              </div>
-              <div></div>
-              <div class="w-[206%]">
-                <label
-                  for="teacher"
-                  class="block mb-2 text-sm"
-                  :class="navbar.userNav ? 'text-white' : 'text-black'"
-                  >O'qituvchi tanlang</label
-                >
-                <select
-                  v-model="edit.employee"
-                  id="teacher"
-                  class="z-10 block w-full p-2 border border-gray-300 rounded-xl bg-gray-50 text-md focus:ring-blue-500 focus:border-blue-500"
-                  required
-                >
-                  <option value="" disabled selected>O'qituvchi tanlang</option>
-                  <option v-for="i in store.employee" :key="i.id" :value="i.id">
-                    {{ i.full_name }}
-                  </option>
-                </select>
-              </div>
-              <div></div>
               <div
                 class="w-[206%] flex items-center justify-between border-t pt-5 mt-5"
               >
@@ -459,6 +411,348 @@
     </div>
 
     <!-- ----------------------------------------- Edit END ---------------------------------------------------- -->
+
+    <!-- ----------------------------------------- Subject MODAL -------------------------------------------------------- -->
+
+    <!-- Main modal -->
+    <div
+      :class="
+        store.subjectModal
+          ? 'absolute overflow-y-auto flex bg-[rgba(0,0,0,0.5)] overflow-x-hidden z-50 justify-center items-center w-full inset-0 h-full'
+          : 'hidden'
+      "
+    >
+      <div class="relative w-full h-auto max-w-lg p-4">
+        <!-- Modal content -->
+        <div
+          class="relative p-4 shadow rounded-xl sm:p-5"
+          :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
+        >
+          <!-- Modal header -->
+          <div
+            class="flex items-center justify-between pb-4 mb-4 border-b rounded-t sm:mb-5"
+          >
+            <h3
+              class="text-lg"
+              :class="navbar.userNav ? 'text-white' : 'text-black'"
+            >
+              Fan qo'shish va o'chirish
+            </h3>
+            <button
+              @click="store.subjectModal = false"
+              type="button"
+              class="bg-transparent hover:bg-gray-200 hover rounded-xl text-sm p-1.5 ml-auto inline-flex items-center"
+              :class="{ 'text-white': navbar.userNav }"
+            >
+              <svg
+                aria-hidden="true"
+                class="w-5 h-5"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                  clip-rule="evenodd"
+                ></path>
+              </svg>
+            </button>
+          </div>
+          <!-- Modal body -->
+          <div class="flex flex-wrap gap-5 py-5">
+            <span
+              v-for="i in store.groupSubject"
+              :key="i.id"
+              @click="
+                remove.name = i.subject.name;
+                removeSubject(i.id);
+              "
+              class="px-3 py-1 bg-gray-300 rounded"
+              >{{ i.subject.name }}
+              <i
+                class="p-1 font-bold rounded cursor-pointer bx bx-x hover:bg-gray-500"
+              ></i
+            ></span>
+          </div>
+          <form
+            @submit.prevent="addSubject"
+            :class="{ darkForm: navbar.userNav }"
+          >
+            <div class="grid grid-cols-1 gap-4 mb-4 font-medium">
+              <label
+                for="name"
+                class="block mb-2 text-sm"
+                :class="navbar.userNav ? 'text-white' : 'text-black'"
+                >Fanini tanlang</label
+              >
+              <div class="relative w-full">
+                <div
+                  class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="w-5 h-5"
+                    fill="currentColor"
+                    viewbox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                </div>
+                <input
+                  v-model="subjectSearch.filter"
+                  @focus="subjectSearch.selectLamp = true"
+                  @blur="
+                    subjectSearch.selectLamp = false;
+                    subjectSearch.filter_show = false;
+                  "
+                  @input="
+                    subjectSearch.filter_show = true;
+                    searchFuncSubject();
+                  "
+                  type="search"
+                  id="simple-search"
+                  class="block w-full p-2 pl-10 text-sm border border-gray-300 rounded-xl bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
+                  placeholder="Fani tanlang yoki qidirish..."
+                />
+                <ul
+                  v-show="
+                    subjectSearch.filter_show &&
+                    subjectSearch.searchList.length > 0
+                  "
+                  class="absolute z-10 w-full py-1 overflow-hidden overflow-y-auto text-gray-600 bg-white rounded max-h-80"
+                >
+                  <li
+                    class="pl-2 cursor-pointer hover:bg-blue-600 hover:text-white"
+                    v-for="(i, index) in subjectSearch.searchList"
+                    :key="index"
+                    @mousedown.prevent="
+                      edit.subject = i.id;
+                      subjectSearch.filter_show = false;
+                      subjectSearch.filter = i.name;
+                    "
+                  >
+                    {{ i.name }}
+                  </li>
+                </ul>
+                <ul
+                  v-show="subjectSearch.selectLamp && !subjectSearch.filter"
+                  class="absolute z-10 w-full py-1 overflow-hidden overflow-y-auto text-gray-600 bg-white rounded max-h-80"
+                >
+                  <li
+                    class="pl-2 cursor-pointer hover:bg-blue-600 hover:text-white whitespace-nowrap"
+                    v-for="(i, index) in store.subject"
+                    :key="index"
+                    @mousedown.prevent="
+                      edit.subject = i.id;
+                      subjectSearch.selectLamp = false;
+                      subjectSearch.filter = i.name;
+                    "
+                  >
+                    {{ i.name }}
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div
+              class="flex items-center justify-between w-full pt-5 mt-5 border-t"
+            >
+              <button
+                @click="store.subjectModal = false"
+                type="button"
+                class="border inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
+              >
+                Bekor qilish
+              </button>
+              <button
+                type="submit"
+                class="btnAdd text-white inline-flex items-center bg-[#4141eb] hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-500 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
+              >
+                Qo'shish
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- ----------------------------------------- Subject MODAL END ---------------------------------------------------- -->
+
+    <!-- ----------------------------------------- Employee MODAL -------------------------------------------------------- -->
+
+    <!-- Main modal -->
+    <div
+      :class="
+        store.employeeModal
+          ? 'absolute overflow-y-auto flex bg-[rgba(0,0,0,0.5)] overflow-x-hidden z-50 justify-center items-center w-full inset-0 h-full'
+          : 'hidden'
+      "
+    >
+      <div class="relative w-full h-auto max-w-lg p-4">
+        <!-- Modal content -->
+        <div
+          class="relative p-4 shadow rounded-xl sm:p-5"
+          :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
+        >
+          <!-- Modal header -->
+          <div
+            class="flex items-center justify-between pb-4 mb-4 border-b rounded-t sm:mb-5"
+          >
+            <h3
+              class="text-lg"
+              :class="navbar.userNav ? 'text-white' : 'text-black'"
+            >
+              O'qituvchi qo'shish va o'chirish
+            </h3>
+            <button
+              @click="store.employeeModal = false"
+              type="button"
+              class="bg-transparent hover:bg-gray-200 hover rounded-xl text-sm p-1.5 ml-auto inline-flex items-center"
+              :class="{ 'text-white': navbar.userNav }"
+            >
+              <svg
+                aria-hidden="true"
+                class="w-5 h-5"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                  clip-rule="evenodd"
+                ></path>
+              </svg>
+            </button>
+          </div>
+          <!-- Modal body -->
+          <div class="flex flex-wrap gap-5 py-5">
+            <span
+              v-for="i in store.groupEmployee"
+              :key="i.id"
+              @click="
+                remove.name = i.employee.full_name;
+                removeEmployee(i.id);
+              "
+              class="px-3 py-1 bg-gray-300 rounded"
+              >{{ i.employee.full_name }}
+              <i
+                class="p-1 font-bold rounded cursor-pointer bx bx-x hover:bg-gray-500"
+              ></i
+            ></span>
+          </div>
+          <form
+            @submit.prevent="addEmployee"
+            :class="{ darkForm: navbar.userNav }"
+          >
+            <div class="grid grid-cols-1 gap-4 mb-4 font-medium">
+              <label
+                for="name"
+                class="block mb-2 text-sm"
+                :class="navbar.userNav ? 'text-white' : 'text-black'"
+                >O'qituvchi tanlang</label
+              >
+              <div class="relative w-full">
+                <div
+                  class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="w-5 h-5"
+                    fill="currentColor"
+                    viewbox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                </div>
+                <input
+                  v-model="employeeSearch.filter"
+                  @focus="employeeSearch.selectLamp = true"
+                  @blur="
+                    employeeSearch.selectLamp = false;
+                    employeeSearch.filter_show = false;
+                  "
+                  @input="
+                    employeeSearch.filter_show = true;
+                    searchFuncEmployee();
+                  "
+                  type="search"
+                  id="simple-search"
+                  class="block w-full p-2 pl-10 text-sm border border-gray-300 rounded-xl bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
+                  placeholder="O'qituvchi tanlang yoki qidirish..."
+                />
+                <ul
+                  v-show="
+                    employeeSearch.filter_show &&
+                    employeeSearch.searchList.length > 0
+                  "
+                  class="absolute z-10 w-full py-1 overflow-hidden overflow-y-auto text-gray-600 bg-white rounded max-h-80"
+                >
+                  <li
+                    class="pl-2 cursor-pointer hover:bg-blue-600 hover:text-white"
+                    v-for="(i, index) in employeeSearch.searchList"
+                    :key="index"
+                    @mousedown.prevent="
+                      edit.employee = i.id;
+                      employeeSearch.filter_show = false;
+                      employeeSearch.filter = i.full_name;
+                    "
+                  >
+                    {{ i.full_name }}
+                  </li>
+                </ul>
+                <ul
+                  v-show="employeeSearch.selectLamp && !employeeSearch.filter"
+                  class="absolute z-10 w-full py-1 overflow-hidden overflow-y-auto text-gray-600 bg-white rounded max-h-80"
+                >
+                  <li
+                    class="pl-2 cursor-pointer hover:bg-blue-600 hover:text-white whitespace-nowrap"
+                    v-for="(i, index) in store.employee"
+                    :key="index"
+                    @mousedown.prevent="
+                      edit.employee = i.id;
+                      employeeSearch.selectLamp = false;
+                      employeeSearch.filter = i.full_name;
+                    "
+                  >
+                    {{ i.full_name }}
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div
+              class="flex items-center justify-between w-full pt-5 mt-5 border-t"
+            >
+              <button
+                @click="store.employeeModal = false"
+                type="button"
+                class="border inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
+              >
+                Bekor qilish
+              </button>
+              <button
+                type="submit"
+                class="btnAdd text-white inline-flex items-center bg-[#4141eb] hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-500 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
+              >
+                Qo'shish
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- ----------------------------------------- Subject MODAL END ---------------------------------------------------- -->
 
     <!-- ----------------------------------------- Delete modal ---------------------------------------------------- -->
     <div
@@ -528,7 +822,7 @@
                   Bekor qilish
                 </button>
                 <button
-                  @click="deleteProduct"
+                  @click="deleteGroup"
                   class="btnAdd cursor-pointer text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                 >
                   O'chirish
@@ -545,7 +839,8 @@
 
     <section class="pt-4" :class="{ 'text-white': navbar.userNav }">
       <!------------------------------------------- Placeholder ------------------------------------------->
-      <div v-if="!store.PageProduct && !store.allProducts">
+
+      <div v-if="store.loaderTime">
         <Placeholder2 />
       </div>
 
@@ -553,10 +848,7 @@
 
       <!------------------------------------------- Search ------------------------------------------->
 
-      <div
-        v-show="store.PageProduct || store.allProducts"
-        class="w-full max-w-screen"
-      >
+      <div v-show="!store.loaderTime" class="w-full max-w-screen">
         <!-- Start coding here -->
         <div
           class="flex flex-col items-center justify-between p-4 mb-4 shadow rounded-xl lg:flex-row lg:space-x-4"
@@ -581,20 +873,18 @@
             </div>
           </div>
 
-          <div v-show="store.guard" class="w-full lg:w-80">
-            <form class="flex items-center font-medium text-gray-900">
-              <label for="simple-search" class="sr-only">Qidiruv</label>
+          <div v-show="store.guard" class="flex w-full">
+            <form
+              class="flex items-center w-full font-medium text-gray-900"
+              @submit.prevent
+            >
+              <label class="sr-only">Qidiruv</label>
+
               <div class="relative w-full">
                 <div
                   class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"
                 >
-                  <svg
-                    aria-hidden="true"
-                    class="w-5 h-5"
-                    fill="currentColor"
-                    viewbox="0 0 20 20"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
+                  <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                     <path
                       fill-rule="evenodd"
                       d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
@@ -604,32 +894,11 @@
                 </div>
                 <input
                   v-model="store.filter"
-                  @input="
-                    store.filter_show = true;
-                    searchFunc();
-                  "
+                  @input="searchName(store.filter)"
                   type="search"
-                  id="simple-search"
                   class="block w-full p-2 pl-10 text-sm border border-gray-300 rounded-xl bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
                   placeholder="Qidirish..."
                 />
-                <ul
-                  v-show="store.filter_show"
-                  class="absolute z-10 w-full py-1 overflow-hidden overflow-y-auto text-gray-600 bg-white rounded max-h-80"
-                  :class="{ hidden: !store.searchList.length }"
-                >
-                  <li
-                    class="pl-2 cursor-pointer hover:bg-gray-100"
-                    v-for="(i, index) in store.searchList"
-                    :key="index"
-                    @click="
-                      store.filter = i.name;
-                      searchFunc();
-                    "
-                  >
-                    {{ i.name }}
-                  </li>
-                </ul>
               </div>
             </form>
           </div>
@@ -641,11 +910,12 @@
           :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
         >
           <div class="overflow-x-auto">
-            <table v-show="store.guard" class="w-full text-sm text-left">
+            <table class="w-full text-sm text-left">
               <thead class="text-xs text-white uppercase rounded-xl btnAdd">
                 <tr>
                   <th scope="col" class="py-3 text-center">Nomi</th>
                   <th scope="col" class="py-3 text-center">Fani</th>
+                  <th scope="col" class="py-3 text-center">O'qituvchilari</th>
                   <th scope="col" class="py-3 text-center">Narxi</th>
                   <th scope="col" class="py-3 text-center">Darajasi</th>
                   <th scope="col" class="py-3 text-center">
@@ -661,8 +931,7 @@
                   :class="
                     navbar.userNav ? 'hover:bg-gray-700' : 'hover:bg-gray-50'
                   "
-                  v-show="!store.searchList.length"
-                  v-for="i in store.PageProduct"
+                  v-for="i in store.groupData"
                   :key="i.id"
                 >
                   <td
@@ -674,11 +943,38 @@
                   <td
                     class="px-8 py-4 font-medium text-center text-blue-800 whitespace-nowrap"
                   >
-                    <p class="bg-blue-100 rounded-[5px] p-1">
-                      <span v-for="fan in i.subject" :key="fan.id"
-                        >{{ fan.subject_name }}
-                      </span>
-                    </p>
+                    <div
+                      class="flex gap-2 justify-between bg-blue-100 min-w-fit rounded-[5px] px-2 py-1 whitespace-nowrap"
+                    >
+                      <p>
+                        <span v-for="id in i.subject" :key="id.id"
+                          >{{ id.subject.name }},
+                        </span>
+                      </p>
+                      <i
+                        v-show="store.guard"
+                        @click="getGroupSubject(i.subject, i.id)"
+                        class="p-1 ml-2 font-extrabold text-white bg-blue-800 rounded-md cursor-pointer bx bx-plus"
+                      ></i>
+                    </div>
+                  </td>
+                  <td
+                    class="px-8 py-4 font-medium text-center text-blue-800 whitespace-nowrap"
+                  >
+                    <div
+                      class="flex gap-2 justify-between bg-blue-100 min-w-fit rounded-[5px] px-2 py-1 whitespace-nowrap"
+                    >
+                      <p>
+                        <span v-for="id in i.employee" :key="id.id"
+                          >{{ id.employee.full_name }},
+                        </span>
+                      </p>
+                      <i
+                        v-show="store.guard"
+                        @click="getGroupEmployee(i.employee, i.id)"
+                        class="p-1 ml-2 font-extrabold text-white bg-blue-800 rounded-md cursor-pointer bx bx-plus"
+                      ></i>
+                    </div>
                   </td>
                   <td
                     class="px-8 py-4 font-medium text-center text-red-800 whitespace-nowrap"
@@ -710,10 +1006,11 @@
                     </button>
                   </td>
                   <td
+                    v-show="store.guard"
                     class="py-4 pr-5 font-medium text-center whitespace-nowrap"
                   >
                     <i
-                      @click="getOneProduct(i.id)"
+                      @click="getOneGroup(i.id)"
                       class="p-2 mr-3 text-blue-600 bg-blue-300 cursor-pointer rounded-xl bx bxs-pencil focus:ring-2"
                     >
                     </i>
@@ -722,162 +1019,19 @@
                       class="p-2 text-red-600 bg-red-300 cursor-pointer rounded-xl bx bxs-trash focus:ring-2"
                     >
                     </i>
-                  </td>
-                </tr>
-                <tr
-                  class="border-b"
-                  :class="
-                    navbar.userNav ? 'hover:bg-gray-700' : 'hover:bg-gray-50'
-                  "
-                  v-show="store.searchList.length"
-                  v-for="i in store.searchList"
-                  :key="i.id"
-                >
-                  <td
-                    scope="row"
-                    class="px-8 py-4 font-medium text-center whitespace-nowrap"
-                  >
-                    {{ i.name }}
-                  </td>
-                  <td
-                    class="px-8 py-4 font-medium text-center text-blue-800 whitespace-nowrap"
-                  >
-                    <p class="bg-blue-100 rounded-[5px] p-1">
-                      <span v-for="fan in i.subject" :key="fan.id"
-                        >{{ fan.subject_name }}
-                      </span>
-                    </p>
-                  </td>
-                  <td
-                    class="px-8 py-4 font-medium text-center text-red-800 whitespace-nowrap"
-                  >
-                    <p class="bg-red-100 rounded-[5px] p-1">
-                      {{ i.price }} so'm
-                    </p>
-                  </td>
-                  <td
-                    class="px-8 py-4 font-medium text-center text-green-800 whitespace-nowrap"
-                  >
-                    <p class="bg-green-100 rounded-[5px] p-1">
-                      {{ i.level || "No'malum" }}
-                    </p>
-                  </td>
-                  <td
-                    class="px-8 py-4 font-medium text-center text-blue-800 whitespace-nowrap"
-                  >
-                    <p class="bg-blue-100 rounded-[5px] p-1">
-                      {{ i.start_date }}
-                    </p>
-                  </td>
-                  <td class="px-8 py-4 font-medium text-center">
-                    <button
-                      @click="enterSlug(i.id, i.name.toLowerCase())"
-                      class="btnKirish bg-blue-600 rounded-xl px-5 py-2.5 text-white focus:ring-2"
-                    >
-                      Kirish
-                    </button>
-                  </td>
-                  <td
-                    class="py-4 pr-5 font-medium text-center whitespace-nowrap"
-                  >
-                    <i
-                      @click="getOneProduct(i.id)"
-                      class="p-2 mr-3 text-blue-600 bg-blue-300 cursor-pointer rounded-xl bx bxs-pencil focus:ring-2"
-                    >
-                    </i>
-                    <i
-                      @click="deleteFunc(i.id)"
-                      class="p-2 text-red-600 bg-red-300 cursor-pointer rounded-xl bx bxs-trash focus:ring-2"
-                    >
-                    </i>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-            <table v-show="!store.guard" class="w-full text-sm text-left">
-              <thead class="text-xs text-white uppercase rounded-xl btnAdd">
-                <tr>
-                  <th scope="col" class="py-3 text-center">Nomi</th>
-                  <th scope="col" class="py-3 text-center">Fani</th>
-                  <th scope="col" class="py-3 text-center">Narxi</th>
-                  <th scope="col" class="py-3 text-center">
-                    Boshlanish sanasi
-                  </th>
-                  <th scope="col" class="py-3 text-center">
-                    Qo'shilgan sanasi
-                  </th>
-                  <th scope="col" class="py-3 text-center">To'liq</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr
-                  class="border-b"
-                  :class="
-                    navbar.userNav ? 'hover:bg-gray-700' : 'hover:bg-gray-50'
-                  "
-                  v-for="i in store.allProducts"
-                  :key="i.id"
-                >
-                  <td
-                    scope="row"
-                    class="px-8 py-4 font-medium text-center whitespace-nowrap"
-                  >
-                    {{ i.name }}
-                  </td>
-                  <td
-                    class="px-8 py-4 font-medium text-center text-blue-800 whitespace-nowrap"
-                  >
-                    <p class="bg-blue-100 rounded-[5px] p-1">
-                      <span v-for="fan in i.subject" :key="fan.id"
-                        >{{ fan.subject_name }}
-                      </span>
-                    </p>
-                  </td>
-                  <td
-                    class="px-8 py-4 font-medium text-center text-red-800 whitespace-nowrap"
-                  >
-                    <p class="bg-red-100 rounded-[5px] p-1">
-                      {{ Number(i.price).toLocaleString("uz-UZ") }} so'm
-                    </p>
-                  </td>
-                  <td
-                    class="px-8 py-4 font-medium text-center text-blue-800 whitespace-nowrap"
-                  >
-                    <p class="bg-blue-100 rounded-[5px] p-1">
-                      {{ i.start_date }}
-                    </p>
-                  </td>
-                  <td
-                    class="px-8 py-4 font-medium text-center text-blue-800 whitespace-nowrap"
-                  >
-                    <p class="bg-blue-100 rounded-[5px] p-1">
-                      {{ i.student_date }}
-                    </p>
-                  </td>
-                  <td class="px-8 py-4 font-medium text-center">
-                    <button
-                      @click="enterSlug(i.id, i.name.toLowerCase())"
-                      class="btnAdd bg-blue-600 rounded-xl px-5 py-2.5 text-white focus:ring-2"
-                    >
-                      Kirish
-                    </button>
                   </td>
                 </tr>
               </tbody>
             </table>
             <div
-              v-if="isEmpty(store.PageProduct) && isEmpty(store.allProducts)"
+              v-if="store.groupData.length == 0"
               class="w-full p-20 text-2xl font-medium text-center max-w-screen"
             >
               <h1>Guruhlar ro'yhati bo'sh</h1>
             </div>
-            <div v-show="store.error" class="flex justify-center w-full">
-              <h1 class="p-20 text-2xl font-medium">{{ store.allProducts }}</h1>
-            </div>
           </div>
           <nav
-            v-show="store.guard"
-            v-if="!store.searchList.length"
+            v-if="!store.searchLamp"
             class="flex flex-row items-center justify-between p-4 space-y-0"
             aria-label="Table navigation"
           >
@@ -893,7 +1047,7 @@
                 @click="
                   if (store.pagination > 1) {
                     store.pagination -= 1;
-                    getProduct(store.pagination);
+                    getPageGroup(store.pagination);
                   }
                 "
               >
@@ -904,7 +1058,6 @@
               </li>
             </ul>
 
-            <!-- Sahifa raqami -->
             <span class="text-sm font-normal text-center">
               Sahifa
               <span class="font-semibold">
@@ -930,7 +1083,7 @@
                 @click="
                   if (store.page[0] * 15 < store.page[1]) {
                     store.pagination += 1;
-                    getProduct(store.pagination);
+                    getPageGroup(store.pagination);
                   }
                 "
               >
@@ -950,7 +1103,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref, reactive, watch } from "vue";
+import { onMounted, ref, reactive, computed } from "vue";
 import { useRouter } from "vue-router";
 import { useNavStore } from "../../stores/toggle";
 import { Placeholder2 } from "../../components";
@@ -962,19 +1115,30 @@ const navbar = useNavStore();
 const router = useRouter();
 const userRole = localStorage.getItem("role");
 const modal = ref(false);
+
+const schoolId = computed(() => localStorage.getItem("school_id"));
+const userId = computed(() => localStorage.getItem("id"));
+const token = computed(() => localStorage.getItem("token"));
+const authHeaders = computed(() => ({
+  Authorization: `Bearer ${token.value}`,
+}));
+
 const store = reactive({
-  PageProduct: null,
+  groupData: [],
   page: [],
   pagination: 1,
-  allProducts: null,
   subject: [{ name: "Fan yaratilmagan" }],
   employee: [{ name: "O'qituvchi yaratilmagan" }],
   error: false,
   filter: "",
-  filter_show: false,
-  searchList: [],
   guard: userRole == "_ow_sch_" || userRole == "_ad_sch_",
-  group: [],
+  searchLamp: false,
+  subjectModal: false,
+  employeeModal: false,
+  groupSubject: [],
+  groupEmployee: [],
+  searchTimer: null,
+  loaderTime: true,
 });
 
 const form = reactive({
@@ -1002,72 +1166,62 @@ const edit = reactive({
   toggle: false,
 });
 
+const subjectSearch = reactive({
+  filter_show: false,
+  filter: "",
+  searchList: [],
+  selectLamp: false,
+});
+
+const employeeSearch = reactive({
+  filter_show: false,
+  filter: "",
+  searchList: [],
+  selectLamp: false,
+});
+
 const remove = reactive({
   id: "",
   toggle: false,
 });
 
-const isEmpty = (value) => {
-  return (
-    value === null ||
-    value === undefined ||
-    value === "" ||
-    (Array.isArray(value) && value.length === 0)
-  );
+const handleError = (
+  message = "Xatolik! Nimadir noto'g'ri. Internetni tekshirib qaytadan urinib ko'ring!"
+) => {
+  notification.warning(message);
 };
 
-// ---------------------------- search ------------------------------------
-function searchFunc() {
-  store.searchList = store.filter
-    ? store.allProducts.filter((product) =>
-        product.name.toLowerCase().includes(store.filter.toLowerCase())
-      )
-    : [];
-}
-// ---------------------------- search end ------------------------------------
+const resetFormData = () => ({
+  name: "",
+  start_date: "",
+  price: "",
+  start_time: "",
+  end_time: "",
+  subject: "",
+  employee: "",
+});
 
 function enterSlug(id, name) {
   router.push(`./groups/${id}/${name}`);
 }
 
 const toggleModal = () => {
+  getSubject();
+  getEmployee();
   modal.value = !modal.value;
-  Object.assign(form, {
-    name: "",
-    start_date: "",
-    price: "",
-    start_time: "",
-    end_time: "",
-    subject: "",
-    employee: "",
-    level: "",
-  });
+  Object.assign(form, resetFormData());
 };
 
 const cancelFunc = () => {
-  Object.assign(form, {
-    name: "",
-    start_date: "",
-    price: "",
-    start_time: "",
-    end_time: "",
-    subject: "",
-    employee: "",
-    level: "",
-  });
+  Object.assign(form, resetFormData());
   modal.value = false;
 };
 
 const cancelFunc1 = () => {
   Object.assign(edit, {
-    name: "",
-    start_date: "",
-    price: "",
-    start_time: "",
-    end_time: "",
-    subject: "",
-    employee: "",
-    level: "",
+
+    ...resetFormData(),
+
     toggle: false,
   });
 };
@@ -1077,246 +1231,266 @@ const deleteFunc = (id) => {
   remove.toggle = true;
 };
 
+const createSearchFilter = (searchObj, data, key) => {
+  if (!searchObj.filter) {
+    searchObj.searchList = [];
+    return;
+  }
+
+  const filterLower = searchObj.filter.toLowerCase();
+  searchObj.searchList = data.filter((i) =>
+    i[key].toLowerCase().includes(filterLower)
+  );
+};
+
+function searchFuncSubject() {
+  createSearchFilter(subjectSearch, store.subject, "name");
+}
+
+function searchFuncEmployee() {
+  createSearchFilter(employeeSearch, store.employee, "full_name");
+}
+
 // ----------------------------------- axios --------------------------------
 
-const getAllProduct = async () => {
-  if (store.guard) {
+const getGroupSubject = async (subject, id) => {
+  getSubject();
+  edit.id = id;
+  store.groupSubject = subject;
+  store.subjectModal = true;
+};
+
+const getGroupEmployee = async (employee, id) => {
+  getEmployee();
+  edit.id = id;
+  store.groupEmployee = employee;
+  store.employeeModal = true;
+};
+
+const searchName = (name) => {
+  store.searchLamp = true;
+  clearTimeout(store.searchTimer);
+
+  store.searchTimer = setTimeout(async () => {
+    if (!name) {
+      getPageGroup(store.pagination);
+      store.searchLamp = false;
+      return;
+    }
+
     try {
-      const res = await axios.get(
-        `/group/${localStorage.getItem("school_id")}/find`,
-        {
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-        }
+      const data = await axios.get(
+        `/v1/group/search/${schoolId.value}/${name}`,
+        { headers: authHeaders.value }
       );
-      store.allProducts = res.data.sort((a, b) => b.id - a.id);
-      store.error = false;
-    } catch (error) {
-      store.allProducts = error.response.data.message;
-      store.error = true;
+      store.groupData = data.data;
+    } catch {
+      getPageGroup(store.pagination);
+      store.searchLamp = false;
     }
-  } else {
-    const schoolId = localStorage.getItem("school_id");
-    const token = localStorage.getItem("token");
-    const id = localStorage.getItem("id");
+  }, 350);
+};
 
-    try {
-      const employeeRes = await axios.get(`/employee/${schoolId}/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      const employeeData = employeeRes.data;
+const getPageGroup = async (page) => {
+  try {
+    const endpoint = store.guard
+      ? `/v1/group/${schoolId.value}/page?page=${page}`
+      : `/v1/group/teacher/${schoolId.value}/${userId.value}/page?page=${page}`;
 
-      const groupPromises = employeeData.group.map(async (group) => {
-        const groupRes = await axios.get(
-          `/group/${schoolId}/${group.group_id}/not`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
-        const groupData = groupRes.data;
-        groupData.student_date = group.createdAt.split("T")[0];
-        store.group.push(groupData);
-        return groupData;
-      });
+    const res = await axios.get(endpoint, { headers: authHeaders.value });
 
-      await Promise.all(groupPromises);
-
-      store.allProducts = store.group;
-    } catch (error) {
-      console.error("Xodim va guruh ma'lumotlarini olishda xato:", error);
-    }
+    const pagination = res.data?.data?.pagination;
+    store.groupData = res.data?.data?.records || [];
+    store.page = [pagination.currentPage, pagination.total_count];
+    store.error = false;
+    store.loaderTime = false;
+  } catch (error) {
+    store.groupData = error.response?.data?.message || [];
+    store.error = true;
+    store.loaderTime = false;
   }
 };
 
-const getProduct = async (page) => {
-  if (store.guard) {
-    try {
-      const res = await axios.get(
-        `/group/${localStorage.getItem("school_id")}/page?page=${page}`,
-        {
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-        }
-      );
-      store.PageProduct = res.data?.data?.records;
-      store.page = [
-        res.data?.data?.pagination.currentPage,
-        res.data?.data?.pagination.total_count,
-      ];
-      store.error = false;
-    } catch (error) {
-      store.PageProduct = error.response.data.message;
-      store.error = true;
-    }
+const getOneGroup = async (id) => {
+  try {
+    const res = await axios.get(`/v1/group/${schoolId.value}/${id}`, {
+      headers: authHeaders.value,
+    });
+
+    Object.assign(edit, {
+      name: res.data.name,
+      level: res.data.level,
+      start_date: res.data.start_date,
+      price: res.data.price,
+      start_time: res.data.start_time,
+      end_time: res.data.end_time,
+      id: id,
+      room_id: res.data.room_id,
+      toggle: true,
+    });
+  } catch (error) {
+    console.log(error);
+    handleError();
   }
 };
 
-const getOneProduct = async (id) => {
-  if (store.guard) {
-    try {
-      const res = await axios.get(
-        `/group/${localStorage.getItem("school_id")}/${id}`,
-        {
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-        }
-      );
-      console.log(res);
-      Object.assign(edit, {
-        name: res.data.name,
-        level: res.data.level,
-        start_date: res.data.start_date,
-        price: res.data.price,
-        start_time: res.data.start_time,
-        end_time: res.data.end_time,
-        id: id,
-        subject: res.data.subject[0].subject_name,
-        employee: Number(res.data.employee[0].employee_id),
-        room_id: res.data.room_id,
-        toggle: true,
-      });
-    } catch (error) {
-      notification.warning(
-        "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
-      );
-    }
+const createGroup = async () => {
+  const data = {
+    school_id: Number(schoolId.value),
+    name: form.name,
+    level: form.level,
+    start_date: form.start_date,
+    price: String(form.price),
+    room_id: 1,
+    start_time: form.start_time,
+    end_time: form.end_time,
+    subject_id: form.subject,
+    teacher_id: form.employee,
+    status: true,
+  };
+
+  try {
+    await axios.post("/v1/group", data, { headers: authHeaders.value });
+    notification.success("Guruh yaratildi");
+    await getPageGroup(store.pagination);
+    cancelFunc();
+  } catch (error) {
+    handleError();
   }
 };
 
-const createProduct = async () => {
-  if (store.guard) {
-    const data = {
-      school_id: Number(localStorage.getItem("school_id")),
-      name: form.name,
-      level: form.level,
-      start_date: form.start_date,
-      price: String(form.price),
-      room_id: 1,
-      start_time: form.start_time,
-      end_time: form.end_time,
-      status: true,
-    };
-    try {
-      const res = await axios.post("/group", data, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      });
-      notification.success("Guruh yaratildi");
+const editGroup = async () => {
+  const data = {
+    school_id: Number(schoolId.value),
+    name: edit.name,
+    level: edit.level,
+    start_date: edit.start_date,
+    price: String(edit.price),
+    start_time: edit.start_time,
+    end_time: edit.end_time,
+    room_id: edit.room_id,
+  };
 
-      const subjectData = {
-        group_id: res.data.group.id,
-        subject_name: form.subject,
-      };
-      await axios.post(`/group-subject`, subjectData, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      });
-
-      const employeeData = {
-        employee_id: form.employee,
-        group_id: res.data.group.id,
-        group_name: res.data.group.name,
-      };
-      await axios.post(`/employee-group`, employeeData, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      });
-
-      await getProduct(store.pagination);
-      cancelFunc();
-    } catch (error) {
-      notification.warning(
-        "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
-      );
-    }
+  try {
+    await axios.put(`/v1/group/${schoolId.value}/${edit.id}`, data, {
+      headers: authHeaders.value,
+    });
+    notification.success("Guruh tahrirlandi");
+    await getPageGroup(store.pagination);
+    cancelFunc1();
+  } catch (error) {
+    handleError();
   }
 };
 
-const editProduct = async () => {
-  if (store.guard) {
-    const data = {
-      school_id: Number(localStorage.getItem("school_id")),
-      name: edit.name,
-      level: edit.level,
-      start_date: edit.start_date,
-      price: String(edit.price),
-      start_time: edit.start_time,
-      end_time: edit.end_time,
-      room_id: edit.room_id,
-    };
-    try {
-      await axios.put(
-        `/group/${localStorage.getItem("school_id")}/${edit.id}`,
-        data,
-        {
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-        }
-      );
-      notification.success("Guruh tahrirlandi");
-      await getProduct(store.pagination);
-      cancelFunc1();
-    } catch (error) {
-      notification.warning(
-        "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
-      );
-    }
-  }
-};
 
-const deleteProduct = async () => {
-  if (store.guard) {
-    try {
-      await axios.delete(
-        `/group/${localStorage.getItem("school_id")}/${remove.id}`,
-        {
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-        }
-      );
-      notification.success("Guruh o'chirildi");
-      await getProduct(store.pagination);
-      remove.toggle = false;
-    } catch (error) {
-      notification.warning(
-        "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
-      );
-    }
+const deleteGroup = async () => {
+  try {
+    await axios.delete(`/v1/group/${schoolId.value}/${remove.id}`, {
+      headers: authHeaders.value,
+    });
+    notification.success("Guruh o'chirildi");
+    await getPageGroup(store.pagination);
+    remove.toggle = false;
+  } catch (error) {
+    handleError();
   }
 };
 
 const getSubject = async () => {
-  if (store.guard) {
-    try {
-      const res = await axios.get(
-        `/subject/${localStorage.getItem("school_id")}`,
-        {
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-        }
-      );
-      store.subject = res.data || [{ name: "Fan yaratilmagan" }];
-    } catch (error) {
-      store.subject = error.response.data.message;
-    }
+  try {
+    const res = await axios.get(`/v1/subject/add/${schoolId.value}`, {
+      headers: authHeaders.value,
+    });
+    store.subject = res.data || [{ name: "Fan yaratilmagan" }];
+  } catch (error) {
+    store.subject = error.response?.data?.message || [
+      { name: "Fan yaratilmagan" },
+    ];
   }
 };
 
 const getEmployee = async () => {
-  if (store.guard) {
-    try {
-      const res = await axios.get(
-        `/employee/${localStorage.getItem("school_id")}`,
-        {
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-        }
-      );
-      store.employee = res.data.filter(
-        (record) => record.role == "teacher"
-      ) || [{ name: "O'qituvchi yaratilmagan" }];
-    } catch (error) {
-      store.employee = error.response.data.message;
+  try {
+    const res = await axios.get(`/v1/employee/add/${schoolId.value}`, {
+      headers: authHeaders.value,
+    });
+    store.employee = res.data || [{ name: "O'qituvchi yaratilmagan" }];
+  } catch (error) {
+    store.employee = error.response?.data?.message || [
+      { name: "O'qituvchi yaratilmagan" },
+    ];
+  }
+};
+
+const addSubject = async () => {
+  const data = {
+    group_id: Number(edit.id),
+    subject_id: Number(edit.subject),
+  };
+
+  try {
+    await axios.post(`/v1/group-subject`, data, { headers: authHeaders.value });
+    notification.success("Guruhga qo'shildi");
+    edit.subject = "";
+    getPageGroup(store.pagination);
+    store.subjectModal = false;
+  } catch (error) {
+    if (error.response?.data?.message === "This subject already exists") {
+      notification.warning("Bu fan allaqachon mavjud");
+    } else {
+      handleError();
     }
   }
 };
 
-// Fetch all initial data on component mount
+const removeSubject = async (id) => {
+  try {
+    await axios.delete(`/v1/group-subject/${id}`, {
+      headers: authHeaders.value,
+    });
+    notification.success("Guruhdan o'chirildi");
+    getPageGroup(store.pagination);
+    store.subjectModal = false;
+  } catch {}
+};
+
+const addEmployee = async () => {
+  const data = {
+    group_id: Number(edit.id),
+    employee_id: Number(edit.employee),
+  };
+
+  try {
+    await axios.post(`/v1/employee-group`, data, {
+      headers: authHeaders.value,
+    });
+    notification.success("Guruhga qo'shildi");
+    edit.employee = "";
+    getPageGroup(store.pagination);
+    store.employeeModal = false;
+  } catch (error) {
+    if (error.response?.data?.message === "This group already exists") {
+      notification.warning("Bu o'qituvchi allaqachon mavjud");
+    } else {
+      handleError();
+    }
+  }
+};
+
+const removeEmployee = async (id) => {
+  try {
+    await axios.delete(`/v1/employee-group/${id}`, {
+      headers: authHeaders.value,
+    });
+    notification.success("Guruhdan o'chirildi");
+    getPageGroup(store.pagination);
+    store.employeeModal = false;
+  } catch {}
+};
+
 onMounted(() => {
-  getProduct(store.pagination);
-  getAllProduct();
-  getSubject();
-  getEmployee();
+  getPageGroup(store.pagination);
 });
 </script>
 

@@ -279,8 +279,8 @@ const monthNames = (month) => {
 const getStatistics = async () => {
   try {
     const url = store.guard
-      ? `/statistic/school/${localStorage.getItem("school_id")}`
-      : `/statistic/teacher-stats/${localStorage.getItem(
+      ? `/v1/statistic/school/${localStorage.getItem("school_id")}`
+      : `/v1/statistic/teacher-stats/${localStorage.getItem(
           "school_id"
         )}/${localStorage.getItem("id")}`;
     const res = await axios.get(url, {
@@ -305,8 +305,8 @@ const getCurrentYearPayments = async () => {
     const userId = localStorage.getItem("id");
 
     const url = store.guard
-      ? `/statistic/school-payments/${schoolId}/${store.year}`
-      : `/statistic/teacher-salary/${schoolId}/${userId}/${store.year}`;
+      ? `/v1/statistic/school-payments/${schoolId}/${store.year}`
+      : `/v1/statistic/teacher-salary/${schoolId}/${userId}/${store.year}`;
 
     const res = await axios.get(url, {
       headers: { Authorization: `Bearer ${token}` },
@@ -325,8 +325,8 @@ const getStudentPayments = async () => {
     const userId = localStorage.getItem("id");
 
     const url = store.guard
-      ? `/statistic/school-studentPayments/${schoolId}/${store.month}`
-      : `/statistic/teacher-studentPayments/${schoolId}/${userId}/${store.month}`;
+      ? `/v1/statistic/school-studentPayments/${schoolId}/${store.month}`
+      : `/v1/statistic/teacher-studentPayments/${schoolId}/${userId}/${store.month}`;
 
     const res = await axios.get(url, {
       headers: { Authorization: `Bearer ${token}` },

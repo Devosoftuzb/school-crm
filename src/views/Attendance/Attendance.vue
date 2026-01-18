@@ -4,7 +4,7 @@
 
     <section class="pt-4">
       <!------------------------------------------- Search ------------------------------------------->
-      <div v-show="!store.groupAllProducts">
+      <div v-show="!store.groupData">
         <Placeholder2 />
       </div>
       <!------------------------------------------- Search ------------------------------------------->
@@ -259,7 +259,7 @@
                       >
                         <li
                           class="pl-2 cursor-pointer hover:bg-blue-600 hover:text-white whitespace-nowrap"
-                          v-for="(i, index) in store.groupAllProducts"
+                          v-for="(i, index) in store.groupData"
                           :key="index"
                           @mousedown.prevent="
                             history.group_id = i.id;
@@ -298,7 +298,7 @@
       </div>
       <!-- ------------------------------------------- history modal end ------------------------------------------------- -->
 
-      <div v-show="store.groupAllProducts" class="w-full max-w-screen">
+      <div v-show="store.groupData" class="w-full max-w-screen">
         <!-- Start coding here -->
 
         <!------------------------------------------- Search ------------------------------------------->
@@ -385,7 +385,7 @@
                 >
                   <li
                     class="pl-2 cursor-pointer hover:bg-blue-600 hover:text-white whitespace-nowrap"
-                    v-for="(i, index) in store.groupAllProducts"
+                    v-for="(i, index) in store.groupData"
                     :key="index"
                     @mousedown.prevent="
                       form.group_id = i.id;
@@ -417,7 +417,7 @@
           class="relative overflow-hidden shadow-md rounded-xl mb-28"
           :class="navbar.userNav ? 'bg-slate-900 text-white' : 'bg-white'"
         >
-          <div v-show="!store.PageProduct" class="overflow-x-auto">
+          <div v-show="store.atData" class="overflow-x-auto">
             <table class="w-full text-sm text-left">
               <thead class="text-xs text-white uppercase rounded-xl btnAdd">
                 <tr>
@@ -429,7 +429,7 @@
               </thead>
               <tbody v-if="!store.error">
                 <tr
-                  v-for="i in store.allProducts"
+                  v-for="i in store.atData"
                   :key="i.id"
                   class="border-b"
                   :class="
@@ -445,14 +445,13 @@
                   <td class="px-8 py-4 font-medium text-center">
                     <p
                       :class="{
-                        'bg-green-100 text-green-800':
-                          i.paymentStatus === 'To\'langan',
+                        'bg-green-100 text-green-800': i.debt === 'To\'langan',
                         'bg-red-100 text-red-800':
-                          i.paymentStatus.includes('to\'lanmagan'),
+                          i.debt.includes('to\'lanmagan'),
                       }"
                       class="rounded-[5px] p-1"
                     >
-                      {{ i.paymentStatus }}
+                      {{ i.debt }}
                     </p>
                   </td>
 
@@ -482,8 +481,8 @@
                     class="py-4 pr-5 font-medium text-center whitespace-nowrap"
                   >
                     <i
-                    v-show="store.guard"
-                      @click="deleteFunc(i.id)"
+                      v-show="store.guard"
+                      @click="deleteFunc(i.student_group_id)"
                       class="p-2 text-red-600 bg-red-300 cursor-pointer rounded-xl bx bxs-trash focus:ring-2"
                     >
                     </i>
@@ -492,7 +491,7 @@
               </tbody>
             </table>
             <div
-              v-show="!store.allProducts"
+              v-show="!store.atData.length && !store.atPageData.length"
               class="w-full p-20 text-2xl font-medium text-center max-w-screen"
             >
               <h1>Davomat ro'yhati bo'sh</h1>
@@ -500,12 +499,12 @@
           </div>
 
           <div
-            v-show="store.allProducts"
+            v-show="store.atData.length > 0"
             class="flex flex-col items-center justify-between gap-3 p-4 mt-5 shadow rounded-xl lg:flex-row lg:space-x-4"
             :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
           >
             <div
-              v-show="store.allProducts"
+              v-show="store.atData"
               class="flex items-center justify-end w-full gap-5 pb-2 lg:pb-0"
             >
               <button
@@ -519,7 +518,7 @@
           </div>
 
           <div
-            v-show="store.PageProduct && store.PageProduct.length"
+            v-show="store.atPageData && store.atPageData.length > 0"
             class="overflow-x-auto"
           >
             <table class="w-full text-sm text-left">
@@ -539,7 +538,7 @@
               </thead>
               <tbody v-if="!store.error">
                 <tr
-                  v-for="i in store.PageProduct"
+                  v-for="i in store.atPageData"
                   :key="i.student_name"
                   class="border-b"
                   :class="
@@ -575,8 +574,8 @@
                     class="py-4 pr-5 font-medium text-center whitespace-nowrap"
                   >
                     <i
-                    v-show="store.guard"
-                      @click="deleteFunc(i.student_id)"
+                      v-show="store.guard"
+                      @click="deleteFunc(i.student_group_id)"
                       class="p-2 text-red-600 bg-red-300 cursor-pointer rounded-xl bx bxs-trash focus:ring-2"
                     >
                     </i>
@@ -585,7 +584,7 @@
               </tbody>
             </table>
             <div
-              v-show="!store.PageProduct"
+              v-show="!store.atPageData"
               class="w-full p-20 text-2xl font-medium text-center max-w-screen"
             >
               <h1>Davomat ro'yhati bo'sh</h1>
@@ -593,11 +592,10 @@
           </div>
 
           <nav
-            v-show="store.PageProduct"
+            v-show="store.atPageData.length > 0"
             class="flex flex-row items-center justify-between p-4 space-y-0"
             aria-label="Table navigation"
           >
-            <!-- Oldingi sahifa tugmasi -->
             <ul class="flex items-center">
               <li
                 :class="[
@@ -620,7 +618,6 @@
               </li>
             </ul>
 
-            <!-- Sahifa raqami -->
             <span class="text-sm font-normal text-center">
               Sahifa
               <span class="font-semibold">
@@ -634,7 +631,6 @@
               <span class="font-semibold">{{ store.page[1] }}</span>
             </span>
 
-            <!-- Keyingi sahifa tugmasi -->
             <ul class="flex items-center">
               <li
                 :class="[
@@ -666,49 +662,45 @@
 </template>
 
 <script setup>
-import { onMounted, ref, reactive } from "vue";
-import { useRouter } from "vue-router";
+import { onMounted, reactive, computed } from "vue";
 import { useNavStore } from "../../stores/toggle";
 import { Placeholder2 } from "../../components";
 import { useNotificationStore } from "../../stores/notification";
 import axios from "@/services/axios";
 
-// Stores
 const notification = useNotificationStore();
 const navbar = useNavStore();
 const userRole = localStorage.getItem("role");
 
-// Current Date
 const hozirgiSana = new Date();
 const hozirgiYil = String(hozirgiSana.getFullYear());
 const orqaYil = hozirgiSana.getFullYear() - 2;
 let hozirgiOy = (hozirgiSana.getMonth() + 1).toString().padStart(2, "0");
 let hozirgiKun = hozirgiSana.getDate();
 
-// Store Reactive
+const schoolId = computed(() => localStorage.getItem("school_id"));
+const userId = computed(() => localStorage.getItem("id"));
+const token = computed(() => localStorage.getItem("token"));
+const authHeaders = computed(() => ({
+  Authorization: `Bearer ${token.value}`,
+}));
+
 const store = reactive({
-  PageProduct: "",
+  atPageData: [],
   page: [],
   pagination: 1,
-  allProducts: false,
-  groupAllProducts: false,
+  atData: [],
+  groupData: false,
   error: false,
-  group: "",
   filter: "",
   filter_show: false,
   searchList: [],
-  student: [],
-  status: false,
-  attendance_id: 0,
-  student_group: false,
   curentYil: [],
   uniqueDates: [],
   selectLamp: false,
   guard: userRole == "_ow_sch_" || userRole == "_ad_sch_",
-  groups: [],
 });
 
-// Form Reactive
 const form = reactive({
   full_name: "",
   payment: "",
@@ -716,7 +708,6 @@ const form = reactive({
   group_id: "",
 });
 
-// History Reactive
 const history = reactive({
   year: hozirgiYil,
   month: hozirgiOy,
@@ -730,18 +721,25 @@ const history = reactive({
   searchList: [],
 });
 
-// Remove Reactive
 const remove = reactive({
   id: "",
   toggle: false,
 });
 
+const handleError = (
+  message = "Xatolik! Nimadir noto'g'ri. Internetni tekshirib qaytadan urinib ko'ring!"
+) => {
+  notification.warning(message);
+};
+
 const historyModal = () => {
-  history.modal = !history.modal;
-  history.year = hozirgiYil;
-  history.month = hozirgiOy;
-  history.day = hozirgiKun;
-  history.group_id = "";
+  Object.assign(history, {
+    modal: !history.modal,
+    year: hozirgiYil,
+    month: hozirgiOy,
+    day: hozirgiKun,
+    group_id: "",
+  });
 };
 
 function deleteFunc(id) {
@@ -749,84 +747,38 @@ function deleteFunc(id) {
   remove.toggle = true;
 }
 
-// Helper Functions
 const davomatToggle = (id, status) => {
-  const student = store.student.find((s) => s.student_id === id);
-  if (student) student.status = status;
+  const student = store.atData.find((s) => s.id === id);
+  if (student) student.attendance = status;
 };
 
 const getStudentStatus = (id) => {
-  const student = store.student.find((s) => s.student_id === id);
-  return student ? student.status : false;
+  const student = store.atData.find((s) => s.id === id);
+  return student ? student.attendance : false;
 };
 
-const searchFunc = () => {
-  store.searchList = [];
-  if (store.filter) {
-    store.searchList = store.groupAllProducts.filter((i) =>
-      i.name.toLowerCase().includes(store.filter.toLowerCase())
-    );
-  }
+const createSearchFilter = (searchObj, data, key, filterProp = "filter") => {
+  searchObj.searchList = [];
+  if (!searchObj[filterProp]) return;
+
+  const filterLower = searchObj[filterProp].toLowerCase();
+  searchObj.searchList = data.filter((i) =>
+    i[key].toLowerCase().includes(filterLower)
+  );
 };
 
-function searchHistoryFunc() {
-  history.searchList = [];
-  if (history.filter) {
-    for (let i of store.groupAllProducts) {
-      if (i.name.toLowerCase().includes(history.filter.toLowerCase())) {
-        history.searchList.push(i);
-      }
-    }
-  }
-}
-
-const calculatePaymentStatus = (paymentHistory, groupPrice) => {
-  const currentDate = new Date();
-  const currentYear = currentDate.getFullYear();
-  const currentMonth = String(currentDate.getMonth() + 1).padStart(2, "0");
-
-  if (!paymentHistory || paymentHistory.length === 0) {
-    return `(${groupPrice}) so'm to'lanmagan`;
-  }
-
-  console.log(paymentHistory[0])
-
-  const totalDiscount = paymentHistory[0]?.discount || 0;
-  const discountSum = paymentHistory[0]?.discountSum || 0;
-  let discountedPrice = Math.round(groupPrice * (1 - totalDiscount / 100));
-  if (discountSum > 0) {
-    discountedPrice = groupPrice - discountSum;
-  }
-  
-
-  let currentMonthPaid = 0;
-  paymentHistory.forEach((payment) => {
-    if (
-      payment.year === String(currentYear) &&
-      payment.month === String(currentMonth)
-    ) {
-      currentMonthPaid += payment.price;
-    }
-  });
-
-  if (currentMonthPaid >= discountedPrice) {
-    return "To'langan";
-  } else {
-    const amountDue = discountedPrice - currentMonthPaid;
-    return `(${amountDue.toLocaleString("uz-UZ")}) so'm to'lanmagan`;
-  }
-};
+const searchFunc = () => createSearchFilter(store, store.groupData, "name");
+const searchHistoryFunc = () =>
+  createSearchFilter(history, store.groupData, "name");
 
 const getUniqueDates = (records) => {
-  const dates = [];
+  const datesSet = new Set();
   records.forEach((record) => {
     record.attendance.forEach((att) => {
-      if (!dates.includes(att.date)) {
-        dates.push(att.date);
-      }
+      datesSet.add(att.date);
     });
   });
-  return dates.sort((a, b) => new Date(a) - new Date(b));
+  return Array.from(datesSet).sort((a, b) => new Date(a) - new Date(b));
 };
 
 const getAttendanceStatus = (attendance, date) => {
@@ -834,172 +786,63 @@ const getAttendanceStatus = (attendance, date) => {
   return record ? record.status : false;
 };
 
-const checkAttendance = (attendanceData, studentID, groupID) => {
-  const today = new Date().toISOString().split("T")[0];
-  const attendanceRecord = attendanceData.find(
-    (record) =>
-      record.student_id === studentID &&
-      record.group_id === groupID &&
-      record.createdAt.split("T")[0] === today
-  );
-  if (attendanceRecord) {
-    store.attendance_id = attendanceRecord.id;
-    store.status = true;
-  }
-  return attendanceRecord ? attendanceRecord.status : true;
-};
-
-const listStudent = (allStudent, groupID) => {
-  allStudent.forEach((student) => {
-    store.student.push({
-      school_id: Number(localStorage.getItem("school_id")),
-      student_id: student.id,
-      group_id: groupID,
-      status: checkAttendance(student.attendance, student.id, groupID),
-      attendance_id: store.attendance_id,
-    });
-  });
-};
-
 // API Functions
-const getAllProduct = async () => {
-  if (store.guard) {
-    try {
-      const res = await axios.get(
-        `/group/${localStorage.getItem("school_id")}`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
-      store.groupAllProducts = res.data.sort((a, b) => b.id - a.id);
-      store.error = false;
-    } catch (error) {
-      store.groupAllProducts = error.response.data.message;
-      store.error = true;
-    }
-  } else {
-    const schoolId = localStorage.getItem("school_id");
-    const token = localStorage.getItem("token");
-    const id = localStorage.getItem("id");
+const getGroups = async () => {
+  try {
+    const endpoint = store.guard
+      ? `/v1/group/add/${schoolId.value}`
+      : `/v1/group/teacher/${schoolId.value}/${userId.value}`;
 
-    try {
-      const employeeRes = await axios.get(`/employee/${schoolId}/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      const employeeData = employeeRes.data;
-
-      const groupPromises = employeeData.group.map(async (group) => {
-        const groupRes = await axios.get(
-          `/group/${schoolId}/${group.group_id}/not`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
-        const groupData = groupRes.data;
-        groupData.student_date = group.createdAt.split("T")[0];
-        store.groups.push(groupData);
-        return groupData;
-      });
-
-      await Promise.all(groupPromises);
-
-      store.groupAllProducts = store.groups;
-    } catch (error) {
-      console.error("Xodim va guruh ma'lumotlarini olishda xato:", error);
-    }
+    const res = await axios.get(endpoint, { headers: authHeaders.value });
+    store.groupData = res.data;
+    store.error = false;
+  } catch (error) {
+    store.groupData = error.response?.data?.message || [];
+    store.error = true;
   }
 };
 
 const getOneProduct = async (id) => {
   history.group_id = "";
   try {
-    const groupResponse = await axios.get(
-      `/group/${localStorage.getItem("school_id")}/${id}/student`,
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      }
+    const res = await axios.get(
+      `/v1/attendance/group/${schoolId.value}/${id}`,
+      { headers: authHeaders.value }
     );
 
-    const groupPrice = Number(groupResponse.data.price);
-    const groupStartDate = groupResponse.data.start_date;
+    store.atData = res.data[0];
+    store.atPageData = [];
 
-    if (!groupStartDate || isNaN(Date.parse(groupStartDate))) {
-      throw new Error("Guruh ochilgan sana noto'g'ri");
-    }
-
-    const studentList = await Promise.all(
-      groupResponse.data.student.map(async (student) => {
-        const studentInfo = await axios.get(
-          `/student/${localStorage.getItem("school_id")}/${
-            student.student_id
-          }/payment`,
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          }
-        );
-
-        const paymentsForGroup = studentInfo.data.payment.filter(
-          (payment) => payment.group_id === form.group_id && payment.status !== 'delete'
-        );
-        studentInfo.data.paymentStatus = calculatePaymentStatus(
-          paymentsForGroup,
-          groupPrice
-        );
-        return studentInfo.data;
-      })
-    );
-
-    store.PageProduct = "";
-    store.allProducts = studentList;
-    listStudent(store.allProducts, form.group_id);
-
-    if (store.status) {
+    if (res.data[1]?.method === "put") {
       notification.warning("Bu guruhga oldin davomat qilingan");
     }
   } catch (error) {
-    notification.warning(
-      "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
-    );
+    handleError();
   }
 };
 
 const addAttendance = async () => {
   try {
     const data = {
-      list: store.student,
+      list: store.atData.map((student) => ({
+        attendance_id: student?.attendance_id,
+        school_id: Number(schoolId.value),
+        student_id: student.id,
+        group_id: student.group_id,
+        status: student.attendance,
+      })),
     };
 
-    const url = store.status
-      ? `/attendance/${localStorage.getItem("school_id")}`
-      : "/attendance";
-
-    const method = store.status ? "put" : "post";
-
-    await axios({
-      method: method,
-      url: url,
-      data: data,
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    });
+    await axios.post("/v1/attendance", data, { headers: authHeaders.value });
 
     notification.success("Davomat saqlandi");
 
-    setTimeout(function () {
+    setTimeout(() => {
       window.location.reload();
     }, 1000);
   } catch (error) {
     console.error(error);
-    notification.warning(
-      "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
-    );
+    handleError();
   }
 };
 
@@ -1007,33 +850,26 @@ const getHistory = async (page) => {
   form.group_id = "";
   try {
     const res = await axios.get(
-      `/attendance/${localStorage.getItem("school_id")}/${history.group_id}/${
-        history.year
-      }/${history.month}/page?page=${page}`,
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      }
+      `/v1/attendance/${schoolId.value}/${history.group_id}/${history.year}/${history.month}/page?page=${page}`,
+      { headers: authHeaders.value }
     );
 
     const records = res.data?.data?.records;
-    if (records && records.length !== 0) {
-      history.group_name = records[0].group_name;
-      store.PageProduct = records;
+    if (records?.length) {
+      store.atPageData = records;
       store.uniqueDates = getUniqueDates(records);
       const pagination = res.data?.data?.pagination;
       store.page = [pagination.currentPage, pagination.total_count];
       store.error = false;
     } else {
-      store.PageProduct = false;
+      store.atPageData = false;
       store.uniqueDates = [];
       store.error = false;
     }
     history.modal = false;
-    store.allProducts = false;
+    store.atData = false;
   } catch (error) {
-    store.PageProduct = [];
+    store.atPageData = [];
     store.uniqueDates = [];
     store.error = true;
   }
@@ -1041,40 +877,11 @@ const getHistory = async (page) => {
 
 const deleteStudentGroup = async () => {
   try {
-    const token = localStorage.getItem("token");
-    const schoolId = localStorage.getItem("school_id");
-
-    const studentGroupResponse = await axios.get(`/student-group`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+    await axios.delete(`/v1/student-group/${remove.id}`, {
+      headers: authHeaders.value,
     });
 
-    store.student_group = studentGroupResponse.data.filter(
-      (item) =>
-        item.student_id === remove.id &&
-        (item.group_id === form.group_id || item.group_id === history.group_id)
-    );
-
-    if (store.student_group.length > 0) {
-      const studentGroupId = store.student_group[0].id;
-
-      await axios.delete(`/student-group/${studentGroupId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      notification.success("O'quvchi guruhdan o'chirildi");
-    }
-
-    const IDgroup = form.group_id === "" ? history.group_id : form.group_id;
-
-    axios.delete(`/attendance/${schoolId}/${IDgroup}/${remove.id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    notification.success("O'quvchi guruhdan o'chirildi");
 
     if (form.group_id !== "") {
       getOneProduct(form.group_id);
@@ -1083,25 +890,18 @@ const deleteStudentGroup = async () => {
     }
 
     remove.toggle = false;
-    notification.success("Davomat ma'lumotlari o'chirildi");
   } catch (error) {
-    // console.error(error);
-    notification.warning(
-      "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
-    );
+    handleError();
   }
 };
 
-// Component Lifecycle
 onMounted(() => {
-  for (let i = 0; i < 5; i++) {
-    let list = {
-      id: i,
-      name: String(orqaYil + i),
-    };
-    store.curentYil.push(list);
-  }
-  getAllProduct();
+  store.curentYil = Array.from({ length: 5 }, (_, i) => ({
+    id: i,
+    name: String(orqaYil + i),
+  }));
+
+  getGroups();
 });
 </script>
 

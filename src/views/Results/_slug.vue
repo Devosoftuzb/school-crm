@@ -222,7 +222,7 @@
                   v-for="item in [
                     ['Ism-familya', store.product.customer?.full_name],
                     ['Telefon raqam', store.product.customer?.phone_number],
-                    ['Tanlagan fani', store.product.subject_name],
+                    ['Tanlagan fani', store.product.test?.subject?.name],
                     ['Tanlagan o‘qituvchisi', store.product.teacher],
                     ['Maqul bo‘lgan dars vaqti', store.product.time],
                   ]"
@@ -457,7 +457,7 @@
                           {{ index + 1 }}
                         </p>
                         <h2 class="w-full text-[14px] sm:text-[16px]">
-                          {{ i.question }}
+                          {{ i.question.question }}
                         </h2>
                       </div>
                       <div>
@@ -476,21 +476,21 @@
                 <div :id="'answers' + i.id" class="hidden mb-5">
                   <div class="mb-5">
                     <!-- File -->
-                    <div v-if="i.file" class="mb-3">
-                      <div v-if="isImage(i.file)">
+                    <div v-if="i.question.file" class="mb-3">
+                      <div v-if="isImage(i.question.file)">
                         <img
-                          :src="getFileUrl(i.file)"
+                          :src="getFileUrl(i.question.file)"
                           alt="Image"
                           loading="lazy"
                           class="w-full max-w-[320px] h-auto object-cover"
                         />
                       </div>
-                      <div v-else-if="isAudio(i.file)">
-                        <audio :src="getFileUrl(i.file)" controls />
+                      <div v-else-if="isAudio(i.question.file)">
+                        <audio :src="getFileUrl(i.question.file)" controls />
                       </div>
-                      <div v-else-if="isVideo(i.file)">
+                      <div v-else-if="isVideo(i.question.file)">
                         <video
-                          :src="getFileUrl(i.file)"
+                          :src="getFileUrl(i.question.file)"
                           controls
                           width="320"
                           height="240"
@@ -500,38 +500,38 @@
 
                     <!-- Text -->
                     <div
-                      v-if="i.text"
+                      v-if="i.question.text"
                       class="flex flex-col px-5 mb-10 text-justify"
                     >
-                      <h3 class="mb-2 font-bold">{{ i.text.title }}</h3>
-                      <p class="whitespace-pre-line">{{ i.text.text }}</p>
+                      <h3 class="mb-2 font-bold">
+                        {{ i.question.text.title }}
+                      </h3>
+                      <p class="whitespace-pre-line">
+                        {{ i.question.text.text }}
+                      </p>
                     </div>
 
                     <!-- Question -->
-                    <h3 class="flex px-5 text-justify">{{ i.question }}</h3>
+                    <h3 class="flex px-5 text-justify">
+                      {{ i.question.question }}
+                    </h3>
                   </div>
 
                   <!-- Test Options -->
                   <div
-                    v-if="i.type === 'test'"
+                    v-if="i.question.type === 'test'"
                     class="grid gap-5 sm:grid-cols-2"
                   >
                     <div
-                      v-for="(ans, ansIndex) in i.option"
-                      :key="ansIndex"
                       class="w-full text-justify text-black p-2.5 sm:pl-10 pl-5 text-sm rounded-xl"
                       :class="
-                        ans.is_correct === true
+                        i.option.is_correct
                           ? 'bg-blue-300 text-blue-600'
-                          : ans.is_correct === false
-                          ? 'bg-red-300 text-red-600'
-                          : 'bg-gray-200 text-gray-600'
+                          : 'bg-red-300 text-red-600'
                       "
                     >
-                      <strong
-                        >{{ String.fromCharCode(65 + ansIndex) }}:
-                      </strong>
-                      <span>{{ ans.option || "Noma'lum" }}</span>
+                      <strong>{{ String.fromCharCode(65) }}: </strong>
+                      <span>{{ i.option.option }}</span>
                     </div>
                   </div>
 
@@ -557,7 +557,7 @@
 </template>
 
 <script setup>
-import { onMounted, reactive } from "vue";
+import { onMounted, reactive, computed } from "vue";
 import { useRouter } from "vue-router";
 import { useNavStore } from "../../stores/toggle";
 import { Placeholder2 } from "../../components";
@@ -567,6 +567,14 @@ import { useNotificationStore } from "../../stores/notification";
 const notification = useNotificationStore();
 const navbar = useNavStore();
 const router = useRouter();
+
+const resultId = computed(() => router.currentRoute.value.params.id);
+const schoolId = computed(() => localStorage.getItem("school_id"));
+const token = computed(() => localStorage.getItem("token"));
+const authHeaders = computed(() => ({
+  Authorization: `Bearer ${token.value}`,
+}));
+const apiUrl = computed(() => import.meta.env.VITE_API);
 
 const store = reactive({
   product: "",
@@ -592,22 +600,27 @@ const form = reactive({
   start_date: "",
 });
 
-const getFileUrl = (file) => import.meta.env.VITE_API + "/" + file;
+const handleError = (
+  message = "Xatolik! Nimadir noto'g'ri. Internetni tekshirib qaytadan urinib ko'ring!",
+) => {
+  notification.warning(message);
+};
 
+const getFileUrl = (file) => `${apiUrl.value}/${file}`;
 const isImage = (filename) => /\.(jpe?g|png|gif|bmp|webp|svg)$/i.test(filename);
 const isAudio = (filename) => /\.(mp3|wav|ogg|m4a)$/i.test(filename);
 const isVideo = (filename) => /\.(mp4|webm|ogg|mov)$/i.test(filename);
 
 function accordion(id) {
-  for (let i of store.accordion) {
-    if (i != id) {
+  store.accordion.forEach((i) => {
+    if (i !== id) {
       const el = document.querySelector(`#answers${i}`);
-      if (el) el.classList.add("hidden");
+      el?.classList.add("hidden");
     }
-  }
+  });
 
   const show = document.querySelector(`#answers${id}`);
-  if (show) show.classList.toggle("hidden");
+  show?.classList.toggle("hidden");
 
   if (!store.accordion.includes(id)) {
     store.accordion.push(id);
@@ -620,7 +633,7 @@ const chekDateFormat = (date) => {
   if (!date) return "Sana mavjud emas";
 
   const d = new Date(date);
-  if (isNaN(d.getTime())) return "Noto‘g‘ri sana";
+  if (isNaN(d.getTime())) return "Noto'g'ri sana";
 
   const year = d.getFullYear();
   const month = String(d.getMonth() + 1).padStart(2, "0");
@@ -631,205 +644,128 @@ const chekDateFormat = (date) => {
   return `${year}-${month}-${day}, ${hour}:${minute}`;
 };
 
-const getSubject = () => {
-  axios
-    .get(`/subject/${localStorage.getItem("school_id")}`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    })
-    .then((res) => {
-      store.subjects = res.data;
-    })
-    .catch((error) => {
-      notification.warning(
-        "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
-      );
-    });
+const enrichRecord = (record) => {
+  const correctAnswers = record.customer_answer.filter(
+    (ans) => ans.is_correct === true,
+  ).length;
+
+  const incorrectAnswers = record.customer_answer.filter(
+    (ans) => ans.is_correct === false,
+  ).length;
+
+  const [time, ...teacherParts] = record.customer.description.split(" ");
+  const teacher = teacherParts.join(" ");
+
+  return {
+    ...record,
+    correct: correctAnswers,
+    incorrect: incorrectAnswers,
+    time: time || "Noma'lum",
+    teacher: teacher || "Noma'lum",
+  };
 };
 
-const getProduct = async () => {
-  const id = router.currentRoute.value.params.id;
+const getOneProduct = (group_id, group_name) => {
+  Object.assign(form, {
+    group_id: group_id,
+    group_name: group_name,
+    modal: true,
+  });
+};
+
+// API Functions
+const getSubject = async () => {
   try {
-    const response = await axios.get(`/customer-test/${id}`, {
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    const res = await axios.get(`/v1/subject/add/${schoolId.value}`, {
+      headers: authHeaders.value,
+    });
+    store.subjects = res.data;
+  } catch (error) {
+    handleError();
+  }
+};
+
+const getOneResult = async () => {
+  try {
+    const response = await axios.get(`/v1/customer-test/${resultId.value}`, {
+      headers: authHeaders.value,
     });
 
-    const record = response.data;
-    const customerAnswers = record.customer_answer || [];
-    const questionsMap = new Map();
+    const data = response.data;
 
-    for (const answer of customerAnswers) {
-      const q = answer.question;
-      if (!q) continue;
+    Object.assign(form, {
+      id: data.customer?.id,
+      full_name: data.customer?.full_name,
+      phone_number: data.customer?.phone_number,
+    });
 
-      if (!questionsMap.has(q.id)) {
-        questionsMap.set(q.id, {
-          id: q.id,
-          question: q.question,
-          file: q.file,
-          option: [],
-          text: q.text,
-          writing: null,
-          type: q.type,
-        });
-      }
+    store.questions = data.customer_answer;
+    store.product = enrichRecord(data);
 
-      const qItem = questionsMap.get(q.id);
-
-      if (q.type === "test") {
-        qItem.option.push({
-          id: answer.option?.id || null,
-          option: answer.option?.option || "Noma'lum",
-          is_correct: answer.is_correct,
-        });
-      } else if (q.type === "writing") {
-        qItem.writing = answer.writing || "Noma'lum";
-      }
-    }
-
-    store.questions = Array.from(questionsMap.values());
-
-    // Correct / Incorrect
-    const correctAnswers = customerAnswers.filter(
-      (ans) => ans.is_correct === true
-    ).length;
-    const incorrectAnswers = customerAnswers.filter(
-      (ans) => ans.is_correct === false
-    ).length;
-
-    const subjectId = record.customer.subject_id;
-    const subject = store.subjects.find((s) => s.id === subjectId);
-
-    // Teacher va time
-    const [time, ...teacherParts] =
-      record.customer.description?.split(" ") || [];
-    const teacher = teacherParts.join(" ");
-
-    store.product = {
-      ...record,
-      subject_name: subject?.name || "Noma'lum",
-      correct: correctAnswers,
-      incorrect: incorrectAnswers,
-      time: time || "Noma'lum",
-      teacher: teacher || "Noma'lum",
-    };
-    form.id = store.product.customer_id;
-    getGroupLevel(store.product.overall_result);
+    getGroupLevel(data.overall_result);
     store.error = null;
   } catch (error) {
-    store.product = null;
+    store.product = {};
     store.error = error.response?.data?.message || "Xatolik yuz berdi!";
   }
 };
 
-const getGroupLevel = (overall) => {
-  axios
-    .get(`/group/level/${localStorage.getItem("school_id")}/${overall}`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    })
-    .then((res) => {
-      store.groupLevel = res.data;
-    })
-    .catch((error) => {
-      notification.warning(
-        "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
-      );
-    });
-};
-
-const getOneProduct = async (group_id, group_name) => {
+const getGroupLevel = async (overall) => {
   try {
     const res = await axios.get(
-      `/customer/${localStorage.getItem("school_id")}/${form.id}`,
-      {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      }
+      `/v1/group/level/${schoolId.value}/${overall}`,
+      { headers: authHeaders.value },
     );
-    form.modal = true;
-    form.group_id = group_id;
-    form.group_name = group_name;
-    form.full_name = res.data.full_name;
-    form.phone_number = res.data.phone_number;
+    store.groupLevel = res.data;
   } catch (error) {
-    notification.warning(
-      "Xatolik! Internetni tekshirib qaytadan urinib ko‘ring!"
-    );
+    handleError();
   }
 };
 
 const createStudent = async () => {
   try {
     const data = {
-      school_id: Number(localStorage.getItem("school_id")),
+      school_id: Number(schoolId.value),
       parents_full_name: form.parents_full_name,
       parents_phone_number: form.parents_phone_number,
       full_name: form.full_name,
       phone_number: form.phone_number,
       start_date: form.start_date,
+      group_id: form.group_id,
       status: true,
     };
-    const res = await axios.post("/student", data, {
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+
+    const res = await axios.post("/v1/student", data, {
+      headers: authHeaders.value,
     });
+
     notification.success("Mijoz guruhga qo'shildi");
     form.is_student = true;
-    editProduct();
-    addGroupsModal(res.data.student.id);
-    form.parents_full_name = "Hurmatli ota-ona";
-    form.parents_phone_number = "+998";
-    form.modal = false;
-  } catch (error) {
-    notification.warning(
-      "Xatolik! Internetni tekshirib qaytadan urinib ko‘ring!"
-    );
-  }
-};
 
-const addGroupsModal = async (id) => {
-  try {
-    const groupRes = await axios.get(
-      `/group/${localStorage.getItem("school_id")}/${form.group_id}/group`,
-      {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      }
-    );
-    const data = {
-      student_id: id,
-      group_id: Number(form.group_id),
-      group_name: groupRes.data.name,
-    };
-    await axios.post("/student-group", data, {
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    await updateStatus();
+    await sendSms(res.data.student.id);
+
+    Object.assign(form, {
+      parents_full_name: "Hurmatli ota-ona",
+      parents_phone_number: "+998",
+      modal: false,
     });
-    form.group_id = "";
-    sendSms(id);
   } catch (error) {
-    notification.warning(
-      "Xatolik! Internetni tekshirib qaytadan urinib ko‘ring!"
-    );
+    handleError();
   }
 };
 
-const editProduct = async () => {
+const updateStatus = async () => {
   try {
     const data = {
-      ...form,
-      school_id: Number(localStorage.getItem("school_id")),
+      is_student: form.is_student,
     };
-    await axios.put(
-      `/customer/${localStorage.getItem("school_id")}/${form.id}`,
-      data,
-      {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      }
-    );
+
+    await axios.put(`/v1/customer/status/${schoolId.value}/${form.id}`, data, {
+      headers: authHeaders.value,
+    });
   } catch (error) {
-    notification.warning(
-      "Xatolik! Internetni tekshirib qaytadan urinib ko‘ring!"
-    );
+    handleError();
   }
 };
 
@@ -838,19 +774,16 @@ const sendSms = async (id) => {
     const data = {
       student_id: id,
     };
-    await axios.post("/sms/group", data, {
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-    });
+
+    await axios.post("/v1/sms/group", data, { headers: authHeaders.value });
   } catch (error) {
-    notification.warning(
-      "Xatolik! Internetni tekshirib qaytadan urinib ko‘ring!"
-    );
+    handleError();
   }
 };
 
 onMounted(() => {
   getSubject();
-  getProduct();
+  getOneResult();
 });
 </script>
 

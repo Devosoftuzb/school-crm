@@ -9,7 +9,7 @@
           : 'hidden'
       "
     >
-      <div class="relative p-4 max-w-xl min-w-[30%] h-auto">
+      <div class="relative w-full h-auto max-w-lg p-4">
         <!-- Modal content -->
         <div
           class="relative p-4 shadow rounded-xl sm:p-5"
@@ -165,7 +165,7 @@
                     type="text"
                     class="bg-gray-50 border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                     :placeholder="`Variant ${String.fromCharCode(
-                      65 + index
+                      65 + index,
                     )} ni kiriting`"
                     required
                   />
@@ -366,7 +366,7 @@
           : 'hidden'
       "
     >
-      <div class="relative p-4 max-w-xl min-w-[30%] h-auto">
+      <div class="relative w-full h-auto max-w-lg p-4">
         <!-- Modal content -->
         <div
           class="relative p-4 shadow rounded-xl sm:p-5"
@@ -520,7 +520,7 @@
                       type="text"
                       class="bg-gray-50 border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                       :placeholder="`Variant ${String.fromCharCode(
-                        65 + index
+                        65 + index,
                       )} ni kiriting`"
                       required
                     />
@@ -682,42 +682,41 @@
       <div v-show="store.allProducts" class="w-full max-w-screen">
         <!-- Start coding here -->
         <div
-          class="flex flex-col items-center justify-between p-4 mb-4 shadow rounded-xl lg:flex-row lg:space-x-4"
+          class="flex flex-col items-center justify-between w-full gap-3 p-4 mb-4 shadow rounded-xl lg:flex-row"
           :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
         >
           <div
-            class="flex flex-col items-center justify-between w-full gap-5 pb-4 sm:flex-row lg:justify-start lg:pb-0"
+            class="flex flex-col items-center justify-between w-full gap-5 sm:flex-row lg:justify-start"
           >
             <h1 class="text-lg font-bold text-blue-700">Savollar</h1>
-            <div
-              class="flex flex-row items-center justify-between w-full gap-5 lg:w-auto md:space-x-3"
+            <button
+              @click="router.back(-1)"
+              class="btn sm:w-auto w-full shadow-lg rounded-xl whitespace-nowrap px-5 py-2.5 text-white focus:ring-2 text-sm"
             >
-              <button
-                @click="modal = true"
-                id=""
-                type="button"
-                class="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-xl btnAdd whitespace-nowrap hover:bg-blue-700 focus:ring-4 focus:ring-blue-300"
-              >
-                <span>Savol qo'shish</span>
-              </button>
-
-              <button
-                @click="store.textModal = true"
-                id=""
-                type="button"
-                class="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-xl btnAdd whitespace-nowrap hover:bg-blue-700 focus:ring-4 focus:ring-blue-300"
-              >
-                <span>Matn qo'shish</span>
-              </button>
-            </div>
+              Orqaga qaytish
+            </button>
           </div>
-
-          <button
-            @click="router.back(-1)"
-            class="btn sm:w-auto w-full shadow-lg rounded-xl whitespace-nowrap px-5 py-2.5 text-white focus:ring-2 text-sm"
+          <div
+            class="flex flex-col items-center justify-center w-full gap-3 md:flex-row lg:w-auto"
           >
-            Orqaga qaytish
-          </button>
+            <button
+              @click="modal = true"
+              id=""
+              type="button"
+              class="btn w-full shadow-lg rounded-xl whitespace-nowrap px-5 py-2.5 text-white focus:ring-2 text-sm"
+            >
+              <span>Savol qo'shish</span>
+            </button>
+
+            <button
+              @click="store.textModal = true"
+              id=""
+              type="button"
+              class="btn w-full shadow-lg rounded-xl whitespace-nowrap px-5 py-2.5 text-white focus:ring-2 text-sm"
+            >
+              <span>Matn qo'shish</span>
+            </button>
+          </div>
         </div>
         <!------------------------------------------- Search ------------------------------------------->
 
@@ -727,7 +726,7 @@
         >
           <div
             class="overflow-x-auto"
-            v-for="(i, index) in store.allProducts.questions"
+            v-for="(i, index) in store.allProducts"
             :key="i.id"
           >
             <div>
@@ -854,7 +853,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref, reactive } from "vue";
+import { onMounted, ref, reactive, computed } from "vue";
 import { useRouter } from "vue-router";
 import { useNavStore } from "../../stores/toggle";
 import { Placeholder2 } from "../../components";
@@ -864,16 +863,27 @@ import axios from "@/services/axios";
 const notification = useNotificationStore();
 const navbar = useNavStore();
 const router = useRouter();
-
 const modal = ref(false);
+const getImg = ref(null);
 
-const getFileUrl = (file) => import.meta.env.VITE_API + "/" + file;
+const token = computed(() => localStorage.getItem("token"));
+const authHeaders = computed(() => ({
+  Authorization: `Bearer ${token.value}`,
+}));
+const apiUrl = computed(() => import.meta.env.VITE_API);
+const testId = computed(() => router.currentRoute?.value?.params?.name);
 
+const handleError = (
+  message = "Xatolik! Nimadir noto'g'ri. Internetni tekshirib qaytadan urinib ko'ring!",
+) => {
+  notification.warning(message);
+};
+
+const getFileUrl = (file) => `${apiUrl.value}/${file}`;
 const isImage = (filename) => /\.(jpe?g|png|gif|bmp|webp|svg)$/i.test(filename);
 const isAudio = (filename) => /\.(mp3|wav|ogg|m4a)$/i.test(filename);
 const isVideo = (filename) => /\.(mp4|webm|ogg|mov)$/i.test(filename);
 
-const getImg = ref(null);
 const setImg = (e) => {
   getImg.value = e.target.files[0];
 };
@@ -892,58 +902,18 @@ const store = reactive({
   textTitle: "",
 });
 
-function enterSlug(name) {
-  router.push(`./tests/question/${name.toLowerCase()}`);
-}
-
-function deleteFunc(id) {
-  remove.id = id;
-  remove.toggle = true;
-}
-
-function accordion(id) {
-  for (let i of store.accordion) {
-    if (i != id) {
-      const el = document.querySelector(`#answers${i}`);
-      if (el) el.classList.add("hidden");
-    }
-  }
-
-  const show = document.querySelector(`#answers${id}`);
-  if (show) show.classList.toggle("hidden");
-
-  if (!store.accordion.includes(id)) {
-    store.accordion.push(id);
-  }
-
-  store.plus = store.plus === id ? "" : id;
-}
-
-// ----------------------------------- forms -----------------------------------
 const form = reactive({
   question: "",
+  question_type: "",
   variants: [""],
   true_answer: null,
   test_id: "",
   question_id: "",
   text_id: "",
-  question_type: "",
 });
 
-function addVariant() {
-  form.variants.push("");
-}
-
-const addVariant2 = () => {
-  const newVariant = {
-    option: "",
-    is_correct: false,
-  };
-
-  edit.variants.push(newVariant);
-};
-
 const edit = reactive({
+  question_type: "",
   question: "",
   variants: [""],
   true_answer: "",
@@ -952,7 +922,6 @@ const edit = reactive({
   id: "",
   toggle: false,
   text_id: "",
-  question_type: "",
 });
 
 const remove = reactive({
@@ -960,312 +929,261 @@ const remove = reactive({
   toggle: false,
 });
 
-const testId = router.currentRoute?.value?.params?.name;
-
-function cancelFunc1() {
-  modal.value = false;
-  getImg.value = "";
-  form.question = "";
-  form.variants = [""];
-  form.true_answer = null;
-  form.test_id = "";
-  form.question_id = "";
-  form.question_type = "";
+function deleteFunc(id) {
+  remove.id = id;
+  remove.toggle = true;
 }
 
-// ----------------------------------- axios --------------------------------
+function accordion(id) {
+  store.accordion.forEach((i) => {
+    if (i !== id) {
+      const el = document.querySelector(`#answers${i}`);
+      el?.classList.add("hidden");
+    }
+  });
+
+  const show = document.querySelector(`#answers${id}`);
+  show?.classList.toggle("hidden");
+
+  if (!store.accordion.includes(id)) {
+    store.accordion.push(id);
+  }
+
+  store.plus = store.plus === id ? "" : id;
+}
+
+function addVariant() {
+  form.variants.push("");
+}
+
+const addVariant2 = () => {
+  edit.variants.push({
+    option: "",
+    is_correct: false,
+  });
+};
+
+function cancelFunc1() {
+  Object.assign(form, {
+    question: "",
+    variants: [""],
+    true_answer: null,
+    test_id: "",
+    question_id: "",
+  });
+  modal.value = false;
+  getImg.value = "";
+}
+
+// API Functions
 const getProduct = async () => {
   try {
-    // const testId = router.currentRoute?.value?.params?.name;
-    const res = await axios.get(`/test/${testId}`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
+    const res = await axios.get(`/v1/questions/all/${testId.value}`, {
+      headers: authHeaders.value,
     });
 
-    if (!res.data.questions.length) {
+    if (!res.data.length) {
       store.allProducts = "Savollar topilmadi";
       store.error = true;
       return;
     }
+
     store.allProducts = res.data;
     store.error = false;
   } catch (error) {
-    notification.warning(
-      "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
-    );
+    handleError();
     store.error = true;
     console.log("error", error);
   }
 };
 
-const getOneProduct = (id) => {
-  axios
-    .get(`/questions/${id}`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    })
-    .then((res) => {
-      edit.question_type = res.data.type;
-      edit.id = id;
-      edit.question = res.data.question;
-      edit.variants =
+const getOneProduct = async (id) => {
+  try {
+    const res = await axios.get(`/v1/questions/${id}`, {
+      headers: authHeaders.value,
+    });
+
+    Object.assign(edit, {
+      id: id,
+      question: res.data.question,
+      question_type: res.data.type,
+      variants:
         res.data.option.map((opt) => ({
           text: opt.option,
           is_correct: opt.is_correct,
           id: opt.id,
-        })) || [];
-
-      edit.true_answer = res.data.option.findIndex((opt) => opt.is_correct);
-      edit.text_id = res.data.text_id;
-      edit.toggle = true;
-    })
-    .catch((error) => {
-      console.log("error", error);
+        })) || [],
+      true_answer: res.data.option.findIndex((opt) => opt.is_correct),
+      text_id: res.data.text_id,
+      toggle: true,
     });
+  } catch (error) {
+    console.log("error", error);
+  }
 };
 
-const getText = () => {
-  axios
-    .get(`/question-text/getTestId/${testId}`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    })
-    .then((res) => {
-      store.textData = res.data;
-    })
-    .catch((error) => {
-      notification.warning(
-        "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
-      );
+const getText = async () => {
+  try {
+    const res = await axios.get(`/v1/question-text/getTestId/${testId.value}`, {
+      headers: authHeaders.value,
     });
+    store.textData = res.data;
+  } catch (error) {
+    handleError();
+  }
 };
 
-const createProduct = () => {
-  if (!form.true_answer && form.question_type === "test") {
-    if (form.true_answer !== 0) {
-      notification.warning("To'g'ri javobni belgilang!");
-      return;
-    }
+const createProduct = async () => {
+  if (
+    form.question_type === "test" &&
+    (form.true_answer === null || form.true_answer === undefined)
+  ) {
+    notification.warning("To'g'ri javobni belgilang!");
+    return;
   }
 
-  const data = {
-    type: form.question_type,
-    test_id: Number(testId),
-    text_id: form.text_id === "" ? null : form.text_id,
-    file: getImg.value,
-    question: form.question,
-  };
+  let options = [];
+  if (form.question_type === "test") {
+    options = form.variants.map((val, idx) => ({
+      option: val,
+      is_correct: form.true_answer === idx,
+    }));
+  }
 
   const formData = new FormData();
-  for (let key of Object.keys(data)) {
-    const value = data[key];
-    if (value !== null && value !== undefined) {
-      formData.append(key, value);
-    }
+  formData.append("test_id", Number(testId.value));
+
+  if (form.text_id !== "" && form.text_id !== null) {
+    formData.append("text_id", form.text_id);
   }
 
-  axios
-    .post("/questions", formData, {
+  formData.append("question", form.question);
+  formData.append("type", form.question_type);
+
+  if (getImg.value) {
+    formData.append("file", getImg.value);
+  }
+
+  if (options.length > 0) {
+    formData.append("options", JSON.stringify(options));
+  }
+
+  try {
+    await axios.post("/v1/questions", formData, {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        ...authHeaders.value,
+        "Content-Type": "multipart/form-data",
       },
-    })
-    .then((res) => {
-      form.variants.forEach((val, idx) => {
-        const obj = {
-          question_id: res.data.question.id,
-          option: val,
-          is_correct: form.true_answer === idx,
-        };
-
-        axios
-          .post("/option", obj, {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          })
-          .then(() => {
-            console.log("Option posted");
-          })
-          .catch((err) => {
-            console.error("Option post error:", err.response?.data || err);
-          });
-      });
-
-      notification.success("Savol qo'shildi");
-      getProduct();
-      cancelFunc1();
-    })
-    .catch((error) => {
-      notification.warning(
-        "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
-      );
-      console.log("error", error);
     });
+    notification.success("Savol qo'shildi");
+    getProduct();
+    cancelFunc1();
+  } catch (error) {
+    console.error(error);
+    handleError("Xatolik! Nimadir noto'g'ri. Qaytadan urinib ko'ring!");
+  }
 };
 
 const createText = async () => {
   try {
     const data = {
-      test_id: Number(testId),
+      test_id: Number(testId.value),
       title: store.textTitle,
       text: store.text,
     };
-    await axios.post("/question-text", data, {
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-    });
+
+    await axios.post("/v1/question-text", data, { headers: authHeaders.value });
     notification.success("Matn qo'shildi");
     getText();
     store.text = "";
     store.textModal = false;
   } catch (error) {
-    notification.warning("Error creating product.");
+    handleError("Error creating product.");
   }
 };
 
-const editProduct = () => {
-  if (!edit.true_answer) {
-    if (edit.true_answer !== 0) {
-      notification.warning("To'g'ri javobni belgilang!");
-      return;
-    }
+const editProduct = async () => {
+  if (
+    edit.question_type === "test" &&
+    (edit.true_answer === null || edit.true_answer === undefined)
+  ) {
+    notification.warning("To'g'ri javobni belgilang!");
+    return;
   }
 
-  const data = {
-    type: edit.question,
-    text_id:
-      edit.text_id === "" && edit.test_id === "null" ? null : edit.text_id,
-    test_id: +router.currentRoute?.value?.params?.name,
-    file: getImg.value,
-    question: edit.question,
-  };
+  const options = edit.variants.map((val, idx) => ({
+    id: val.id || undefined,
+    option: val.text,
+    is_correct: edit.true_answer === idx,
+  }));
 
   const formData = new FormData();
-  for (let key of Object.keys(data)) {
-    if (data[key] !== null && data[key] !== undefined) {
-      formData.append(key, data[key]);
-    }
+  formData.append("test_id", Number(testId.value));
+
+  if (edit.text_id !== "" && edit.test_id !== "null" && edit.text_id !== null) {
+    formData.append("text_id", edit.text_id);
   }
 
-  axios
-    .put(`/questions/${edit.id}`, formData, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    })
-    .then((res) => {
-      edit.variants.forEach((val, idx) => {
-        const optionData = {
-          option: val.text,
-          is_correct: edit.true_answer === idx ? true : false,
-        };
+  formData.append("question", edit.question);
 
-        if (val.id) {
-          axios
-            .put(`/option/${val.id}`, optionData, {
-              headers: {
-                Authorization: `Bearer ${localStorage.getItem("token")}`,
-              },
-            })
-            .then(() => {
-              console.log("Option updated");
-            })
-            .catch((err) => {
-              console.error("Option update error:", err.response?.data || err);
-            });
-        } else {
-          axios
-            .post(
-              "/option",
-              {
-                question_id: res.data.question.id,
-                ...optionData,
-              },
-              {
-                headers: {
-                  Authorization: `Bearer ${localStorage.getItem("token")}`,
-                },
-              }
-            )
-            .then(() => {
-              console.log("Option added");
-            })
-            .catch((err) => {
-              console.error("Option add error:", err.response?.data || err);
-            });
-        }
-      });
-      notification.success("Muvaffaqiyatli o'zgartirildi");
-      getProduct();
-      edit.toggle = false;
-    })
-    .catch((error) => {
-      notification.warning(
-        "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
-      );
-      console.log("error", error);
+  if (getImg.value) {
+    formData.append("file", getImg.value);
+  }
+
+  formData.append("options", JSON.stringify(options));
+
+  try {
+    await axios.put(`/v1/questions/${edit.id}`, formData, {
+      headers: {
+        ...authHeaders.value,
+        "Content-Type": "multipart/form-data",
+      },
     });
+    notification.success("Muvaffaqiyatli o'zgartirildi");
+    getProduct();
+    edit.toggle = false;
+  } catch (error) {
+    console.error("error", error);
+    handleError();
+  }
 };
 
-const deleteProduct = () => {
-  axios
-    .delete(`/questions/${remove.id}`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    })
-    .then((res) => {
-      notification.success("Savol o'chirildi");
-      getProduct();
-      remove.toggle = false;
-    })
-    .catch((error) => {
-      notification.warning(
-        "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
-      );
-      console.log("error", error);
+const deleteProduct = async () => {
+  try {
+    await axios.delete(`/v1/questions/${remove.id}`, {
+      headers: authHeaders.value,
     });
+    notification.success("Savol o'chirildi");
+    getProduct();
+    remove.toggle = false;
+  } catch (error) {
+    handleError();
+    console.log("error", error);
+  }
 };
 
-const deleteOption = (id) => {
-  axios
-    .delete(`/option/${id}`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    })
-    .then((res) => {
-      notification.success("Variant o'chirildi");
-      getOneProduct(edit.id);
-      remove.toggle = false;
-    })
-    .catch((error) => {
-      notification.warning(
-        "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
-      );
-      console.log("error", error);
-    });
+const deleteOption = async (id) => {
+  try {
+    await axios.delete(`/v1/option/${id}`, { headers: authHeaders.value });
+    notification.success("Variant o'chirildi");
+    getOneProduct(edit.id);
+    remove.toggle = false;
+  } catch (error) {
+    handleError();
+    console.log("error", error);
+  }
 };
 
-const deleteText = (id) => {
-  axios
-    .delete(`/question-text/${id}`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    })
-    .then((res) => {
-      notification.success("Matn o'chirildi");
-      getText();
-    })
-    .catch((error) => {
-      notification.warning(
-        "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
-      );
+const deleteText = async (id) => {
+  try {
+    await axios.delete(`/v1/question-text/${id}`, {
+      headers: authHeaders.value,
     });
+    notification.success("Matn o'chirildi");
+    getText();
+  } catch (error) {
+    handleError();
+  }
 };
 
 onMounted(() => {

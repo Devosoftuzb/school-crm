@@ -4,7 +4,7 @@
 
     <section class="pt-4">
       <!------------------------------------------- Search ------------------------------------------->
-      <div v-show="!store.PageProduct">
+      <div v-show="!store.payHistoryData">
         <Placeholder2 />
       </div>
 
@@ -14,7 +14,7 @@
       <!-- ---------------------------------------- Statistic ------------------------------------- -->
 
       <div
-        v-show="store.PageProduct"
+        v-show="store.payHistoryData"
         v-for="i in store.statistic"
         :key="i"
         class="flex flex-wrap items-center justify-center mb-5 cards gap-x-5 gap-y-5"
@@ -118,7 +118,7 @@
                     Bekor qilish
                   </button>
                   <button
-                    @click="deleteProduct"
+                    @click="deletePayment"
                     class="btnAdd cursor-pointer text-white inline-flex items-center bg-[#4141eb] hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-500 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                   >
                     O'chirish
@@ -284,7 +284,7 @@
                     <span class="font-semibold">Sana:</span>
                     <span id="date">{{ store.chekDate }}</span>
                   </div>
-                  <div
+                  <!-- <div
                     class="flex justify-center py-1 text-sm text-center border-b border-black border-dashed item"
                   >
                     <span
@@ -295,7 +295,7 @@
                       }}</span>
                       da o'rgan!
                     </span>
-                  </div>
+                  </div> -->
                   <div
                     class="flex items-center justify-end gap-0.5 text-[4px] mt-5"
                   >
@@ -309,7 +309,7 @@
 
                 <!-- Modal body -->
                 <form
-                  @submit.prevent="editProduct"
+                  @submit.prevent="editPayment"
                   class="md:w-[60%] w-full"
                   :class="{ darkForm: navbar.userNav }"
                 >
@@ -406,7 +406,6 @@
                           placeholder="To'lov sumani kiriting"
                           :max="store.price"
                           required
-                          @input="onInput"
                         />
                       </div>
                       <div class="">
@@ -470,7 +469,7 @@
                             : 'bg-blue-100 text-blue-700'
                         "
                       >
-                        {{ store.student_date || "Noma'lum" }}
+                        {{ store.start_date || "Noma'lum" }}
                       </span>
                     </p>
                   </div>
@@ -656,7 +655,7 @@
                     <span class="font-semibold">Sana:</span>
                     <span id="date">{{ store.chekDate }}</span>
                   </div>
-                  <div
+                  <!-- <div
                     class="flex justify-center py-1 text-sm text-center border-b border-black border-dashed item"
                   >
                     <span
@@ -667,7 +666,7 @@
                       }}</span>
                       da o'rgan!
                     </span>
-                  </div>
+                  </div> -->
                   <div
                     class="flex items-center justify-end gap-0.5 text-[4px] mt-5"
                   >
@@ -843,7 +842,7 @@
                             : 'bg-blue-100 text-blue-700'
                         "
                       >
-                        {{ store.student_date || "Noma'lum" }}
+                        {{ store.start_date || "Noma'lum" }}
                       </span>
                     </p>
                   </div>
@@ -1033,7 +1032,7 @@
                 >
                   <ButtonLoader
                     :loading="loading.excel"
-                    @click="exportToExcel"
+                    @click="exportExcelHistory"
                     type="button"
                     class="btnAdd3 text-white inline-flex items-center justify-center bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                   >
@@ -1114,7 +1113,7 @@
                 >
                   <ButtonLoader
                     :loading="loading.excel"
-                    @click="exportToExcel"
+                    @click="exportExcelHistory"
                     type="button"
                     class="btnAdd3 text-white inline-flex items-center justify-center bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                   >
@@ -1256,7 +1255,7 @@
                       >
                         <li
                           class="pl-2 cursor-pointer hover:bg-blue-600 hover:text-white whitespace-nowrap"
-                          v-for="(i, index) in store.groupAllProducts"
+                          v-for="(i, index) in store.groups"
                           :key="index"
                           @mousedown.prevent="
                             history.group_id = i.id;
@@ -1276,7 +1275,7 @@
                 >
                   <ButtonLoader
                     :loading="loading.excel"
-                    @click="exportToExcel"
+                    @click="exportExcelHistory"
                     type="button"
                     class="btnAdd3 text-white inline-flex items-center justify-center bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                   >
@@ -1332,7 +1331,7 @@
                 >
                   <ButtonLoader
                     :loading="loading.excel"
-                    @click="exportToExcel"
+                    @click="exportExcelHistory"
                     type="button"
                     class="btnAdd3 text-white inline-flex items-center justify-center bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
                   >
@@ -1636,7 +1635,7 @@
                       >
                         <li
                           class="pl-2 cursor-pointer hover:bg-blue-600 hover:text-white whitespace-nowrap"
-                          v-for="(i, index) in store.groupAllProducts"
+                          v-for="(i, index) in store.groups"
                           :key="index"
                           @mousedown.prevent="
                             debtor.group_id = i.id;
@@ -1686,7 +1685,7 @@
       </div>
       <!-- ------------------------------------------- debtor modal end ------------------------------------------------- -->
 
-      <div v-show="store.PageProduct" class="w-full max-w-screen">
+      <div v-show="store.payHistoryData" class="w-full max-w-screen">
         <!-- Start coding here -->
 
         <!------------------------------------------- Search ------------------------------------------->
@@ -1721,7 +1720,7 @@
 
           <div class="flex items-center w-full gap-5 pb-2 lg:pb-0">
             <form
-              @submit.prevent="getOneProduct(form.group_id)"
+              @submit.prevent="handleSubmit"
               :class="{ darkForm: navbar.userNav }"
               class="flex flex-col items-center justify-end w-full gap-5 sm:flex-row"
             >
@@ -1783,7 +1782,7 @@
                 >
                   <li
                     class="pl-2 cursor-pointer hover:bg-blue-600 hover:text-white whitespace-nowrap"
-                    v-for="(i, index) in store.groupAllProducts"
+                    v-for="(i, index) in store.groups"
                     :key="index"
                     @mousedown.prevent="
                       form.group_id = i.id;
@@ -1833,14 +1832,13 @@
                 />
                 <ul
                   v-show="
-                    store.filter_showStudent &&
-                    store.searchListStudent.length > 0
+                    store.filter_showStudent && store.searchList.length > 0
                   "
                   class="absolute z-10 w-full py-1 overflow-hidden overflow-y-auto text-gray-600 bg-white rounded max-h-80"
                 >
                   <li
                     class="pl-2 cursor-pointer hover:bg-blue-600 hover:text-white"
-                    v-for="(i, index) in store.searchListStudent"
+                    v-for="(i, index) in store.searchList"
                     :key="index"
                     @mousedown.prevent="
                       form.id = i.id;
@@ -1858,7 +1856,7 @@
                 >
                   <li
                     class="pl-2 cursor-pointer hover:bg-blue-600 hover:text-white whitespace-nowrap"
-                    v-for="(i, index) in store.studentAllProducts"
+                    v-for="(i, index) in store.students"
                     :key="index"
                     @mousedown.prevent="
                       form.id = i.id;
@@ -1888,7 +1886,7 @@
         <!------------------------------------------- Search ------------------------------------------->
 
         <div
-          v-show="!store.allProducts && !debtor.isTable && !store.studentGroups"
+          v-show="!store.payData && !debtor.isTable && !store.studentGroups"
           class="w-full mb-5 bg-transparent rounded-xl"
         >
           <ul
@@ -1971,7 +1969,7 @@
         <h2
           v-show="
             history.dayModal &&
-            !store.allProducts &&
+            !store.payData &&
             !debtor.isTable &&
             !store.studentGroups &&
             !history.loader
@@ -1985,7 +1983,7 @@
         <h2
           v-show="
             history.monthModal &&
-            !store.allProducts &&
+            !store.payData &&
             !debtor.isTable &&
             !store.studentGroups &&
             !history.loader
@@ -1997,7 +1995,7 @@
         <h2
           v-show="
             history.groupMonthModal &&
-            !store.allProducts &&
+            !store.payData &&
             !debtor.isTable &&
             !store.studentGroups &&
             !history.loader
@@ -2011,7 +2009,7 @@
         <h2
           v-show="
             history.yearModal &&
-            !store.allProducts &&
+            !store.payData &&
             !debtor.isTable &&
             !store.studentGroups &&
             !history.loader
@@ -2030,73 +2028,7 @@
           </div>
 
           <div
-            v-show="store.allProducts && !store.studentGroups"
-            class="overflow-x-auto"
-          >
-            <table class="w-full text-sm text-left">
-              <thead class="text-xs text-white uppercase rounded-xl btnAdd">
-                <tr>
-                  <th scope="col" class="py-3 text-center">F . I . O</th>
-                  <th scope="col" class="py-3 text-center">To'lov holati</th>
-                  <th scope="col" class="py-3 text-center">To'lov</th>
-                </tr>
-              </thead>
-              <tbody v-if="!store.error">
-                <tr
-                  v-for="i in store.allProducts"
-                  :key="i.id"
-                  class="border-b"
-                  :class="
-                    navbar.userNav ? 'hover:bg-gray-700' : 'hover:bg-gray-50'
-                  "
-                >
-                  <th
-                    scope="row"
-                    class="px-8 py-4 font-medium text-center whitespace-nowrap"
-                  >
-                    <span>{{ i.full_name }}</span>
-                  </th>
-                  <td class="px-8 py-4 font-medium text-center">
-                    <p
-                      :class="{
-                        'bg-green-100 text-green-800':
-                          i.paymentStatus === 'To\'langan',
-                        'bg-red-100 text-red-800':
-                          i.paymentStatus.includes('to\'lanmagan'),
-                      }"
-                      class="rounded-[5px] p-1"
-                    >
-                      {{ i.paymentStatus }}
-                    </p>
-                  </td>
-
-                  <td
-                    v-show="store.btn_lamp"
-                    class="px-8 py-4 font-medium text-center"
-                  >
-                    <button
-                      v-show="store.btn_lamp"
-                      @click="toggleModal(i.id, i.full_name, i.start_date)"
-                      class="bg-green-600 rounded-xl py-2.5 px-5 text-white"
-                    >
-                      To'lov qilish
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-            <div
-              v-show="!store.allProducts"
-              class="w-full p-20 text-2xl font-medium text-center max-w-screen"
-            >
-              <h1>To'lov ro'yhati bo'sh</h1>
-            </div>
-          </div>
-
-          <div
-            v-show="
-              store.studentGroups && !store.allProducts && !debtor.isTable
-            "
+            v-show="store.payData && !debtor.isTable"
             class="overflow-x-auto"
           >
             <table class="w-full text-sm text-left">
@@ -2110,8 +2042,8 @@
               </thead>
               <tbody v-if="!store.error">
                 <tr
-                  v-for="i in store.studentGroups"
-                  :key="i.id"
+                  v-for="i in store.payData"
+                  :key="i.student_id"
                   class="border-b"
                   :class="
                     navbar.userNav ? 'hover:bg-gray-700' : 'hover:bg-gray-50'
@@ -2121,25 +2053,24 @@
                     scope="row"
                     class="px-8 py-4 font-medium text-center whitespace-nowrap"
                   >
-                    <span>{{ i.studentFullName }}</span>
+                    <span>{{ i.student_name }}</span>
                   </th>
                   <th
                     scope="row"
                     class="px-8 py-4 font-medium text-center whitespace-nowrap"
                   >
-                    <span>{{ i.groupName }}</span>
+                    <span>{{ i.group_name }}</span>
                   </th>
                   <td class="px-8 py-4 font-medium text-center">
                     <p
                       :class="{
-                        'bg-green-100 text-green-800':
-                          i.paymentStatus === 'To\'langan',
+                        'bg-green-100 text-green-800': i.debt === 'To\'langan',
                         'bg-red-100 text-red-800':
-                          i.paymentStatus.includes('to\'lanmagan'),
+                          i.debt.includes('to\'lanmagan'),
                       }"
                       class="rounded-[5px] p-1"
                     >
-                      {{ i.paymentStatus }}
+                      {{ i.debt }}
                     </p>
                   </td>
 
@@ -2151,12 +2082,15 @@
                       v-show="store.btn_lamp"
                       @click="
                         toggleModalStudent(
-                          i.studentId,
-                          i.groupId,
-                          i.studentFullName,
-                          i.teacherName,
-                          i.groupPrice,
-                          i.groupName
+                          i.student_id,
+                          i.group_id,
+                          i.student_name,
+                          i.teacher_name,
+                          i.group_price,
+                          i.group_name,
+                          i.group_start_date,
+                          i.start_date,
+                          i.debt,
                         )
                       "
                       class="bg-green-600 rounded-xl py-2.5 px-5 text-white"
@@ -2168,7 +2102,7 @@
               </tbody>
             </table>
             <div
-              v-show="!store.studentGroups"
+              v-show="!store.payData"
               class="w-full p-20 text-2xl font-medium text-center max-w-screen"
             >
               <h1>To'lov ro'yhati bo'sh</h1>
@@ -2177,7 +2111,7 @@
 
           <div
             v-show="
-              !store.allProducts &&
+              !store.payData &&
               !debtor.isTable &&
               !store.studentGroups &&
               !history.loader
@@ -2229,7 +2163,7 @@
               </thead>
               <tbody v-show="!store.error">
                 <tr
-                  v-for="i in store.PageProduct"
+                  v-for="i in store.payHistoryData"
                   :key="i"
                   class="border-b"
                   :class="[
@@ -2301,9 +2235,9 @@
                           !i.description || i.description.trim() === ""
                             ? "Izoh yo'q"
                             : i.description.split(" ").length > 3
-                            ? i.description.split(" ").slice(0, 3).join(" ") +
-                              "..."
-                            : i.description
+                              ? i.description.split(" ").slice(0, 3).join(" ") +
+                                "..."
+                              : i.description
                         }}
                       </p>
                       <span
@@ -2328,7 +2262,7 @@
                   >
                     <i
                       v-show="i.status !== 'delete'"
-                      @click="getEditProduct(i.id)"
+                      @click="getOnePayment(i.id)"
                       class="p-2 mr-3 text-blue-600 bg-blue-300 cursor-pointer rounded-xl bx bxs-pencil focus:ring-2"
                     >
                     </i>
@@ -2345,8 +2279,8 @@
 
             <div
               v-show="
-                (store.PageProduct && store.error) ||
-                store.PageProduct.length == 0
+                (store.payHistoryData && store.error) ||
+                store.payHistoryData.length == 0
               "
               class="w-full p-20 text-2xl font-medium text-center max-w-screen"
             >
@@ -2355,7 +2289,7 @@
           </div>
 
           <div
-            v-show="!store.allProducts && debtor.isTable"
+            v-show="!store.payData && debtor.isTable"
             class="overflow-x-auto"
           >
             <table class="w-full text-sm text-left">
@@ -2386,7 +2320,7 @@
               </thead>
               <tbody v-show="!store.error">
                 <tr
-                  v-for="i in store.PageProduct"
+                  v-for="i in store.payHistoryData"
                   :key="i"
                   class="border-b"
                   :class="
@@ -2440,9 +2374,11 @@
                           i.student_name,
                           i.group_id,
                           i.group_price,
-                          i.remaining_debt,
+                          i.debt,
                           i.teacher_name,
-                          i.group_name
+                          i.group_name,
+                          i.start_date,
+                          i.group_start_date,
                         )
                       "
                       class="bg-green-600 rounded-xl py-2.5 px-5 text-white"
@@ -2456,8 +2392,8 @@
 
             <div
               v-show="
-                (store.PageProduct && store.error) ||
-                store.PageProduct.length == 0
+                (store.payHistoryData && store.error) ||
+                store.payHistoryData.length == 0
               "
               class="w-full p-20 text-2xl font-medium text-center max-w-screen"
             >
@@ -2466,12 +2402,7 @@
           </div>
 
           <nav
-            v-show="
-              !store.allProducts &&
-              !debtor.isTable &&
-              !history.loader &&
-              !store.studentGroups
-            "
+            v-show="!store.payData && debtor.isTable"
             class="flex flex-row items-center justify-between p-4 space-y-0"
             aria-label="Table navigation"
           >
@@ -2487,7 +2418,7 @@
                 @click="
                   if (store.pagination > 1) {
                     store.pagination -= 1;
-                    getHistory(store.pagination);
+                    getDebtor(store.pagination);
                   }
                 "
               >
@@ -2524,7 +2455,7 @@
                 @click="
                   if (store.page[0] * 15 < store.page[1]) {
                     store.pagination += 1;
-                    getHistory(store.pagination);
+                    getDebtor(store.pagination);
                   }
                 "
               >
@@ -2537,7 +2468,7 @@
           </nav>
 
           <nav
-            v-show="!store.allProducts && debtor.isTable"
+            v-show="!store.payData && !debtor.isTable"
             class="flex flex-row items-center justify-between p-4 space-y-0"
             aria-label="Table navigation"
           >
@@ -2553,7 +2484,7 @@
                 @click="
                   if (store.pagination > 1) {
                     store.pagination -= 1;
-                    getDebtor(store.pagination);
+                    getHistory(store.pagination);
                   }
                 "
               >
@@ -2590,7 +2521,7 @@
                 @click="
                   if (store.page[0] * 15 < store.page[1]) {
                     store.pagination += 1;
-                    getDebtor(store.pagination);
+                    getHistory(store.pagination);
                   }
                 "
               >
@@ -2612,14 +2543,14 @@
 <script setup>
 import { onMounted, ref, reactive, computed } from "vue";
 import { useNavStore } from "../../stores/toggle";
-import { Placeholder2 } from "../../components";
-import { Placeholder3 } from "../../components";
+import {
+  Placeholder2,
+  Placeholder3,
+  ButtonLoader,
+  PageLoader,
+} from "../../components";
 import { useNotificationStore } from "../../stores/notification";
 import axios from "@/services/axios";
-import * as XLSX from "xlsx";
-import { saveAs } from "file-saver";
-import { ButtonLoader } from "../../components";
-import { PageLoader } from "../../components";
 
 const notification = useNotificationStore();
 const navbar = useNavStore();
@@ -2628,9 +2559,16 @@ const modal = ref(false);
 const hozirgiSana = new Date();
 const hozirgiYil = String(hozirgiSana.getFullYear());
 const orqaYil = hozirgiSana.getFullYear() - 2;
-let hozirgiOy = hozirgiSana.getMonth() + 1;
-hozirgiOy = hozirgiOy.toString().padStart(2, "0");
+let hozirgiOy = String(hozirgiSana.getMonth() + 1).padStart(2, "0");
 let hozirgiKun = hozirgiSana.getDate();
+
+// Computed properties
+const schoolId = computed(() => localStorage.getItem("school_id"));
+const token = computed(() => localStorage.getItem("token"));
+const authHeaders = computed(() => ({
+  Authorization: `Bearer ${token.value}`,
+}));
+const apiUrl = computed(() => import.meta.env.VITE_API);
 
 const loading = reactive({
   view: false,
@@ -2638,21 +2576,19 @@ const loading = reactive({
 });
 
 const store = reactive({
-  PageProduct: "",
+  payHistoryData: "",
   page: [],
   pagination: 1,
-  allProducts: false,
-  groupAllProducts: false,
-  studentAllProducts: false,
+  payData: false,
+  groups: false,
+  students: false,
   error: false,
-  guard: "",
   method: "",
   filter: "",
   filterStudent: "",
   filter_show: false,
   filter_showStudent: false,
   searchList: [],
-  searchListStudent: [],
   price: 0,
   date: "",
   curentYil: [],
@@ -2661,7 +2597,7 @@ const store = reactive({
   student_name: "",
   teacher_name: "",
   school_logo: "",
-  logo_link: import.meta.env.VITE_API + "/",
+  logo_link: `${apiUrl.value}/`,
   school_name: "",
   btn_lamp: true,
   statistic: false,
@@ -2669,8 +2605,8 @@ const store = reactive({
   selectLampStudent: false,
   isSubmitting: false,
   pay_price: 0,
-  studentGroups: false,
-  student_date: "",
+  checkOldPay: "",
+  start_date: "",
 });
 
 const statusCount = reactive({
@@ -2678,137 +2614,6 @@ const statusCount = reactive({
   halfPayment: 0,
   discount: 0,
 });
-
-function toggleModal(id, name, start_date) {
-  modal.value = !modal.value;
-  form.year = hozirgiYil;
-  form.month = hozirgiOy;
-  form.method = "";
-  form.price = store.price;
-  form.id = id;
-  form.discount = 0;
-  form.discountSum = 0;
-  store.student_name = name;
-  store.student_date = start_date;
-  formatDateToNumeric(new Date());
-}
-
-function toggleModalStudent(
-  id,
-  groupID,
-  studentName,
-  teacherName,
-  groupPrice,
-  groupName
-) {
-  modal.value = !modal.value;
-  form.year = hozirgiYil;
-  form.month = hozirgiOy;
-  form.method = "";
-  form.price = groupPrice;
-  form.id = id;
-  form.group_id = groupID;
-  store.student_name = studentName;
-  store.price = groupPrice;
-  store.teacher_name = teacherName;
-  store.group_name = groupName;
-  formatDateToNumeric(new Date());
-}
-
-function paymentDebtor(
-  id,
-  name,
-  group_id,
-  group_price,
-  debtorPay,
-  teacher_name,
-  group_name
-) {
-  getSchool();
-  modal.value = !modal.value;
-  form.year = hozirgiYil;
-  form.month = hozirgiOy;
-  form.price = debtorPay;
-  store.price = group_price;
-  store.teacher_name = teacher_name;
-  store.group_name = group_name;
-  form.group_id = group_id;
-  form.id = id;
-  store.student_name = name;
-}
-
-const cenecleEdit = () => {
-  edit.modal = false;
-  cancelFunc();
-};
-
-function cancelFunc() {
-  form.year = "";
-  form.month = "";
-  form.method = "";
-  form.price = store.price;
-  form.discount = 0;
-  form.discountSum = 0;
-  modal.value = false;
-}
-
-const onInput = (e) => {
-  let val = Number(e.target.value);
-  if (val > store.price) val = store.price;
-  if (val < 0) val = 0;
-  form.price = val;
-  store.pay_price = val;
-};
-
-// ---------------------------- search ------------------------------------
-function searchFunc() {
-  store.searchList = [];
-  if (store.filter) {
-    for (let i of store.groupAllProducts) {
-      if (i.name.toLowerCase().includes(store.filter.toLowerCase())) {
-        store.searchList.push(i);
-      }
-    }
-  }
-}
-
-function searchHistoryFunc() {
-  history.searchList = [];
-  if (history.filter) {
-    for (let i of store.groupAllProducts) {
-      if (i.name.toLowerCase().includes(history.filter.toLowerCase())) {
-        history.searchList.push(i);
-      }
-    }
-  }
-}
-
-function searchDebtorFunc() {
-  debtor.searchList = [];
-  if (debtor.filter) {
-    for (let i of store.groupAllProducts) {
-      if (i.name.toLowerCase().includes(debtor.filter.toLowerCase())) {
-        debtor.searchList.push(i);
-      }
-    }
-  }
-}
-
-function searchFuncStudent() {
-  store.searchListStudent = [];
-  if (store.filterStudent) {
-    for (let i of store.studentAllProducts) {
-      if (
-        i.full_name.toLowerCase().includes(store.filterStudent.toLowerCase())
-      ) {
-        store.searchListStudent.push(i);
-      }
-    }
-  }
-}
-// ---------------------------- search end ------------------------------------
-
-// ----------------------------------- forms -----------------------------------
 
 const form = reactive({
   year: hozirgiYil,
@@ -2827,93 +2632,10 @@ const edit = reactive({
   id: false,
 });
 
-function deleteFunc(id) {
-  remove.id = id;
-  remove.toggle = true;
-}
-
 const remove = reactive({
   id: "",
   toggle: false,
 });
-
-const historyDayModal = () => {
-  history.dayModal = true;
-  history.monthModal = false;
-  history.groupMonthModal = false;
-  history.yearModal = false;
-};
-
-const historyMonthModal = () => {
-  history.dayModal = false;
-  history.monthModal = true;
-  history.groupMonthModal = false;
-  history.yearModal = false;
-};
-
-const historyGroupMonthModal = () => {
-  history.groupMonthModal = true;
-  history.dayModal = false;
-  history.monthModal = false;
-  history.yearModal = false;
-};
-
-const historyYearModal = () => {
-  history.yearModal = true;
-  history.dayModal = false;
-  history.monthModal = false;
-  history.groupMonthModal = false;
-};
-
-const historyModal = () => {
-  history.modal = !history.modal;
-  history.year = hozirgiYil;
-  history.month = hozirgiOy;
-  history.day = hozirgiKun;
-  history.group_id = "";
-  historyDayModal();
-  getHistory(store.pagination);
-};
-
-const statusPaymentAllModal = () => {
-  history.status = "all";
-  history.statusPaymentAll = true;
-  history.statusPayment = false;
-  history.statusHalfPayment = false;
-  history.statusDiscount = false;
-  history.loader = true;
-  getHistory(1);
-};
-
-const statusPaymentModal = () => {
-  history.status = "payment";
-  history.statusPayment = true;
-  history.statusPaymentAll = false;
-  history.statusHalfPayment = false;
-  history.statusDiscount = false;
-  history.loader = true;
-  getHistory(1);
-};
-
-const statusHalfPaymentModal = () => {
-  history.status = "halfPayment";
-  history.statusHalfPayment = true;
-  history.statusPaymentAll = false;
-  history.statusPayment = false;
-  history.statusDiscount = false;
-  history.loader = true;
-  getHistory(1);
-};
-
-const statusDiscountModal = () => {
-  history.status = "discount";
-  history.statusDiscount = true;
-  history.statusPaymentAll = false;
-  history.statusPayment = false;
-  history.statusHalfPayment = false;
-  history.loader = true;
-  getHistory(1);
-};
 
 const history = reactive({
   year: hozirgiYil,
@@ -2943,26 +2665,6 @@ const history = reactive({
   statistic: false,
 });
 
-const debtorDayModal = () => {
-  debtor.dayModal = true;
-  debtor.monthModal = false;
-};
-
-const debtorMonthModal = () => {
-  debtor.dayModal = false;
-  debtor.monthModal = true;
-};
-
-const debtorModal = () => {
-  debtor.modal = !debtor.modal;
-  debtor.year = hozirgiYil;
-  debtor.month = hozirgiOy;
-  debtor.day = hozirgiKun;
-  debtor.group_id = "";
-  debtorDayModal();
-  getHistory(store.pagination);
-};
-
 const debtor = reactive({
   year: hozirgiYil,
   month: hozirgiOy,
@@ -2980,52 +2682,39 @@ const debtor = reactive({
   exportList: "",
 });
 
-const monthNames = (month) => {
-  switch (month) {
-    case "01":
-      return "Yanvar";
-    case "02":
-      return "Fevral";
-    case "03":
-      return "Mart";
-    case "04":
-      return "Aprel";
-    case "05":
-      return "May";
-    case "06":
-      return "Iyun";
-    case "07":
-      return "Iyul";
-    case "08":
-      return "Avgust";
-    case "09":
-      return "Sentabr";
-    case "10":
-      return "Oktabr";
-    case "11":
-      return "Noyabr";
-    case "12":
-      return "Dekabr";
-    default:
-      return "Notog'ri oy";
-  }
+// Helper functions
+const handleError = (
+  message = "Xatolik! Nimadir noto'g'ri. Internetni tekshirib qaytadan urinib ko'ring!",
+) => {
+  notification.warning(message);
 };
 
-// ----------------------------------- axios --------------------------------
+const monthNames = (month) => {
+  const months = [
+    "Yanvar",
+    "Fevral",
+    "Mart",
+    "Aprel",
+    "May",
+    "Iyun",
+    "Iyul",
+    "Avgust",
+    "Sentabr",
+    "Oktabr",
+    "Noyabr",
+    "Dekabr",
+  ];
+  return months[parseInt(month) - 1] || "Notog'ri oy";
+};
 
-const discountedPrice = computed(() => {
-  let discountAmount = 0;
-  if (form.discount !== 0 && form.discount !== "") {
-    discountAmount = (store.price * form.discount) / 100;
-    form.price = store.price - discountAmount;
-    store.pay_price = store.price - discountAmount;
-  } else if (form.discountSum !== 0 && form.discountSum !== "") {
-    discountAmount = form.discountSum;
-    form.price = store.price - discountAmount;
-    store.pay_price = store.price - discountAmount;
-  }
-  return store.price - discountAmount;
-});
+const formatDateToNumeric = (date) => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  const hour = String(date.getHours()).padStart(2, "0");
+  const minute = String(date.getMinutes()).padStart(2, "0");
+  store.chekDate = `${year}-${month}-${day}, ${hour}:${minute}`;
+};
 
 const chekDateFormat = (date) => {
   const year = date.getFullYear();
@@ -3033,621 +2722,396 @@ const chekDateFormat = (date) => {
   const day = String(date.getDate()).padStart(2, "0");
   const hour = String(date.getHours()).padStart(2, "0");
   const minute = String(date.getMinutes()).padStart(2, "0");
-
   return `${year}-${month}-${day}, ${hour}:${minute}`;
 };
 
-const getAllHistoryForExport = async () => {
-  const schoolId = localStorage.getItem("school_id");
-  const token = localStorage.getItem("token");
-  const config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  };
+// Search functions
+const createSearchFilter = (searchObj, data, key, filterProp = "filter") => {
+  searchObj.searchList = [];
+  if (!searchObj[filterProp]) return;
 
-  let urlBase;
-  if (history.dayModal) {
-    urlBase = `/payment/day/${schoolId}/${history.year}/${history.month}/${history.day}/all/page`;
-    await getStatistic(`${history.year}-${history.month}-${history.day}`);
-  } else if (history.monthModal) {
-    urlBase = `/payment/month/${schoolId}/${history.year}/${history.month}/all/page`;
-    await getStatistic(`${history.year}-${history.month}`);
-  } else if (history.groupMonthModal) {
-    urlBase = `/payment/groupMonth/${schoolId}/${history.group_id}/${history.year}/${history.month}/all/page`;
-    await getStatisticGroup(
-      history.group_id,
-      `${history.year}-${history.month}`
-    );
-  } else if (history.yearModal) {
-    urlBase = `/payment/year/${schoolId}/${history.year}/all/page`;
-    // await getStatistic(`${history.year}-${history.month}`);
-  } else {
-    return;
-  }
+  const filterLower = searchObj[filterProp].toLowerCase();
+  searchObj.searchList = data.filter((i) =>
+    i[key].toLowerCase().includes(filterLower),
+  );
+};
 
-  let allData = [];
-  let page = 1;
-  let hasMore = true;
+const searchFunc = () => createSearchFilter(store, store.groups, "name");
+const searchHistoryFunc = () =>
+  createSearchFilter(history, store.groups, "name");
+const searchDebtorFunc = () => createSearchFilter(debtor, store.groups, "name");
+const searchFuncStudent = () =>
+  createSearchFilter(store, store.students, "full_name", "filterStudent");
 
-  while (hasMore) {
-    try {
-      const res = await axios.get(`${urlBase}?page=${page}`, config);
-      const records = res.data?.data?.records || [];
-      if (records.length > 0) {
-        allData = allData.concat(records);
-        page++;
-        hasMore = records.length === 15;
-      } else {
-        hasMore = false;
-      }
-    } catch (err) {
-      console.error("Export uchun malumotlarni olishda xatolik:", err);
-      hasMore = false;
-    }
-  }
+// Modal handlers
+const setActiveHistoryModal = (type) => {
+  history.dayModal = type === "day";
+  history.monthModal = type === "month";
+  history.groupMonthModal = type === "groupMonth";
+  history.yearModal = type === "year";
+};
 
-  if (history.dayModal) {
-    history.dayList = allData;
-  } else if (history.monthModal) {
-    history.monthList = allData;
-  } else if (history.groupMonthModal) {
-    history.groupMonthList = allData;
-  } else if (history.yearModal) {
-    history.yearList = allData;
+const historyDayModal = () => setActiveHistoryModal("day");
+const historyMonthModal = () => setActiveHistoryModal("month");
+const historyGroupMonthModal = () => setActiveHistoryModal("groupMonth");
+const historyYearModal = () => setActiveHistoryModal("year");
+
+const setActiveStatusModal = (status) => {
+  history.status = status;
+  history.statusPaymentAll = status === "all";
+  history.statusPayment = status === "payment";
+  history.statusHalfPayment = status === "halfPayment";
+  history.statusDiscount = status === "discount";
+  history.loader = true;
+  getHistory(1);
+};
+
+const statusPaymentAllModal = () => setActiveStatusModal("all");
+const statusPaymentModal = () => setActiveStatusModal("payment");
+const statusHalfPaymentModal = () => setActiveStatusModal("halfPayment");
+const statusDiscountModal = () => setActiveStatusModal("discount");
+
+const setActiveDebtorModal = (type) => {
+  debtor.dayModal = type === "day";
+  debtor.monthModal = type === "month";
+};
+
+const debtorDayModal = () => setActiveDebtorModal("day");
+const debtorMonthModal = () => setActiveDebtorModal("month");
+
+const historyModal = () => {
+  Object.assign(history, {
+    modal: !history.modal,
+    year: hozirgiYil,
+    month: hozirgiOy,
+    day: hozirgiKun,
+    group_id: "",
+  });
+  historyDayModal();
+  getHistory(store.pagination);
+};
+
+const debtorModal = () => {
+  Object.assign(debtor, {
+    modal: !debtor.modal,
+    year: hozirgiYil,
+    month: hozirgiOy,
+    day: hozirgiKun,
+    group_id: "",
+  });
+  debtorDayModal();
+  getHistory(store.pagination);
+};
+
+const handleSubmit = () => {
+  if (form.group_id) {
+    getGroupStudents(form.group_id);
+  } else if (form.id) {
+    getStudentGroups(form.id);
   }
 };
 
-const exportToExcel = async () => {
-  loading.excel = true;
-  await getAllHistoryForExport();
+function toggleModal(id, name) {
+  modal.value = !modal.value;
+  Object.assign(form, {
+    year: hozirgiYil,
+    month: hozirgiOy,
+    method: "",
+    price: store.price,
+    id: id,
+    discount: 0,
+    discountSum: 0,
+  });
+  store.student_name = name;
+  formatDateToNumeric(new Date());
+}
 
-  const list = history.dayModal
-    ? history.dayList
-    : history.monthModal
-    ? history.monthList
-    : history.groupMonthModal
-    ? history.groupMonthList
-    : history.yearList;
+function toggleModalStudent(
+  id,
+  groupID,
+  studentName,
+  teacherName,
+  groupPrice,
+  groupName,
+  groupStartData,
+  start_date,
+  debt,
+) {
+  modal.value = !modal.value;
+  Object.assign(form, {
+    year: hozirgiYil,
+    month: hozirgiOy,
+    method: "",
+    price: groupPrice,
+    id: id,
+    group_id: groupID,
+  });
+  Object.assign(store, {
+    student_name: studentName,
+    price: groupPrice,
+    teacher_name: teacherName,
+    group_name: groupName,
+    start_date: start_date,
+    date: groupStartData,
+    checkOldPay: debt === "To'langan",
+  });
+  formatDateToNumeric(new Date());
+  getMethod();
+}
 
-  if (!list || list.length === 0) {
-    loading.excel = false;
-    notification.warning("Yuklash uchun ma'lumot topilmadi");
-    return;
-  }
+function paymentDebtor(
+  id,
+  name,
+  group_id,
+  group_price,
+  debtorPay,
+  teacher_name,
+  group_name,
+  start_date,
+  groupStartDate,
+) {
+  getSchool();
+  modal.value = !modal.value;
+  Object.assign(form, {
+    year: hozirgiYil,
+    month: hozirgiOy,
+    price: Number(debtorPay),
+    group_id: group_id,
+    id: id,
+  });
+  Object.assign(store, {
+    price: Number(group_price),
+    teacher_name: teacher_name,
+    group_name: group_name,
+    student_name: name,
+    start_date: start_date,
+    date: groupStartDate,
+  });
+  formatDateToNumeric(new Date());
+  getMethod();
+}
 
-  const rawData = list.filter((item) => item.status !== "delete");
-
-  const dataToExport = rawData.map((item) => ({
-    "O'quvchi (F . I . O)": item.student_name,
-    "O'qituvchi (F . I . O)": item.teacher_name,
-    "Guruh nomi": item.group_name,
-    "Guruh narxi": Number(item.group_price).toLocaleString("uz-UZ") + " so'm",
-    "To'lov turi": item.method,
-    "To'langan summa": item.price,
-    "Chegirma (%)": item.discount + " %",
-    Yil: item.year + " yil",
-    Oy: monthNames(item.month),
-    "To'lov sanasi": chekDateFormat(new Date(item.createdAt)),
-    Izoh: item.description,
-    Holati:
-      item.status === "delete"
-        ? "O'chirilgan"
-        : item.status === "update"
-        ? "O'zgartirilgan"
-        : "Tasdiqlangan",
-  }));
-
-  const ws = XLSX.utils.json_to_sheet(dataToExport, { origin: "A1" });
-
-  const lastRow = dataToExport.length + 1;
-
-  if (
-    !history.yearModal &&
-    history.statistic.statistics &&
-    history.statistic.statistics.length > 0
-  ) {
-    const startRow = lastRow + 4;
-
-    ws[`A${startRow}`] = { t: "s", v: "To'lov turi" };
-    ws[`B${startRow}`] = { t: "s", v: "To'lovlar soni" };
-    ws[`C${startRow}`] = { t: "s", v: "Jami summa" };
-
-    history.statistic.statistics.forEach((stat, idx) => {
-      const row = startRow + idx + 1;
-      ws[`A${row}`] = { t: "s", v: stat.method };
-      ws[`B${row}`] = {
-        t: "s",
-        v: Number(stat.count).toLocaleString("uz-UZ") + " ta",
-      };
-      ws[`C${row}`] = {
-        t: "s",
-        v: Number(stat.sum).toLocaleString("uz-UZ") + " so'm",
-      };
-    });
-
-    const numColumns = Object.keys(dataToExport[0]).length;
-    const maxRow = startRow + history.statistic.statistics.length;
-    ws["!ref"] = XLSX.utils.encode_range({
-      s: { c: 0, r: 0 },
-      e: { c: numColumns - 1, r: maxRow - 1 },
-    });
-  } else {
-    const numColumns = Object.keys(dataToExport[0]).length;
-    ws["!ref"] = XLSX.utils.encode_range({
-      s: { c: 0, r: 0 },
-      e: { c: numColumns - 1, r: dataToExport.length },
-    });
-  }
-
-  ws["!cols"] = [
-    { wpx: 180 },
-    { wpx: 180 },
-    { wpx: 200 },
-    { wpx: 120 },
-    { wpx: 120 },
-    { wpx: 130 },
-    { wpx: 110 },
-    { wpx: 90 },
-    { wpx: 90 },
-    { wpx: 160 },
-    { wpx: 90 },
-  ];
-
-  const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, "To'lov Tarixi");
-
-  const fileName = history.dayModal
-    ? `kunlik_tolov_tarixi_${history.year}-${history.month}-${history.day}.xlsx`
-    : history.monthModal
-    ? `oylik_tolov_tarixi_${history.year}-${history.month}.xlsx`
-    : history.groupMonthModal
-    ? `guruhni_oylik_tolov_tarixi_${history.year}-${history.month}-${history.group_name}.xlsx`
-    : `barcha_tolov_tarixi_${history.year}.xlsx`;
-
-  const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
-  const blob = new Blob([excelBuffer], { type: "application/octet-stream" });
-  saveAs(blob, fileName);
-  loading.excel = false;
-  notification.success("Excel fayl yuklab olindi!");
-  history.modal = !history.modal;
+const cenecleEdit = () => {
+  edit.modal = false;
+  cancelFunc();
 };
 
-const getAllHistoryForExportDebtor = async () => {
-  const id = localStorage.getItem("id");
-  const schoolId = localStorage.getItem("school_id");
-  const token = localStorage.getItem("token");
+function cancelFunc() {
+  Object.assign(form, {
+    year: "",
+    month: "",
+    method: "",
+    price: store.price,
+    discount: 0,
+    discountSum: 0,
+  });
+  modal.value = false;
+}
+
+function deleteFunc(id) {
+  remove.id = id;
+  remove.toggle = true;
+}
+
+const onInput = (e) => {
+  let val = Number(e.target.value);
+  if (val > store.price) val = store.price;
+  if (val < 0) val = 0;
+  form.price = val;
+  store.pay_price = val;
+};
+
+const discountedPrice = computed(() => {
+  let discountAmount = 0;
+  if (form.discount !== 0 && form.discount !== "") {
+    discountAmount = (store.price * form.discount) / 100;
+    form.price = store.price - discountAmount;
+  } else if (form.discountSum !== 0 && form.discountSum !== "") {
+    discountAmount = form.discountSum;
+    form.price = store.price - discountAmount;
+  }
+  return store.price - discountAmount;
+});
+
+// Export functions
+const exportExcelHistory = async () => {
   const config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
+    headers: authHeaders.value,
+    responseType: "blob",
   };
 
-  let urlBase;
-  if (debtor.dayModal) {
-    urlBase = `/payment/debtor/${schoolId}/${debtor.year}/${debtor.month}/page`;
-  } else if (debtor.monthModal) {
-    urlBase = `/payment/debtor-group/${schoolId}/${debtor.group_id}/${debtor.year}/${debtor.month}/page`;
+  let urlBase = `/v1/payment/history/excel?school_id=${schoolId.value}`;
+  let fileName = "payment";
+
+  if (history.dayModal) {
+    urlBase += `&year=${history.year}&month=${history.month}&day=${history.day}`;
+    fileName = `payment_${history.year}_${monthNames(history.month)}_${
+      history.day
+    }`;
+  } else if (history.monthModal) {
+    urlBase += `&year=${history.year}&month=${history.month}`;
+    fileName = `payment_${history.year}_${monthNames(history.month)}`;
+  } else if (history.groupMonthModal) {
+    urlBase += `&year=${history.year}&month=${history.month}&group_id=${history.group_id}`;
+    fileName = `payment_${history.year}_${monthNames(history.month)}_group`;
+  } else if (history.yearModal) {
+    urlBase += `&year=${history.year}`;
+    fileName = `payment_${history.year}`;
   } else {
     return;
   }
 
-  let allData = [];
-  let page = 1;
-  let hasMore = true;
-
-  while (hasMore) {
-    try {
-      const res = await axios.get(`${urlBase}?page=${page}`, config);
-      const records = res.data?.data?.records || [];
-      if (records.length > 0) {
-        allData = allData.concat(records);
-        page++;
-        hasMore = records.length === 15;
-      } else {
-        hasMore = false;
-      }
-    } catch (err) {
-      console.error("Export uchun malumotlarni olishda xatolik:", err);
-      hasMore = false;
-    }
+  try {
+    const response = await axios.get(urlBase, config);
+    const url = window.URL.createObjectURL(new Blob([response.data]));
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", `${fileName}.xlsx`);
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+  } catch (err) {
+    console.error("Export uchun malumotlarni olishda xatolik:", err);
   }
-  debtor.exportList = allData;
 };
 
 const exportToExcelDebtor = async () => {
-  loading.excel = true;
-  await getAllHistoryForExportDebtor();
+  const config = {
+    headers: authHeaders.value,
+    responseType: "blob",
+  };
 
-  const rawData = debtor.exportList;
+  let urlBase = `/v1/payment/debtor/excel?school_id=${schoolId.value}`;
+  let fileName = "debtor";
 
-  if (!rawData || rawData.length === 0) {
-    loading.excel = false;
-    notification.warning("Yuklash uchun ma'lumot topilmadi");
+  if (debtor.dayModal) {
+    urlBase += `&year=${debtor.year}&month=${debtor.month}`;
+    fileName = `debtor_${debtor.year}_${monthNames(debtor.month)}`;
+  } else if (debtor.monthModal) {
+    urlBase += `&year=${debtor.year}&month=${debtor.month}&group_id=${debtor.group_id}`;
+    fileName = `debtor_${debtor.year}_${monthNames(debtor.month)}_group`;
+  } else {
     return;
   }
 
-  const dataToExport = rawData.map((item) => ({
-    "O'quvchi (F . I . O)": item.student_name,
-    "O'qituvchi (F . I . O)": item.teacher_name,
-    "Guruh nomi": item.group_name,
-    "Guruh narxi": Number(item.group_price).toLocaleString("uz-UZ") + " so'm",
-    "Qarzdorlik suma": Number(item.debt),
-  }));
-
-  const ws = XLSX.utils.json_to_sheet(dataToExport, { origin: "A1" });
-
-  const numColumns = Object.keys(dataToExport[0]).length;
-  ws["!ref"] = XLSX.utils.encode_range({
-    s: { c: 0, r: 0 },
-    e: { c: numColumns - 1, r: dataToExport.length },
-  });
-
-  ws["!cols"] = [
-    { wpx: 180 },
-    { wpx: 180 },
-    { wpx: 180 },
-    { wpx: 200 },
-    { wpx: 120 },
-  ];
-
-  const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, "Qarzdorlar Tarixi");
-
-  const fileName = debtor.dayModal
-    ? `qarzdorlar_tarixi_${debtor.year}-${debtor.month}.xlsx`
-    : `guruhni_qarzdorlar_tarixi_${debtor.year}-${debtor.month}-${debtor.group_name}.xlsx`;
-
-  const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
-  const blob = new Blob([excelBuffer], { type: "application/octet-stream" });
-  saveAs(blob, fileName);
-  loading.excel = false;
-  debtor.modal = !debtor.modal;
-  notification.success("Excel fayl yuklab olindi!");
+  try {
+    const response = await axios.get(urlBase, config);
+    const url = window.URL.createObjectURL(new Blob([response.data]));
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", `${fileName}.xlsx`);
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+  } catch (err) {
+    console.error("Export uchun malumotlarni olishda xatolik:", err);
+  }
 };
 
-const getSchool = () => {
-  axios
-    .get(`/school/${localStorage.getItem("school_id")}`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    })
-    .then((res) => {
-      store.school_name = res.data.name;
-      store.school_logo = res.data.image;
-    })
-    .catch((error) => {});
-};
-
-const getAllProduct = () => {
-  axios
-    .get(`/group/${localStorage.getItem("school_id")}`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    })
-    .then((res) => {
-      store.groupAllProducts = res.data.sort((a, b) => b.id - a.id);
-      store.error = false;
-    })
-    .catch((error) => {
-      store.groupAllProducts = error.response.data.message;
-      store.error = true;
+// API Functions
+const getSchool = async () => {
+  try {
+    const res = await axios.get(`/v1/school/navbar/${schoolId.value}`, {
+      headers: authHeaders.value,
     });
+    store.school_name = res.data.name;
+    store.school_logo = res.data.image;
+  } catch (error) {}
 };
 
-const getAllStudent = () => {
-  axios
-    .get(`/student/${localStorage.getItem("school_id")}/findNot`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    })
-    .then((res) => {
-      store.studentAllProducts = res.data.sort((a, b) => b.id - a.id);
-      store.error = false;
-    })
-    .catch((error) => {
-      store.studentAllProducts = error.response.data.message;
-      store.error = true;
+const getGroups = async () => {
+  try {
+    const res = await axios.get(`/v1/group/add/${schoolId.value}`, {
+      headers: authHeaders.value,
     });
+    store.groups = res.data.sort((a, b) => b.id - a.id);
+    store.error = false;
+  } catch (error) {
+    store.groups = error.response?.data?.message || [];
+    store.error = true;
+  }
+};
+
+const getStudents = async () => {
+  try {
+    const res = await axios.get(`/v1/student/${schoolId.value}/search`, {
+      headers: authHeaders.value,
+    });
+    store.students = res.data.sort((a, b) => b.id - a.id);
+    store.error = false;
+  } catch (error) {
+    store.students = error.response?.data?.message || [];
+    store.error = true;
+  }
 };
 
 const getStatistic = async (date) => {
-  await axios
-    .get(
-      `/statistic/payment-day/${localStorage.getItem("school_id")}/${date}`,
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      }
-    )
-    .then((res) => {
-      if (loading.excel) {
-        history.statistic = res.data;
-      } else {
-        store.statistic = res.data;
-      }
-    })
-    .catch((error) => {});
+  try {
+    const res = await axios.get(
+      `/v1/statistic/payment-day/${schoolId.value}/${date}`,
+      { headers: authHeaders.value },
+    );
+    if (loading.excel) {
+      history.statistic = res.data;
+    } else {
+      store.statistic = res.data;
+    }
+  } catch (error) {}
 };
 
 const getStatisticGroup = async (group_id, date) => {
-  await axios
-    .get(
-      `/statistic/payment-day/${localStorage.getItem(
-        "school_id"
-      )}/${group_id}/${date}`,
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      }
-    )
-    .then((res) => {
-      if (loading.excel) {
-        history.statistic = res.data;
-      } else {
-        store.statistic = res.data;
-      }
-    })
-    .catch((error) => {});
-};
-
-const calculatePaymentStatus = (paymentHistory, groupPrice) => {
-  const currentDate = new Date();
-  const currentYear = currentDate.getFullYear();
-  const currentMonth = String(currentDate.getMonth() + 1).padStart(2, "0");
-
-  if (!paymentHistory || paymentHistory.length === 0) {
-    return `(${groupPrice}) so'm to'lanmagan`;
-  }
-
-  const totalDiscount = paymentHistory[0]?.discount || 0;
-  const discountSum = paymentHistory[0]?.discountSum || 0;
-  let discountedPrice = Math.round(groupPrice * (1 - totalDiscount / 100));
-  if (discountSum > 0) {
-    discountedPrice = groupPrice - discountSum;
-  }
-
-  let currentMonthPaid = 0;
-  paymentHistory.forEach((payment) => {
-    if (
-      payment.year === String(currentYear) &&
-      payment.month === String(currentMonth)
-    ) {
-      currentMonthPaid += payment.price;
+  try {
+    const res = await axios.get(
+      `/v1/statistic/payment-day/${schoolId.value}/${group_id}/${date}`,
+      { headers: authHeaders.value },
+    );
+    if (loading.excel) {
+      history.statistic = res.data;
+    } else {
+      store.statistic = res.data;
     }
-  });
-
-  if (currentMonthPaid >= discountedPrice) {
-    return "To'langan";
-  } else {
-    const amountDue = discountedPrice - currentMonthPaid;
-    return `(${amountDue.toLocaleString("uz-UZ")}) so'm to'lanmagan`;
-  }
+  } catch (error) {}
 };
 
-const getOneProduct = async (id) => {
+const getGroupStudents = async (group_id) => {
   debtor.isTable = false;
-  if (form.group_id == "" && form.id) {
-    getStudentGroups(form.id);
-    form.group_id = "";
-    form.filter = "";
-  } else {
-    form.id = "";
-    form.filterStudent = "";
-    try {
-      const schoolId = localStorage.getItem("school_id");
-      const token = localStorage.getItem("token");
-      const headers = { headers: { Authorization: `Bearer ${token}` } };
 
-      const groupResponse = await axios.get(
-        `/group/${schoolId}/${id}/payment`,
-        headers
-      );
-      const {
-        price: groupPrice,
-        start_date: groupStartDate,
-        name: groupName,
-        school,
-      } = groupResponse.data;
-
-      store.price = Number(groupPrice);
-      store.date = groupStartDate;
-      store.group_name = groupName;
-      form.group_id = id;
-      store.school_name = school.name;
-      store.school_logo = school.image;
-
-      const employeeResponse = await axios.get(
-        `/employee/${schoolId}/${groupResponse.data.employee[0].employee_id}/fullname`,
-        headers
-      );
-      store.teacher_name = employeeResponse.data.full_name;
-
-      if (!groupStartDate || isNaN(Date.parse(groupStartDate))) {
-        throw new Error("Guruh ochilgan sana noto'g'ri");
-      }
-
-      const studentPromises = groupResponse.data.student.map(
-        async (student) => {
-          const studentInfo = await axios.get(
-            `/student/${schoolId}/${student.student_id}/payment`,
-            headers
-          );
-          const payments = studentInfo.data.payment;
-          const paymentsForGroup = payments.filter(
-            (payment) =>
-              payment.group_id === form.group_id && payment.status !== "delete"
-          );
-
-          studentInfo.data.paymentStatus = calculatePaymentStatus(
-            paymentsForGroup,
-            groupPrice
-          );
-          return studentInfo.data;
-        }
-      );
-
-      store.allProducts = await Promise.all(studentPromises);
-      store.studentGroups = false;
-    } catch (error) {
-      notification.warning(
-        "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
-      );
-      console.log(error);
-    }
+  try {
+    const res = await axios.get(
+      `/v1/payment/group/${schoolId.value}/${group_id}`,
+      { headers: authHeaders.value },
+    );
+    store.payData = res.data[0];
+  } catch (error) {
+    handleError();
   }
 };
 
 const getStudentGroups = async (student_id) => {
   debtor.isTable = false;
   try {
-    const schoolId = localStorage.getItem("school_id");
-    const token = localStorage.getItem("token");
-    const headers = { headers: { Authorization: `Bearer ${token}` } };
-
-    const studentResponse = await axios.get(
-      `/student/${schoolId}/${student_id}/not`,
-      headers
+    const res = await axios.get(
+      `/v1/payment/student/${schoolId.value}/${student_id}`,
+      { headers: authHeaders.value },
     );
-    const studentFullName = studentResponse.data.full_name;
-    
-    const groupsResponse = await axios.get(
-      `/student/${schoolId}/${student_id}/studentGroup`,
-      headers
-    );
-    store.student_date = groupsResponse.data.start_date
-    const groups = groupsResponse.data.group;
 
-    const groupDetailsPromises = groups.map(async (group) => {
-      const groupId = group.group_id;
-
-      const groupPaymentResponse = await axios.get(
-        `/group/${schoolId}/${groupId}/payment`,
-        headers
-      );
-      const groupData = groupPaymentResponse.data;
-      const groupPrice = Number(groupData.price);
-      const groupName = groupData.name;
-      const groupStartDate = groupData.start_date;
-
-      const employeeId = groupData.employee[0].employee_id;
-      const employeeResponse = await axios.get(
-        `/employee/${schoolId}/${employeeId}/fullname`,
-        headers
-      );
-      const teacherName = employeeResponse.data.full_name;
-
-      const studentInfoResponse = await axios.get(
-        `/student/${schoolId}/${student_id}/payment`,
-        headers
-      );
-      const payments = studentInfoResponse.data.payment;
-
-      const paymentsForGroup = payments.filter(
-        (payment) => payment.group_id === groupId && payment.status !== "delete"
-      );
-
-      const paymentStatus = calculatePaymentStatus(
-        paymentsForGroup,
-        groupPrice
-      );
-
-      return {
-        studentId: student_id,
-        studentFullName,
-        groupId,
-        groupName,
-        groupPrice,
-        teacherName,
-        groupStartDate,
-        paymentStatus,
-      };
-    });
-
-    const detailedGroups = await Promise.all(groupDetailsPromises);
-
-    store.studentGroups = detailedGroups;
-    store.allProducts = false;
+    store.payData = res.data;
   } catch (error) {
-    notification.warning(
-      "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
-    );
+    handleError();
   }
 };
 
 const checkPayment = (year, month, groupStartDate) => {
   const paymentYear = parseInt(year, 10);
   const paymentMonth = parseInt(month, 10);
-
   const groupStart = new Date(groupStartDate);
   const groupStartYear = groupStart.getFullYear();
   const groupStartMonth = groupStart.getMonth() + 1;
 
-  if (
-    paymentYear < groupStartYear ||
-    (paymentYear === groupStartYear && paymentMonth < groupStartMonth)
-  ) {
-    return false;
-  } else {
-    return true;
-  }
-};
-
-const checkOldPayment = async (
-  school_id,
-  student_id,
-  group_id,
-  year,
-  month
-) => {
-  try {
-    const res = await axios.get(`/payment/${school_id}`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    });
-
-    const payments = res.data;
-
-    const studentPayments = payments.filter(
-      (payment) =>
-        payment.student_id === student_id &&
-        payment.group_id === group_id &&
-        payment.year === year &&
-        payment.month === month &&
-        payment.status !== "delete"
-    );
-
-    const basePrice = store.price;
-
-    const discountPercent = studentPayments[0]?.discount
-      ? studentPayments[0].discount
-      : 0;
-
-    const discountSum = studentPayments[0]?.discountSum
-      ? studentPayments[0].discountSum
-      : 0;
-
-    const priceAfterPercent = Math.round(
-      basePrice * (1 - discountPercent / 100)
-    );
-
-    const finalPrice = Math.max(priceAfterPercent - discountSum, 0);
-
-    const totalPaid = studentPayments.reduce(
-      (sum, payment) => sum + payment.price,
-      0
-    );
-
-    return totalPaid < finalPrice;
-  } catch (error) {
-    return false;
-  }
+  return (
+    paymentYear > groupStartYear ||
+    (paymentYear === groupStartYear && paymentMonth >= groupStartMonth)
+  );
 };
 
 const addPayment = async () => {
@@ -3655,7 +3119,7 @@ const addPayment = async () => {
   store.isSubmitting = true;
 
   const data = {
-    school_id: Number(localStorage.getItem("school_id")),
+    school_id: Number(schoolId.value),
     student_id: form.id,
     group_id: Number(form.group_id),
     year: form.year,
@@ -3663,204 +3127,205 @@ const addPayment = async () => {
     method: form.method,
     discount: form.discount,
     discountSum: form.discountSum,
-    price: form.price,
+    price: Number(form.price),
     description: form.description,
   };
 
-  const check = checkPayment(form.year, form.month, store.date);
-
-  const checkOldPay = await checkOldPayment(
-    Number(localStorage.getItem("school_id")),
-    form.id,
-    Number(form.group_id),
-    form.year,
-    form.month
-  );
-
-  if (!check) {
+  if (!checkPayment(form.year, form.month, store.date)) {
     notification.warning("To'lov qilmoqchi bo'lgan sanada guruh boshlanmagan");
+    store.isSubmitting = false;
     return;
   }
 
-  if (!checkOldPay) {
+  if (store.checkOldPay && form.year == hozirgiYil && form.month == hozirgiOy) {
     notification.warning(
-      "To'lov qilmoqchi bo'lgan sanaga oldin to'lov qilingan"
+      "To'lov qilmoqchi bo'lgan sanaga oldin to'lov qilingan",
     );
+    store.isSubmitting = false;
     return;
   }
 
   try {
-    const res = await axios.post("/payment", data, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    });
-
+    await axios.post("/v1/payment", data, { headers: authHeaders.value });
     printReceipt();
-    cancelFunc();
     notification.success("To'lov qilindi!");
-    store.isSubmitting = false;
+
     if (debtor.isTable) {
       getDebtor(store.pagination);
-    } else if (store.allProducts) {
-      getOneProduct(form.group_id);
+    } else if (store.payData) {
+      getGroupStudents(form.group_id);
     } else {
       getStudentGroups(form.id);
     }
+    cancelFunc();
   } catch (error) {
-    console.log(error);
-    notification.warning(
-      "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
-    );
+    handleError();
+  } finally {
+    store.isSubmitting = false;
   }
 };
 
-const getHistory = (page) => {
+const getHistory = async (page = 1) => {
   loading.view = true;
   debtor.isTable = false;
-  store.allProducts = false;
-  const schoolId = localStorage.getItem("school_id");
-  const token = localStorage.getItem("token");
-  const config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
+  store.payData = false;
+
+  const url = `/v1/payment/history`;
+
+  const params = {
+    school_id: schoolId.value,
+    page,
+    status: history.status,
   };
 
-  let url;
   if (history.dayModal) {
-    url = `/payment/day/${schoolId}/${history.year}/${history.month}/${history.day}/${history.status}/page?page=${page}`;
+    params.year = history.year;
+    params.month = history.month;
+    params.day = history.day;
     getStatistic(`${history.year}-${history.month}-${history.day}`);
   } else if (history.monthModal) {
-    url = `/payment/month/${schoolId}/${history.year}/${history.month}/${history.status}/page?page=${page}`;
+    params.year = history.year;
+    params.month = history.month;
     getStatistic(`${history.year}-${history.month}`);
   } else if (history.groupMonthModal) {
-    url = `/payment/groupMonth/${schoolId}/${history.group_id}/${history.year}/${history.month}/${history.status}/page?page=${page}`;
+    params.year = history.year;
+    params.month = history.month;
+    params.group_id = history.group_id;
     getStatisticGroup(history.group_id, `${history.year}-${history.month}`);
   } else if (history.yearModal) {
-    url = `/payment/year/${schoolId}/${history.year}/${history.status}/page?page=${page}`;
-    // getStatistic(`${history.year}-${history.month}`);
+    params.year = history.year;
   } else {
+    loading.view = false;
     return;
   }
 
-  axios
-    .get(url, config)
-    .then((res) => {
-      const records = res.data?.data?.records;
-      if (records.length !== 0) {
-        history.group_name = records[0].group_name;
-      }
-      store.studentGroups = false;
-      statusCount.payment = res.data?.data?.summary.paymentCount;
-      statusCount.halfPayment = res.data?.data?.summary.halfPaymentCount;
-      statusCount.discount = res.data?.data?.summary.discountCount;
-      store.PageProduct = records;
-      const pagination = res.data?.data?.pagination;
-      store.page = [pagination.currentPage, pagination.total_count];
-      store.error = false;
-      loading.view = false;
-      history.modal = false;
-      history.loader = false;
-    })
-    .catch((error) => {
-      store.PageProduct = error.response?.data?.message;
-      store.error = true;
-    });
+  try {
+    const res = await axios.get(url, { headers: authHeaders.value, params });
+    const records = res.data?.data?.records || [];
+
+    if (records.length !== 0) {
+      history.group_name = records[0].group_name;
+    }
+
+    store.studentGroups = false;
+    const summary = res.data?.data?.summary || {};
+    statusCount.payment = summary.paymentCount || 0;
+    statusCount.halfPayment = summary.halfPaymentCount || 0;
+    statusCount.discount = summary.discountCount || 0;
+
+    store.payHistoryData = records;
+    const pagination = res.data?.data?.pagination;
+    store.page = [pagination.currentPage, pagination.total_count];
+    store.error = false;
+    loading.view = false;
+    history.modal = false;
+    history.loader = false;
+  } catch (error) {
+    store.payHistoryData = error.response?.data?.message || [];
+    store.error = true;
+    loading.view = false;
+  }
 };
 
-const getDebtor = (page) => {
-  store.allProducts = false;
+const getDebtor = async (page = 1) => {
+  store.payData = false;
+
   const schoolId = localStorage.getItem("school_id");
   const token = localStorage.getItem("token");
-  const config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
+
+  if (!schoolId) return;
+
+  const params = {
+    school_id: schoolId,
+    year: debtor.year,
+    month: debtor.month,
+    page: page,
   };
 
-  let url;
-  if (debtor.dayModal) {
-    url = `/payment/debtor/${schoolId}/${debtor.year}/${debtor.month}/page?page=${page}`;
-  } else if (debtor.monthModal) {
-    url = `/payment/debtor-group/${schoolId}/${debtor.group_id}/${debtor.year}/${debtor.month}/page?page=${page}`;
-  } else {
-    return;
+  if (debtor.monthModal) {
+    params.group_id = debtor.group_id;
+  }
+  if (debtor.employee_id) {
+    params.employee_id = debtor.employee_id;
   }
 
-  axios
-    .get(url, config)
-    .then((res) => {
-      const records = res.data?.data?.records;
-      if (records.length !== 0) {
-        history.group_name = records[0].group_name;
-      }
-      store.PageProduct = records;
-      const pagination = res.data?.data?.pagination;
-      store.page = [pagination.currentPage, pagination.total_count];
-      store.error = false;
-      debtor.isTable = true;
-      debtor.modal = false;
-    })
-    .catch((error) => {
-      store.PageProduct = error.response?.data?.message;
-      store.error = true;
-    });
-};
-
-const getMethod = () => {
-  axios
-    .get(`/payment-method/${localStorage.getItem("school_id")}`, {
+  try {
+    const res = await axios.get(`/v1/payment/history/debtor`, {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        Authorization: `Bearer ${token}`,
       },
-    })
-    .then((res) => {
-      store.method = res.data;
-    })
-    .catch((error) => {
-      store.method = [{ name: "To'lov turi yaratilmagan" }];
+      params: params,
     });
+
+    const records = res.data?.data?.records || [];
+
+    if (records.length > 0) {
+      debtor.group_name = records[0].group_name;
+    }
+
+    store.payHistoryData = records;
+
+    const pagination = res.data?.data?.pagination || {
+      currentPage: 1,
+      total_count: 0,
+    };
+    store.page = [pagination.currentPage, pagination.total_count];
+
+    store.error = false;
+    debtor.isTable = true;
+    debtor.modal = false;
+  } catch (error) {
+    store.payHistoryData = error.response?.data?.message || [];
+    store.error = true;
+  }
 };
 
-const getEditProduct = (id) => {
-  axios
-    .get(`/payment/${localStorage.getItem("school_id")}/${id}`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    })
-    .then((res) => {
-      edit.id = id;
-      form.year = res.data.year;
-      form.month = res.data.month;
-      store.pay_price = res.data.price;
-      form.discount = res.data.discount;
-      form.discountSum = res.data.discountSum;
-      form.method = res.data.method;
-      form.description = res.data.description;
-      form.id = res.data.student.id;
-      form.group_id = res.data.group.id;
-      formatDateToNumeric(new Date(res.data.createdAt));
-      store.school_logo = res.data.school.image;
-      store.school_name = res.data.school.name;
-      store.student_name = res.data.student.full_name;
-      store.group_name = res.data.group.name;
-      store.price = res.data.group.price;
-      const teacher = store.PageProduct.find((teacher) => teacher.id === id);
-      store.teacher_name = teacher.teacher_name;
-      edit.modal = true;
-    })
-    .catch((error) => {
-      notification.warning(
-        "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
-      );
+const getMethod = async () => {
+  try {
+    const res = await axios.get(`/v1/payment-method/${schoolId.value}`, {
+      headers: authHeaders.value,
     });
+    store.method = res.data;
+  } catch (error) {
+    store.method = [{ name: "To'lov turi yaratilmagan" }];
+  }
 };
 
-const editProduct = () => {
+const getOnePayment = async (id) => {
+  try {
+    const res = await axios.get(`/v1/payment/${schoolId.value}/${id}`, {
+      headers: authHeaders.value,
+    });
+
+    getMethod();
+    edit.id = id;
+    Object.assign(form, {
+      year: res.data.year,
+      month: res.data.month,
+      method: res.data.method,
+      discount: res.data.discount,
+      discountSum: res.data.discountSum,
+      id: res.data.student.id,
+      group_id: res.data.group.id,
+      description: res.data.description,
+    });
+
+    store.pay_price = res.data.price;
+    formatDateToNumeric(new Date(res.data.createdAt));
+    store.start_date = res.data.student.start_date;
+    store.student_name = res.data.student.full_name;
+    store.group_name = res.data.group.name;
+    store.price = res.data.group.price;
+    store.teacher_name = res.data.group.employee[0].employee.full_name;
+    edit.modal = true;
+  } catch (error) {
+    handleError();
+  }
+};
+
+const editPayment = async () => {
   const data = {
-    school_id: Number(localStorage.getItem("school_id")),
+    school_id: Number(schoolId.value),
     student_id: form.id,
     group_id: Number(form.group_id),
     year: form.year,
@@ -3871,165 +3336,81 @@ const editProduct = () => {
     price: store.pay_price,
   };
 
-  const check = checkPayment(form.year, form.month, store.date);
-
-  if (!check) {
+  if (!checkPayment(form.year, form.month, store.date)) {
     notification.warning("To'lov qilmoqchi bo'lgan sanada guruh boshlanmagan");
-  } else {
-    axios
-      .put(`/payment/${localStorage.getItem("school_id")}/${edit.id}`, data, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      })
-      .then((res) => {
-        printReceipt();
-        cancelFunc();
-        cenecleEdit();
-        notification.success("To'lov tahrirlandi!");
-        getProduct(store.pagination);
-      })
-      .catch((error) => {
-        notification.warning(
-          "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
-        );
-      });
+    return;
+  }
+
+  try {
+    await axios.put(`/v1/payment/${schoolId.value}/${edit.id}`, data, {
+      headers: authHeaders.value,
+    });
+    printReceipt();
+    notification.success("To'lov tahrirlandi!");
+    getHistory(store.pagination);
+    cancelFunc();
+    cenecleEdit();
+  } catch (error) {
+    handleError();
   }
 };
 
-const deleteProduct = () => {
-  axios
-    .delete(`/payment/${localStorage.getItem("school_id")}/${remove.id}`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    })
-    .then((res) => {
-      notification.success("To'lov o'chirildi");
-      getHistory(store.pagination);
-      remove.toggle = false;
-    })
-    .catch((error) => {
-      notification.warning(
-        "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
-      );
+const deletePayment = async () => {
+  try {
+    await axios.delete(`/v1/payment/${schoolId.value}/${remove.id}`, {
+      headers: authHeaders.value,
     });
-};
-
-const formatDateToNumeric = (date) => {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate()).padStart(2, "0");
-  const hour = String(date.getHours()).padStart(2, "0");
-  const minute = String(date.getMinutes()).padStart(2, "0");
-
-  store.chekDate = `${year}-${month}-${day}, ${hour}:${minute}`;
+    notification.success("To'lov o'chirildi");
+    getHistory(store.pagination);
+    remove.toggle = false;
+  } catch (error) {
+    handleError();
+  }
 };
 
 const printReceipt = () => {
   const printWindow = window.open("", "_blank");
-
   printWindow.document.write(`
     <html>
       <head>
         <title>Chek</title>
         <style>
-          body {
-            background-color: #f3f4f6;
-            font-family: Arial, sans-serif;
-          }
-          .container {
-            max-width: 320px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 8px;
-            padding: 20px;
-          }
-          .title {
-            text-align: center;
-            font-size: 18px;
-            font-weight: bold;
-            text-transform: uppercase;
-            margin-bottom: 15px;
-          }
-          .logo {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 5px;
-          }
-          .logo img {
-            width: 30px;
-            border-radius: 50%;
-          }
-          .row {
-            display: flex;
-            justify-content: space-between;
-            border-bottom: 1px dashed black;
-            padding: 8px 0;
-            font-size: 12px;
-          }
-          .bold {
-            font-weight: bold;
-          }
-          .strike {
-            text-decoration: line-through;
-            font-size: 10px;
-          }
-          .card {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-          }  
-          .footer {
-            text-align: center;
-            font-size: 10px;
-            margin-top: 15px;
-          }
-          .brand_box {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            font-size: 8px;
-            margin-top: 20px;
-          }
-          .brand_box h5 {
-            font-size: 10px;
-            font-weight: 600;
-            margin: 0;
-          }
-          .phone_number {
-            font-size: 7px;
-            font-weight: 600;
-            text-align: end;
-          }
+          body { background-color: #f3f4f6; font-family: Arial, sans-serif; }
+          .container { max-width: 320px; margin: 0 auto; background: white; border-radius: 8px; padding: 20px; }
+          .title { text-align: center; font-size: 18px; font-weight: bold; text-transform: uppercase; margin-bottom: 15px; }
+          .logo { display: flex; align-items: center; justify-content: center; gap: 5px; }
+          .logo img { width: 30px; border-radius: 50%; }
+          .row { display: flex; justify-content: space-between; border-bottom: 1px dashed black; padding: 8px 0; font-size: 12px; }
+          .bold { font-weight: bold; }
+          .strike { text-decoration: line-through; font-size: 10px; }
+          .card { display: flex; flex-direction: column; align-items: flex-end; }
+          .brand_box { display: flex; flex-direction: column; align-items: flex-end; font-size: 8px; margin-top: 20px; }
+          .brand_box h5 { font-size: 10px; font-weight: 600; margin: 0; }
+          .phone_number { font-size: 7px; font-weight: 600; text-align: end; }
         </style>
       </head>
       <body>
         <div class="container">
           <div class="logo">
-            <img src="${import.meta.env.VITE_API}/${store.school_logo}" alt="">
+            <img src="${apiUrl.value}/${store.school_logo}" alt="">
             <h2 class="title">${store.school_name}</h2>
           </div>
-          <div class="row">
-            <span class="bold">To'lov turi:</span>
-            <span>${form.method}</span>
-          </div>
-          <div class="row">
-            <span class="bold">Talaba:</span>
-            <span>${store.student_name}</span>
-          </div>
-          <div class="row">
-            <span class="bold">Guruh nomi:</span>
-            <span>${store.group_name}</span>
-          </div>
+          <div class="row"><span class="bold">To'lov turi:</span><span>${
+            form.method
+          }</span></div>
+          <div class="row"><span class="bold">Talaba:</span><span>${
+            store.student_name
+          }</span></div>
+          <div class="row"><span class="bold">Guruh nomi:</span><span>${
+            store.group_name
+          }</span></div>
           <div class="row">
             <span class="bold">Kurs narxi:</span>
             <span class="card">
               ${
                 form.discount !== 0 && form.discount !== ""
                   ? `<span class="strike">${store.price?.toLocaleString(
-                      "uz-UZ"
+                      "uz-UZ",
                     )} so'm</span>`
                   : ""
               }
@@ -4038,41 +3419,22 @@ const printReceipt = () => {
           </div>
           ${
             form.discount !== 0 && form.discount !== ""
-              ? `
-          <div class="row">
-            <span class="bold">Chegirma:</span>
-            <span>${form.discount}%</span>
-          </div>
-          `
+              ? `<div class="row"><span class="bold">Chegirma:</span><span>${form.discount}%</span></div>`
               : ""
           }
-          <div class="row">
-            <span class="bold">Ustoz:</span>
-            <span>${store.teacher_name}</span>
-          </div>
-          <div class="row">
-            <span class="bold">Oy:</span>
-            <span class="bold">${monthNames(form.month)}</span>
-          </div>
-          <div class="row">
-            <span class="bold">To'lov:</span>
-            <span class="bold">${Number(form.price)?.toLocaleString(
-              "uz-UZ"
-            )} so'm</span>
-          </div>
-          <div class="row">
-            <span class="bold">Sana:</span>
-            <span>${store.chekDate}</span>
-          </div>
-          <div class="footer">
-            <span>IT ni it deb o'qima, <br> Ingliz tili va AyTi ni <strong>${
-              store.school_name
-            }</strong> da o'rgan!</span>
-          </div>
-          <div class="brand_box">
-            <h5>Devosoft Group</h5>
-            <span class="phone_number">+998933279137</span>
-          </div>
+          <div class="row"><span class="bold">Ustoz:</span><span>${
+            store.teacher_name
+          }</span></div>
+          <div class="row"><span class="bold">Oy:</span><span class="bold">${monthNames(
+            form.month,
+          )}</span></div>
+          <div class="row"><span class="bold">To'lov:</span><span class="bold">${Number(
+            form.price,
+          )?.toLocaleString("uz-UZ")} so'm</span></div>
+          <div class="row"><span class="bold">Sana:</span><span>${
+            store.chekDate
+          }</span></div>
+          <div class="brand_box"><h5>Devosoft Group</h5><span class="phone_number">+998933279137</span></div>
         </div>
       </body>
     </html>
@@ -4081,223 +3443,124 @@ const printReceipt = () => {
   printWindow.document.close();
   printWindow.focus();
   printWindow.print();
-
-  printWindow.onafterprint = () => {
-    printWindow.close();
-  };
+  printWindow.onafterprint = () => printWindow.close();
 };
 
-const printChek = (id) => {
-  const product = store.PageProduct.find((product) => product.id === id);
+const printChek = async (id) => {
+  const product = store.payHistoryData.find((product) => product.id === id);
   const priceDiscounted = product.discount
     ? (
         product.group_price -
         (product.group_price * product.discount) / 100
       ).toFixed(2)
     : product.discountSum
-    ? product.group_price - product.discountSum
-    : product.group_price;
+      ? product.group_price - product.discountSum
+      : product.group_price;
 
   formatDateToNumeric(new Date(product.createdAt));
-  axios
-    .get(`/school/${localStorage.getItem("school_id")}`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    })
-    .then((res) => {
-      const printWindow = window.open("", "_blank");
 
-      printWindow.document.write(`
-    <html>
-      <head>
-        <title>Chek</title>
-        <style>
-          body {
-            background-color: #f3f4f6;
-            font-family: Arial, sans-serif;
-          }
-          .container {
-            max-width: 320px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 8px;
-            padding: 20px;
-          }
-          .title {
-            text-align: center;
-            font-size: 18px;
-            font-weight: bold;
-            text-transform: uppercase;
-            margin-bottom: 15px;
-          }
-          .logo {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 5px;
-          }
-          .logo img {
-            width: 30px;
-            border-radius: 50%;
-          }
-          .row {
-            display: flex;
-            justify-content: space-between;
-            border-bottom: 1px dashed black;
-            padding: 8px 0;
-            font-size: 12px;
-          }
-          .bold {
-            font-weight: bold;
-          }
-          .strike {
-            text-decoration: line-through;
-            font-size: 10px;
-          }
-          .card {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-          }  
-          .footer {
-            text-align: center;
-            font-size: 10px;
-            margin-top: 15px;
-          }
-          .brand_box {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            font-size: 8px;
-            margin-top: 20px;
-          }
-          .brand_box h5 {
-            font-size: 10px;
-            font-weight: 600;
-            margin: 0;
-          }
-          .phone_number {
-            font-size: 7px;
-            font-weight: 600;
-            text-align: end;
-          }
-        </style>
-      </head>
-      <body>
-        <div class="container">
-          <div class="logo">
-            <img src="${import.meta.env.VITE_API}/${res.data.image}" alt="">
-            <h2 class="title">${res.data.name}</h2>
-          </div>
-          <div class="row">
-            <span class="bold">To'lov turi:</span>
-            <span>${product.method}</span>
-          </div>
-          <div class="row">
-            <span class="bold">Talaba:</span>
-            <span>${product.student_name}</span>
-          </div>
-          <div class="row">
-            <span class="bold">Guruh nomi:</span>
-            <span>${product.group_name}</span>
-          </div>
-          <div class="row">
-            <span class="bold">Kurs narxi:</span>
-            <span class="card">
-              ${
-                (product.discount !== 0 && product.discount !== "") ||
-                (product.discountSum !== 0 && product.discountSum !== "")
-                  ? `<span class="strike">${Number(
-                      product.group_price
-                    )?.toLocaleString("uz-UZ")} so'm</span>`
-                  : ""
-              }
-              ${Number(priceDiscounted)?.toLocaleString("uz-UZ")} so'm
-            </span>
-          </div>
-          ${
-            product.discount !== 0 && product.discount !== ""
-              ? `
-          <div class="row">
-            <span class="bold">Chegirma:</span>
-            <span>${product.discount}%</span>
-          </div>
-          `
-              : ""
-          }
-          ${
-            product.discountSum !== 0 && product.discountSum !== ""
-              ? `
-          <div class="row">
-            <span class="bold">Chegirma:</span>
-            <span>${Number(product.discountSum)?.toLocaleString(
-              "uz-UZ"
-            )} so'm</span>
-          </div>
-          `
-              : ""
-          }
-          <div class="row">
-            <span class="bold">Ustoz:</span>
-            <span>${product.teacher_name}</span>
-          </div>
-          <div class="row">
-            <span class="bold">Oy:</span>
-            <span class="bold">${monthNames(product.month)}</span>
-          </div>
-          <div class="row">
-            <span class="bold">To'lov:</span>
-            <span class="bold">${product.price?.toLocaleString(
-              "uz-UZ"
-            )} so'm</span>
-          </div>
-          <div class="row">
-            <span class="bold">Sana:</span>
-            <span>${store.chekDate}</span>
-          </div>
-          <div class="footer">
-            <span>IT ni it deb o'qima, <br> Ingliz tili va AyTi ni <strong>${
-              res.data.name
-            }</strong> da o'rgan!</span>
-          </div>
-          <div class="brand_box">
-            <h5>Devosoft Group</h5>
-            <span class="phone_number">+998933279137</span>
-          </div>
-        </div>
-      </body>
-    </html>
-  `);
-
-      printWindow.document.close();
-      printWindow.focus();
-      printWindow.print();
-
-      printWindow.onafterprint = () => {
-        printWindow.close();
-      };
-    })
-    .catch((error) => {
-      notification.warning(
-        "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
-      );
+  try {
+    const res = await axios.get(`/school/${schoolId.value}`, {
+      headers: authHeaders.value,
     });
+    const printWindow = window.open("", "_blank");
+    printWindow.document.write(`
+      <html>
+        <head>
+          <title>Chek</title>
+          <style>
+            body { background-color: #f3f4f6; font-family: Arial, sans-serif; }
+            .container { max-width: 320px; margin: 0 auto; background: white; border-radius: 8px; padding: 20px; }
+            .title { text-align: center; font-size: 18px; font-weight: bold; text-transform: uppercase; margin-bottom: 15px; }
+            .logo { display: flex; align-items: center; justify-content: center; gap: 5px; }
+            .logo img { width: 30px; border-radius: 50%; }
+            .row { display: flex; justify-content: space-between; border-bottom: 1px dashed black; padding: 8px 0; font-size: 12px; }
+            .bold { font-weight: bold; }
+            .strike { text-decoration: line-through; font-size: 10px; }
+            .card { display: flex; flex-direction: column; align-items: flex-end; }
+            .brand_box { display: flex; flex-direction: column; align-items: flex-end; font-size: 8px; margin-top: 20px; }
+            .brand_box h5 { font-size: 10px; font-weight: 600; margin: 0; }
+            .phone_number { font-size: 7px; font-weight: 600; text-align: end; }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <div class="logo">
+              <img src="${apiUrl.value}/${res.data.image}" alt="">
+              <h2 class="title">${res.data.name}</h2>
+            </div>
+            <div class="row"><span class="bold">To'lov turi:</span><span>${
+              product.method
+            }</span></div>
+            <div class="row"><span class="bold">Talaba:</span><span>${
+              product.student_name
+            }</span></div>
+            <div class="row"><span class="bold">Guruh nomi:</span><span>${
+              product.group_name
+            }</span></div>
+            <div class="row">
+              <span class="bold">Kurs narxi:</span>
+              <span class="card">
+                ${
+                  (product.discount !== 0 && product.discount !== "") ||
+                  (product.discountSum !== 0 && product.discountSum !== "")
+                    ? `<span class="strike">${Number(
+                        product.group_price,
+                      )?.toLocaleString("uz-UZ")} so'm</span>`
+                    : ""
+                }
+                ${Number(priceDiscounted)?.toLocaleString("uz-UZ")} so'm
+              </span>
+            </div>
+            ${
+              product.discount !== 0 && product.discount !== ""
+                ? `<div class="row"><span class="bold">Chegirma:</span><span>${product.discount}%</span></div>`
+                : ""
+            }
+            ${
+              product.discountSum !== 0 && product.discountSum !== ""
+                ? `<div class="row"><span class="bold">Chegirma:</span><span>${Number(
+                    product.discountSum,
+                  )?.toLocaleString("uz-UZ")} so'm</span></div>`
+                : ""
+            }
+            <div class="row"><span class="bold">Ustoz:</span><span>${
+              product.teacher_name
+            }</span></div>
+            <div class="row"><span class="bold">Oy:</span><span class="bold">${monthNames(
+              product.month,
+            )}</span></div>
+            <div class="row"><span class="bold">To'lov:</span><span class="bold">${product.price?.toLocaleString(
+              "uz-UZ",
+            )} so'm</span></div>
+            <div class="row"><span class="bold">Sana:</span><span>${
+              store.chekDate
+            }</span></div>
+            <div class="brand_box"><h5>Devosoft Group</h5><span class="phone_number">+998933279137</span></div>
+          </div>
+        </body>
+      </html>
+    `);
+
+    printWindow.document.close();
+    printWindow.focus();
+    printWindow.print();
+    printWindow.onafterprint = () => printWindow.close();
+  } catch (error) {
+    handleError();
+  }
 };
 
 onMounted(() => {
   getSchool();
-  getAllProduct();
-  getAllStudent();
+  getGroups();
+  getStudents();
   getHistory(store.pagination);
-  getMethod();
-  for (let i = 0; i < 5; i++) {
-    let list = {
-      id: i,
-      name: String(orqaYil + i),
-    };
-    store.curentYil.push(list);
-  }
+
+  store.curentYil = Array.from({ length: 5 }, (_, i) => ({
+    id: i,
+    name: String(orqaYil + i),
+  }));
 });
 </script>
 
