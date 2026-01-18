@@ -3743,6 +3743,7 @@ const getDebtor = async (page = 1) => {
 
 // Export functions
 const exportToExcel = async () => {
+  loading.excel = true;
   const config = {
     headers: authHeaders.value,
     responseType: "blob",
@@ -3776,12 +3777,15 @@ const exportToExcel = async () => {
     document.body.appendChild(link);
     link.click();
     link.remove();
+    loading.excel = false;
   } catch (err) {
-    console.error("Export uchun malumotlarni olishda xatolik:", err);
+    loading.excel = false;
+    handleError()
   }
 };
 
 const exportToExcelCost = async () => {
+  loading.excel = true;
   try {
     const params = {};
 
@@ -3806,12 +3810,15 @@ const exportToExcelCost = async () => {
     link.download = `cost_${costHistory.year}${costHistory.month ? "_" + costHistory.month : ""}.xlsx`;
     link.click();
     window.URL.revokeObjectURL(link.href);
+    loading.excel = false;
   } catch (error) {
-    console.error("Excel export error:", error);
+    loading.excel = false;
+    handleError()
   }
 };
 
 const exportToExcelSalary = async () => {
+  loading.excel = true;
   try {
     const params = { year: salaryHistory.year };
 
@@ -3837,12 +3844,15 @@ const exportToExcelSalary = async () => {
     link.download = `salary_${salaryHistory.year}${salaryHistory.month ? "_" + salaryHistory.month : ""}.xlsx`;
     link.click();
     window.URL.revokeObjectURL(link.href);
+    loading.excel = false;
   } catch (e) {
-    console.error("Salary excel export error", e);
+    loading.excel = false;
+    handleError()
   }
 };
 
 const exportToExcelDebtor = async () => {
+  loading.excel = true;
   const config = {
     headers: authHeaders.value,
     responseType: "blob",
@@ -3865,8 +3875,10 @@ const exportToExcelDebtor = async () => {
     document.body.appendChild(link);
     link.click();
     link.remove();
+    loading.excel = false;
   } catch (err) {
-    console.error("Export uchun malumotlarni olishda xatolik:", err);
+    loading.excel = false;
+    handleError()
   }
 };
 
