@@ -3023,13 +3023,13 @@ const addPayment = async () => {
   }
 
 
-  if (store.checkOldPay && form.year == hozirgiYil && form.month == hozirgiOy) {
-    notification.warning(
-      "To'lov qilmoqchi bo'lgan sanaga oldin to'lov qilingan",
-    );
-    store.isSubmitting = false;
-    return;
-  }
+  // if (store.checkOldPay && form.year == hozirgiYil && form.month == hozirgiOy) {
+  //   notification.warning(
+  //     "To'lov qilmoqchi bo'lgan sanaga oldin to'lov qilingan",
+  //   );
+  //   store.isSubmitting = false;
+  //   return;
+  // }
 
 
   try {
