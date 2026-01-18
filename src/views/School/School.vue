@@ -399,7 +399,7 @@
 
     <section class="pt-4" :class="{ 'text-white': navbar.userNav }">
       <!------------------------------------------- Placeholder ------------------------------------------->
-      <div v-if="!store.PageProduct && !store.allProducts">
+      <div v-if="!store.PageProduct">
         <Placeholder2 />
       </div>
 
@@ -408,7 +408,7 @@
       <!------------------------------------------- Search ------------------------------------------->
 
       <div
-        v-show="store.PageProduct || store.allProducts"
+        v-show="store.PageProduct"
         class="w-full max-w-screen"
       >
         <!-- Start coding here -->
@@ -434,20 +434,18 @@
             </div>
           </div>
 
-          <div class="w-full lg:w-80">
-            <form class="flex items-center font-medium text-gray-900">
-              <label for="simple-search" class="sr-only">Qidiruv</label>
+          <div class="flex w-full">
+            <form
+              class="flex items-center w-full font-medium text-gray-900"
+              @submit.prevent
+            >
+              <label class="sr-only">Qidiruv</label>
+
               <div class="relative w-full">
                 <div
                   class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"
                 >
-                  <svg
-                    aria-hidden="true"
-                    class="w-5 h-5"
-                    fill="currentColor"
-                    viewbox="0 0 20 20"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
+                  <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                     <path
                       fill-rule="evenodd"
                       d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
@@ -457,32 +455,11 @@
                 </div>
                 <input
                   v-model="store.filter"
-                  @input="
-                    store.filter_show = true;
-                    searchFunc();
-                  "
+                  @input="searchName(store.filter)"
                   type="search"
-                  id="simple-search"
                   class="block w-full p-2 pl-10 text-sm border border-gray-300 rounded-xl bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
                   placeholder="Qidirish..."
                 />
-                <ul
-                  v-show="store.filter_show"
-                  class="absolute z-10 w-full py-1 overflow-hidden overflow-y-auto text-gray-600 bg-white rounded max-h-80"
-                  :class="{ hidden: !store.searchList.length }"
-                >
-                  <li
-                    class="pl-2 cursor-pointer hover:bg-gray-100"
-                    v-for="(i, index) in store.searchList"
-                    :key="index"
-                    @click="
-                      store.filter = i.name;
-                      searchFunc();
-                    "
-                  >
-                    {{ i.name }}
-                  </li>
-                </ul>
               </div>
             </form>
           </div>
@@ -515,84 +492,7 @@
                   :class="
                     navbar.userNav ? 'hover:bg-gray-700' : 'hover:bg-gray-50'
                   "
-                  v-show="!store.searchList.length"
                   v-for="i in store.PageProduct"
-                  :key="i.id"
-                >
-                  <td
-                    scope="row"
-                    class="flex items-center justify-center py-4 pl-8 font-medium whitespace-nowrap"
-                  >
-                    <img
-                      :src="API + '/' + i.image"
-                      alt=""
-                      class="rounded-full h-14 w-14"
-                    />
-                  </td>
-                  <td
-                    scope="row"
-                    class="px-8 py-4 font-medium text-center whitespace-nowrap"
-                  >
-                    {{ i.name }}
-                  </td>
-                  <td
-                    class="px-8 py-4 font-medium text-center text-blue-800 whitespace-nowrap"
-                  >
-                    <p class="bg-blue-100 rounded-[5px] p-1">
-                      {{ i.owner.full_name }}
-                    </p>
-                  </td>
-                  <td
-                    class="px-8 py-4 font-medium text-center text-red-800 whitespace-nowrap"
-                  >
-                    <p class="bg-red-100 rounded-[5px] p-1">
-                      {{ Number(i.price).toLocaleString("uz-UZ") }} so'm
-                    </p>
-                  </td>
-                  <td
-                    class="px-8 py-4 font-medium text-center text-green-800 whitespace-nowrap"
-                  >
-                    <p class="bg-green-100 rounded-[5px] p-1">
-                      {{ i.address }}
-                    </p>
-                  </td>
-                  <td
-                    class="px-8 py-4 font-medium text-center text-blue-800 whitespace-nowrap"
-                  >
-                    <p class="bg-blue-100 rounded-[5px] p-1">
-                      {{ formatDate(i.createdAt) }}
-                    </p>
-                  </td>
-                  <!-- <td class="px-8 py-4 font-medium text-center">
-                    <button
-                      @click="enterSlug(i.id, i.name.toLowerCase())"
-                      class="btnKirish bg-blue-600 rounded-xl px-5 py-2.5 text-white focus:ring-2"
-                    >
-                      Kirish
-                    </button>
-                  </td> -->
-                  <td
-                    class="py-4 pr-5 font-medium text-center whitespace-nowrap"
-                  >
-                    <i
-                      @click="getOneProduct(i.id)"
-                      class="p-2 mr-3 text-blue-600 bg-blue-300 cursor-pointer rounded-xl bx bxs-pencil focus:ring-2"
-                    >
-                    </i>
-                    <i
-                      @click="deleteFunc(i.id)"
-                      class="p-2 text-red-600 bg-red-300 cursor-pointer rounded-xl bx bxs-trash focus:ring-2"
-                    >
-                    </i>
-                  </td>
-                </tr>
-                <tr
-                  class="border-b"
-                  :class="
-                    navbar.userNav ? 'hover:bg-gray-700' : 'hover:bg-gray-50'
-                  "
-                  v-show="store.searchList.length"
-                  v-for="i in store.searchList"
                   :key="i.id"
                 >
                   <td
@@ -665,17 +565,14 @@
               </tbody>
             </table>
             <div
-              v-if="isEmpty(store.PageProduct) && isEmpty(store.allProducts)"
+              v-if="isEmpty(store.PageProduct)"
               class="w-full p-20 text-2xl font-medium text-center max-w-screen"
             >
               <h1>Guruhlar ro'yhati bo'sh</h1>
             </div>
-            <div v-show="store.error" class="flex justify-center w-full">
-              <h1 class="p-20 text-2xl font-medium">{{ store.allProducts }}</h1>
-            </div>
           </div>
           <nav
-            v-if="!store.searchList.length"
+            v-if="!store.searchLamp"
             class="flex flex-row items-center justify-between p-4 space-y-0"
             aria-label="Table navigation"
           >
@@ -762,13 +659,12 @@ const store = reactive({
   PageProduct: null,
   page: [],
   pagination: 1,
-  allProducts: null,
   error: false,
   filter: "",
   filter_show: false,
-  searchList: [],
-  group: [],
   user: [],
+  searchTimer: null,
+  searchLamp: false,
 });
 
 const form = reactive({
@@ -815,19 +711,6 @@ const handleFileChange = (event) => {
   form.image = file;
 };
 
-// ---------------------------- search ------------------------------------
-function searchFunc() {
-  store.searchList = store.filter
-    ? store.allProducts.filter((product) =>
-        product.name.toLowerCase().includes(store.filter.toLowerCase())
-      )
-    : [];
-}
-// ---------------------------- search end ------------------------------------
-
-// function enterSlug(id, name) {
-//   router.push(`./groups/${id}/${name}`);
-// }
 
 const toggleModal = () => {
   modal.value = !modal.value;
@@ -868,22 +751,33 @@ const deleteFunc = (id) => {
 
 // ----------------------------------- axios --------------------------------
 
-const getAllSchool = async () => {
-  try {
-    const res = await axios.get(`/school`, {
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-    });
-    store.allProducts = res.data.sort((a, b) => b.id - a.id);
-    store.error = false;
-  } catch (error) {
-    store.allProducts = error.response.data.message;
-    store.error = true;
-  }
+const searchName = (name) => {
+  store.searchLamp = true;
+  clearTimeout(store.searchTimer);
+
+  store.searchTimer = setTimeout(async () => {
+    if (!name) {
+      store.PageProduct = [];
+      getSchoolPage(store.pagination);
+      store.searchLamp = false;
+      return;
+    }
+
+    try {
+      const res = await axios.get(`/v1/school/search/${name}`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      });
+      store.PageProduct = res.data;
+    } catch {
+      store.PageProduct = [];
+      store.searchLamp = false;
+    }
+  }, 350);
 };
 
 const getSchoolPage = async (page) => {
   try {
-    const res = await axios.get(`/school/page?page=${page}`, {
+    const res = await axios.get(`/v1/school/page?page=${page}`, {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     });
     store.PageProduct = res.data?.data?.records;
@@ -900,7 +794,7 @@ const getSchoolPage = async (page) => {
 
 const getOneProduct = async (id) => {
   try {
-    const res = await axios.get(`/school/${id}`, {
+    const res = await axios.get(`/v1/school/${id}`, {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     });
     Object.assign(edit, {
@@ -929,10 +823,10 @@ const createProduct = async () => {
       formData.append("image", form.image); 
     }
 
-    const res = await axios.post("/school", formData, {
+    const res = await axios.post("/v1/school", formData, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
-        "Content-Type": "multipart/form-data", // ❗ muhim
+        "Content-Type": "multipart/form-data", 
       },
     });
 
@@ -958,7 +852,7 @@ const editProduct = async () => {
       formData.append("image", edit.image);
     }
 
-    await axios.put(`/school/${edit.id}`, formData, {
+    await axios.put(`/v1/school/${edit.id}`, formData, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
         "Content-Type": "multipart/form-data",
@@ -978,7 +872,7 @@ const editProduct = async () => {
 
 const deleteProduct = async () => {
   try {
-    await axios.delete(`/school/${remove.id}`, {
+    await axios.delete(`/v1/school/${remove.id}`, {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     });
     notification.success("School o'chirildi");
@@ -993,7 +887,7 @@ const deleteProduct = async () => {
 
 const getOwner = async () => {
   try {
-    const res = await axios.get(`/user`, {
+    const res = await axios.get(`/v1/user/add/owner`, {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     });
     store.user = res.data
@@ -1006,7 +900,6 @@ const getOwner = async () => {
 
 onMounted(() => {
   getSchoolPage(store.pagination);
-  getAllSchool();
   getOwner();
 });
 </script>

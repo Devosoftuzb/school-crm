@@ -153,9 +153,14 @@ import axios from "@/services/axios";
 
 const notification = useNotificationStore();
 const navbar = useNavStore();
-const router = useRouter();
 
-const modal = ref(false);
+const formatSchoolName = (name) => {
+  if (!name) return "";
+  return name
+    .split("_")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+};
 
 const store = reactive({
   allProducts: false,
@@ -163,7 +168,7 @@ const store = reactive({
   filter: "",
   filter_show: false,
   searchList: [],
-  schoolName: "",
+  schoolName: formatSchoolName(localStorage.getItem("school_name")),
 });
 
 // ---------------------------- search ------------------------------------
@@ -185,24 +190,10 @@ const form = reactive({
 });
 
 // ----------------------------------- axios --------------------------------
-const getOneProduct = () => {
-  axios
-    .get(`/school/${localStorage.getItem("school_id")}`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    })
-    .then((res) => {
-      store.schoolName = res.data.name;
-    })
-    .catch((error) => {
-      console.log("error", error);
-    });
-};
 
-const getAllProduct = () => {
+const getGroups = () => {
   axios
-    .get(`/group/${localStorage.getItem("school_id")}`, {
+    .get(`/v1/group/add/${localStorage.getItem("school_id")}`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
@@ -222,7 +213,7 @@ const sendSMS = () => {
     group_id: form.group_id,
   };
   axios
-    .post("/sms/payment", data, {
+    .post("/v1/sms/payment", data, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
@@ -239,8 +230,7 @@ const sendSMS = () => {
 };
 
 onMounted(() => {
-  getOneProduct();
-  getAllProduct();
+  getGroups();
 });
 </script>
 

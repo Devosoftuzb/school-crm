@@ -398,13 +398,13 @@
                             v-for="(i, index) in history.searchList"
                             :key="index"
                             @mousedown.prevent="
-                              history.group_id = i.id;
-                              history.group_name = i.name;
+                              history.group_id = i.group.id;
+                              history.group_name = i.group.name;
                               history.filter_show = false;
-                              history.filter = i.name;
+                              history.filter = i.group.name;
                             "
                           >
-                            {{ i.name }}
+                            {{ i.group.name }}
                           </li>
                         </ul>
                         <ul
@@ -416,13 +416,13 @@
                             v-for="(i, index) in store.group"
                             :key="index"
                             @mousedown.prevent="
-                              history.group_id = i.id;
-                              history.group_name = i.name;
+                              history.group_id = i.group.id;
+                              history.group_name = i.group.name;
                               history.selectLamp = false;
-                              history.filter = i.name;
+                              history.filter = i.group.name;
                             "
                           >
-                            {{ i.name }}
+                            {{ i.group.name }}
                           </li>
                         </ul>
                       </div>
@@ -635,7 +635,7 @@
                     :class="navbar.userNav ? 'text-white' : 'text-[#1e293b]'"
                   >
                     <span class="w-full font-bold">Qo'shilgan vaqti :</span>
-                    <span class="w-full">{{ date }}</span>
+                    <span class="w-full">{{ store.addDate }}</span>
                   </h2>
                 </div>
               </div>
@@ -676,14 +676,14 @@
                       scope="row"
                       class="px-8 py-4 font-medium text-center whitespace-nowrap"
                     >
-                      {{ i.name }}
+                      {{ i.group.name }}
                     </td>
                     <td
                       class="px-8 py-4 font-medium text-center text-blue-800 whitespace-nowrap"
                     >
                       <p class="bg-blue-100 rounded-[5px] p-1">
-                        <span v-for="fan in i.subject" :key="fan.id"
-                          >{{ fan.subject_name }}
+                        <span v-for="fan in i.group.subject" :key="fan.id"
+                          >{{ fan.subject.name }}
                         </span>
                       </p>
                     </td>
@@ -691,26 +691,28 @@
                       class="px-8 py-4 font-medium text-center text-red-800 whitespace-nowrap"
                     >
                       <p class="bg-red-100 rounded-[5px] p-1">
-                        {{ Number(i.price).toLocaleString("uz-UZ") }} so'm
+                        {{ Number(i.group.price).toLocaleString("uz-UZ") }} so'm
                       </p>
                     </td>
                     <td
                       class="px-8 py-4 font-medium text-center text-blue-800 whitespace-nowrap"
                     >
                       <p class="bg-blue-100 rounded-[5px] p-1">
-                        {{ i.start_date }}
+                        {{ i.group.start_date }}
                       </p>
                     </td>
                     <td
                       class="px-8 py-4 font-medium text-center text-blue-800 whitespace-nowrap"
                     >
                       <p class="bg-blue-100 rounded-[5px] p-1">
-                        {{ i.student_date }}
+                        {{ i.createdAt.split("T")[0] }}
                       </p>
                     </td>
                     <td class="px-8 py-4 font-medium text-center">
                       <button
-                        @click="enterSlug(i.id, i.name.toLowerCase())"
+                        @click="
+                          enterSlug(i.group.id, i.group.name.toLowerCase())
+                        "
                         class="btn bg-blue-600 rounded-xl px-5 py-2.5 text-white focus:ring-2"
                       >
                         Kirish
@@ -968,9 +970,11 @@
                             !i.description || i.description.trim() === ""
                               ? "Izoh yo'q"
                               : i.description.split(" ").length > 3
-                              ? i.description.split(" ").slice(0, 3).join(" ") +
-                                "..."
-                              : i.description
+                                ? i.description
+                                    .split(" ")
+                                    .slice(0, 3)
+                                    .join(" ") + "..."
+                                : i.description
                           }}
                         </p>
                         <span
@@ -1064,27 +1068,38 @@
 </template>
 
 <script setup>
-import { onMounted, reactive, ref, watch } from "vue";
+import { onMounted, reactive, ref, watch, computed } from "vue";
 import { useRouter } from "vue-router";
 import { useNavStore } from "../../stores/toggle";
 import axios from "../../services/axios";
-import { Placeholder2 } from "../../components";
+import { Placeholder2, ButtonLoader, PageLoader } from "../../components";
 import Chart from "chart.js/auto";
-import * as XLSX from "xlsx";
-import { saveAs } from "file-saver";
 import { useNotificationStore } from "../../stores/notification";
-import { ButtonLoader } from "../../components";
-import { PageLoader } from "../../components";
 
 const notification = useNotificationStore();
 const navbar = useNavStore();
 const router = useRouter();
+
 const hozirgiSana = new Date();
 const hozirgiYil = String(hozirgiSana.getFullYear());
 const orqaYil = hozirgiSana.getFullYear() - 2;
-let hozirgiOy = hozirgiSana.getMonth() + 1;
-hozirgiOy = hozirgiOy.toString().padStart(2, "0");
+let hozirgiOy = String(hozirgiSana.getMonth() + 1).padStart(2, "0");
 let hozirgiKun = hozirgiSana.getDate();
+
+// Computed properties
+const schoolId = computed(() => localStorage.getItem("school_id"));
+const employeeId = computed(() => router.currentRoute.value.params.id);
+const token = computed(() => localStorage.getItem("token"));
+const authHeaders = computed(() => ({
+  Authorization: `Bearer ${token.value}`,
+}));
+
+// Chart theme computed
+const chartTheme = computed(() => ({
+  background: navbar.userNav ? "#1e293b" : "#ffffff",
+  textColor: navbar.userNav ? "#ffffff" : "#000000",
+  gridColor: navbar.userNav ? "rgba(255, 255, 255, 0.2)" : "rgba(0, 0, 0, 0.1)",
+}));
 
 const loading = reactive({
   view: false,
@@ -1092,7 +1107,7 @@ const loading = reactive({
 });
 
 const store = reactive({
-  data: "",
+  data: [],
   group: [],
   payment: [],
   modalInfo: true,
@@ -1103,87 +1118,19 @@ const store = reactive({
   loading: false,
   curentYil: [],
   year: hozirgiSana.getFullYear(),
-  month: (hozirgiSana.getMonth() + 1).toString().padStart(2, "0"),
-  PageProduct: "",
+  month: String(hozirgiSana.getMonth() + 1).padStart(2, "0"),
+  PageProduct: [],
   page: [],
   pagination: 1,
   teacher_name: "",
   statistic: "",
+  addDate: "",
 });
 
 const info = reactive({
   PaymentStats: [],
   StudentPayments: [],
 });
-
-const date = ref("");
-
-function searchHistoryFunc() {
-  history.searchList = [];
-  if (history.filter) {
-    for (let i of store.group) {
-      if (i.name.toLowerCase().includes(history.filter.toLowerCase())) {
-        history.searchList.push(i);
-      }
-    }
-  }
-}
-
-const infoModal = () => {
-  store.modalInfo = true;
-  store.modalGroup = false;
-  store.modalPayment = false;
-};
-
-const groupModal = () => {
-  store.modalGroup = true;
-  store.modalInfo = false;
-  store.modalPayment = false;
-};
-
-const paymentModal = () => {
-  store.modalPayment = true;
-  store.modalInfo = false;
-  store.modalGroup = false;
-};
-
-const historyDayModal = () => {
-  history.dayModal = true;
-  history.monthModal = false;
-  history.groupMonthModal = false;
-  history.yearModal = false;
-};
-
-const historyMonthModal = () => {
-  history.dayModal = false;
-  history.monthModal = true;
-  history.groupMonthModal = false;
-  history.yearModal = false;
-};
-
-const historyGroupMonthModal = () => {
-  history.groupMonthModal = true;
-  history.dayModal = false;
-  history.monthModal = false;
-  history.yearModal = false;
-};
-
-const historyYearModal = () => {
-  history.yearModal = true;
-  history.dayModal = false;
-  history.monthModal = false;
-  history.groupMonthModal = false;
-};
-
-const historyModal = () => {
-  history.modal = !history.modal;
-  history.year = hozirgiYil;
-  history.month = hozirgiOy;
-  history.day = hozirgiKun;
-  history.group_id = "";
-  historyDayModal();
-  getHistory(store.pagination);
-};
 
 const history = reactive({
   year: hozirgiYil,
@@ -1207,9 +1154,24 @@ const history = reactive({
   dayPay: 0,
 });
 
-function enterSlug(id, name) {
-  router.push(`/groups/${id}/${name}`);
-}
+// Helper functions
+const monthNames = (month) => {
+  const months = [
+    "Yanvar",
+    "Fevral",
+    "Mart",
+    "Aprel",
+    "May",
+    "Iyun",
+    "Iyul",
+    "Avgust",
+    "Sentabr",
+    "Oktabr",
+    "Noyabr",
+    "Dekabr",
+  ];
+  return months[parseInt(month) - 1] || "Notog'ri oy";
+};
 
 const formatDateToNumeric = (date) => {
   const year = date.getFullYear();
@@ -1217,51 +1179,65 @@ const formatDateToNumeric = (date) => {
   const day = String(date.getDate()).padStart(2, "0");
   const hour = String(date.getHours()).padStart(2, "0");
   const minute = String(date.getMinutes()).padStart(2, "0");
-
   return `${day}-${month}-${year}, ${hour}:${minute}`;
 };
 
-const monthNames = (month) => {
-  switch (month) {
-    case "01":
-      return "Yanvar";
-    case "02":
-      return "Fevral";
-    case "03":
-      return "Mart";
-    case "04":
-      return "Aprel";
-    case "05":
-      return "May";
-    case "06":
-      return "Iyun";
-    case "07":
-      return "Iyul";
-    case "08":
-      return "Avgust";
-    case "09":
-      return "Sentabr";
-    case "10":
-      return "Oktabr";
-    case "11":
-      return "Noyabr";
-    case "12":
-      return "Dekabr";
-    default:
-      return "Notog'ri oy";
+function searchHistoryFunc() {
+  if (!history.filter) {
+    history.searchList = [];
+    return;
   }
+
+  const filterLower = history.filter.toLowerCase();
+  history.searchList = store.group.filter((i) =>
+    i.group.name.toLowerCase().includes(filterLower),
+  );
+}
+
+// Modal handlers
+const setActiveModal = (modalType) => {
+  store.modalInfo = modalType === "info";
+  store.modalGroup = modalType === "group";
+  store.modalPayment = modalType === "payment";
 };
 
-// API chaqiruvlarini umumiy qilish uchun yordamchi funksiya
-const fetchData = async (url, params = {}) => {
-  const token = localStorage.getItem("token");
+const infoModal = () => setActiveModal("info");
+const groupModal = () => setActiveModal("group");
+const paymentModal = () => setActiveModal("payment");
 
+const setActiveHistoryModal = (type) => {
+  history.dayModal = type === "day";
+  history.monthModal = type === "month";
+  history.groupMonthModal = type === "groupMonth";
+  history.yearModal = type === "year";
+};
+
+const historyDayModal = () => setActiveHistoryModal("day");
+const historyMonthModal = () => setActiveHistoryModal("month");
+const historyGroupMonthModal = () => setActiveHistoryModal("groupMonth");
+const historyYearModal = () => setActiveHistoryModal("year");
+
+const historyModal = () => {
+  Object.assign(history, {
+    modal: !history.modal,
+    year: hozirgiYil,
+    month: hozirgiOy,
+    day: hozirgiKun,
+    group_id: "",
+  });
+  historyDayModal();
+  getHistory(store.pagination);
+};
+
+function enterSlug(id, name) {
+  router.push(`/groups/${id}/${name}`);
+}
+
+const fetchData = async (url, params = {}) => {
   try {
     const response = await axios.get(url, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      params: params,
+      headers: authHeaders.value,
+      params,
     });
     return response.data;
   } catch (error) {
@@ -1270,56 +1246,31 @@ const fetchData = async (url, params = {}) => {
   }
 };
 
+// API Functions
 const getEmployee = async () => {
-  const schoolId = localStorage.getItem("school_id");
-  const id = router.currentRoute.value.params.id;
-
   try {
-    const employeeData = await fetchData(`/employee/${schoolId}/${id}`);
-    store.data = employeeData;
-    date.value = store.data.createdAt.split("T")[0];
-    store.teacher_name = store.data.full_name;
+    const data = await fetchData(
+      `/v1/employee/${schoolId.value}/${employeeId.value}`,
+    );
 
-    const promises = [
-      ...employeeData.group.map((group) =>
-        getGroup(group.group_id, group.createdAt)
-      ),
-    ];
-
-    await Promise.all(promises);
-    store.loading = true;
+    Object.assign(store, {
+      data: data,
+      teacher_name: data.full_name,
+      group: data.group,
+      addDate: data.createdAt.split("T")[0],
+      loading: true,
+    });
   } catch (error) {
     console.error("Xodim ma'lumotlarini olishda xato:", error);
   }
 };
 
-const getGroup = async (id, date) => {
-  try {
-    const groupData = await fetchData(
-      `/group/${localStorage.getItem("school_id")}/${id}/not`
-    );
-    groupData.student_date = date.split("T")[0];
-    store.group.push(groupData);
-    return groupData;
-  } catch (error) {
-    console.error("Guruh ma'lumotlarini olishda xato:", error);
-  }
-};
-
 const getCurrentYearPayments = async () => {
-  const id = router.currentRoute.value.params.id;
   try {
     const res = await axios.get(
-      `/statistic/teacher-salary/${localStorage.getItem("school_id")}/${id}/${
-        store.year
-      }`,
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      }
+      `/v1/statistic/teacher-salary/${schoolId.value}/${employeeId.value}/${store.year}`,
+      { headers: authHeaders.value },
     );
-
     info.PaymentStats = res.data.PaymentStats;
   } catch (err) {
     console.error("Statistikani olishda xato:", err);
@@ -1327,70 +1278,22 @@ const getCurrentYearPayments = async () => {
 };
 
 const getStudentPayments = async () => {
-  const id = router.currentRoute.value.params.id;
   try {
     const res = await axios.get(
-      `/statistic/teacher-studentPayments/${localStorage.getItem(
-        "school_id"
-      )}/${id}/${store.month}`,
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      }
+      `/v1/statistic/teacher-studentPayments/${schoolId.value}/${employeeId.value}/${store.month}`,
+      { headers: authHeaders.value },
     );
-
     info.StudentPayments = res.data.studentPayments;
   } catch (err) {
     console.error("Statistikani olishda xato:", err);
   }
 };
 
-const getStatistic = async (teacher_id, date) => {
-  await axios
-    .get(
-      `/statistic/payment-day-employee/${localStorage.getItem(
-        "school_id"
-      )}/${teacher_id}/${date}`,
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      }
-    )
-    .then((res) => {
-      store.statistic = res.data;
-    })
-    .catch((error) => {});
-};
-
-const getStatisticGroup = async (group_id, date) => {
-  await axios
-    .get(
-      `/statistic/payment-day/${localStorage.getItem(
-        "school_id"
-      )}/${group_id}/${date}`,
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      }
-    )
-    .then((res) => {
-      store.statistic = res.data;
-    })
-    .catch((error) => {});
-};
-
+// Chart management
 let paymentChart = null;
 const createPaymentChart = () => {
-  const ctx = document.getElementById("paymentChart").getContext("2d");
-
-  const chartBackground = navbar.userNav ? "#1e293b" : "#ffffff";
-  const chartTextColor = navbar.userNav ? "#ffffff" : "#000000";
-  const gridColor = navbar.userNav
-    ? "rgba(255, 255, 255, 0.2)"
-    : "rgba(0, 0, 0, 0.1)";
+  const ctx = document.getElementById("paymentChart")?.getContext("2d");
+  if (!ctx) return;
 
   if (paymentChart) {
     paymentChart.destroy();
@@ -1427,18 +1330,18 @@ const createPaymentChart = () => {
       responsive: true,
       scales: {
         x: {
-          grid: { color: gridColor },
-          ticks: { color: chartTextColor },
+          grid: { color: chartTheme.value.gridColor },
+          ticks: { color: chartTheme.value.textColor },
         },
         y: {
           beginAtZero: true,
-          grid: { color: gridColor },
-          ticks: { color: chartTextColor },
+          grid: { color: chartTheme.value.gridColor },
+          ticks: { color: chartTheme.value.textColor },
         },
       },
       plugins: {
         legend: {
-          labels: { color: chartTextColor },
+          labels: { color: chartTheme.value.textColor },
         },
       },
     },
@@ -1447,13 +1350,8 @@ const createPaymentChart = () => {
 
 let studentPaymentChart = null;
 const createStudentPaymentChart = () => {
-  const ctx = document.getElementById("studentPaymentChart").getContext("2d");
-
-  const chartBackground = navbar.userNav ? "#1e293b" : "#ffffff";
-  const chartTextColor = navbar.userNav ? "#ffffff" : "#000000";
-  const gridColor = navbar.userNav
-    ? "rgba(255, 255, 255, 0.2)"
-    : "rgba(0, 0, 0, 0.1)";
+  const ctx = document.getElementById("studentPaymentChart")?.getContext("2d");
+  if (!ctx) return;
 
   if (studentPaymentChart) {
     studentPaymentChart.destroy();
@@ -1482,256 +1380,124 @@ const createStudentPaymentChart = () => {
       responsive: true,
       plugins: {
         legend: {
-          labels: { color: chartTextColor },
+          labels: { color: chartTheme.value.textColor },
         },
       },
     },
   });
 };
 
-const getHistory = async (page) => {
+const getHistory = async (page = 1) => {
   loading.view = true;
-  const id = router.currentRoute.value.params.id;
-  const schoolId = localStorage.getItem("school_id");
-  const token = localStorage.getItem("token");
-  const config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
+
+  const url = `/v1/payment/history`;
+
+  const params = {
+    school_id: schoolId.value,
+    employee_id: employeeId.value,
+    page,
+    status: history.status || "all",
   };
 
-  let url;
   if (history.dayModal) {
-    url = `/payment/employeeDay/${schoolId}/${id}/${history.year}/${history.month}/${history.day}/page?page=${page}`;
+    params.year = history.year;
+    params.month = history.month;
+    params.day = history.day;
   } else if (history.monthModal) {
-    url = `/payment/employeeMonth/${schoolId}/${id}/${history.year}/${history.month}/page?page=${page}`;
+    params.year = history.year;
+    params.month = history.month;
   } else if (history.groupMonthModal) {
-    url = `/payment/groupMonth/${schoolId}/${history.group_id}/${history.year}/${history.month}/all/page?page=${page}`;
+    params.group_id = history.group_id;
+    params.year = history.year;
+    params.month = history.month;
   } else if (history.yearModal) {
-    url = `/payment/employeeYear/${schoolId}/${id}/${history.year}/page?page=${page}`;
+    params.year = history.year;
   } else {
+    loading.view = false;
     return;
   }
 
-  await axios
-    .get(url, config)
-    .then((res) => {
-      const records = res.data?.data?.records;
-      if (records.length !== 0) {
-        history.group_name = records[0].group_name;
-      }
-      // history.dayPay = res.data?.data?.total_sum
-      store.PageProduct = records;
-      const pagination = res.data?.data?.pagination;
-      store.page = [pagination.currentPage, pagination.total_count];
-      loading.view = false;
-      history.modal = false;
-    })
-    .catch((error) => {
-      loading.view = false;
-      store.PageProduct = error.response?.data?.message;
-    });
-};
+  try {
+    const res = await axios.get(url, { headers: authHeaders.value, params });
+    const records = res.data?.data?.records || [];
 
-const getAllHistoryForExport = async () => {
-  const id = router.currentRoute.value.params.id;
-  const schoolId = localStorage.getItem("school_id");
-  const token = localStorage.getItem("token");
-  const config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  };
-
-  let urlBase;
-  if (history.dayModal) {
-    urlBase = `/payment/employeeDay/${schoolId}/${id}/${history.year}/${history.month}/${history.day}/page`;
-    await getStatistic(id, `${history.year}-${history.month}-${history.day}`);
-  } else if (history.monthModal) {
-    urlBase = `/payment/employeeMonth/${schoolId}/${id}/${history.year}/${history.month}/page`;
-    await getStatistic(id, `${history.year}-${history.month}`);
-  } else if (history.groupMonthModal) {
-    urlBase = `/payment/groupMonth/${schoolId}/${history.group_id}/${history.year}/${history.month}/all/page`;
-    await getStatisticGroup(
-      history.group_id,
-      `${history.year}-${history.month}`
-    );
-  } else if (history.yearModal) {
-    urlBase = `/payment/employeeYear/${schoolId}/${id}/${history.year}/page`;
-  } else {
-    return;
-  }
-
-  let allData = [];
-  let page = 1;
-  let hasMore = true;
-
-  while (hasMore) {
-    try {
-      const res = await axios.get(`${urlBase}?page=${page}`, config);
-      const records = res.data?.data?.records || [];
-      if (records.length > 0) {
-        allData = allData.concat(records);
-        page++;
-        hasMore = records.length === 15;
-      } else {
-        hasMore = false;
-      }
-    } catch (err) {
-      console.error("Export uchun malumotlarni olishda xatolik:", err);
-      hasMore = false;
+    if (records.length !== 0) {
+      history.group_name = records[0].group_name;
     }
-  }
 
-  if (history.dayModal) {
-    history.dayList = allData;
-  } else if (history.monthModal) {
-    history.monthList = allData;
-  } else if (history.groupMonthModal) {
-    history.groupMonthList = allData;
-  } else if (history.yearModal) {
-    history.yearList = allData;
+    store.PageProduct = records;
+
+    const pagination = res.data?.data?.pagination;
+    store.page = [pagination.currentPage, pagination.total_count];
+
+    loading.view = false;
+    history.modal = false;
+  } catch (error) {
+    loading.view = false;
+    store.PageProduct = error.response?.data?.message || [];
   }
 };
 
 const exportToExcel = async () => {
-  loading.excel = true;
-  await getAllHistoryForExport();
+  const config = {
+    headers: authHeaders.value,
+    responseType: "blob",
+  };
 
-  const list = history.dayModal
-    ? history.dayList
-    : history.monthModal
-    ? history.monthList
-    : history.groupMonthModal
-    ? history.groupMonthList
-    : history.yearList;
+  let urlBase = `/v1/payment/history/teacher/excel?school_id=${schoolId.value}`;
+  let fileName = "payment";
 
-  if (!list || list.length === 0) {
-    loading.excel = false;
-    notification.warning("Yuklash uchun ma'lumot topilmadi");
+  if (history.dayModal) {
+    urlBase += `&year=${history.year}&month=${history.month}&day=${history.day}&employee_id=${employeeId.value}`;
+    fileName = `payment_${history.year}_${monthNames(history.month)}_${history.day}`;
+  } else if (history.monthModal) {
+    urlBase += `&year=${history.year}&month=${history.month}&employee_id=${employeeId.value}`;
+    fileName = `payment_${history.year}_${monthNames(history.month)}`;
+  } else if (history.groupMonthModal) {
+    urlBase = `/v1/payment/history/excel?school_id=${schoolId.value}&year=${history.year}&month=${history.month}&group_id=${history.group_id}`;
+    fileName = `payment_${history.year}_${monthNames(history.month)}_group`;
+  } else if (history.yearModal) {
+    urlBase += `&year=${history.year}&employee_id=${employeeId.value}`;
+    fileName = `payment_${history.year}`;
+  } else {
     return;
   }
 
-  const rawData = list.filter((item) => item.status !== "delete");
-
-  const dataToExport = rawData.map((item) => ({
-    "O'quvchi (F . I . O)": item.student_name,
-    // "O'qituvchi (F . I . O)": item.teacher_name,
-    "Guruh nomi": item.group_name,
-    "Guruh narxi": Number(item.group_price).toLocaleString("uz-UZ") + " so'm",
-    "To'lov turi": item.method,
-    "To'langan summa": Number(item.price),
-    "Chegirma (%)": item.discount + " %",
-    Yil: item.year + " yil",
-    Oy: monthNames(item.month),
-    "To'lov sanasi (Oy)": monthNames(
-      String(new Date(item.createdAt).getMonth() + 1).padStart(2, "0")
-    ),
-    "To'lov sanasi": formatDateToNumeric(new Date(item.createdAt)),
-    Izoh: item.description,
-    Holati:
-      item.status === "delete"
-        ? "O'chirilgan"
-        : item.status === "update"
-        ? "O'zgartirilgan"
-        : "Tasdiqlangan",
-  }));
-
-  const ws = XLSX.utils.json_to_sheet(dataToExport, { origin: "A1" });
-
-  const lastRow = dataToExport.length + 1;
-
-  if (
-    !history.yearModal &&
-    store.statistic.statistics &&
-    store.statistic.statistics.length > 0
-  ) {
-    const startRow = lastRow + 4;
-
-    ws[`A${startRow}`] = { t: "s", v: "To'lov turi" };
-    ws[`B${startRow}`] = { t: "s", v: "To'lovlar soni" };
-    ws[`C${startRow}`] = { t: "s", v: "Jami summa" };
-
-    store.statistic.statistics.forEach((stat, idx) => {
-      const row = startRow + idx + 1;
-      ws[`A${row}`] = { t: "s", v: stat.method };
-      ws[`B${row}`] = {
-        t: "s",
-        v: Number(stat.count).toLocaleString("uz-UZ") + " ta",
-      };
-      ws[`C${row}`] = {
-        t: "s",
-        v: Number(stat.sum).toLocaleString("uz-UZ") + " so'm",
-      };
-    });
-
-    const numColumns = Object.keys(dataToExport[0]).length;
-    const maxRow = startRow + store.statistic.statistics.length;
-    ws["!ref"] = XLSX.utils.encode_range({
-      s: { c: 0, r: 0 },
-      e: { c: numColumns - 1, r: maxRow - 1 },
-    });
-  } else {
-    const numColumns = Object.keys(dataToExport[0]).length;
-    ws["!ref"] = XLSX.utils.encode_range({
-      s: { c: 0, r: 0 },
-      e: { c: numColumns - 1, r: dataToExport.length },
-    });
+  try {
+    const response = await axios.get(urlBase, config);
+    const url = window.URL.createObjectURL(new Blob([response.data]));
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", `${fileName}.xlsx`);
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+  } catch (err) {
+    console.error("Export uchun malumotlarni olishda xatolik:", err);
   }
-
-  ws["!cols"] = [
-    { wpx: 180 },
-    { wpx: 180 },
-    { wpx: 200 },
-    { wpx: 120 },
-    { wpx: 120 },
-    { wpx: 130 },
-    { wpx: 110 },
-    { wpx: 90 },
-    { wpx: 90 },
-    { wpx: 160 },
-    { wpx: 90 },
-  ];
-
-  const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, "To'lov Tarixi");
-
-  const fileName = history.dayModal
-    ? `kunlik_tolov_tarixi_${store.teacher_name}-${history.year}-${history.month}-${history.day}.xlsx`
-    : history.monthModal
-    ? `oylik_tolov_tarixi_${store.teacher_name}-${history.year}-${history.month}.xlsx`
-    : history.groupMonthModal
-    ? `guruhni_oylik_tolov_tarixi_${store.teacher_name}-${history.year}-${history.month}-${history.group_name}.xlsx`
-    : `barcha_tolov_tarixi_${store.teacher_name}-${history.year}.xlsx`;
-
-  const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
-  const blob = new Blob([excelBuffer], { type: "application/octet-stream" });
-  saveAs(blob, fileName);
-  loading.excel = false;
-  history.modal = !history.modal;
-  notification.success("Excel fayl yuklab olindi!");
 };
 
+// Watchers
 watch(
   () => navbar.userNav,
   () => {
     setTimeout(createPaymentChart, 300);
     setTimeout(createStudentPaymentChart, 300);
-  }
+  },
 );
 
 watch(
   () => info.PaymentStats,
   () => {
     setTimeout(createPaymentChart, 300);
-  }
+  },
 );
 
 watch(
   () => info.StudentPayments,
   () => {
     setTimeout(createStudentPaymentChart, 300);
-  }
+  },
 );
 
 onMounted(() => {
@@ -1741,13 +1507,11 @@ onMounted(() => {
   getStudentPayments();
   getEmployee();
   getHistory(store.pagination);
-  for (let i = 0; i < 5; i++) {
-    let list = {
-      id: i,
-      name: String(orqaYil + i),
-    };
-    store.curentYil.push(list);
-  }
+
+  store.curentYil = Array.from({ length: 5 }, (_, i) => ({
+    id: i,
+    name: String(orqaYil + i),
+  }));
 });
 </script>
 

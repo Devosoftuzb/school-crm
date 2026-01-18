@@ -1,12 +1,12 @@
 <template>
   <div class="px-2 py-8">
     <!-- Placeholder -->
-    <div v-show="!store.product && !store.questions">
+    <div v-show="!store.resultData && !store.questions">
       <Placeholder2 />
     </div>
 
     <div
-      v-show="store.product && store.questions"
+      v-show="store.resultData && store.questions"
       class="p-8 mb-32 rounded-xl"
       :class="navbar.userNav ? 'bg-slate-900 text-white' : 'bg-white'"
     >
@@ -45,7 +45,7 @@
                 >
                   <span class="w-full font-bold">Ism-familya :</span>
                   <span class="w-full py-0.5">{{
-                    store.product.customer?.full_name
+                    store.resultData.customer?.full_name
                   }}</span>
                 </h2>
 
@@ -55,7 +55,7 @@
                 >
                   <span class="w-full font-bold">Telefon raqam :</span>
                   <span class="w-full py-0.5">{{
-                    store.product.customer?.phone_number
+                    store.resultData.customer?.phone_number
                   }}</span>
                 </h2>
 
@@ -65,7 +65,7 @@
                 >
                   <span class="w-full font-bold">Tanlagan fani :</span>
                   <span class="w-full py-0.5">{{
-                    store.product.subject_name
+                    store.resultData.test?.subject?.name
                   }}</span>
                 </h2>
 
@@ -74,7 +74,9 @@
                   :class="navbar.userNav ? 'text-white' : 'text-[#1e293b]'"
                 >
                   <span class="w-full font-bold">Tanlagan o'qituvchisi :</span>
-                  <span class="w-full py-0.5">{{ store.product.teacher }}</span>
+                  <span class="w-full py-0.5">{{
+                    store.resultData.teacher
+                  }}</span>
                 </h2>
 
                 <h2
@@ -84,7 +86,7 @@
                   <span class="w-full font-bold"
                     >Maqul bo'lgan dars vaqti :</span
                   >
-                  <span class="w-full py-0.5">{{ store.product.time }}</span>
+                  <span class="w-full py-0.5">{{ store.resultData.time }}</span>
                 </h2>
 
                 <h2
@@ -94,7 +96,7 @@
                   <span class="w-full font-bold">Darajasi :</span>
                   <span
                     class="w-auto rounded-xl bg-blue-100 py-0.5 px-4 text-blue-800"
-                    >{{ store.product.result }}</span
+                    >{{ store.resultData.result }}</span
                   >
                 </h2>
               </div>
@@ -108,7 +110,7 @@
                   <span class="w-full font-bold">Testni boshlagan vaqti :</span>
                   <span
                     class="w-auto rounded-xl py-0.5 px-4 bg-blue-100 text-blue-800"
-                    >{{ chekDateFormat(store.product.started_at) }}</span
+                    >{{ chekDateFormat(store.resultData.started_at) }}</span
                   >
                 </h2>
 
@@ -119,7 +121,7 @@
                   <span class="w-full font-bold">Testni tugatgan vaqti :</span>
                   <span
                     class="w-auto rounded-xl py-0.5 px-4 bg-red-100 text-red-800"
-                    >{{ chekDateFormat(store.product.finished_at) }}</span
+                    >{{ chekDateFormat(store.resultData.finished_at) }}</span
                   >
                 </h2>
 
@@ -131,7 +133,7 @@
                     >Test bajarishga berilgan vaqt :</span
                   >
                   <span class="w-full py-0.5"
-                    >{{ store.product.test?.time }} daqiqa</span
+                    >{{ store.resultData.test?.time }} daqiqa</span
                   >
                 </h2>
 
@@ -141,7 +143,7 @@
                 >
                   <span class="w-full font-bold">Savolar soni :</span>
                   <span class="w-full py-0.5"
-                    >{{ store.product.test?.count }} ta</span
+                    >{{ store.resultData.test?.count }} ta</span
                   >
                 </h2>
 
@@ -152,7 +154,7 @@
                   <span class="w-full font-bold">Togri javoblar :</span>
                   <span
                     class="w-auto rounded-xl py-0.5 px-4 bg-blue-100 text-blue-800"
-                    >{{ store.product.correct }} ta</span
+                    >{{ store.resultData.correct }} ta</span
                   >
                 </h2>
 
@@ -163,7 +165,7 @@
                   <span class="w-full font-bold">Notogri javoblar :</span>
                   <span
                     class="w-auto rounded-xl py-0.5 px-4 bg-red-100 text-red-800"
-                    >{{ store.product.incorrect }} ta</span
+                    >{{ store.resultData.incorrect }} ta</span
                   >
                 </h2>
               </div>
@@ -198,7 +200,7 @@
                         {{ index + 1 }}
                       </p>
                       <h2 class="w-full text-[14px] sm:text-[16px]">
-                        {{ i.question }}
+                        {{ i.question.question }}
                       </h2>
                     </div>
                     <div>
@@ -216,21 +218,21 @@
               <!-- acardion main -->
               <div :id="'answers' + i.id" class="hidden mb-5">
                 <div class="mb-5">
-                  <div v-if="i.file !== 'null' || i.file !== ''" class="mb-3">
-                    <div v-if="isImage(i.file)">
+                  <div v-if="i.question.file !== 'null' || i.question.file !== ''" class="mb-3">
+                    <div v-if="isImage(i.question.file)">
                       <img
-                        :src="getFileUrl(i.file)"
+                        :src="getFileUrl(i.question.file)"
                         alt="Image"
                         loading="lazy"
                         class="w-full max-w-[320px] h-auto object-cove"
                       />
                     </div>
-                    <div v-else-if="isAudio(i.file)">
-                      <audio :src="getFileUrl(i.file)" controls />
+                    <div v-else-if="isAudio(i.question.file)">
+                      <audio :src="getFileUrl(i.question.file)" controls />
                     </div>
-                    <div v-else-if="isVideo(i.file)">
+                    <div v-else-if="isVideo(i.question.file)">
                       <video
-                        :src="getFileUrl(i.file)"
+                        :src="getFileUrl(i.question.file)"
                         controls
                         width="320"
                         height="240"
@@ -243,27 +245,25 @@
                     </div> -->
                   </div>
                   <div
-                    v-if="i.text"
+                    v-if="i.question.text"
                     class="flex flex-col px-5 mb-10 text-justify"
                   >
-                    <h3 class="mb-2 font-bold">{{ i.text.title }}</h3>
-                    <p class="whitespace-pre-line">{{ i.text.text }}</p>
+                    <h3 class="mb-2 font-bold">{{ i.question.text.title }}</h3>
+                    <p class="whitespace-pre-line">{{ i.question.text.text }}</p>
                   </div>
-                  <h3 class="flex px-5 text-justify">{{ i.question }}</h3>
+                  <h3 class="flex px-5 text-justify">{{ i.question.question }}</h3>
                 </div>
                 <div class="grid gap-5 sm:grid-cols-2">
                   <div
-                    v-for="(ans, ansIndex) in i.option"
-                    :key="ansIndex"
                     class="w-full text-justify text-black p-2.5 sm:pl-10 pl-5 text-sm rounded-xl"
                     :class="
-                      ans.is_correct
+                      i.option.is_correct
                         ? 'bg-blue-300 text-blue-600'
                         : 'bg-red-300 text-red-600'
                     "
                   >
-                    <strong>{{ String.fromCharCode(65 + ansIndex) }}: </strong>
-                    <span>{{ ans.option }}</span>
+                    <strong>{{ String.fromCharCode(65) }}: </strong>
+                    <span>{{ i.option.option }}</span>
                   </div>
                 </div>
               </div>
@@ -276,7 +276,7 @@
 </template>
 
 <script setup>
-import { onMounted, reactive } from "vue";
+import { onMounted, reactive, computed } from "vue";
 import { useRouter } from "vue-router";
 import { useNavStore } from "../../stores/toggle";
 import { Placeholder2 } from "../../components";
@@ -285,31 +285,37 @@ import axios from "@/services/axios";
 const navbar = useNavStore();
 const router = useRouter();
 
+const resultId = computed(() => router.currentRoute.value.params.id);
+const token = computed(() => localStorage.getItem("token"));
+const authHeaders = computed(() => ({ 
+  Authorization: `Bearer ${token.value}` 
+}));
+const apiUrl = computed(() => import.meta.env.VITE_API);
+
 const store = reactive({
-  product: "",
-  subjects: [],
+  resultData: "",
   error: null,
   questions: "",
   plus: "",
   accordion: [],
 });
 
-const getFileUrl = (file) => import.meta.env.VITE_API + "/" + file;
 
+const getFileUrl = (file) => `${apiUrl.value}/${file}`;
 const isImage = (filename) => /\.(jpe?g|png|gif|bmp|webp|svg)$/i.test(filename);
 const isAudio = (filename) => /\.(mp3|wav|ogg|m4a)$/i.test(filename);
 const isVideo = (filename) => /\.(mp4|webm|ogg|mov)$/i.test(filename);
 
 function accordion(id) {
-  for (let i of store.accordion) {
-    if (i != id) {
+  store.accordion.forEach(i => {
+    if (i !== id) {
       const el = document.querySelector(`#answers${i}`);
-      if (el) el.classList.add("hidden");
+      el?.classList.add("hidden");
     }
-  }
+  });
 
   const show = document.querySelector(`#answers${id}`);
-  if (show) show.classList.toggle("hidden");
+  show?.classList.toggle("hidden");
 
   if (!store.accordion.includes(id)) {
     store.accordion.push(id);
@@ -322,7 +328,7 @@ const chekDateFormat = (date) => {
   if (!date) return "Sana mavjud emas";
 
   const d = new Date(date);
-  if (isNaN(d.getTime())) return "Noto‘g‘ri sana";
+  if (isNaN(d.getTime())) return "Noto'g'ri sana";
 
   const year = d.getFullYear();
   const month = String(d.getMonth() + 1).padStart(2, "0");
@@ -333,88 +339,45 @@ const chekDateFormat = (date) => {
   return `${year}-${month}-${day}, ${hour}:${minute}`;
 };
 
-const getSubject = () => {
-  axios
-    .get(`/subject/${localStorage.getItem("school_id")}`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    })
-    .then((res) => {
-      store.subjects = res.data;
-    })
-    .catch((error) => {
-      notification.warning(
-        "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
-      );
-    });
+const enrichRecord = (record) => {
+  const correctAnswers = record.customer_answer.filter(
+    (ans) => ans.is_correct === true
+  ).length;
+  
+  const incorrectAnswers = record.customer_answer.filter(
+    (ans) => ans.is_correct === false
+  ).length;
+
+  const [time, ...teacherParts] = record.customer.description.split(" ");
+  const teacher = teacherParts.join(" ");
+
+  return {
+    ...record,
+    correct: correctAnswers,
+    incorrect: incorrectAnswers,
+    time: time || "Noma'lum",
+    teacher: teacher || "Noma'lum",
+  };
 };
 
-const getProduct = async () => {
-  const id = router.currentRoute.value.params.id;
+const getOneResult = async () => {
   try {
-    const response = await axios.get(`/customer-test/${id}`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    });
+    const response = await axios.get(
+      `/v1/customer-test/${resultId.value}`,
+      { headers: authHeaders.value }
+    );
 
-    const record = response.data;
-
-    const questionsMap = new Map();
-
-    for (const answer of record.customer_answer) {
-      const q = answer.question;
-
-      if (!questionsMap.has(q.id)) {
-        questionsMap.set(q.id, {
-          id: q.id,
-          question: q.question,
-          file: q.file,
-          option: [],
-          text: q.text,
-        });
-      }
-
-      const qItem = questionsMap.get(q.id);
-      qItem.option.push(answer.option);
-    }
-
-    store.questions = Array.from(questionsMap.values());
-
-    const subjectId = record.customer.subject_id;
-    const subject = store.subjects.find((s) => s.id === subjectId);
-
-    const correctAnswers = record.customer_answer.filter(
-      (ans) => ans.is_correct === true
-    ).length;
-    const incorrectAnswers = record.customer_answer.filter(
-      (ans) => ans.is_correct === false
-    ).length;
-
-    const [time, ...teacherParts] = record.customer.description.split(" ");
-    const teacher = teacherParts.join(" ");
-
-    const enrichedRecord = {
-      ...record,
-      subject_name: subject ? subject.name : "Noma'lum",
-      correct: correctAnswers,
-      incorrect: incorrectAnswers,
-      time: time ? time : "Noma'lum",
-      teacher: teacher ? teacher : "Noma'lum",
-    };
-
-    store.product = enrichedRecord;
+    store.questions = response.data.customer_answer;
+    store.resultData = enrichRecord(response.data);
     store.error = null;
   } catch (error) {
-    store.product = {};
+    store.resultData = {};
     store.error = error.response?.data?.message || "Xatolik yuz berdi!";
   }
 };
 
 onMounted(() => {
-  getSubject();
-  getProduct();
+  getOneResult();
 });
 </script>
 
