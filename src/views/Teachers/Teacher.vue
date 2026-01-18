@@ -1190,7 +1190,7 @@ const toggleModal = () => (modal.value = !modal.value);
 
 const schoolId = computed(() => localStorage.getItem("school_id"));
 const token = computed(() => localStorage.getItem("token"));
-const accessRole = computed(() => (store.owner ? "adminstrator" : "teacher"));
+const accessRole = computed(() => (store.owner ? "administrator" : "teacher"));
 const authHeaders = computed(() => ({
   Authorization: `Bearer ${token.value}`,
 }));

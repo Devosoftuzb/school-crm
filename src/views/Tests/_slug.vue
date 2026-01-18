@@ -668,6 +668,7 @@
           :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
         >
           <div
+          v-show="!store.error"
             class="overflow-x-auto"
             v-for="(i, index) in store.allProducts"
             :key="i.id"
