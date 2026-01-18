@@ -31,6 +31,10 @@
               }}</span>
             </p>
             <p class="flex items-center gap-3 text-sm">
+              <span class="font-bold">Xonasi:</span>
+              {{ store.groupData.room?.name }}
+            </p>
+            <p class="flex items-center gap-3 text-sm">
               <span class="font-bold">Boshlangan sana:</span>
               {{ store.groupData.start_time?.slice(0, 10) }}
             </p>

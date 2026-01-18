@@ -68,6 +68,19 @@
             >
               <span class="">To'lov turlari</span>
             </button>
+            <button
+              v-show="userRole == '_ad_sch_' || userRole == '_ow_sch_'"
+              @click="toggleRoom()"
+              id=""
+              type="button"
+              :class="
+                roomChange
+                  ? 'btnAdd flex items-center w-full sm:max-w-fit justify-center whitespace-nowrap border border-[#2f73f0] focus:ring-4 focus:ring-blue-300 font-medium rounded-xl text-sm px-5 py-2.5'
+                  : 'flex items-center w-full sm:max-w-fit justify-center whitespace-nowrap bg-transparent border border-[#2f73f0] focus:ring-4 focus:ring-blue-300 font-medium rounded-xl text-sm px-5 py-2.5'
+              "
+            >
+              <span class="">Xonalar</span>
+            </button>
           </div>
         </div>
       </div>
@@ -909,6 +922,255 @@
               </div>
             </div>
           </div>
+
+          <!-------------------------------------------- Payment Method --------------------------------------------------------->
+
+          <div
+            :class="
+              room.modal
+                ? 'absolute overflow-y-auto flex bg-[rgba(0,0,0,0.5)] overflow-x-hidden z-50 justify-center items-center w-full inset-0 h-full'
+                : 'hidden'
+            "
+          >
+            <div class="relative w-full h-auto max-w-lg p-4">
+              <div
+                class="relative p-4 shadow rounded-xl sm:p-5"
+                :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
+              >
+                <div
+                  class="flex items-center justify-between pb-4 mb-4 border-b rounded-t sm:mb-5"
+                >
+                  <h3
+                    class="text-lg"
+                    :class="navbar.userNav ? 'text-white' : 'text-black'"
+                  >
+                    Yangi xona qo'shish
+                  </h3>
+                  <button
+                    @click="roomModal"
+                    type="button"
+                    class="bg-transparent hover:bg-gray-200 hover rounded-xl text-sm p-1.5 ml-auto inline-flex items-center"
+                    :class="{ 'text-white': navbar.userNav }"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      class="w-5 h-5"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                        clip-rule="evenodd"
+                      ></path>
+                    </svg>
+                  </button>
+                </div>
+
+                <form
+                  @submit.prevent="addRoom"
+                  :class="{ darkForm: navbar.userNav }"
+                >
+                  <div class="grid grid-cols-1 gap-4 mb-4 font-medium">
+                    <div>
+                      <label for="method_name" class="block mb-2 text-sm"
+                        >Nomi</label
+                      >
+                      <input
+                        v-model="room.name"
+                        type="text"
+                        name="method_name"
+                        id="method_name"
+                        class="bg-gray-50 border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                        placeholder="Nomini kiriting"
+                      />
+                    </div>
+                  </div>
+                  <div
+                    class="flex items-center justify-between w-full pt-5 mt-5 border-t"
+                  >
+                    <button
+                      @click="roomModal"
+                      type="button"
+                      class="border inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
+                    >
+                      Bekor qilish
+                    </button>
+                    <button
+                      type="submit"
+                      class="btnAdd text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
+                    >
+                      Qo'shish
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+
+          <!-- ----------------------------------------- Delete modal ---------------------------------------------------- -->
+          <div
+            :class="
+              remove.room
+                ? 'absolute overflow-y-auto flex bg-[rgba(0,0,0,0.5)] overflow-x-hidden z-50 justify-center items-center w-full inset-0 h-full'
+                : 'hidden'
+            "
+          >
+            <div class="relative p-4 max-w-5xl min-w-[30%] h-auto">
+              <div
+                class="relative p-4 shadow rounded-xl sm:p-5"
+                :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
+              >
+                <div
+                  class="flex items-center justify-between pb-4 mb-4 border-b rounded-t sm:mb-5"
+                >
+                  <h3
+                    class="text-lg"
+                    :class="navbar.userNav ? 'text-white' : 'text-black'"
+                  >
+                    Xonani o'chirib tashlash
+                  </h3>
+                  <button
+                    @click="remove.room = false"
+                    type="button"
+                    class="bg-transparent hover:bg-gray-200 hover rounded-xl text-sm p-1.5 ml-auto inline-flex items-center"
+                    :class="navbar.userNav ? 'text-white' : 'text-black'"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      class="w-5 h-5"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                        clip-rule="evenodd"
+                      ></path>
+                    </svg>
+                  </button>
+                </div>
+
+                <div :class="{ darkForm: navbar.userNav }">
+                  <div class="grid grid-cols-1 gap-4 mb-4 font-medium">
+                    <div>
+                      <div></div>
+                      <h1
+                        class="text-2xl"
+                        :class="navbar.userNav ? 'text-white' : 'text-black'"
+                      >
+                        Siz xonani o'chirishni xohlaysizmi?
+                      </h1>
+                    </div>
+                    <div
+                      class="flex items-center justify-between w-full pt-5 mt-5 border-t"
+                    >
+                      <button
+                        @click="remove.room = false"
+                        type="button"
+                        class="border cursor-pointer inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
+                      >
+                        Bekor qilish
+                      </button>
+                      <button
+                        @click="deleteRoom"
+                        class="btnAdd cursor-pointer text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
+                      >
+                        O'chirish
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- ----------------------------------------- delete modal end ---------------------------------------------------- -->
+
+          <div :class="roomChange ? 'p-4 sm:p-5' : 'hidden'">
+            <div
+              class="flex items-center justify-between pb-4 mb-4 border-b rounded-t sm:mb-5"
+            >
+              <h3
+                class="text-lg font-bold"
+                :class="navbar.userNav ? 'text-white' : 'text-black'"
+              >
+                Xonalar
+              </h3>
+              <div
+                class="flex flex-col items-stretch justify-end space-y-2 lg:w-auto md:flex-row md:space-y-0 md:items-center md:space-x-3"
+              >
+                <button
+                  @click="roomModal"
+                  id=""
+                  type="button"
+                  class="flex items-center justify-center px-4 text-sm font-medium text-white bg-blue-600 rounded-xl btnAdd max-w-fit whitespace-nowrap hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 sm:py-2"
+                >
+                  <span class="hidden sm:block">Xona qo'shish</span>
+                  <i class="block text-lg sm:hidden bx bxs-user-plus"></i>
+                </button>
+              </div>
+            </div>
+            <div
+              class="relative overflow-hidden border rounded-xl"
+              :class="
+                navbar.userNav
+                  ? 'bg-slate-900 border-gray-700 text-white'
+                  : 'bg-white'
+              "
+            >
+              <div class="overflow-x-auto">
+                <table class="w-full text-sm text-left">
+                  <thead class="text-xs rounded-xl uppercase bg-[#4141eb]">
+                    <tr>
+                      <th
+                        scope="col"
+                        class="py-3 text-center text-white whitespace-nowrap"
+                      >
+                        Nomi
+                      </th>
+                      <th scope="col" class="py-3 text-center text-white">
+                        O'chirish
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr
+                      v-for="i in store.room"
+                      :key="i.id"
+                      class=""
+                      :class="
+                        navbar.userNav
+                          ? 'hover:bg-gray-700'
+                          : 'hover:bg-gray-50'
+                      "
+                    >
+                      <th
+                        scope="row"
+                        class="px-8 py-3 font-medium text-center whitespace-nowrap"
+                      >
+                        <span>{{ i.name }}</span>
+                      </th>
+                      <td class="font-medium text-center whitespace-nowrap">
+                        <i
+                          @click="deleteFuncRoom(i.id)"
+                          class="px-5 py-2 text-red-600 bg-red-300 cursor-pointer rounded-xl bx bxs-trash focus:ring-2"
+                        >
+                        </i>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div
+                  v-show="store.room == ''"
+                  class="w-full p-20 text-2xl font-medium text-center max-w-screen"
+                >
+                  <h1>Xona ro'yhati bo'sh</h1>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -936,6 +1198,7 @@ const toggleGeneralSettings = () => {
   passwordChange.value = false;
   socialLink.value = false;
   paymentMethod.value = false;
+  roomChange.value = false;
 };
 
 const passwordChange = ref(false);
@@ -944,6 +1207,7 @@ const togglePasswordChange = () => {
   generalSettings.value = false;
   socialLink.value = false;
   paymentMethod.value = false;
+  roomChange.value = false;
 };
 
 const socialLink = ref(false);
@@ -952,11 +1216,22 @@ const toggleSocialLink = () => {
   generalSettings.value = false;
   passwordChange.value = false;
   paymentMethod.value = false;
+  roomChange.value = false;
 };
 
 const paymentMethod = ref(false);
 const togglePaymentMethod = () => {
   paymentMethod.value = true;
+  generalSettings.value = false;
+  passwordChange.value = false;
+  socialLink.value = false;
+  roomChange.value = false;
+};
+
+const roomChange = ref(false);
+const toggleRoom = () => {
+  roomChange.value = true;
+  paymentMethod.value = false;
   generalSettings.value = false;
   passwordChange.value = false;
   socialLink.value = false;
@@ -966,6 +1241,7 @@ const store = reactive({
   PageProduct: "",
   social_link: "",
   payment_method: "",
+  room: "",
 });
 
 function deleteFunc(id) {
@@ -978,14 +1254,24 @@ function deleteFuncPay(id) {
   remove.payment = true;
 }
 
+function deleteFuncRoom(id) {
+  remove.id = id;
+  remove.room = true;
+}
+
 const socialModal = () => {
   social.modal = !social.modal;
-  (social.id = ""), (social.name = "");
+  ((social.id = ""), (social.name = ""));
 };
 
 const payModal = () => {
   pay.modal = !pay.modal;
-  (pay.id = ""), (pay.name = "");
+  ((pay.id = ""), (pay.name = ""));
+};
+
+const roomModal = () => {
+  room.modal = !room.modal;
+  ((room.id = ""), (room.name = ""));
 };
 
 // ----------------------------------- forms -----------------------------------
@@ -1005,6 +1291,7 @@ const remove = reactive({
   id: "",
   toggle: false,
   payment: false,
+  room: false,
 });
 
 const social = reactive({
@@ -1014,6 +1301,12 @@ const social = reactive({
 });
 
 const pay = reactive({
+  id: "",
+  name: "",
+  modal: false,
+});
+
+const room = reactive({
   id: "",
   name: "",
   modal: false,
@@ -1089,7 +1382,7 @@ const changeInfo = (id) => {
         notification.warning("Bunday login mavjud! Boshqa kiritib ko'ring");
       } else {
         notification.warning(
-          "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
+          "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!",
         );
       }
     });
@@ -1129,7 +1422,7 @@ const changePassword = (id) => {
         notification.warning("Joriy parol mos kelmadi!");
       } else {
         notification.warning(
-          "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
+          "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!",
         );
       }
     });
@@ -1171,18 +1464,21 @@ const addSocialLink = () => {
     })
     .catch((error) => {
       notification.warning(
-        "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
+        "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!",
       );
     });
 };
 
 const deleteSocialLink = () => {
   axios
-    .delete(`/v1/social-media/${localStorage.getItem("school_id")}/${remove.id}`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
+    .delete(
+      `/v1/social-media/${localStorage.getItem("school_id")}/${remove.id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
       },
-    })
+    )
     .then((res) => {
       notification.success("Ijtimoiy tarmoq o'chirildi!");
       remove.toggle = false;
@@ -1190,7 +1486,7 @@ const deleteSocialLink = () => {
     })
     .catch((error) => {
       notification.warning(
-        "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
+        "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!",
       );
     });
 };
@@ -1231,7 +1527,7 @@ const addPaymentMethod = () => {
     })
     .catch((error) => {
       notification.warning(
-        "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
+        "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!",
       );
     });
 };
@@ -1244,7 +1540,7 @@ const deletePaymentMethod = () => {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
-      }
+      },
     )
     .then((res) => {
       notification.success("To'lov turi o'chirildi!");
@@ -1253,7 +1549,71 @@ const deletePaymentMethod = () => {
     })
     .catch((error) => {
       notification.warning(
-        "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!"
+        "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!",
+      );
+    });
+};
+
+const getRoom = () => {
+  if (
+    localStorage.getItem("role") == "_ad_sch_" ||
+    localStorage.getItem("role") == "_ow_sch_"
+  ) {
+    axios
+      .get(`/v1/room/all/${localStorage.getItem("school_id")}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
+      .then((res) => {
+        store.room = res.data;
+      })
+      .catch((error) => {});
+  }
+};
+
+const addRoom = () => {
+  const data = {
+    school_id: Number(localStorage.getItem("school_id")),
+    name: room.name,
+    status: 'success',
+  };
+  axios
+    .post(`/v1/room`, data, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    })
+    .then((res) => {
+      notification.success("Xona qo'shildi!");
+      getRoom();
+      roomModal();
+    })
+    .catch((error) => {
+      notification.warning(
+        "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!",
+      );
+    });
+};
+
+const deleteRoom = () => {
+  axios
+    .delete(
+      `/v1/room/${remove.id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      },
+    )
+    .then((res) => {
+      notification.success("Xona o'chirildi!");
+      remove.room = false;
+      getRoom();
+    })
+    .catch((error) => {
+      notification.warning(
+        "Xatolik! Nimadir noto‘g‘ri. Internetni tekshirib qaytadan urinib ko‘ring!",
       );
     });
 };
@@ -1262,6 +1622,7 @@ onMounted(() => {
   getOneUser();
   getSocialLink();
   getPaymentMethod();
+  getRoom();
 });
 </script>
 
