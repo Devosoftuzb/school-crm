@@ -3415,9 +3415,6 @@ const printChek = async (id) => {
   formatDateToNumeric(new Date(product.createdAt));
 
   try {
-    const res = await axios.get(`/school/${schoolId.value}`, {
-      headers: authHeaders.value,
-    });
     const printWindow = window.open("", "_blank");
     printWindow.document.write(`
       <html>
@@ -3441,8 +3438,8 @@ const printChek = async (id) => {
         <body>
           <div class="container">
             <div class="logo">
-              <img src="${apiUrl.value}/${res.data.image}" alt="">
-              <h2 class="title">${res.data.name}</h2>
+              <img src="${apiUrl.value}/${store.school_logo}" alt="">
+              <h2 class="title">${store.school_name}</h2>
             </div>
             <div class="row"><span class="bold">To'lov turi:</span><span>${
               product.method
