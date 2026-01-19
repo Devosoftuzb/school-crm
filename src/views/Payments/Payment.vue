@@ -3131,11 +3131,11 @@ const addPayment = async () => {
     description: form.description,
   };
 
-  if (!checkPayment(form.year, form.month, store.date)) {
-    notification.warning("To'lov qilmoqchi bo'lgan sanada guruh boshlanmagan");
-    store.isSubmitting = false;
-    return;
-  }
+//  if (!checkPayment(form.year, form.month, store.date)) {
+//    notification.warning("To'lov qilmoqchi bo'lgan sanada guruh boshlanmagan");
+//    store.isSubmitting = false;
+//    return;
+//  }
 
   if (store.checkOldPay && form.year == hozirgiYil && form.month == hozirgiOy) {
     notification.warning(
