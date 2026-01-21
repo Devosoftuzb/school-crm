@@ -3321,10 +3321,10 @@ const editPayment = async () => {
     price: store.pay_price,
   };
 
-  if (!checkPayment(form.year, form.month, store.date)) {
-    notification.warning("To'lov qilmoqchi bo'lgan sanada guruh boshlanmagan");
-    return;
-  }
+  // if (!checkPayment(form.year, form.month, store.date)) {
+  //   notification.warning("To'lov qilmoqchi bo'lgan sanada guruh boshlanmagan");
+  //   return;
+  // }
 
   try {
     await axios.put(`/v1/payment/${schoolId.value}/${edit.id}`, data, {
