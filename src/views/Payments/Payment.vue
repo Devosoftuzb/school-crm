@@ -2466,7 +2466,10 @@
               </li>
             </ul>
           </nav>
+<<<<<<< HEAD
 
+=======
+>>>>>>> 30d77bc05730bdfb94abb68e269f721f318f97b7
           <nav
             v-show="!store.payData && !debtor.isTable"
             class="flex flex-row items-center justify-between p-4 space-y-0"
@@ -2935,6 +2938,7 @@ const discountedPrice = computed(() => {
 
 // Export functions
 const exportExcelHistory = async () => {
+  loading.excel = true;
   const config = {
     headers: authHeaders.value,
     responseType: "blob",
@@ -2970,12 +2974,15 @@ const exportExcelHistory = async () => {
     document.body.appendChild(link);
     link.click();
     link.remove();
+    loading.excel = false;
   } catch (err) {
-    console.error("Export uchun malumotlarni olishda xatolik:", err);
+    loading.excel = false;
+    handleError()
   }
 };
 
 const exportToExcelDebtor = async () => {
+  loading.excel = true;
   const config = {
     headers: authHeaders.value,
     responseType: "blob",
@@ -3003,8 +3010,10 @@ const exportToExcelDebtor = async () => {
     document.body.appendChild(link);
     link.click();
     link.remove();
+    loading.excel = false;
   } catch (err) {
-    console.error("Export uchun malumotlarni olishda xatolik:", err);
+    loading.excel = false;
+    handleError()
   }
 };
 
