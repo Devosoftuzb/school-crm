@@ -2466,10 +2466,6 @@
               </li>
             </ul>
           </nav>
-<<<<<<< HEAD
-
-=======
->>>>>>> 30d77bc05730bdfb94abb68e269f721f318f97b7
           <nav
             v-show="!store.payData && !debtor.isTable"
             class="flex flex-row items-center justify-between p-4 space-y-0"
