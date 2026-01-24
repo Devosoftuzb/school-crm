@@ -1476,7 +1476,6 @@ const exportToExcel = async () => {
     loading.excel = false;
   } catch (err) {
     loading.excel = false;
-    
   }
 };
 

@@ -1286,24 +1286,26 @@
                 <div
                   class="flex flex-col justify-center w-full gap-5 pt-5 mt-5 border-t"
                 >
-                  <div class="flex flex-col items-center justify-between w-full gap-5 sm:flex-row">
-                  <ButtonLoader
-                    :loading="loading.excel"
-                    @click="exportExcelHistory"
-                    type="button"
-                    class="btnAdd3 text-white w-full inline-flex items-center justify-center bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
+                  <div
+                    class="flex flex-col items-center justify-between w-full gap-5 sm:flex-row"
                   >
-                    {{ history.year }} - Excelga yuklab olish
-                  </ButtonLoader>
-                <ButtonLoader
-                    :loading="loading.excel"
-                    @click="exportExcelAllHistory"
-                    type="button"
-                    class="btnAdd3 text-white w-full inline-flex items-center justify-center bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
-                  >
-                    Barchasini Excelga yuklab olish
-                  </ButtonLoader>
-                </div>
+                    <ButtonLoader
+                      :loading="loading.excel"
+                      @click="exportExcelHistory"
+                      type="button"
+                      class="btnAdd3 text-white w-full inline-flex items-center justify-center bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
+                    >
+                      {{ history.year }} - Excelga yuklab olish
+                    </ButtonLoader>
+                    <ButtonLoader
+                      :loading="loading.excel"
+                      @click="exportExcelAllHistory"
+                      type="button"
+                      class="btnAdd3 text-white w-full inline-flex items-center justify-center bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
+                    >
+                      Barchasini Excelga yuklab olish
+                    </ButtonLoader>
+                  </div>
                   <div class="flex items-center justify-between w-full">
                     <button
                       @click="historyModal"
@@ -2432,7 +2434,7 @@
             </ul>
           </nav>
 
-                    <nav
+          <nav
             v-show="!store.payData && !debtor.isTable"
             class="flex flex-row items-center justify-between p-4 space-y-0"
             aria-label="Table navigation"
@@ -3120,11 +3122,11 @@ const addPayment = async () => {
     description: form.description,
   };
 
-  if (!checkPayment(form.year, form.month, store.date)) {
-    notification.warning("To'lov qilmoqchi bo'lgan sanada guruh boshlanmagan");
-    store.isSubmitting = false;
-    return;
-  }
+//  if (!checkPayment(form.year, form.month, store.date)) {
+//    notification.warning("To'lov qilmoqchi bo'lgan sanada guruh boshlanmagan");
+//    store.isSubmitting = false;
+//    return;
+//  }
 
 
   // if (store.checkOldPay && form.year == hozirgiYil && form.month == hozirgiOy) {
