@@ -537,7 +537,7 @@
 
                   <!-- Writing Answer -->
                   <div
-                    v-if="i.type === 'writing'"
+                    v-if="i.question.type === 'writing'"
                     class="p-2 border border-purple-200 rounded-lg bg-purple-50"
                   >
                     <p
