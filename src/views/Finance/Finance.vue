@@ -2072,7 +2072,7 @@
                       class="bg-white border text-black border-blue-600 rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-[7px]"
                       required
                     >
-                      <option value="" disabled selected>Yilni tanlang</option>
+                      <option value="all" selected>Barchasi</option>
                       <option
                         v-for="i in store.curentYil"
                         :key="i.id"
@@ -2796,7 +2796,7 @@
                       class="bg-white border text-black border-blue-600 rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-[7px]"
                       required
                     >
-                      <option value="" disabled selected>Yilni tanlang</option>
+                      <option value="all" selected>Barchasi</option>
                       <option
                         v-for="i in store.curentYil"
                         :key="i.id"
@@ -3218,14 +3218,14 @@ const salary = reactive({
 });
 
 const salaryHistory = reactive({
-  year: hozirgiYil,
+  year: "all",
   month: "",
   teacher_name: "",
   salaryList: "",
 });
 
 const costHistory = reactive({
-  year: hozirgiYil,
+  year: "all",
   month: "",
   category_name: "",
   costList: "",
@@ -3332,7 +3332,6 @@ const chekDateFormat = (date) => {
   const minute = String(date.getMinutes()).padStart(2, "0");
   return `${year}-${month}-${day}, ${hour}:${minute}`;
 };
-
 
 const setActiveHistoryModal = (type) => {
   history.dayModal = type === "day";
@@ -3491,7 +3490,8 @@ const getCost = async (page = 1) => {
   try {
     const params = { page };
 
-    if (costHistory.year) params.year = costHistory.year;
+    if (costHistory.year && costHistory.year !== "all")
+      params.year = costHistory.year;
     if (costHistory.month) params.month = costHistory.month;
     if (history.category_id) params.category_id = history.category_id;
 
@@ -3520,7 +3520,8 @@ const getSalary = async (page = 1) => {
   try {
     const params = { page };
 
-    if (salaryHistory.year) params.year = salaryHistory.year;
+    if (salaryHistory.year && salaryHistory.year !== "all")
+      params.year = salaryHistory.year;
     if (salaryHistory.month) params.month = salaryHistory.month;
 
     if (!store.guard) {
@@ -3780,7 +3781,7 @@ const exportToExcel = async () => {
     loading.excel = false;
   } catch (err) {
     loading.excel = false;
-    handleError()
+    handleError();
   }
 };
 
@@ -3789,7 +3790,8 @@ const exportToExcelCost = async () => {
   try {
     const params = {};
 
-    if (costHistory.year) params.year = costHistory.year;
+    if (costHistory.year && costHistory.year !== "all")
+      params.year = costHistory.year;
     if (costHistory.month && costHistory.month !== "")
       params.month = costHistory.month;
     if (history.category_id && history.category_id !== "")
@@ -3813,15 +3815,17 @@ const exportToExcelCost = async () => {
     loading.excel = false;
   } catch (error) {
     loading.excel = false;
-    handleError()
+    handleError();
   }
 };
 
 const exportToExcelSalary = async () => {
   loading.excel = true;
   try {
-    const params = { year: salaryHistory.year };
+    const params = {};
 
+    if (salaryHistory.year && salaryHistory.year !== "all")
+      params.year = salaryHistory.year;
     if (salaryHistory.month) params.month = salaryHistory.month;
     if (history.teacher_id) {
       params.teacher_id = history.teacher_id;
@@ -3847,7 +3851,7 @@ const exportToExcelSalary = async () => {
     loading.excel = false;
   } catch (e) {
     loading.excel = false;
-    handleError()
+    handleError();
   }
 };
 
@@ -3878,7 +3882,7 @@ const exportToExcelDebtor = async () => {
     loading.excel = false;
   } catch (err) {
     loading.excel = false;
-    handleError()
+    handleError();
   }
 };
 
