@@ -69,7 +69,6 @@
 
       <div v-show="store.modalInfo">
         <div class="grid grid-cols-1 gap-5 lg:grid-cols-3">
-          <!-- Chap: Avatar karta -->
           <div
             class="flex flex-col items-center gap-4 p-6 text-center rounded-2xl"
             :class="
@@ -132,9 +131,7 @@
             </div>
           </div>
 
-          <!-- O'ng: Info kartalar -->
           <div class="flex flex-col gap-4 lg:col-span-2">
-            <!-- Ota-ona -->
             <div
               class="p-5 rounded-2xl"
               :class="
@@ -185,7 +182,6 @@
               </div>
             </div>
 
-            <!-- Telegram bot -->
             <div
               class="flex items-center justify-between p-5 rounded-2xl"
               :class="
@@ -284,6 +280,221 @@
               >
                 {{ store.data.parent_chat_id ? "Aktiv" : "Inaktiv" }}
               </span>
+            </div>
+
+            <div
+              class="p-5 rounded-2xl"
+              :class="
+                store.data.hikvision_code
+                  ? navbar.userNav
+                    ? 'bg-green-950 border border-green-900'
+                    : 'bg-green-50 border border-green-100'
+                  : navbar.userNav
+                    ? 'bg-slate-900 border border-slate-800'
+                    : 'bg-white border border-slate-100 shadow-sm'
+              "
+            >
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                  <div
+                    class="flex items-center justify-center flex-shrink-0 w-11 h-11 rounded-xl"
+                    :class="
+                      store.data.hikvision_code
+                        ? 'bg-green-500'
+                        : navbar.userNav
+                          ? 'bg-slate-800'
+                          : 'bg-slate-100'
+                    "
+                  >
+                    <svg
+                      class="w-6 h-6"
+                      :class="
+                        store.data.hikvision_code
+                          ? 'text-white'
+                          : navbar.userNav
+                            ? 'text-slate-600'
+                            : 'text-slate-400'
+                      "
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.5"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M7 3H4a1 1 0 0 0-1 1v3M17 3h3a1 1 0 0 1 1 1v3M7 21H4a1 1 0 0 1-1-1v-3M17 21h3a1 1 0 0 0 1-1v-3"
+                      />
+                      <circle
+                        cx="9"
+                        cy="10"
+                        r="1.5"
+                        fill="currentColor"
+                        stroke="none"
+                      />
+                      <circle
+                        cx="15"
+                        cy="10"
+                        r="1.5"
+                        fill="currentColor"
+                        stroke="none"
+                      />
+                      <path
+                        stroke-linecap="round"
+                        d="M9 15c.8 1.2 5.2 1.2 6 0"
+                      />
+                    </svg>
+                  </div>
+
+                  <div>
+                    <p
+                      class="text-sm font-medium"
+                      :class="
+                        store.data.hikvision_code
+                          ? navbar.userNav
+                            ? 'text-green-400'
+                            : 'text-green-700'
+                          : navbar.userNav
+                            ? 'text-white'
+                            : 'text-slate-800'
+                      "
+                    >
+                      {{
+                        store.data.hikvision_code
+                          ? "Qurilmada bor"
+                          : "Qurilmada yo'q"
+                      }}
+                    </p>
+                    <p
+                      class="text-xs mt-0.5"
+                      :class="
+                        store.data.hikvision_code
+                          ? navbar.userNav
+                            ? 'text-green-600'
+                            : 'text-green-500'
+                          : navbar.userNav
+                            ? 'text-slate-500'
+                            : 'text-slate-400'
+                      "
+                    >
+                      {{
+                        store.data.hikvision_code
+                          ? "Yuz tanish faol"
+                          : "Yuz qo'shilmagan"
+                      }}
+                    </p>
+                  </div>
+                </div>
+
+                <div class="flex items-center gap-2">
+                  <label
+                    v-if="!store.data.hikvision_code"
+                    class="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white cursor-pointer rounded-xl bg-gradient-to-r from-blue-700 to-indigo-600 hover:opacity-90 whitespace-nowrap"
+                  >
+                    <input
+                      type="file"
+                      accept="image/*"
+                      class="hidden"
+                      @change="handlePhotoSelect"
+                    />
+                    <svg
+                      class="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      viewBox="0 0 24 24"
+                    >
+                      <path stroke-linecap="round" d="M12 4v16m8-8H4" />
+                    </svg>
+                    Yuz qo'shish
+                  </label>
+
+                  <button
+                    v-if="store.data.hikvision_code"
+                    @click="deleteFace"
+                    :disabled="store.faceActionLoading"
+                    class="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white rounded-xl bg-gradient-to-r from-red-600 to-rose-500 hover:opacity-90 disabled:opacity-50 whitespace-nowrap"
+                  >
+                    <svg
+                      class="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"
+                      />
+                    </svg>
+                    {{
+                      store.faceActionLoading ? "O'chirilmoqda..." : "O'chirish"
+                    }}
+                  </button>
+
+                  <span
+                    class="px-3 py-1 text-xs font-medium rounded-full"
+                    :class="
+                      store.data.hikvision_code
+                        ? 'bg-green-500 text-white'
+                        : navbar.userNav
+                          ? 'bg-slate-700 text-slate-400'
+                          : 'bg-slate-100 text-slate-500'
+                    "
+                  >
+                    {{ store.data.hikvision_code ? "Aktiv" : "Inaktiv" }}
+                  </span>
+                </div>
+              </div>
+
+              <div
+                v-if="store.selectedPhoto"
+                class="flex items-center gap-3 pt-4 mt-4 border-t"
+                :class="
+                  navbar.userNav ? 'border-slate-800' : 'border-slate-100'
+                "
+              >
+                <img
+                  :src="store.selectedPhotoPreview"
+                  class="flex-shrink-0 object-cover w-16 h-16 rounded-xl"
+                  alt="preview"
+                />
+                <div class="flex flex-col flex-1 gap-2">
+                  <p
+                    class="text-xs"
+                    :class="
+                      navbar.userNav ? 'text-slate-400' : 'text-slate-500'
+                    "
+                  >
+                    Rasm tanlandi. Saqlash uchun bosing.
+                  </p>
+                  <div class="flex gap-2">
+                    <button
+                      @click="addFace"
+                      :disabled="store.faceActionLoading"
+                      class="px-4 py-2 text-sm font-medium text-white rounded-xl bg-gradient-to-r from-green-600 to-emerald-500 hover:opacity-90 disabled:opacity-50"
+                    >
+                      {{
+                        store.faceActionLoading ? "Yuborilmoqda..." : "Saqlash"
+                      }}
+                    </button>
+                    <button
+                      @click="
+                        store.selectedPhoto = null;
+                        store.selectedPhotoPreview = null;
+                      "
+                      class="px-4 py-2 text-xs font-medium rounded-xl"
+                      :class="
+                        navbar.userNav
+                          ? 'bg-slate-700 text-slate-300'
+                          : 'bg-slate-100 text-slate-600'
+                      "
+                    >
+                      Bekor
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -665,6 +876,9 @@ const store = reactive({
   attendanceData: [],
   attPage: 1,
   attTotalPages: 1,
+  faceActionLoading: false,
+  selectedPhoto: null,
+  selectedPhotoPreview: null,
 });
 
 const setActiveModal = (modalType) => {
@@ -740,6 +954,50 @@ const getAttendance = async (page) => {
     store.attTotalPages = res.data.data.pagination.total_pages;
   } catch (error) {
     console.error("Attendance xato:", error);
+  }
+};
+
+const handlePhotoSelect = (event) => {
+  const file = event.target.files[0];
+  if (!file) return;
+  store.selectedPhoto = file;
+  store.selectedPhotoPreview = URL.createObjectURL(file);
+};
+
+const addFace = async () => {
+  if (!store.selectedPhoto) return;
+  store.faceActionLoading = true;
+  try {
+    const formData = new FormData();
+    formData.append("photo", store.selectedPhoto);
+
+    await axios.post(`/v1/hikvision/face/${studentId.value}`, formData, {
+      headers: {
+        Authorization: `Bearer ${token.value}`,
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    store.faceExists = true;
+    store.selectedPhoto = null;
+    store.selectedPhotoPreview = null;
+  } catch {
+    console.error("Yuz qo'shishda xato");
+  } finally {
+    store.faceActionLoading = false;
+  }
+};
+
+const deleteFace = async () => {
+  store.faceActionLoading = true;
+  try {
+    await axios.delete(`/v1/hikvision/face/${studentId.value}`, {
+      headers: { Authorization: `Bearer ${token.value}` },
+    });
+    store.faceExists = false;
+  } catch {
+    console.error("Yuz o'chirishda xato");
+  } finally {
+    store.faceActionLoading = false;
   }
 };
 
