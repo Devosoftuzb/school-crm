@@ -294,7 +294,9 @@
                     : 'bg-white border border-slate-100 shadow-sm'
               "
             >
-              <div class="flex items-center justify-between">
+              <div
+                class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"
+              >
                 <div class="flex items-center gap-4">
                   <div
                     class="flex items-center justify-center flex-shrink-0 w-11 h-11 rounded-xl"
@@ -386,10 +388,11 @@
                   </div>
                 </div>
 
+                <!-- Tugmalar — mobileda to'liq kenglik -->
                 <div class="flex items-center gap-2">
                   <label
                     v-if="!store.data.hikvision_code"
-                    class="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white cursor-pointer rounded-xl bg-gradient-to-r from-blue-700 to-indigo-600 hover:opacity-90 whitespace-nowrap"
+                    class="flex items-center justify-center w-full gap-2 px-4 py-2 text-sm font-medium text-white cursor-pointer sm:w-auto rounded-xl bg-gradient-to-r from-blue-700 to-indigo-600 hover:opacity-90 whitespace-nowrap"
                   >
                     <input
                       type="file"
@@ -413,7 +416,7 @@
                     v-if="store.data.hikvision_code"
                     @click="deleteFace"
                     :disabled="store.faceActionLoading"
-                    class="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white rounded-xl bg-gradient-to-r from-red-600 to-rose-500 hover:opacity-90 disabled:opacity-50 whitespace-nowrap"
+                    class="flex items-center justify-center w-full gap-2 px-4 py-2 text-sm font-medium text-white sm:w-auto rounded-xl bg-gradient-to-r from-red-600 to-rose-500 hover:opacity-90 disabled:opacity-50 whitespace-nowrap"
                   >
                     <svg
                       class="w-4 h-4"
@@ -433,7 +436,7 @@
                   </button>
 
                   <span
-                    class="px-3 py-1 text-xs font-medium rounded-full"
+                    class="px-3 py-1 text-xs font-medium rounded-full whitespace-nowrap"
                     :class="
                       store.data.hikvision_code
                         ? 'bg-green-500 text-white'
@@ -676,7 +679,7 @@
       </div>
 
       <div v-show="store.modalAttendance">
-        <div class="flex flex-col gap-3">
+        <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
           <div
             v-for="group in store.attendanceData"
             :key="group.date"
@@ -688,15 +691,10 @@
             "
           >
             <div
-              class="flex items-center gap-3 px-5 py-3 border-b"
-              :class="
-                navbar.userNav
-                  ? 'bg-slate-800 border-slate-700'
-                  : 'bg-slate-50 border-slate-100'
-              "
+              class="flex items-center gap-3 px-5 py-3 text-white bg-gradient-to-r from-blue-700 to-indigo-600"
             >
               <svg
-                class="w-4 h-4 text-blue-500"
+                class="w-4 h-4 text-white"
                 fill="none"
                 stroke="currentColor"
                 stroke-width="2"
@@ -707,24 +705,15 @@
                 <line x1="8" y1="2" x2="8" y2="6" />
                 <line x1="3" y1="10" x2="21" y2="10" />
               </svg>
+              <span class="text-sm font-semibold">{{ group.date }}</span>
               <span
-                class="text-sm font-semibold"
-                :class="navbar.userNav ? 'text-white' : 'text-slate-700'"
-              >
-                {{ group.date }}
-              </span>
-              <span
-                class="ml-auto text-xs px-2 py-0.5 rounded-full"
-                :class="
-                  navbar.userNav
-                    ? 'bg-slate-700 text-slate-400'
-                    : 'bg-slate-200 text-slate-500'
-                "
+                class="ml-auto text-xs px-2 py-0.5 rounded-full bg-white/20 text-white"
               >
                 {{ group.records.length }} ta yozuv
               </span>
             </div>
-            <div class="flex flex-wrap gap-2 p-4">
+
+            <div class="grid grid-cols-2 gap-2 p-4">
               <div
                 v-for="(record, idx) in group.records"
                 :key="idx"
@@ -740,10 +729,9 @@
                 "
               >
                 <span
-                  class="w-2 h-2 rounded-full"
+                  class="flex-shrink-0 w-2 h-2 rounded-full"
                   :class="record.type === 'IN' ? 'bg-green-500' : 'bg-red-500'"
-                >
-                </span>
+                />
                 {{ record.type === "IN" ? "Kirdi" : "Chiqdi" }}
                 <span class="font-normal opacity-75">{{ record.time }}</span>
               </div>
@@ -752,7 +740,7 @@
 
           <div
             v-show="!store.attendanceData.length"
-            class="p-20 text-center border text-slate-400 rounded-2xl"
+            class="p-20 text-center border col-span-full text-slate-400 rounded-2xl"
             :class="
               navbar.userNav
                 ? 'bg-slate-900 border-slate-800'
@@ -763,72 +751,62 @@
           </div>
         </div>
 
-        <!-- Pagination -->
-        <div
-          v-show="store.attTotalPages > 1"
-          class="flex items-center justify-between px-2 mt-4"
+        <nav
+          v-if="store.attTotalPages > 1"
+          class="flex flex-row items-center justify-between p-4"
         >
-          <button
-            @click="
-              if (store.attPage > 1) {
-                store.attPage--;
-                getAttendance(store.attPage);
-              }
-            "
-            :class="[
-              store.attPage === 1 ? 'opacity-40 pointer-events-none' : '',
-              navbar.userNav
-                ? 'border-slate-700 text-slate-300 hover:bg-slate-800'
-                : 'border-slate-200 text-slate-600 hover:bg-slate-50',
-            ]"
-            class="flex items-center gap-2 px-4 py-2 text-sm font-medium transition-colors border rounded-xl"
-          >
-            <svg
-              class="w-4 h-4"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              viewBox="0 0 24 24"
+          <ul class="flex items-center">
+            <li
+              :class="[
+                store.attPage === 1 ? 'pointer-events-none opacity-50' : '',
+                'flex font-bold text-black border-2 bg-white hover:bg-gray-300 items-center justify-center text-sm sm:py-2 sm:px-6 px-3 rounded-xl leading-tight cursor-pointer transition duration-200 ease-in-out',
+              ]"
+              @click="
+                if (store.attPage > 1) {
+                  store.attPage--;
+                  getAttendance(store.attPage);
+                }
+              "
             >
-              <path d="M15 18l-6-6 6-6" />
-            </svg>
-            Oldingi
-          </button>
+              <i
+                class="text-2xl font-bold text-black md:hidden bx bx-chevron-left"
+              ></i>
+              <span class="hidden md:block">Oldingi</span>
+            </li>
+          </ul>
+
           <span
-            class="text-sm"
-            :class="navbar.userNav ? 'text-slate-400' : 'text-slate-500'"
+            class="text-sm font-normal text-center"
+            :class="navbar.userNav ? 'text-slate-400' : 'text-slate-600'"
           >
-            {{ store.attPage }} / {{ store.attTotalPages }}
+            Sahifa
+            <span class="font-semibold">{{ store.attPage }}</span>
+            dan
+            <span class="font-semibold">{{ store.attTotalPages }}</span>
           </span>
-          <button
-            @click="
-              if (store.attPage < store.attTotalPages) {
-                store.attPage++;
-                getAttendance(store.attPage);
-              }
-            "
-            :class="[
-              store.attPage >= store.attTotalPages
-                ? 'opacity-40 pointer-events-none'
-                : '',
-              navbar.userNav
-                ? 'border-slate-700 text-slate-300 hover:bg-slate-800'
-                : 'border-slate-200 text-slate-600 hover:bg-slate-50',
-            ]"
-            class="flex items-center gap-2 px-4 py-2 text-sm font-medium transition-colors border rounded-xl"
-          >
-            Keyingi
-            <svg
-              class="w-4 h-4"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              viewBox="0 0 24 24"
+
+          <ul class="flex items-center">
+            <li
+              :class="[
+                store.attPage >= store.attTotalPages
+                  ? 'pointer-events-none opacity-50'
+                  : '',
+                'flex font-bold text-black border-2 bg-white hover:bg-gray-300 items-center justify-center text-sm sm:py-2 sm:px-6 px-3 rounded-xl leading-tight cursor-pointer transition duration-200 ease-in-out',
+              ]"
+              @click="
+                if (store.attPage < store.attTotalPages) {
+                  store.attPage++;
+                  getAttendance(store.attPage);
+                }
+              "
             >
-              <path d="M9 18l6-6-6-6" />
-            </svg>
-          </button>
-        </div>
+              <span class="hidden md:block">Keyingi</span>
+              <i
+                class="text-2xl font-bold text-black md:hidden bx bx-chevron-right"
+              ></i>
+            </li>
+          </ul>
+        </nav>
       </div>
     </div>
   </section>
