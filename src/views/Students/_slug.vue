@@ -818,7 +818,9 @@ import { useRouter } from "vue-router";
 import { useNavStore } from "../../stores/toggle";
 import axios from "../../services/axios";
 import { Placeholder2 } from "../../components";
+import { useNotificationStore } from "../../stores/notification";
 
+const notification = useNotificationStore();
 const navbar = useNavStore();
 const router = useRouter();
 
