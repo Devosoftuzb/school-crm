@@ -958,8 +958,10 @@ const addFace = async () => {
     store.faceExists = true;
     store.selectedPhoto = null;
     store.selectedPhotoPreview = null;
+    notification.success("Yuz muvaffaqiyatli qo'shildi 🎉");
+    getStudent();
   } catch {
-    console.error("Yuz qo'shishda xato");
+    notification.error("Yuz qo'shishda xato ❌");
   } finally {
     store.faceActionLoading = false;
   }
@@ -972,8 +974,10 @@ const deleteFace = async () => {
       headers: { Authorization: `Bearer ${token.value}` },
     });
     store.faceExists = false;
+    notification.success("Yuz muvaffaqiyatli o'chirildi 🗑️");
+    getStudent();
   } catch {
-    console.error("Yuz o'chirishda xato");
+    notification.error("Yuz o'chirishda xato ❌");
   } finally {
     store.faceActionLoading = false;
   }
