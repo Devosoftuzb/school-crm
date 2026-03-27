@@ -948,8 +948,9 @@ const addFace = async () => {
   if (!store.selectedPhoto) return;
   store.faceActionLoading = true;
   try {
+    const compressed = await compressImage(store.selectedPhoto);
     const formData = new FormData();
-    formData.append("photo", store.selectedPhoto);
+    formData.append("photo", compressed, "face.jpg");
 
     await axios.post(`/v1/hikvision/face/${studentId.value}`, formData, {
       headers: {
@@ -957,16 +958,44 @@ const addFace = async () => {
         "Content-Type": "multipart/form-data",
       },
     });
-    store.faceExists = true;
     store.selectedPhoto = null;
     store.selectedPhotoPreview = null;
     notification.success("Yuz muvaffaqiyatli qo'shildi 🎉");
     getStudent();
-  } catch {
-    notification.error("Yuz qo'shishda xato ❌");
+  } catch (err) {
+    const msg = err?.response?.data?.message || "Yuz qo'shishda xato ❌";
+    notification.error(msg);
   } finally {
     store.faceActionLoading = false;
   }
+};
+
+const compressImage = (file) => {
+  return new Promise((resolve) => {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      const MAX = 600;
+      let w = img.width,
+        h = img.height;
+      if (w > MAX || h > MAX) {
+        if (w > h) {
+          h = Math.round((h * MAX) / w);
+          w = MAX;
+        } else {
+          w = Math.round((w * MAX) / h);
+          h = MAX;
+        }
+      }
+      const canvas = document.createElement("canvas");
+      canvas.width = w;
+      canvas.height = h;
+      canvas.getContext("2d").drawImage(img, 0, 0, w, h);
+      canvas.toBlob((blob) => resolve(blob), "image/jpeg", 0.8);
+    };
+    img.src = url;
+  });
 };
 
 const deleteFace = async () => {
