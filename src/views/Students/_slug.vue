@@ -963,8 +963,8 @@ const addFace = async () => {
     notification.success("Yuz muvaffaqiyatli qo'shildi 🎉");
     getStudent();
   } catch (err) {
-    const msg = err?.response?.data?.message || "Yuz qo'shishda xato ❌";
-    notification.error(msg);
+    console.log(err);
+    notification.error("Yuz qo'shishda xato ❌");
   } finally {
     store.faceActionLoading = false;
   }
