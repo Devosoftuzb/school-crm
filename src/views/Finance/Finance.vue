@@ -3768,6 +3768,7 @@ const exportToExcel = async () => {
     return;
   }
 
+
   try {
     const response = await axios.get(urlBase, config);
     const url = window.URL.createObjectURL(new Blob([response.data]));
@@ -3812,8 +3813,8 @@ const exportToExcelCost = async () => {
     window.URL.revokeObjectURL(link.href);
     loading.excel = false;
   } catch (error) {
-   loading.excel = false;
-   handleError()
+    loading.excel = false;
+    handleError()
   }
 };
 
@@ -3846,8 +3847,8 @@ const exportToExcelSalary = async () => {
     window.URL.revokeObjectURL(link.href);
     loading.excel = false;
   } catch (e) {
-   loading.excel = false;
-   handleError()
+    loading.excel = false;
+    handleError()
   }
 };
 

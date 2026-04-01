@@ -65,12 +65,14 @@ const showMenu = (item) => {
   if (!item || !item.role) return false;
 
   const roleArray = item.role.split(",").map((r) => r.trim());
+
   if (!roleArray.includes(store.guard)) return false;
 
   if (!item.school || !store.school) return true;
 
   const schoolArray = item.school.split(",").map((s) => s.trim());
   return schoolArray.includes(store.school);
+
 };
 
 const isActive = (link) => {
