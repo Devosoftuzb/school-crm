@@ -308,6 +308,108 @@
       </div>
       <!-- ------------------------------------------- history modal end ------------------------------------------------- -->
 
+      <!-- ------------------------------------------- hikvision excel modal ----------------------------------------------------- -->
+      <div
+        @click.self="hikvisionModal.show = false"
+        :class="
+          hikvisionModal.show
+            ? 'fixed overflow-y-auto flex bg-[rgba(0,0,0,0.5)] overflow-x-hidden z-50 justify-center items-center w-full inset-0 h-full'
+            : 'hidden'
+        "
+      >
+        <div class="relative w-full h-auto max-w-xl p-4">
+          <div
+            class="relative p-4 shadow rounded-xl sm:p-5"
+            :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
+          >
+            <!-- header -->
+            <div
+              class="flex items-center justify-between pb-4 mb-4 border-b rounded-t sm:mb-5"
+            >
+              <h3
+                class="text-lg"
+                :class="navbar.userNav ? 'text-white' : 'text-black'"
+              >
+                Hikvision Davomat Excel
+              </h3>
+              <button
+                @click="hikvisionModal.show = false"
+                type="button"
+                class="bg-transparent hover:bg-gray-200 rounded-xl text-sm p-1.5 ml-auto inline-flex items-center"
+                :class="{ 'text-white': navbar.userNav }"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="w-5 h-5"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                    clip-rule="evenodd"
+                  ></path>
+                </svg>
+              </button>
+            </div>
+
+            <!-- body -->
+            <div
+              :class="{ darkForm: navbar.userNav }"
+              class="grid gap-4 mb-4 font-medium"
+            >
+              <div>
+                <label
+                  class="block mb-2 text-sm"
+                  :class="navbar.userNav ? 'text-white' : 'text-black'"
+                >
+                  Boshlanish sanasi
+                </label>
+                <input
+                  v-model="hikvisionModal.startDate"
+                  type="date"
+                  class="bg-white border text-black border-gray-300 rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                  required
+                />
+              </div>
+              <div>
+                <label
+                  class="block mb-2 text-sm"
+                  :class="navbar.userNav ? 'text-white' : 'text-black'"
+                >
+                  Tugash sanasi
+                </label>
+                <input
+                  v-model="hikvisionModal.endDate"
+                  type="date"
+                  class="bg-white border text-black border-gray-300 rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                  required
+                />
+              </div>
+            </div>
+
+            <div
+              class="flex items-center justify-between w-full pt-5 mt-5 border-t"
+            >
+              <button
+                @click="hikvisionModal.show = false"
+                type="button"
+                class="border inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
+              >
+                Bekor qilish
+              </button>
+              <button
+                @click="downloadHikvisionExcel"
+                class="btnAdd3 text-white inline-flex items-center hover:opacity-90 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
+              >
+                Yuklab olish
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- ------------------------------------------- hikvision excel modal end ----------------------------------------------------- -->
+
       <div v-show="store.groupData" class="w-full max-w-screen">
         <!-- Start coding here -->
 
@@ -329,6 +431,14 @@
                 class="btnAdd flex items-center max-w-fit justify-center whitespace-nowrap text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-xl text-sm px-4 py-2.5"
               >
                 <span class="">Davomat tarixi</span>
+              </button>
+
+              <button
+                @click="hikvisionModal.show = true"
+                type="button"
+                class="btnAdd3 flex items-center max-w-fit justify-center whitespace-nowrap text-white hover:opacity-90 focus:ring-4 focus:ring-orange-300 font-medium rounded-xl text-sm px-4 py-2.5"
+              >
+                <span>Hikvision Excel</span>
               </button>
             </div>
           </div>
@@ -740,7 +850,7 @@ const form = reactive({
 
 const history = reactive({
   year: hozirgiYil,
-  month: '',
+  month: "",
   day: hozirgiKun,
   group_id: "",
   group_name: "",
@@ -754,6 +864,12 @@ const history = reactive({
 const remove = reactive({
   id: "",
   toggle: false,
+});
+
+const hikvisionModal = reactive({
+  show: false,
+  startDate: "",
+  endDate: "",
 });
 
 const handleError = (
@@ -960,6 +1076,46 @@ const downloadExcel = async () => {
     window.URL.revokeObjectURL(url);
 
     notification.success("Excel yuklab olindi!");
+  } catch (error) {
+    notification.warning("Excel yuklab olishda xatolik!");
+  }
+};
+
+const downloadHikvisionExcel = async () => {
+  if (!hikvisionModal.startDate || !hikvisionModal.endDate) {
+    notification.warning("Sanalarni tanlang!");
+    return;
+  }
+
+  try {
+    const params = new URLSearchParams({
+      school_id: schoolId.value,
+      startDate: hikvisionModal.startDate,
+      endDate: hikvisionModal.endDate,
+    });
+
+    const res = await axios.get(
+      `/student-attendance/excel?${params.toString()}`,
+      {
+        headers: authHeaders.value,
+        responseType: "blob",
+      },
+    );
+
+    const url = window.URL.createObjectURL(new Blob([res.data]));
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute(
+      "download",
+      `hikvision_davomat_${hikvisionModal.startDate}_${hikvisionModal.endDate}.xlsx`,
+    );
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    window.URL.revokeObjectURL(url);
+
+    notification.success("Excel yuklab olindi!");
+    hikvisionModal.show = false;
   } catch (error) {
     notification.warning("Excel yuklab olishda xatolik!");
   }
