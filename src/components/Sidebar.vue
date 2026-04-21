@@ -71,6 +71,7 @@ const showMenu = (item) => {
 
   const schoolArray = item.school.split(",").map((s) => s.trim());
   return schoolArray.includes(store.school);
+
 };
 
 const isActive = (link) => {

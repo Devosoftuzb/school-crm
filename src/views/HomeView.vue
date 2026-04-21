@@ -13,7 +13,7 @@
         'pt-[70px] px-2 xl:ml-64 sm:pb-4 pb-28 overflow-y-auto h-screen transition-colors duration-300',
         navbar.userNav
           ? 'bg-slate-950'
-          : 'bg-gray-200',
+          : 'bg-gray-100',
       ]"
     >
       <router-view></router-view>

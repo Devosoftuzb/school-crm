@@ -404,7 +404,6 @@
                           id="price"
                           class="bg-gray-50 border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full py-3 p-2.5"
                           placeholder="To'lov sumani kiriting"
-                          :max="store.price"
                           required
                         />
                       </div>
@@ -756,9 +755,7 @@
                           id="price"
                           class="bg-gray-50 border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full py-3 p-2.5"
                           placeholder="To'lov sumani kiriting"
-                          :max="store.price"
                           required
-                          @input="onInput"
                         />
                       </div>
                       <div class="">
@@ -1289,14 +1286,26 @@
                 <div
                   class="flex flex-col justify-center w-full gap-5 pt-5 mt-5 border-t"
                 >
-                  <ButtonLoader
-                    :loading="loading.excel"
-                    @click="exportExcelHistory"
-                    type="button"
-                    class="btnAdd3 text-white inline-flex items-center justify-center bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
+                  <div
+                    class="flex flex-col items-center justify-between w-full gap-5 sm:flex-row"
                   >
-                    Excelga yuklab olish
-                  </ButtonLoader>
+                    <ButtonLoader
+                      :loading="loading.excel"
+                      @click="exportExcelHistory"
+                      type="button"
+                      class="btnAdd3 text-white w-full inline-flex items-center justify-center bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
+                    >
+                      {{ history.year }} - Excelga yuklab olish
+                    </ButtonLoader>
+                    <ButtonLoader
+                      :loading="loading.excel"
+                      @click="exportExcelAllHistory"
+                      type="button"
+                      class="btnAdd3 text-white w-full inline-flex items-center justify-center bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
+                    >
+                      Barchasini Excelga yuklab olish
+                    </ButtonLoader>
+                  </div>
                   <div class="flex items-center justify-between w-full">
                     <button
                       @click="historyModal"
@@ -2424,6 +2433,7 @@
               </li>
             </ul>
           </nav>
+
           <nav
             v-show="!store.payData && !debtor.isTable"
             class="flex flex-row items-center justify-between p-4 space-y-0"
@@ -2886,6 +2896,28 @@ const discountedPrice = computed(() => {
 });
 
 // Export functions
+const exportExcelAllHistory = async () => {
+  loading.excel = true;
+  const config = {
+    headers: authHeaders.value,
+    responseType: "blob",
+  };
+  try {
+    const response = await axios.get(`/v2/payment/history/all/excel?school_id=${schoolId.value}`, config);
+    const url = window.URL.createObjectURL(new Blob([response.data]));
+    const link = document.createElement("a");
+    link.href = url;
+    let fileName = "payment-all";
+    link.setAttribute("download", `${fileName}.xlsx`);
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    loading.excel = false;
+  } catch (err) {
+    handleError();
+  }
+};
+
 const exportExcelHistory = async () => {
   loading.excel = true;
   const config = {
@@ -2926,12 +2958,12 @@ const exportExcelHistory = async () => {
     loading.excel = false;
   } catch (err) {
     loading.excel = false;
-    handleError()
+    handleError();
   }
 };
 
 const exportToExcelDebtor = async () => {
-  loading.excel = true;
+   loading.excel = true;
   const config = {
     headers: authHeaders.value,
     responseType: "blob",
@@ -2959,10 +2991,10 @@ const exportToExcelDebtor = async () => {
     document.body.appendChild(link);
     link.click();
     link.remove();
-    loading.excel = false;
+     loading.excel = false;
   } catch (err) {
-    loading.excel = false;
-    handleError()
+     loading.excel = false;
+    handleError();
   }
 };
 
@@ -3033,6 +3065,7 @@ const getStatisticGroup = async (group_id, date) => {
 
 const getGroupStudents = async (group_id) => {
   debtor.isTable = false;
+
   try {
     const res = await axios.get(
       `/v1/payment/group/${schoolId.value}/${group_id}`,
@@ -3064,10 +3097,12 @@ const checkPayment = (year, month, groupStartDate) => {
   const groupStartYear = groupStart.getFullYear();
   const groupStartMonth = groupStart.getMonth() + 1;
 
+
   return (
     paymentYear > groupStartYear ||
     (paymentYear === groupStartYear && paymentMonth >= groupStartMonth)
   );
+
 };
 
 const addPayment = async () => {
@@ -3093,13 +3128,15 @@ const addPayment = async () => {
 //    return;
 //  }
 
-  if (store.checkOldPay && form.year == hozirgiYil && form.month == hozirgiOy) {
-    notification.warning(
-      "To'lov qilmoqchi bo'lgan sanaga oldin to'lov qilingan",
-    );
-    store.isSubmitting = false;
-    return;
-  }
+
+  // if (store.checkOldPay && form.year == hozirgiYil && form.month == hozirgiOy) {
+  //   notification.warning(
+  //     "To'lov qilmoqchi bo'lgan sanaga oldin to'lov qilingan",
+  //   );
+  //   store.isSubmitting = false;
+  //   return;
+  // }
+
 
   try {
     await axios.post("/v1/payment", data, { headers: authHeaders.value });
@@ -3235,6 +3272,7 @@ const getDebtor = async (page = 1) => {
     store.error = true;
   }
 };
+
 
 const getMethod = async () => {
   try {
@@ -3409,10 +3447,13 @@ const printChek = async (id) => {
         (product.group_price * product.discount) / 100
       ).toFixed(2)
     : product.discountSum
+
       ? product.group_price - product.discountSum
       : product.group_price;
 
+
   formatDateToNumeric(new Date(product.createdAt));
+
 
   try {
     const printWindow = window.open("", "_blank");

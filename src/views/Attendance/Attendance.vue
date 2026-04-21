@@ -175,9 +175,8 @@
                       v-model="history.month"
                       id="month"
                       class="bg-white border text-black border-gray-300 rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
-                      required
                     >
-                      <option value="" disabled selected>Oyni tanlang</option>
+                      <option value="">Barcha oylar (yil bo'yicha)</option>
                       <option value="01">Yanvar</option>
                       <option value="02">Fevral</option>
                       <option value="03">Mart</option>
@@ -274,9 +273,20 @@
                     </div>
                   </div>
                 </div>
+
                 <div
                   class="flex items-center justify-between w-full pt-5 mt-5 border-t"
                 >
+                  <button
+                    @click.prevent="downloadExcel()"
+                    type="button"
+                    class="btnAdd3 w-full text-white inline-flex items-center justify-center bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
+                  >
+                    Excelga yuklab olish
+                  </button>
+                </div>
+
+                <div class="flex items-center justify-between mt-5 w-ful">
                   <button
                     @click="historyModal"
                     type="button"
@@ -297,6 +307,108 @@
         </transition>
       </div>
       <!-- ------------------------------------------- history modal end ------------------------------------------------- -->
+
+      <!-- ------------------------------------------- hikvision excel modal ----------------------------------------------------- -->
+      <div
+        @click.self="hikvisionModal.show = false"
+        :class="
+          hikvisionModal.show
+            ? 'fixed overflow-y-auto flex bg-[rgba(0,0,0,0.5)] overflow-x-hidden z-50 justify-center items-center w-full inset-0 h-full'
+            : 'hidden'
+        "
+      >
+        <div class="relative w-full h-auto max-w-xl p-4">
+          <div
+            class="relative p-4 shadow rounded-xl sm:p-5"
+            :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
+          >
+            <!-- header -->
+            <div
+              class="flex items-center justify-between pb-4 mb-4 border-b rounded-t sm:mb-5"
+            >
+              <h3
+                class="text-lg"
+                :class="navbar.userNav ? 'text-white' : 'text-black'"
+              >
+                Hikvision Davomat Excel
+              </h3>
+              <button
+                @click="hikvisionModal.show = false"
+                type="button"
+                class="bg-transparent hover:bg-gray-200 rounded-xl text-sm p-1.5 ml-auto inline-flex items-center"
+                :class="{ 'text-white': navbar.userNav }"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="w-5 h-5"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                    clip-rule="evenodd"
+                  ></path>
+                </svg>
+              </button>
+            </div>
+
+            <!-- body -->
+            <div
+              :class="{ darkForm: navbar.userNav }"
+              class="grid gap-4 mb-4 font-medium"
+            >
+              <div>
+                <label
+                  class="block mb-2 text-sm"
+                  :class="navbar.userNav ? 'text-white' : 'text-black'"
+                >
+                  Boshlanish sanasi
+                </label>
+                <input
+                  v-model="hikvisionModal.startDate"
+                  type="date"
+                  class="bg-white border text-black border-gray-300 rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                  required
+                />
+              </div>
+              <div>
+                <label
+                  class="block mb-2 text-sm"
+                  :class="navbar.userNav ? 'text-white' : 'text-black'"
+                >
+                  Tugash sanasi
+                </label>
+                <input
+                  v-model="hikvisionModal.endDate"
+                  type="date"
+                  class="bg-white border text-black border-gray-300 rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                  required
+                />
+              </div>
+            </div>
+
+            <div
+              class="flex items-center justify-between w-full pt-5 mt-5 border-t"
+            >
+              <button
+                @click="hikvisionModal.show = false"
+                type="button"
+                class="border inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
+              >
+                Bekor qilish
+              </button>
+              <button
+                @click="downloadHikvisionExcel"
+                class="btnAdd3 text-white inline-flex items-center hover:opacity-90 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
+              >
+                Yuklab olish
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- ------------------------------------------- hikvision excel modal end ----------------------------------------------------- -->
 
       <div v-show="store.groupData" class="w-full max-w-screen">
         <!-- Start coding here -->
@@ -319,6 +431,14 @@
                 class="btnAdd flex items-center max-w-fit justify-center whitespace-nowrap text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-xl text-sm px-4 py-2.5"
               >
                 <span class="">Davomat tarixi</span>
+              </button>
+
+              <button
+                @click="hikvisionModal.show = true"
+                type="button"
+                class="btnAdd3 flex items-center max-w-fit justify-center whitespace-nowrap text-white hover:opacity-90 focus:ring-4 focus:ring-orange-300 font-medium rounded-xl text-sm px-4 py-2.5"
+              >
+                <span>Hikvision Excel</span>
               </button>
             </div>
           </div>
@@ -541,15 +661,29 @@
                   v-for="i in store.atPageData"
                   :key="i.student_name"
                   class="border-b"
-                  :class="
-                    navbar.userNav ? 'hover:bg-gray-700' : 'hover:bg-gray-50'
-                  "
+                  :class="[
+                    i.is_left
+                      ? navbar.userNav
+                        ? 'bg-slate-800 opacity-60'
+                        : 'bg-red-50 opacity-75'
+                      : navbar.userNav
+                        ? 'hover:bg-gray-700'
+                        : 'hover:bg-gray-50',
+                  ]"
                 >
                   <th
                     scope="row"
                     class="px-8 py-4 font-medium text-center whitespace-nowrap"
                   >
-                    <span>{{ i.student_name }}</span>
+                    <div class="flex items-center justify-center gap-2">
+                      <span>{{ i.student_name }}</span>
+                      <span
+                        v-if="i.is_left"
+                        class="text-xs px-2 py-0.5 bg-red-100 text-red-600 rounded-full whitespace-nowrap"
+                      >
+                        chiqib ketgan
+                      </span>
+                    </div>
                   </th>
 
                   <td
@@ -557,24 +691,30 @@
                     :key="index"
                     class="px-8 py-4 font-medium text-center"
                   >
-                    <p
-                      v-if="getAttendanceStatus(i.attendance, date)"
-                      class="bg-green-100 text-green-800 text-lg rounded-[5px] p-1 px-3 whitespace-nowrap"
+                    <template
+                      v-if="getAttendanceForDate(i.attendance, date) !== null"
                     >
-                      <i class="bx bx-check"></i>
-                    </p>
-                    <p
-                      v-else
-                      class="bg-red-100 text-red-800 text-lg rounded-[5px] p-1 px-3 whitespace-nowrap"
-                    >
-                      <i class="bx bx-x"></i>
-                    </p>
+                      <p
+                        v-if="getAttendanceForDate(i.attendance, date)"
+                        class="bg-green-100 text-green-800 text-lg rounded-[5px] p-1 px-3 whitespace-nowrap"
+                      >
+                        <i class="bx bx-check"></i>
+                      </p>
+                      <p
+                        v-else
+                        class="bg-red-100 text-red-800 text-lg rounded-[5px] p-1 px-3 whitespace-nowrap"
+                      >
+                        <i class="bx bx-x"></i>
+                      </p>
+                    </template>
+                    <span v-else class="text-gray-300">—</span>
                   </td>
+
                   <td
                     class="py-4 pr-5 font-medium text-center whitespace-nowrap"
                   >
                     <i
-                      v-show="store.guard"
+                      v-show="store.guard && !i.is_left"
                       @click="deleteFunc(i.student_group_id)"
                       class="p-2 text-red-600 bg-red-300 cursor-pointer rounded-xl bx bxs-trash focus:ring-2"
                     >
@@ -710,7 +850,7 @@ const form = reactive({
 
 const history = reactive({
   year: hozirgiYil,
-  month: hozirgiOy,
+  month: "",
   day: hozirgiKun,
   group_id: "",
   group_name: "",
@@ -726,8 +866,14 @@ const remove = reactive({
   toggle: false,
 });
 
+const hikvisionModal = reactive({
+  show: false,
+  startDate: "",
+  endDate: "",
+});
+
 const handleError = (
-  message = "Xatolik! Nimadir noto'g'ri. Internetni tekshirib qaytadan urinib ko'ring!"
+  message = "Xatolik! Nimadir noto'g'ri. Internetni tekshirib qaytadan urinib ko'ring!",
 ) => {
   notification.warning(message);
 };
@@ -736,7 +882,7 @@ const historyModal = () => {
   Object.assign(history, {
     modal: !history.modal,
     year: hozirgiYil,
-    month: hozirgiOy,
+    month: "",
     day: hozirgiKun,
     group_id: "",
   });
@@ -763,7 +909,7 @@ const createSearchFilter = (searchObj, data, key, filterProp = "filter") => {
 
   const filterLower = searchObj[filterProp].toLowerCase();
   searchObj.searchList = data.filter((i) =>
-    i[key].toLowerCase().includes(filterLower)
+    i[key].toLowerCase().includes(filterLower),
   );
 };
 
@@ -781,9 +927,10 @@ const getUniqueDates = (records) => {
   return Array.from(datesSet).sort((a, b) => new Date(a) - new Date(b));
 };
 
-const getAttendanceStatus = (attendance, date) => {
+const getAttendanceForDate = (attendance, date) => {
   const record = attendance.find((att) => att.date === date);
-  return record ? record.status : false;
+  if (!record) return null;
+  return record.status;
 };
 
 // API Functions
@@ -807,7 +954,7 @@ const getOneProduct = async (id) => {
   try {
     const res = await axios.get(
       `/v1/attendance/group/${schoolId.value}/${id}`,
-      { headers: authHeaders.value }
+      { headers: authHeaders.value },
     );
 
     store.atData = res.data[0];
@@ -849,10 +996,11 @@ const addAttendance = async () => {
 const getHistory = async (page) => {
   form.group_id = "";
   try {
-    const res = await axios.get(
-      `/v1/attendance/${schoolId.value}/${history.group_id}/${history.year}/${history.month}/page?page=${page}`,
-      { headers: authHeaders.value }
-    );
+    const url = history.month
+      ? `/v1/attendance/${schoolId.value}/${history.group_id}/${history.year}/${history.month}/page?page=${page}`
+      : `/v1/attendance/${schoolId.value}/${history.group_id}/${history.year}/all/page?page=${page}`;
+
+    const res = await axios.get(url, { headers: authHeaders.value });
 
     const records = res.data?.data?.records;
     if (records?.length) {
@@ -864,7 +1012,6 @@ const getHistory = async (page) => {
     } else {
       store.atPageData = false;
       store.uniqueDates = [];
-      store.error = false;
     }
     history.modal = false;
     store.atData = false;
@@ -892,6 +1039,85 @@ const deleteStudentGroup = async () => {
     remove.toggle = false;
   } catch (error) {
     handleError();
+  }
+};
+
+const downloadExcel = async () => {
+  if (!history.group_id) {
+    notification.warning("Guruhni tanlang!");
+    return;
+  }
+
+  try {
+    const params = new URLSearchParams({
+      school_id: schoolId.value,
+      group_id: history.group_id,
+      year: history.year,
+      month: history.month || "all",
+    });
+
+    const res = await axios.get(`/v1/attendance/excel?${params.toString()}`, {
+      headers: authHeaders.value,
+      responseType: "blob",
+    });
+
+    const url = window.URL.createObjectURL(new Blob([res.data]));
+    const link = document.createElement("a");
+    link.href = url;
+
+    const fileName = history.month
+      ? `davomat_${history.group_name}_${history.month}_${history.year}.xlsx`
+      : `davomat_${history.group_name}_${history.year}.xlsx`;
+
+    link.setAttribute("download", fileName);
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    window.URL.revokeObjectURL(url);
+
+    notification.success("Excel yuklab olindi!");
+  } catch (error) {
+    notification.warning("Excel yuklab olishda xatolik!");
+  }
+};
+
+const downloadHikvisionExcel = async () => {
+  if (!hikvisionModal.startDate || !hikvisionModal.endDate) {
+    notification.warning("Sanalarni tanlang!");
+    return;
+  }
+
+  try {
+    const params = new URLSearchParams({
+      school_id: schoolId.value,
+      startDate: hikvisionModal.startDate,
+      endDate: hikvisionModal.endDate,
+    });
+
+    const res = await axios.get(
+      `/student-attendance/excel?${params.toString()}`,
+      {
+        headers: authHeaders.value,
+        responseType: "blob",
+      },
+    );
+
+    const url = window.URL.createObjectURL(new Blob([res.data]));
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute(
+      "download",
+      `hikvision_davomat_${hikvisionModal.startDate}_${hikvisionModal.endDate}.xlsx`,
+    );
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    window.URL.revokeObjectURL(url);
+
+    notification.success("Excel yuklab olindi!");
+    hikvisionModal.show = false;
+  } catch (error) {
+    notification.warning("Excel yuklab olishda xatolik!");
   }
 };
 
@@ -924,5 +1150,7 @@ onMounted(() => {
   }
 }
 
-// #056674
+.btnAdd3 {
+  background-image: linear-gradient(to right, white -450%, #ff9800);
+}
 </style>
