@@ -25,6 +25,7 @@ import {
   Finance,
   School,
   Owner,
+  Bot
 } from "../views";
 
 const routes = [
@@ -228,6 +229,15 @@ const routes = [
         meta: {
           roles: ["_sp_am_"],
           title: "O'quv markazlar",
+        },
+      },
+      {
+        path: "/bot",
+        name: "Telegram bot",
+        component: Bot,
+        meta: {
+          roles: ["_sp_am_", "_ow_sch_", "_ad_sch_", "_tch_sch_"],
+          title: "Telegram bot",
         },
       },
       {
