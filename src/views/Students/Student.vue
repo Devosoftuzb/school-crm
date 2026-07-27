@@ -719,6 +719,62 @@
       <div v-show="!store.loaderTime" class="w-full max-w-screen">
         <!-- Start coding here -->
 
+        <!------------------------------------------- Stat cards ------------------------------------------->
+        <div class="grid grid-cols-1 gap-4 mb-4 sm:grid-cols-3">
+          <div
+            class="flex items-center justify-between p-4 shadow rounded-xl"
+            :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
+          >
+            <div>
+              <p
+                class="text-sm"
+                :class="navbar.userNav ? 'text-gray-300' : 'text-gray-500'"
+              >
+                Ulanmaganlar
+              </p>
+              <p class="text-2xl font-bold text-red-600">
+                {{ stats.not_connected }}
+              </p>
+            </div>
+            <i class="text-3xl text-red-500 bx bx-x-circle"></i>
+          </div>
+          <div
+            class="flex items-center justify-between p-4 shadow rounded-xl"
+            :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
+          >
+            <div>
+              <p
+                class="text-sm"
+                :class="navbar.userNav ? 'text-gray-300' : 'text-gray-500'"
+              >
+                O'zi ulangan
+              </p>
+              <p class="text-2xl font-bold text-blue-600">
+                {{ stats.student_connected }}
+              </p>
+            </div>
+            <i class="text-3xl text-blue-500 bx bxs-user-check"></i>
+          </div>
+          <div
+            class="flex items-center justify-between p-4 shadow rounded-xl"
+            :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
+          >
+            <div>
+              <p
+                class="text-sm"
+                :class="navbar.userNav ? 'text-gray-300' : 'text-gray-500'"
+              >
+                Ota-onasi ulangan
+              </p>
+              <p class="text-2xl font-bold text-green-600">
+                {{ stats.parent_connected }}
+              </p>
+            </div>
+            <i class="text-3xl text-green-500 bx bxs-group"></i>
+          </div>
+        </div>
+        <!------------------------------------------- Stat cards end ------------------------------------------->
+
         <!------------------------------------------- Search ------------------------------------------->
         <div
           class="flex flex-col items-center justify-between p-4 mb-4 shadow rounded-xl lg:flex-row lg:space-x-4"
@@ -757,7 +813,25 @@
             </div>
           </div>
 
-          <div class="flex w-full">
+          <div class="flex flex-col w-full gap-3 sm:flex-row sm:items-center">
+            <div class="w-full sm:w-56 sm:shrink-0">
+              <select
+                v-model="botFilter"
+                @change="onBotFilterChange"
+                class="block w-full p-2 text-sm border rounded-xl focus:ring-blue-500 focus:border-blue-500"
+                :class="
+                  navbar.userNav
+                    ? 'bg-slate-800 border-slate-700 text-white'
+                    : 'bg-gray-50 border-gray-300 text-slate-800'
+                "
+              >
+                <option value="all">Barchasi</option>
+                <option value="student">O'zi ulangan</option>
+                <option value="parent">Ota-onasi ulangan</option>
+                <option value="studentOrParent">Biri ulangan</option>
+              </select>
+            </div>
+
             <form
               class="flex items-center w-full font-medium text-gray-900"
               @submit.prevent
@@ -767,6 +841,7 @@
               <div class="relative w-full">
                 <div
                   class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"
+                  :class="navbar.userNav ? 'text-slate-500' : 'text-gray-500'"
                 >
                   <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                     <path
@@ -780,7 +855,12 @@
                   v-model="store.filter"
                   @input="searchName(store.filter)"
                   type="search"
-                  class="block w-full p-2 pl-10 text-sm border border-gray-300 rounded-xl bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
+                  class="block w-full p-2 pl-10 text-sm border rounded-xl focus:ring-blue-500 focus:border-blue-500"
+                  :class="
+                    navbar.userNav
+                      ? 'bg-slate-800 border-slate-700 text-white placeholder:text-slate-500'
+                      : 'bg-gray-50 border-gray-300 text-slate-800'
+                  "
                   placeholder="Qidirish..."
                 />
               </div>
@@ -1002,7 +1082,7 @@ const store = reactive({
   error: false,
   group: [{ name: "Guruh yaratilmagan" }],
   groupModal: false,
-  filter: "",
+  filter: sessionStorage.getItem("student_search_filter") || "",
   searchList: [],
   guard: userRole == "_ow_sch_" || userRole == "_ad_sch_",
   searchTimer: null,
@@ -1047,6 +1127,15 @@ const archive = reactive({
   id: "",
   toggle: false,
 });
+
+// ---- Telegram statistika va bot filter ----
+const stats = reactive({
+  not_connected: 0,
+  student_connected: 0,
+  parent_connected: 0,
+});
+
+const botFilter = ref(sessionStorage.getItem("student_bot_filter") || "all");
 
 function searchFuncGroup() {
   if (!groupSearch.filter) {
@@ -1118,6 +1207,7 @@ const fetchData = async (url, method = "get", data = null) => {
 };
 
 const searchName = (name) => {
+  sessionStorage.setItem("student_search_filter", name || "");
   store.searchLamp = true;
   clearTimeout(store.searchTimer);
 
@@ -1144,9 +1234,10 @@ const searchName = (name) => {
 
 const getPageStudent = async (page) => {
   try {
+    const botQuery = botFilter.value !== "all" ? `&bot=${botFilter.value}` : "";
     const endpoint = store.guard
-      ? `/v1/student/${schoolId.value}/page?page=${page}`
-      : `/v1/student/teacher/${schoolId.value}/${userId.value}/page?page=${page}`;
+      ? `/v1/student/${schoolId.value}/page?page=${page}${botQuery}`
+      : `/v1/student/teacher/${schoolId.value}/${userId.value}/page?page=${page}${botQuery}`;
 
     const data = await fetchData(endpoint);
 
@@ -1161,6 +1252,27 @@ const getPageStudent = async (page) => {
     store.error = true;
     store.loaderTime = false;
   }
+};
+
+const onBotFilterChange = () => {
+  sessionStorage.setItem("student_bot_filter", botFilter.value);
+  store.pagination = 1;
+  if (store.filter) {
+    searchName(store.filter);
+  } else {
+    getPageStudent(1);
+  }
+};
+
+const getTelegramStats = async () => {
+  try {
+    const data = await fetchData(
+      `/v1/statistic/telegram-connection/${schoolId.value}`,
+    );
+    stats.not_connected = data.not_connected;
+    stats.student_connected = data.student_connected;
+    stats.parent_connected = data.parent_connected;
+  } catch {}
 };
 
 const getGroups = async () => {
@@ -1209,6 +1321,7 @@ const createStudent = async () => {
     await fetchData("/v1/student", "post", data);
     notification.success("O'quvchi qo'shildi");
     getPageStudent(store.pagination);
+    getTelegramStats();
     cancelFunc();
   } catch {}
 };
@@ -1239,6 +1352,7 @@ const archiveStudent = async () => {
     );
     notification.success("O'quvchi arxivlandi");
     getPageStudent(store.pagination);
+    getTelegramStats();
     archive.toggle = false;
   } catch {}
 };
@@ -1248,6 +1362,7 @@ const deleteStudent = async () => {
     await fetchData(`/v1/student/${schoolId.value}/${remove.id}`, "delete");
     notification.success("O'quvchi o'chirildi");
     getPageStudent(store.pagination);
+    getTelegramStats();
     remove.toggle = false;
   } catch {}
 };
@@ -1277,7 +1392,12 @@ const removeGroups = async (id) => {
 };
 
 onMounted(() => {
-  getPageStudent(store.pagination);
+  if (store.filter) {
+    searchName(store.filter);
+  } else {
+    getPageStudent(store.pagination);
+  }
+  getTelegramStats();
 });
 </script>
 

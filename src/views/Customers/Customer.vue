@@ -93,7 +93,10 @@
           >
             <div class="grid gap-4 mb-4 font-medium sm:grid-cols-2">
               <div>
-                <label for="parents_fullname" class="block mb-2 text-sm"
+                <label
+                  for="parents_fullname"
+                  class="block mb-2 text-sm"
+                  :class="navbar.userNav ? 'text-white' : 'text-black'"
                   >Ota-ona ism familiyasi</label
                 >
                 <input
@@ -101,13 +104,21 @@
                   type="text"
                   name="parents_fullname"
                   id="parents_fullname"
-                  class="bg-gray-50 border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                  class="text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 border"
+                  :class="
+                    navbar.userNav
+                      ? 'bg-slate-800 border-slate-700 text-white placeholder:text-slate-500'
+                      : 'bg-gray-50 border-gray-300 text-slate-800'
+                  "
                   placeholder="Ota-ona ism familiyasi kiriting"
                   required
                 />
               </div>
               <div>
-                <label for="parents_phone" class="block mb-2 text-sm"
+                <label
+                  for="parents_phone"
+                  class="block mb-2 text-sm"
+                  :class="navbar.userNav ? 'text-white' : 'text-black'"
                   >Ota-ona raqami</label
                 >
                 <input
@@ -115,25 +126,43 @@
                   type="text"
                   name="parents_phone"
                   id="parents_phone"
-                  class="bg-gray-50 border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                  class="text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 border"
+                  :class="
+                    navbar.userNav
+                      ? 'bg-slate-800 border-slate-700 text-white placeholder:text-slate-500'
+                      : 'bg-gray-50 border-gray-300 text-slate-800'
+                  "
                   placeholder="Ota-ona raqamini kiriting"
                   required
                 />
               </div>
               <div class="">
-                <label for="name" class="block mb-2 text-sm">F . I . O</label>
+                <label
+                  for="name"
+                  class="block mb-2 text-sm"
+                  :class="navbar.userNav ? 'text-white' : 'text-black'"
+                  >F . I . O</label
+                >
                 <input
                   v-model="edit.full_name"
                   type="text"
                   name="name"
                   id="name"
-                  class="bg-gray-50 border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                  class="text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 border"
+                  :class="
+                    navbar.userNav
+                      ? 'bg-slate-800 border-slate-700 text-white placeholder:text-slate-500'
+                      : 'bg-gray-50 border-gray-300 text-slate-800'
+                  "
                   placeholder="F . I . O"
                   required
                 />
               </div>
               <div>
-                <label for="phone" class="block mb-2 text-sm"
+                <label
+                  for="phone"
+                  class="block mb-2 text-sm"
+                  :class="navbar.userNav ? 'text-white' : 'text-black'"
                   >Telefon raqami</label
                 >
                 <input
@@ -141,7 +170,12 @@
                   type="text"
                   name="phone"
                   id="phone"
-                  class="bg-gray-50 border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                  class="text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 border"
+                  :class="
+                    navbar.userNav
+                      ? 'bg-slate-800 border-slate-700 text-white placeholder:text-slate-500'
+                      : 'bg-gray-50 border-gray-300 text-slate-800'
+                  "
                   placeholder="Telefon raqamini kiriting"
                   required
                 />
@@ -158,7 +192,12 @@
                   type="date"
                   name="phone"
                   id="phone"
-                  class="bg-gray-50 border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                  class="text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 border"
+                  :class="
+                    navbar.userNav
+                      ? 'bg-slate-800 border-slate-700 text-white'
+                      : 'bg-gray-50 border-gray-300 text-slate-800'
+                  "
                   required
                 />
               </div>
@@ -172,7 +211,12 @@
                 <select
                   v-model="edit.group_id"
                   id="name"
-                  class="bg-gray-50 border border-gray-300 rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                  class="rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 border"
+                  :class="
+                    navbar.userNav
+                      ? 'bg-slate-800 border-slate-700 text-white'
+                      : 'bg-gray-50 border-gray-300 text-slate-800'
+                  "
                   required
                 >
                   <option value="" disabled selected>Guruh tanlang</option>
@@ -262,19 +306,32 @@
           >
             <div class="grid grid-cols-1 gap-4 mb-4 font-medium">
               <div class="">
-                <label for="name" class="block mb-2 text-sm">F . I . O</label>
+                <label
+                  for="name"
+                  class="block mb-2 text-sm"
+                  :class="navbar.userNav ? 'text-white' : 'text-black'"
+                  >F . I . O</label
+                >
                 <input
                   v-model="form.full_name"
                   type="phone_number"
                   name="name"
                   id="name"
-                  class="bg-gray-50 border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                  class="text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 border"
+                  :class="
+                    navbar.userNav
+                      ? 'bg-slate-800 border-slate-700 text-white placeholder:text-slate-500'
+                      : 'bg-gray-50 border-gray-300 text-slate-800'
+                  "
                   placeholder="F . I . O"
                   required
                 />
               </div>
               <div>
-                <label for="phone" class="block mb-2 text-sm"
+                <label
+                  for="phone"
+                  class="block mb-2 text-sm"
+                  :class="navbar.userNav ? 'text-white' : 'text-black'"
                   >Telefon raqami</label
                 >
                 <input
@@ -282,17 +339,32 @@
                   type="phone_number"
                   name="phone"
                   id="phone"
-                  class="bg-gray-50 border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                  class="text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 border"
+                  :class="
+                    navbar.userNav
+                      ? 'bg-slate-800 border-slate-700 text-white placeholder:text-slate-500'
+                      : 'bg-gray-50 border-gray-300 text-slate-800'
+                  "
                   placeholder="Telefon raqamini kiriting"
                   required
                 />
               </div>
               <div>
-                <label for="select" class="block mb-2 text-sm">Fani</label>
+                <label
+                  for="select"
+                  class="block mb-2 text-sm"
+                  :class="navbar.userNav ? 'text-white' : 'text-black'"
+                  >Fani</label
+                >
                 <select
                   v-model="form.subject_id"
                   id="select"
-                  class="bg-gray-50 border border-gray-300 rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                  class="rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 border"
+                  :class="
+                    navbar.userNav
+                      ? 'bg-slate-800 border-slate-700 text-white'
+                      : 'bg-gray-50 border-gray-300 text-slate-800'
+                  "
                   required
                 >
                   <option value="" disabled selected>Fani tanlang</option>
@@ -302,25 +374,41 @@
                 </select>
               </div>
               <div>
-                <label for="description" class="block mb-2 text-sm"
+                <label
+                  for="description"
+                  class="block mb-2 text-sm"
+                  :class="navbar.userNav ? 'text-white' : 'text-black'"
                   >Mijoz haqida</label
                 >
                 <textarea
                   v-model="form.description"
                   name="description"
                   id="description"
-                  class="bg-gray-50 border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                  class="text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 border"
+                  :class="
+                    navbar.userNav
+                      ? 'bg-slate-800 border-slate-700 text-white placeholder:text-slate-500'
+                      : 'bg-gray-50 border-gray-300 text-slate-800'
+                  "
                   placeholder="Mijoz haqida ma'lumot"
                 ></textarea>
               </div>
               <div>
-                <label for="select" class="block mb-2 text-sm"
+                <label
+                  for="select"
+                  class="block mb-2 text-sm"
+                  :class="navbar.userNav ? 'text-white' : 'text-black'"
                   >Mijoz oqimi</label
                 >
                 <select
                   v-model="form.social_media_id"
                   id="select"
-                  class="bg-gray-50 border border-gray-300 rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                  class="rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 border"
+                  :class="
+                    navbar.userNav
+                      ? 'bg-slate-800 border-slate-700 text-white'
+                      : 'bg-gray-50 border-gray-300 text-slate-800'
+                  "
                   required
                 >
                   <option value="" disabled selected>
@@ -412,19 +500,32 @@
           >
             <div class="grid grid-cols-1 gap-4 mb-4 font-medium">
               <div class="">
-                <label for="name" class="block mb-2 text-sm">F . I . O</label>
+                <label
+                  for="name"
+                  class="block mb-2 text-sm"
+                  :class="navbar.userNav ? 'text-white' : 'text-black'"
+                  >F . I . O</label
+                >
                 <input
                   v-model="edit.full_name"
                   type="name"
                   name="name"
                   id="name"
-                  class="bg-gray-50 border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                  class="text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 border"
+                  :class="
+                    navbar.userNav
+                      ? 'bg-slate-800 border-slate-700 text-white placeholder:text-slate-500'
+                      : 'bg-gray-50 border-gray-300 text-slate-800'
+                  "
                   placeholder="F . I . O"
                   required
                 />
               </div>
               <div>
-                <label for="phone" class="block mb-2 text-sm"
+                <label
+                  for="phone"
+                  class="block mb-2 text-sm"
+                  :class="navbar.userNav ? 'text-white' : 'text-black'"
                   >Telefon raqami</label
                 >
                 <input
@@ -432,17 +533,32 @@
                   type="phone_number"
                   name="phone"
                   id="phone"
-                  class="bg-gray-50 border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                  class="text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 border"
+                  :class="
+                    navbar.userNav
+                      ? 'bg-slate-800 border-slate-700 text-white placeholder:text-slate-500'
+                      : 'bg-gray-50 border-gray-300 text-slate-800'
+                  "
                   placeholder="Telefon raqamini kiriting"
                   required
                 />
               </div>
               <div>
-                <label for="select" class="block mb-2 text-sm">Fani</label>
+                <label
+                  for="select"
+                  class="block mb-2 text-sm"
+                  :class="navbar.userNav ? 'text-white' : 'text-black'"
+                  >Fani</label
+                >
                 <select
                   v-model="edit.subject_id"
                   id="select"
-                  class="bg-gray-50 border border-gray-300 rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                  class="rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 border"
+                  :class="
+                    navbar.userNav
+                      ? 'bg-slate-800 border-slate-700 text-white'
+                      : 'bg-gray-50 border-gray-300 text-slate-800'
+                  "
                   required
                 >
                   <option value="" disabled selected>Fani tanlang</option>
@@ -452,25 +568,41 @@
                 </select>
               </div>
               <div>
-                <label for="description" class="block mb-2 text-sm"
+                <label
+                  for="description"
+                  class="block mb-2 text-sm"
+                  :class="navbar.userNav ? 'text-white' : 'text-black'"
                   >Mijoz haqida</label
                 >
                 <textarea
                   v-model="edit.description"
                   name="description"
                   id="description"
-                  class="bg-gray-50 border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                  class="text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 border"
+                  :class="
+                    navbar.userNav
+                      ? 'bg-slate-800 border-slate-700 text-white placeholder:text-slate-500'
+                      : 'bg-gray-50 border-gray-300 text-slate-800'
+                  "
                   placeholder="Mijoz haqida ma'lumot"
                 ></textarea>
               </div>
               <div>
-                <label for="select" class="block mb-2 text-sm"
+                <label
+                  for="select"
+                  class="block mb-2 text-sm"
+                  :class="navbar.userNav ? 'text-white' : 'text-black'"
                   >Mijoz oqimi</label
                 >
                 <select
                   v-model="edit.social_media_id"
                   id="select"
-                  class="bg-gray-50 border border-gray-300 rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                  class="rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 border"
+                  :class="
+                    navbar.userNav
+                      ? 'bg-slate-800 border-slate-700 text-white'
+                      : 'bg-gray-50 border-gray-300 text-slate-800'
+                  "
                   required
                 >
                   <option value="" disabled selected>
@@ -637,7 +769,12 @@
               <select
                 v-model="history.year"
                 id="name"
-                class="bg-white text-black rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-[7px]"
+                class="rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-[7px] border"
+                :class="
+                  navbar.userNav
+                    ? 'bg-slate-800 border-slate-700 text-white'
+                    : 'bg-white border-gray-300 text-black'
+                "
                 required
                 @change="getPageCustomer(store.pagination)"
               >
@@ -655,7 +792,12 @@
               <select
                 v-model="history.month"
                 id="month"
-                class="bg-white text-black rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-[7px]"
+                class="rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-[7px] border"
+                :class="
+                  navbar.userNav
+                    ? 'bg-slate-800 border-slate-700 text-white'
+                    : 'bg-white border-gray-300 text-black'
+                "
                 @change="getPageCustomer(store.pagination)"
               >
                 <option value="" disabled selected>Oyni tanlang</option>
@@ -684,6 +826,7 @@
                 <div class="relative w-full">
                   <div
                     class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"
+                    :class="navbar.userNav ? 'text-slate-500' : 'text-gray-500'"
                   >
                     <svg
                       class="w-5 h-5"
@@ -701,7 +844,12 @@
                     v-model="store.filter"
                     @input="searchName(store.filter)"
                     type="search"
-                    class="block w-full p-2 pl-10 text-sm border border-gray-300 rounded-xl bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
+                    class="block w-full p-2 pl-10 text-sm rounded-xl border"
+                    :class="
+                      navbar.userNav
+                        ? 'bg-slate-800 border-slate-700 text-white placeholder:text-slate-500'
+                        : 'bg-gray-50 border-gray-300 text-slate-800'
+                    "
                     placeholder="Qidirish..."
                   />
                 </div>
@@ -964,7 +1112,7 @@ const history = reactive({
 });
 
 const handleError = (
-  message = "Xatolik! Internetni tekshirib qaytadan urinib ko'ring!"
+  message = "Xatolik! Internetni tekshirib qaytadan urinib ko'ring!",
 ) => {
   notification.warning(message);
 };
@@ -990,7 +1138,7 @@ const getStatistic = async (date) => {
   try {
     const res = await axios.get(
       `/v1/statistic/customer/${schoolId.value}/${date}`,
-      { headers: authHeaders.value }
+      { headers: authHeaders.value },
     );
     store.statistic = res.data;
   } catch {}
@@ -1011,7 +1159,7 @@ const searchName = (name) => {
     try {
       const res = await axios.get(
         `/v1/customer/search/${schoolId.value}/${name}`,
-        { headers: authHeaders.value }
+        { headers: authHeaders.value },
       );
       store.pageData = res.data;
     } catch {
@@ -1037,7 +1185,7 @@ const getPageCustomer = async (page) => {
     };
 
     getStatistic(
-      history.month ? `${history.year}-${history.month}` : history.year
+      history.month ? `${history.year}-${history.month}` : history.year,
     );
 
     store.error = false;

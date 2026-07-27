@@ -1,1173 +1,1277 @@
 <template>
-  <div class="px-2 mt-4 mb-20">
+  <div
+    class="min-h-screen px-4 py-6"
+    :class="navbar.userNav ? 'bg-slate-950' : 'bg-gray-100'"
+  >
     <div v-show="!store.PageProduct">
       <Placeholder2 />
     </div>
 
-    <section v-show="store.PageProduct" class="">
-      <div class="w-full max-w-screen">
-        <!-- Start coding here -->
-
-        <!------------------------------------------- Search ------------------------------------------->
-        <div
-          class="flex flex-col items-center justify-between gap-3 p-4 mb-4 shadow rounded-xl lg:flex-row lg:space-x-4"
-          :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
+    <section v-show="store.PageProduct">
+      <div class="mb-6">
+        <p
+          class="mb-1 text-xs font-medium tracking-widest uppercase"
+          :class="navbar.userNav ? 'text-slate-500' : 'text-slate-400'"
         >
-          <h1 class="w-full text-lg font-bold text-blue-700">Sozlamalar</h1>
-          <div
-            class="flex flex-col items-stretch w-full space-y-2 lg:w-auto md:flex-row md:space-y-0 md:items-center md:space-x-4"
-            :class="navbar.userNav ? 'text-white' : 'text-black'"
+          Boshqaruv
+        </p>
+        <h1
+          class="text-xl font-bold"
+          :class="navbar.userNav ? 'text-white' : 'text-slate-800'"
+        >
+          Sozlamalar
+        </h1>
+      </div>
+
+      <!-- TABS -->
+      <div class="mb-6">
+        <div
+          class="grid w-full grid-cols-2 gap-1 p-1 sm:inline-grid sm:w-auto rounded-xl"
+          :class="
+            navbar.userNav
+              ? 'bg-slate-900'
+              : 'bg-white shadow-sm border border-slate-200'
+          "
+          :style="{
+            gridTemplateColumns: `repeat(${tabCount}, minmax(0, 1fr))`,
+          }"
+        >
+          <button
+            @click="toggleGeneralSettings()"
+            type="button"
+            class="flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium transition-all rounded-xl"
+            :class="
+              generalSettings
+                ? 'bg-gradient-to-r from-blue-700 to-indigo-600 text-white shadow-sm'
+                : navbar.userNav
+                  ? 'text-slate-400 hover:text-white hover:bg-slate-700'
+                  : 'text-slate-500 hover:text-slate-800 hover:bg-slate-50'
+            "
           >
-            <button
-              @click="toggleGeneralSettings()"
-              id=""
-              type="button"
-              :class="
-                generalSettings
-                  ? 'btnAdd flex items-center w-full sm:max-w-fit justify-center whitespace-nowrap border border-[#2f73f0] focus:ring-4 focus:ring-blue-300 font-medium rounded-xl text-sm px-5 py-2.5'
-                  : 'flex items-center w-full sm:max-w-fit justify-center whitespace-nowrap bg-transparent border border-[#2f73f0] focus:ring-4 focus:ring-blue-300 font-medium rounded-xl text-sm px-5 py-2.5'
-              "
+            <span class="whitespace-nowrap">Asosiy sozlama</span>
+          </button>
+          <button
+            @click="togglePasswordChange()"
+            type="button"
+            class="flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium transition-all rounded-xl"
+            :class="
+              passwordChange
+                ? 'bg-gradient-to-r from-blue-700 to-indigo-600 text-white shadow-sm'
+                : navbar.userNav
+                  ? 'text-slate-400 hover:text-white hover:bg-slate-700'
+                  : 'text-slate-500 hover:text-slate-800 hover:bg-slate-50'
+            "
+          >
+            <span class="whitespace-nowrap">Parolni yangilash</span>
+          </button>
+          <button
+            v-show="userRole == '_ad_sch_' || userRole == '_ow_sch_'"
+            @click="toggleSocialLink()"
+            type="button"
+            class="flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium transition-all rounded-xl"
+            :class="
+              socialLink
+                ? 'bg-gradient-to-r from-blue-700 to-indigo-600 text-white shadow-sm'
+                : navbar.userNav
+                  ? 'text-slate-400 hover:text-white hover:bg-slate-700'
+                  : 'text-slate-500 hover:text-slate-800 hover:bg-slate-50'
+            "
+          >
+            <span class="whitespace-nowrap">Ijtimoiy tarmoqlar</span>
+          </button>
+          <button
+            v-show="userRole == '_ad_sch_' || userRole == '_ow_sch_'"
+            @click="togglePaymentMethod()"
+            type="button"
+            class="flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium transition-all rounded-xl"
+            :class="
+              paymentMethod
+                ? 'bg-gradient-to-r from-blue-700 to-indigo-600 text-white shadow-sm'
+                : navbar.userNav
+                  ? 'text-slate-400 hover:text-white hover:bg-slate-700'
+                  : 'text-slate-500 hover:text-slate-800 hover:bg-slate-50'
+            "
+          >
+            <span class="whitespace-nowrap">To'lov turlari</span>
+          </button>
+          <button
+            v-show="userRole == '_ad_sch_' || userRole == '_ow_sch_'"
+            @click="toggleRoom()"
+            type="button"
+            class="flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium transition-all rounded-xl"
+            :class="
+              roomChange
+                ? 'bg-gradient-to-r from-blue-700 to-indigo-600 text-white shadow-sm'
+                : navbar.userNav
+                  ? 'text-slate-400 hover:text-white hover:bg-slate-700'
+                  : 'text-slate-500 hover:text-slate-800 hover:bg-slate-50'
+            "
+          >
+            <span class="whitespace-nowrap">Xonalar</span>
+          </button>
+        </div>
+      </div>
+
+      <!----------------------------------------- User settings ------------------------------------>
+      <div v-show="generalSettings">
+        <div
+          class="p-6 rounded-2xl"
+          :class="
+            navbar.userNav
+              ? 'bg-slate-900 border border-slate-800'
+              : 'bg-white border border-slate-100 shadow-sm'
+          "
+        >
+          <p
+            class="mb-5 text-xs font-semibold tracking-widest uppercase"
+            :class="navbar.userNav ? 'text-slate-500' : 'text-slate-400'"
+          >
+            Foydalanuvchi sozlamalari
+          </p>
+          <form @submit.prevent="changeInfo(edit.id)">
+            <div class="grid gap-4 mb-5 sm:grid-cols-3">
+              <div>
+                <label
+                  for="name"
+                  class="block mb-2 text-xs"
+                  :class="navbar.userNav ? 'text-slate-500' : 'text-slate-400'"
+                >
+                  To'liq ismi (I . F . O)
+                </label>
+                <input
+                  v-model="edit.full_name"
+                  type="text"
+                  name="name"
+                  id="name"
+                  class="text-sm rounded-xl block w-full p-2.5 border focus:ring-2 focus:ring-blue-300 focus:outline-none"
+                  :class="
+                    navbar.userNav
+                      ? 'bg-slate-800 border-slate-700 text-white placeholder:text-slate-500'
+                      : 'bg-white border-slate-200 text-slate-800'
+                  "
+                  placeholder="To'liq ismini kiriting"
+                  required
+                />
+              </div>
+              <div>
+                <label
+                  for="phone"
+                  class="block mb-2 text-xs"
+                  :class="navbar.userNav ? 'text-slate-500' : 'text-slate-400'"
+                >
+                  Telefon raqami
+                </label>
+                <input
+                  v-model="edit.phone_number"
+                  type="tel"
+                  name="phone"
+                  id="phone"
+                  class="text-sm rounded-xl block w-full p-2.5 border focus:ring-2 focus:ring-blue-300 focus:outline-none"
+                  :class="
+                    navbar.userNav
+                      ? 'bg-slate-800 border-slate-700 text-white placeholder:text-slate-500'
+                      : 'bg-white border-slate-200 text-slate-800'
+                  "
+                  placeholder="Telefon raqamini kiriting"
+                  required
+                />
+              </div>
+              <div>
+                <label
+                  for="login"
+                  class="block mb-2 text-xs"
+                  :class="navbar.userNav ? 'text-slate-500' : 'text-slate-400'"
+                >
+                  Login
+                </label>
+                <input
+                  v-model="edit.login"
+                  type="text"
+                  name="login"
+                  id="login"
+                  class="text-sm rounded-xl block w-full p-2.5 border focus:ring-2 focus:ring-blue-300 focus:outline-none"
+                  :class="
+                    navbar.userNav
+                      ? 'bg-slate-800 border-slate-700 text-white placeholder:text-slate-500'
+                      : 'bg-white border-slate-200 text-slate-800'
+                  "
+                  placeholder="login"
+                  required
+                />
+              </div>
+            </div>
+            <div
+              class="flex items-center justify-end w-full pt-5 border-t"
+              :class="navbar.userNav ? 'border-slate-800' : 'border-slate-100'"
             >
-              <span class="">Asosiy sozlama</span>
-            </button>
-            <button
-              @click="togglePasswordChange()"
-              id=""
-              type="button"
-              :class="
-                passwordChange
-                  ? 'btnAdd flex items-center w-full sm:max-w-fit justify-center whitespace-nowrap border border-[#2f73f0] focus:ring-4 focus:ring-blue-300 font-medium rounded-xl text-sm px-5 py-2.5'
-                  : 'flex items-center w-full sm:max-w-fit justify-center whitespace-nowrap bg-transparent border border-[#2f73f0] focus:ring-4 focus:ring-blue-300 font-medium rounded-xl text-sm px-5 py-2.5'
-              "
+              <button
+                type="submit"
+                class="px-5 py-2.5 text-sm font-medium text-white rounded-xl bg-gradient-to-r from-blue-700 to-indigo-600 focus:ring-2 focus:ring-blue-300"
+              >
+                O'zgartirish
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!----------------------------------------- Password change ---------------------------------->
+      <div v-show="passwordChange">
+        <div
+          class="p-6 rounded-2xl"
+          :class="
+            navbar.userNav
+              ? 'bg-slate-900 border border-slate-800'
+              : 'bg-white border border-slate-100 shadow-sm'
+          "
+        >
+          <p
+            class="mb-5 text-xs font-semibold tracking-widest uppercase"
+            :class="navbar.userNav ? 'text-slate-500' : 'text-slate-400'"
+          >
+            Parolni o'zgartirish
+          </p>
+          <form @submit.prevent="changePassword(edit.id)">
+            <div class="grid gap-4 mb-5 sm:grid-cols-3">
+              <div class="relative">
+                <label
+                  for="password"
+                  class="block mb-2 text-xs"
+                  :class="navbar.userNav ? 'text-slate-500' : 'text-slate-400'"
+                >
+                  Joriy parol
+                </label>
+                <input
+                  v-model="edit.password"
+                  :type="showOldPassword ? 'text' : 'password'"
+                  name="password"
+                  id="password"
+                  class="text-sm rounded-xl block w-full p-2.5 border focus:ring-2 focus:ring-blue-300 focus:outline-none"
+                  :class="
+                    navbar.userNav
+                      ? 'bg-slate-800 border-slate-700 text-white placeholder:text-slate-500'
+                      : 'bg-white border-slate-200 text-slate-800'
+                  "
+                  placeholder="********"
+                  required
+                />
+                <button
+                  type="button"
+                  @click="showOldPassword = !showOldPassword"
+                  class="absolute top-[38px] right-3"
+                  :class="
+                    navbar.userNav
+                      ? 'text-slate-500 hover:text-white'
+                      : 'text-slate-400 hover:text-slate-700'
+                  "
+                  aria-label="Parolni ko'rsatish"
+                >
+                  <svg
+                    v-if="!showOldPassword"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    class="w-5 h-5"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                    />
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                    />
+                  </svg>
+                  <svg
+                    v-else
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    class="w-5 h-5"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M13.875 18.825A10.05 10.05 0 0112 19c-4.477 0-8.268-2.943-9.542-7a9.958 9.958 0 012.223-3.607m1.923-1.92A9.956 9.956 0 0112 5c4.477 0 8.268 2.943 9.542 7a10.025 10.025 0 01-4.683 5.12M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                    />
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M3 3l18 18"
+                    />
+                  </svg>
+                </button>
+              </div>
+              <div class="relative">
+                <label
+                  for="new_password"
+                  class="block mb-2 text-xs"
+                  :class="navbar.userNav ? 'text-slate-500' : 'text-slate-400'"
+                >
+                  Yangi parol
+                </label>
+                <input
+                  v-model="edit.newPassword"
+                  :type="showNewPassword ? 'text' : 'password'"
+                  name="new_password"
+                  id="new_password"
+                  class="text-sm rounded-xl block w-full p-2.5 border focus:ring-2 focus:ring-blue-300 focus:outline-none"
+                  :class="
+                    navbar.userNav
+                      ? 'bg-slate-800 border-slate-700 text-white placeholder:text-slate-500'
+                      : 'bg-white border-slate-200 text-slate-800'
+                  "
+                  placeholder="********"
+                  required
+                />
+                <button
+                  type="button"
+                  @click="showNewPassword = !showNewPassword"
+                  class="absolute top-[38px] right-3"
+                  :class="
+                    navbar.userNav
+                      ? 'text-slate-500 hover:text-white'
+                      : 'text-slate-400 hover:text-slate-700'
+                  "
+                  aria-label="Yangi parolni ko'rsatish"
+                >
+                  <svg
+                    v-if="!showNewPassword"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    class="w-5 h-5"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                    />
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                    />
+                  </svg>
+                  <svg
+                    v-else
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    class="w-5 h-5"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M13.875 18.825A10.05 10.05 0 0112 19c-4.477 0-8.268-2.943-9.542-7a9.958 9.958 0 012.223-3.607m1.923-1.92A9.956 9.956 0 0112 5c4.477 0 8.268 2.943 9.542 7a10.025 10.025 0 01-4.683 5.12M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                    />
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M3 3l18 18"
+                    />
+                  </svg>
+                </button>
+              </div>
+              <div class="relative">
+                <label
+                  for="confirm_password"
+                  class="block mb-2 text-xs"
+                  :class="navbar.userNav ? 'text-slate-500' : 'text-slate-400'"
+                >
+                  Yangi parolni tasdiqlang
+                </label>
+                <input
+                  v-model="edit.confirmNewPassword"
+                  :type="showNew2Password ? 'text' : 'password'"
+                  name="confirm_password"
+                  id="confirm_password"
+                  class="text-sm rounded-xl block w-full p-2.5 border focus:ring-2 focus:ring-blue-300 focus:outline-none"
+                  :class="
+                    navbar.userNav
+                      ? 'bg-slate-800 border-slate-700 text-white placeholder:text-slate-500'
+                      : 'bg-white border-slate-200 text-slate-800'
+                  "
+                  placeholder="********"
+                  required
+                />
+                <button
+                  type="button"
+                  @click="showNew2Password = !showNew2Password"
+                  class="absolute top-[38px] right-3"
+                  :class="
+                    navbar.userNav
+                      ? 'text-slate-500 hover:text-white'
+                      : 'text-slate-400 hover:text-slate-700'
+                  "
+                  aria-label="Yangi parolni ko'rsatish"
+                >
+                  <svg
+                    v-if="!showNew2Password"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    class="w-5 h-5"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                    />
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                    />
+                  </svg>
+                  <svg
+                    v-else
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    class="w-5 h-5"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M13.875 18.825A10.05 10.05 0 0112 19c-4.477 0-8.268-2.943-9.542-7a9.958 9.958 0 012.223-3.607m1.923-1.92A9.956 9.956 0 0112 5c4.477 0 8.268 2.943 9.542 7a10.025 10.025 0 01-4.683 5.12M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                    />
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M3 3l18 18"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div
+              class="flex items-center justify-end w-full pt-5 border-t"
+              :class="navbar.userNav ? 'border-slate-800' : 'border-slate-100'"
             >
-              <span class="">Parolni yangilash</span>
-            </button>
-            <button
-              v-show="userRole == '_ad_sch_' || userRole == '_ow_sch_'"
-              @click="toggleSocialLink()"
-              id=""
-              type="button"
-              :class="
-                socialLink
-                  ? 'btnAdd flex items-center w-full sm:max-w-fit justify-center whitespace-nowrap border border-[#2f73f0] focus:ring-4 focus:ring-blue-300 font-medium rounded-xl text-sm px-5 py-2.5'
-                  : 'flex items-center w-full sm:max-w-fit justify-center whitespace-nowrap bg-transparent border border-[#2f73f0] focus:ring-4 focus:ring-blue-300 font-medium rounded-xl text-sm px-5 py-2.5'
-              "
+              <button
+                type="submit"
+                class="px-5 py-2.5 text-sm font-medium text-white rounded-xl bg-gradient-to-r from-blue-700 to-indigo-600 focus:ring-2 focus:ring-blue-300"
+              >
+                O'zgartirish
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!----------------------------------------- Social Link add modal ---------------------------->
+      <div
+        v-show="social.modal"
+        class="fixed inset-0 z-50 flex items-center justify-center w-full h-full bg-black/50"
+      >
+        <div class="relative w-full h-auto max-w-lg p-4">
+          <div
+            class="p-5 rounded-2xl"
+            :class="
+              navbar.userNav
+                ? 'bg-slate-900 border border-slate-800'
+                : 'bg-white border border-slate-100 shadow-lg'
+            "
+          >
+            <div
+              class="flex items-center justify-between pb-4 mb-4 border-b"
+              :class="navbar.userNav ? 'border-slate-800' : 'border-slate-100'"
             >
-              <span class="">Ijtimoiy tarmoqlar</span>
-            </button>
-            <button
-              v-show="userRole == '_ad_sch_' || userRole == '_ow_sch_'"
-              @click="togglePaymentMethod()"
-              id=""
-              type="button"
-              :class="
-                paymentMethod
-                  ? 'btnAdd flex items-center w-full sm:max-w-fit justify-center whitespace-nowrap border border-[#2f73f0] focus:ring-4 focus:ring-blue-300 font-medium rounded-xl text-sm px-5 py-2.5'
-                  : 'flex items-center w-full sm:max-w-fit justify-center whitespace-nowrap bg-transparent border border-[#2f73f0] focus:ring-4 focus:ring-blue-300 font-medium rounded-xl text-sm px-5 py-2.5'
-              "
-            >
-              <span class="">To'lov turlari</span>
-            </button>
-            <button
-              v-show="userRole == '_ad_sch_' || userRole == '_ow_sch_'"
-              @click="toggleRoom()"
-              id=""
-              type="button"
-              :class="
-                roomChange
-                  ? 'btnAdd flex items-center w-full sm:max-w-fit justify-center whitespace-nowrap border border-[#2f73f0] focus:ring-4 focus:ring-blue-300 font-medium rounded-xl text-sm px-5 py-2.5'
-                  : 'flex items-center w-full sm:max-w-fit justify-center whitespace-nowrap bg-transparent border border-[#2f73f0] focus:ring-4 focus:ring-blue-300 font-medium rounded-xl text-sm px-5 py-2.5'
-              "
-            >
-              <span class="">Xonalar</span>
-            </button>
+              <h3
+                class="text-lg font-bold"
+                :class="navbar.userNav ? 'text-white' : 'text-slate-800'"
+              >
+                Yangi link qo'shish
+              </h3>
+              <button
+                @click="socialModal"
+                type="button"
+                class="p-1.5 rounded-xl"
+                :class="
+                  navbar.userNav
+                    ? 'text-slate-400 hover:bg-slate-800'
+                    : 'text-slate-500 hover:bg-slate-100'
+                "
+              >
+                <svg
+                  aria-hidden="true"
+                  class="w-5 h-5"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                    clip-rule="evenodd"
+                  ></path>
+                </svg>
+              </button>
+            </div>
+            <form @submit.prevent="addSocialLink">
+              <div class="mb-5">
+                <label
+                  for="socil_name"
+                  class="block mb-2 text-xs"
+                  :class="navbar.userNav ? 'text-slate-500' : 'text-slate-400'"
+                  >Nomi</label
+                >
+                <input
+                  v-model="social.name"
+                  type="text"
+                  name="socil_name"
+                  id="socil_name"
+                  class="text-sm rounded-xl block w-full p-2.5 border focus:ring-2 focus:ring-blue-300 focus:outline-none"
+                  :class="
+                    navbar.userNav
+                      ? 'bg-slate-800 border-slate-700 text-white placeholder:text-slate-500'
+                      : 'bg-white border-slate-200 text-slate-800'
+                  "
+                  placeholder="Nomini kiriting"
+                />
+              </div>
+              <div
+                class="flex items-center justify-between w-full pt-5 border-t"
+                :class="
+                  navbar.userNav ? 'border-slate-800' : 'border-slate-100'
+                "
+              >
+                <button
+                  @click="socialModal"
+                  type="button"
+                  class="px-5 py-2.5 text-sm font-medium rounded-xl border"
+                  :class="
+                    navbar.userNav
+                      ? 'border-slate-700 text-slate-300 hover:bg-slate-800'
+                      : 'border-slate-200 text-slate-600 hover:bg-slate-50'
+                  "
+                >
+                  Bekor qilish
+                </button>
+                <button
+                  type="submit"
+                  class="px-5 py-2.5 text-sm font-medium text-white rounded-xl bg-gradient-to-r from-blue-700 to-indigo-600 focus:ring-2 focus:ring-blue-300"
+                >
+                  Qo'shish
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       </div>
 
-      <div class="w-full max-w-screen">
-        <!-- Start coding here -->
+      <!-- Social link delete modal -->
+      <div
+        v-show="remove.toggle"
+        class="fixed inset-0 z-50 flex items-center justify-center w-full h-full bg-black/50"
+      >
+        <div class="relative w-full h-auto max-w-md p-4">
+          <div
+            class="p-5 rounded-2xl"
+            :class="
+              navbar.userNav
+                ? 'bg-slate-900 border border-slate-800'
+                : 'bg-white border border-slate-100 shadow-lg'
+            "
+          >
+            <div
+              class="flex items-center justify-between pb-4 mb-4 border-b"
+              :class="navbar.userNav ? 'border-slate-800' : 'border-slate-100'"
+            >
+              <h3
+                class="text-lg font-bold"
+                :class="navbar.userNav ? 'text-white' : 'text-slate-800'"
+              >
+                Linkni o'chirib tashlash
+              </h3>
+              <button
+                @click="remove.toggle = false"
+                type="button"
+                class="p-1.5 rounded-xl"
+                :class="
+                  navbar.userNav
+                    ? 'text-slate-400 hover:bg-slate-800'
+                    : 'text-slate-500 hover:bg-slate-100'
+                "
+              >
+                <svg
+                  aria-hidden="true"
+                  class="w-5 h-5"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                    clip-rule="evenodd"
+                  ></path>
+                </svg>
+              </button>
+            </div>
+            <p
+              class="mb-5 text-sm font-medium"
+              :class="navbar.userNav ? 'text-slate-300' : 'text-slate-600'"
+            >
+              Siz linkni o'chirishni xohlaysizmi?
+            </p>
+            <div
+              class="flex items-center justify-between w-full pt-5 border-t"
+              :class="navbar.userNav ? 'border-slate-800' : 'border-slate-100'"
+            >
+              <button
+                @click="remove.toggle = false"
+                type="button"
+                class="px-5 py-2.5 text-sm font-medium rounded-xl border"
+                :class="
+                  navbar.userNav
+                    ? 'border-slate-700 text-slate-300 hover:bg-slate-800'
+                    : 'border-slate-200 text-slate-600 hover:bg-slate-50'
+                "
+              >
+                Bekor qilish
+              </button>
+              <button
+                @click="deleteSocialLink"
+                class="px-5 py-2.5 text-sm font-medium text-white rounded-xl bg-gradient-to-r from-blue-700 to-indigo-600 focus:ring-2 focus:ring-blue-300"
+              >
+                O'chirish
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
 
-        <!------------------------------------------- Search ------------------------------------------->
+      <div v-show="socialLink">
         <div
-          class="flex flex-col justify-between gap-3 p-4 mb-4 shadow rounded-xl"
-          :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
+          class="p-6 rounded-2xl"
+          :class="
+            navbar.userNav
+              ? 'bg-slate-900 border border-slate-800'
+              : 'bg-white border border-slate-100 shadow-sm'
+          "
         >
-          <!----------------------------------------- User settings ------------------------------------>
-
-          <div :class="generalSettings ? 'relative w-full h-auto' : 'hidden'">
-            <!-- Modal content -->
-            <div
-              class="relative p-4 rounded-xl sm:p-5"
-              :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
-            >
-              <!-- Modal header -->
-              <div
-                class="flex items-center justify-between pb-4 mb-4 border-b rounded-t sm:mb-5"
-              >
-                <h3
-                  class="text-lg font-bold"
-                  :class="navbar.userNav ? 'text-white' : 'text-black'"
-                >
-                  Foydalanuvchi sozlamalari
-                </h3>
-              </div>
-              <!-- Modal body -->
-              <form
-                @submit.prevent="changeInfo(edit.id)"
-                :class="{ darkForm: navbar.userNav }"
-              >
-                <div class="grid gap-4 mb-4 font-medium sm:grid-cols-3">
-                  <div>
-                    <label
-                      for="name"
-                      class="block mb-2 text-sm"
-                      :class="navbar.userNav ? 'text-white' : 'text-black'"
-                      >To'liq ismi (I . F . O)</label
-                    >
-                    <input
-                      v-model="edit.full_name"
-                      type="text"
-                      name="name"
-                      id="name"
-                      class="bg-white border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
-                      placeholder="To'liq ismini kiriting"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label
-                      for="phone"
-                      class="block mb-2 text-sm"
-                      :class="navbar.userNav ? 'text-white' : 'text-black'"
-                      >Telefon raqami</label
-                    >
-                    <input
-                      v-model="edit.phone_number"
-                      type="tel"
-                      name="phone"
-                      id="phone"
-                      class="bg-white border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
-                      placeholder="Telefon raqamini kiriting"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label
-                      for="login"
-                      class="block mb-2 text-sm"
-                      :class="navbar.userNav ? 'text-white' : 'text-black'"
-                      >Login</label
-                    >
-                    <input
-                      v-model="edit.login"
-                      type="text"
-                      name="login"
-                      id="login"
-                      class="bg-white border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
-                      placeholder="login"
-                      required
-                    />
-                  </div>
-                </div>
-                <div
-                  class="flex items-center justify-end w-full pt-5 mt-5 border-t"
-                >
-                  <button
-                    type="submit"
-                    class="btnAdd cursor-pointer text-white inline-flex items-center bg-[#4141eb] focus:ring-4 focus:outline-none focus:ring-blue-500 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
-                  >
-                    O'zgartirish
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-
-          <!----------------------------------------- Password change ---------------------------------->
-
-          <div :class="passwordChange ? 'relative w-full h-auto' : 'hidden'">
-            <!-- Modal content -->
-            <div
-              class="relative p-4 rounded-xl sm:p-5"
-              :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
-            >
-              <!-- Modal header -->
-              <div
-                class="flex items-center justify-between pb-4 mb-4 border-b rounded-t sm:mb-5"
-              >
-                <h3
-                  class="text-lg font-bold"
-                  :class="navbar.userNav ? 'text-white' : 'text-black'"
-                >
-                  Parolni o'zgartirish
-                </h3>
-              </div>
-              <!-- Modal body -->
-              <form
-                @submit.prevent="changePassword(edit.id)"
-                :class="{ darkForm: navbar.userNav }"
-              >
-                <div class="grid gap-4 mb-4 font-medium sm:grid-cols-3">
-                  <div class="relative">
-                    <label
-                      for="password"
-                      class="block mb-2 text-sm"
-                      :class="navbar.userNav ? 'text-white' : 'text-black'"
-                      >Joriy parol</label
-                    >
-                    <input
-                      v-model="edit.password"
-                      :type="showOldPassword ? 'text' : 'password'"
-                      name="password"
-                      id="password"
-                      class="bg-white border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
-                      placeholder="********"
-                      required
-                    />
-                    <button
-                      type="button"
-                      @click="showOldPassword = !showOldPassword"
-                      class="absolute top-[38px] right-3 text-gray-600 hover:text-gray-900 focus:outline-none"
-                      aria-label="Yangi parolni ko‘rsatish"
-                    >
-                      <svg
-                        v-if="!showOldPassword"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        class="w-6 h-6"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                        />
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                        />
-                      </svg>
-
-                      <svg
-                        v-else
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        class="w-6 h-6"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M13.875 18.825A10.05 10.05 0 0112 19c-4.477 0-8.268-2.943-9.542-7a9.958 9.958 0 012.223-3.607m1.923-1.92A9.956 9.956 0 0112 5c4.477 0 8.268 2.943 9.542 7a10.025 10.025 0 01-4.683 5.12M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                        />
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M3 3l18 18"
-                        />
-                      </svg>
-                    </button>
-                  </div>
-                  <div class="relative">
-                    <label
-                      for="new_password"
-                      class="block mb-2 text-sm"
-                      :class="navbar.userNav ? 'text-white' : 'text-black'"
-                      >Yangi parol</label
-                    >
-                    <input
-                      v-model="edit.newPassword"
-                      :type="showNewPassword ? 'text' : 'password'"
-                      name="new_password"
-                      id="new_password"
-                      class="bg-white border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
-                      placeholder="********"
-                      required
-                    />
-                    <button
-                      type="button"
-                      @click="showNewPassword = !showNewPassword"
-                      class="absolute top-[38px] right-3 text-gray-600 hover:text-gray-900 focus:outline-none"
-                      aria-label="Yangi parolni ko‘rsatish"
-                    >
-                      <svg
-                        v-if="!showNewPassword"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        class="w-6 h-6"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                        />
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                        />
-                      </svg>
-
-                      <svg
-                        v-else
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        class="w-6 h-6"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M13.875 18.825A10.05 10.05 0 0112 19c-4.477 0-8.268-2.943-9.542-7a9.958 9.958 0 012.223-3.607m1.923-1.92A9.956 9.956 0 0112 5c4.477 0 8.268 2.943 9.542 7a10.025 10.025 0 01-4.683 5.12M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                        />
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M3 3l18 18"
-                        />
-                      </svg>
-                    </button>
-                  </div>
-                  <div class="relative">
-                    <label
-                      for="confirm_password"
-                      class="block mb-2 text-sm"
-                      :class="navbar.userNav ? 'text-white' : 'text-black'"
-                      >Yangi parolni tasdiqlang</label
-                    >
-                    <input
-                      v-model="edit.confirmNewPassword"
-                      :type="showNew2Password ? 'text' : 'password'"
-                      name="confirm_password"
-                      id="confirm_password"
-                      class="bg-white border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
-                      placeholder="********"
-                      required
-                    />
-                    <button
-                      type="button"
-                      @click="showNew2Password = !showNew2Password"
-                      class="absolute top-[38px] right-3 text-gray-600 hover:text-gray-900 focus:outline-none"
-                      aria-label="Yangi parolni ko‘rsatish"
-                    >
-                      <svg
-                        v-if="!showNew2Password"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        class="w-6 h-6"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                        />
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                        />
-                      </svg>
-
-                      <svg
-                        v-else
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        class="w-6 h-6"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M13.875 18.825A10.05 10.05 0 0112 19c-4.477 0-8.268-2.943-9.542-7a9.958 9.958 0 012.223-3.607m1.923-1.92A9.956 9.956 0 0112 5c4.477 0 8.268 2.943 9.542 7a10.025 10.025 0 01-4.683 5.12M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                        />
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M3 3l18 18"
-                        />
-                      </svg>
-                    </button>
-                  </div>
-                </div>
-                <div
-                  class="flex items-center justify-end w-full pt-5 mt-5 border-t"
-                >
-                  <button
-                    type="submit"
-                    class="btnAdd cursor-pointer text-white inline-flex items-center bg-[#4141eb] focus:ring-4 focus:outline-none focus:ring-blue-500 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
-                  >
-                    O'zgartirish
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-
-          <!----------------------------------------- Social Link -------------------------------------->
-
           <div
+            class="flex items-center justify-between pb-4 mb-4 border-b"
+            :class="navbar.userNav ? 'border-slate-800' : 'border-slate-100'"
+          >
+            <h3
+              class="text-lg font-bold"
+              :class="navbar.userNav ? 'text-white' : 'text-slate-800'"
+            >
+              Ijtimoiy tarmoqlar
+            </h3>
+            <button
+              @click="socialModal"
+              type="button"
+              class="flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-white rounded-xl bg-gradient-to-r from-blue-700 to-indigo-600 focus:ring-2 focus:ring-blue-300"
+            >
+              <span class="hidden sm:block">Link qo'shish</span>
+              <i class="block text-lg sm:hidden bx bxs-user-plus"></i>
+            </button>
+          </div>
+          <div
+            class="overflow-hidden border rounded-2xl"
+            :class="navbar.userNav ? 'border-slate-800' : 'border-slate-100'"
+          >
+            <div class="overflow-x-auto">
+              <table class="w-full text-sm !border-none">
+                <thead
+                  class="text-xs text-white uppercase rounded-xl bg-gradient-to-r from-blue-700 to-indigo-600"
+                >
+                  <tr>
+                    <th scope="col" class="py-3 text-center">Nomi</th>
+                    <th scope="col" class="py-3 text-center">O'chirish</th>
+                  </tr>
+                </thead>
+                <tbody
+                  :class="navbar.userNav ? 'text-white' : 'text-slate-800'"
+                >
+                  <tr
+                    v-for="i in store.social_link"
+                    :key="i.id"
+                    class="border-b last:border-b-0"
+                    :class="
+                      navbar.userNav
+                        ? 'border-slate-800 hover:bg-slate-800/50'
+                        : 'border-slate-100 hover:bg-gray-50'
+                    "
+                  >
+                    <th
+                      scope="row"
+                      class="px-8 py-3 font-medium text-center whitespace-nowrap"
+                    >
+                      {{ i.name }}
+                    </th>
+                    <td class="font-medium text-center whitespace-nowrap">
+                      <button
+                        @click="deleteFunc(i.id)"
+                        class="px-4 py-2 text-red-600 bg-red-100 cursor-pointer rounded-xl focus:ring-2"
+                      >
+                        <i class="bx bxs-trash"></i>
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <div
+                v-show="store.social_link == ''"
+                class="p-20 text-center text-slate-400"
+              >
+                Ijtimoiy tarmoqlar ro'yxati bo'sh
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-------------------------------------------- Payment Method modal -------------------------------------------------->
+      <div
+        v-show="pay.modal"
+        class="fixed inset-0 z-50 flex items-center justify-center w-full h-full bg-black/50"
+      >
+        <div class="relative w-full h-auto max-w-lg p-4">
+          <div
+            class="p-5 rounded-2xl"
             :class="
-              social.modal
-                ? 'absolute overflow-y-auto flex bg-[rgba(0,0,0,0.5)] overflow-x-hidden z-50 justify-center items-center w-full inset-0 h-full'
-                : 'hidden'
+              navbar.userNav
+                ? 'bg-slate-900 border border-slate-800'
+                : 'bg-white border border-slate-100 shadow-lg'
             "
           >
-            <div class="relative w-full h-auto max-w-lg p-4">
-              <div
-                class="relative p-4 shadow rounded-xl sm:p-5"
-                :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
-              >
-                <div
-                  class="flex items-center justify-between pb-4 mb-4 border-b rounded-t sm:mb-5"
-                >
-                  <h3
-                    class="text-lg"
-                    :class="navbar.userNav ? 'text-white' : 'text-black'"
-                  >
-                    Yangi link qo'shish
-                  </h3>
-                  <button
-                    @click="socialModal"
-                    type="button"
-                    class="bg-transparent hover:bg-gray-200 hover rounded-xl text-sm p-1.5 ml-auto inline-flex items-center"
-                    :class="{ 'text-white': navbar.userNav }"
-                  >
-                    <svg
-                      aria-hidden="true"
-                      class="w-5 h-5"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                        clip-rule="evenodd"
-                      ></path>
-                    </svg>
-                  </button>
-                </div>
-
-                <form
-                  @submit.prevent="addSocialLink"
-                  :class="{ darkForm: navbar.userNav }"
-                >
-                  <div class="grid grid-cols-1 gap-4 mb-4 font-medium">
-                    <div>
-                      <label for="socil_name" class="block mb-2 text-sm"
-                        >Nomi</label
-                      >
-                      <input
-                        v-model="social.name"
-                        type="text"
-                        name="socil_name"
-                        id="socil_name"
-                        class="bg-gray-50 border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
-                        placeholder="Nomini kiriting"
-                      />
-                    </div>
-                  </div>
-                  <div
-                    class="flex items-center justify-between w-full pt-5 mt-5 border-t"
-                  >
-                    <button
-                      @click="socialModal"
-                      type="button"
-                      class="border inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
-                    >
-                      Bekor qilish
-                    </button>
-                    <button
-                      type="submit"
-                      class="btnAdd text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
-                    >
-                      Qo'shish
-                    </button>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
-
-          <!-- ----------------------------------------- Delete modal ---------------------------------------------------- -->
-          <div
-            :class="
-              remove.toggle
-                ? 'absolute overflow-y-auto flex bg-[rgba(0,0,0,0.5)] overflow-x-hidden z-50 justify-center items-center w-full inset-0 h-full'
-                : 'hidden'
-            "
-          >
-            <div class="relative p-4 max-w-5xl min-w-[30%] h-auto">
-              <div
-                class="relative p-4 shadow rounded-xl sm:p-5"
-                :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
-              >
-                <div
-                  class="flex items-center justify-between pb-4 mb-4 border-b rounded-t sm:mb-5"
-                >
-                  <h3
-                    class="text-lg"
-                    :class="navbar.userNav ? 'text-white' : 'text-black'"
-                  >
-                    Linkni o'chirib tashlash
-                  </h3>
-                  <button
-                    @click="remove.toggle = false"
-                    type="button"
-                    class="bg-transparent hover:bg-gray-200 hover rounded-xl text-sm p-1.5 ml-auto inline-flex items-center"
-                    :class="navbar.userNav ? 'text-white' : 'text-black'"
-                  >
-                    <svg
-                      aria-hidden="true"
-                      class="w-5 h-5"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                        clip-rule="evenodd"
-                      ></path>
-                    </svg>
-                  </button>
-                </div>
-
-                <div :class="{ darkForm: navbar.userNav }">
-                  <div class="grid grid-cols-1 gap-4 mb-4 font-medium">
-                    <div>
-                      <div></div>
-                      <h1
-                        class="text-2xl"
-                        :class="navbar.userNav ? 'text-white' : 'text-black'"
-                      >
-                        Siz linkni o'chirishni xohlaysizmi?
-                      </h1>
-                    </div>
-                    <div
-                      class="flex items-center justify-between w-full pt-5 mt-5 border-t"
-                    >
-                      <button
-                        @click="remove.toggle = false"
-                        type="button"
-                        class="border cursor-pointer inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
-                      >
-                        Bekor qilish
-                      </button>
-                      <button
-                        @click="deleteSocialLink"
-                        class="btnAdd cursor-pointer text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
-                      >
-                        O'chirish
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- ----------------------------------------- delete modal end ---------------------------------------------------- -->
-
-          <div :class="socialLink ? 'p-4 sm:p-5' : 'hidden'">
             <div
-              class="flex items-center justify-between pb-4 mb-4 border-b rounded-t sm:mb-5"
+              class="flex items-center justify-between pb-4 mb-4 border-b"
+              :class="navbar.userNav ? 'border-slate-800' : 'border-slate-100'"
             >
               <h3
                 class="text-lg font-bold"
-                :class="navbar.userNav ? 'text-white' : 'text-black'"
+                :class="navbar.userNav ? 'text-white' : 'text-slate-800'"
               >
-                Ijtimoiy tarmoqlar
+                Yangi to'lov turini qo'shish
               </h3>
-              <div
-                class="flex flex-col items-stretch justify-end space-y-2 lg:w-auto md:flex-row md:space-y-0 md:items-center md:space-x-3"
+              <button
+                @click="payModal"
+                type="button"
+                class="p-1.5 rounded-xl"
+                :class="
+                  navbar.userNav
+                    ? 'text-slate-400 hover:bg-slate-800'
+                    : 'text-slate-500 hover:bg-slate-100'
+                "
               >
-                <button
-                  @click="socialModal"
-                  id=""
-                  type="button"
-                  class="flex items-center justify-center px-4 text-sm font-medium text-white bg-blue-600 rounded-xl btnAdd max-w-fit whitespace-nowrap hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 sm:py-2"
+                <svg
+                  aria-hidden="true"
+                  class="w-5 h-5"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
                 >
-                  <span class="hidden sm:block">Link qo'shish</span>
-                  <i class="block text-lg sm:hidden bx bxs-user-plus"></i>
-                </button>
-              </div>
+                  <path
+                    fill-rule="evenodd"
+                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                    clip-rule="evenodd"
+                  ></path>
+                </svg>
+              </button>
             </div>
-            <div
-              class="relative overflow-hidden border rounded-xl"
-              :class="
-                navbar.userNav
-                  ? 'bg-slate-900 border-gray-700 text-white'
-                  : 'bg-white'
-              "
-            >
-              <div class="overflow-x-auto">
-                <table class="w-full text-sm text-left">
-                  <thead class="text-xs rounded-xl uppercase bg-[#4141eb]">
-                    <tr>
-                      <th
-                        scope="col"
-                        class="py-3 text-center text-white whitespace-nowrap"
-                      >
-                        Nomi
-                      </th>
-                      <th scope="col" class="py-3 text-center text-white">
-                        O'chirish
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr
-                      v-for="i in store.social_link"
-                      :key="i.id"
-                      class=""
-                      :class="
-                        navbar.userNav
-                          ? 'hover:bg-gray-700'
-                          : 'hover:bg-gray-50'
-                      "
-                    >
-                      <th
-                        scope="row"
-                        class="px-8 py-3 font-medium text-center whitespace-nowrap"
-                      >
-                        <span>{{ i.name }}</span>
-                      </th>
-                      <td class="font-medium text-center whitespace-nowrap">
-                        <i
-                          @click="deleteFunc(i.id)"
-                          class="px-5 py-2 text-red-600 bg-red-300 cursor-pointer rounded-xl bx bxs-trash focus:ring-2"
-                        >
-                        </i>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-                <div
-                  v-show="store.social_link == ''"
-                  class="w-full p-20 text-2xl font-medium text-center max-w-screen"
+            <form @submit.prevent="addPaymentMethod">
+              <div class="mb-5">
+                <label
+                  for="method_name"
+                  class="block mb-2 text-xs"
+                  :class="navbar.userNav ? 'text-slate-500' : 'text-slate-400'"
+                  >Nomi</label
                 >
-                  <h1>Ijtimoiy tarmoqlar ro'yhati bo'sh</h1>
-                </div>
+                <input
+                  v-model="pay.name"
+                  type="text"
+                  name="method_name"
+                  id="method_name"
+                  class="text-sm rounded-xl block w-full p-2.5 border focus:ring-2 focus:ring-blue-300 focus:outline-none"
+                  :class="
+                    navbar.userNav
+                      ? 'bg-slate-800 border-slate-700 text-white placeholder:text-slate-500'
+                      : 'bg-white border-slate-200 text-slate-800'
+                  "
+                  placeholder="Nomini kiriting"
+                />
               </div>
-            </div>
-          </div>
-
-          <!-------------------------------------------- Payment Method --------------------------------------------------------->
-
-          <div
-            :class="
-              pay.modal
-                ? 'absolute overflow-y-auto flex bg-[rgba(0,0,0,0.5)] overflow-x-hidden z-50 justify-center items-center w-full inset-0 h-full'
-                : 'hidden'
-            "
-          >
-            <div class="relative w-full h-auto max-w-lg p-4">
               <div
-                class="relative p-4 shadow rounded-xl sm:p-5"
-                :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
-              >
-                <div
-                  class="flex items-center justify-between pb-4 mb-4 border-b rounded-t sm:mb-5"
-                >
-                  <h3
-                    class="text-lg"
-                    :class="navbar.userNav ? 'text-white' : 'text-black'"
-                  >
-                    Yangi to'lov turini qo'shish
-                  </h3>
-                  <button
-                    @click="payModal"
-                    type="button"
-                    class="bg-transparent hover:bg-gray-200 hover rounded-xl text-sm p-1.5 ml-auto inline-flex items-center"
-                    :class="{ 'text-white': navbar.userNav }"
-                  >
-                    <svg
-                      aria-hidden="true"
-                      class="w-5 h-5"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                        clip-rule="evenodd"
-                      ></path>
-                    </svg>
-                  </button>
-                </div>
-
-                <form
-                  @submit.prevent="addPaymentMethod"
-                  :class="{ darkForm: navbar.userNav }"
-                >
-                  <div class="grid grid-cols-1 gap-4 mb-4 font-medium">
-                    <div>
-                      <label for="method_name" class="block mb-2 text-sm"
-                        >Nomi</label
-                      >
-                      <input
-                        v-model="pay.name"
-                        type="text"
-                        name="method_name"
-                        id="method_name"
-                        class="bg-gray-50 border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
-                        placeholder="Nomini kiriting"
-                      />
-                    </div>
-                  </div>
-                  <div
-                    class="flex items-center justify-between w-full pt-5 mt-5 border-t"
-                  >
-                    <button
-                      @click="payModal"
-                      type="button"
-                      class="border inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
-                    >
-                      Bekor qilish
-                    </button>
-                    <button
-                      type="submit"
-                      class="btnAdd text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
-                    >
-                      Qo'shish
-                    </button>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
-
-          <!-- ----------------------------------------- Delete modal ---------------------------------------------------- -->
-          <div
-            :class="
-              remove.payment
-                ? 'absolute overflow-y-auto flex bg-[rgba(0,0,0,0.5)] overflow-x-hidden z-50 justify-center items-center w-full inset-0 h-full'
-                : 'hidden'
-            "
-          >
-            <div class="relative p-4 max-w-5xl min-w-[30%] h-auto">
-              <div
-                class="relative p-4 shadow rounded-xl sm:p-5"
-                :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
-              >
-                <div
-                  class="flex items-center justify-between pb-4 mb-4 border-b rounded-t sm:mb-5"
-                >
-                  <h3
-                    class="text-lg"
-                    :class="navbar.userNav ? 'text-white' : 'text-black'"
-                  >
-                    To'lov turini o'chirib tashlash
-                  </h3>
-                  <button
-                    @click="remove.payment = false"
-                    type="button"
-                    class="bg-transparent hover:bg-gray-200 hover rounded-xl text-sm p-1.5 ml-auto inline-flex items-center"
-                    :class="navbar.userNav ? 'text-white' : 'text-black'"
-                  >
-                    <svg
-                      aria-hidden="true"
-                      class="w-5 h-5"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                        clip-rule="evenodd"
-                      ></path>
-                    </svg>
-                  </button>
-                </div>
-
-                <div :class="{ darkForm: navbar.userNav }">
-                  <div class="grid grid-cols-1 gap-4 mb-4 font-medium">
-                    <div>
-                      <div></div>
-                      <h1
-                        class="text-2xl"
-                        :class="navbar.userNav ? 'text-white' : 'text-black'"
-                      >
-                        Siz to'lov turini o'chirishni xohlaysizmi?
-                      </h1>
-                    </div>
-                    <div
-                      class="flex items-center justify-between w-full pt-5 mt-5 border-t"
-                    >
-                      <button
-                        @click="remove.payment = false"
-                        type="button"
-                        class="border cursor-pointer inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
-                      >
-                        Bekor qilish
-                      </button>
-                      <button
-                        @click="deletePaymentMethod"
-                        class="btnAdd cursor-pointer text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
-                      >
-                        O'chirish
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- ----------------------------------------- delete modal end ---------------------------------------------------- -->
-
-          <div :class="paymentMethod ? 'p-4 sm:p-5' : 'hidden'">
-            <div
-              class="flex items-center justify-between pb-4 mb-4 border-b rounded-t sm:mb-5"
-            >
-              <h3
-                class="text-lg font-bold"
-                :class="navbar.userNav ? 'text-white' : 'text-black'"
-              >
-                To'lov turlari
-              </h3>
-              <div
-                class="flex flex-col items-stretch justify-end space-y-2 lg:w-auto md:flex-row md:space-y-0 md:items-center md:space-x-3"
+                class="flex items-center justify-between w-full pt-5 border-t"
+                :class="
+                  navbar.userNav ? 'border-slate-800' : 'border-slate-100'
+                "
               >
                 <button
                   @click="payModal"
-                  id=""
                   type="button"
-                  class="flex items-center justify-center px-4 text-sm font-medium text-white bg-blue-600 rounded-xl btnAdd max-w-fit whitespace-nowrap hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 sm:py-2"
+                  class="px-5 py-2.5 text-sm font-medium rounded-xl border"
+                  :class="
+                    navbar.userNav
+                      ? 'border-slate-700 text-slate-300 hover:bg-slate-800'
+                      : 'border-slate-200 text-slate-600 hover:bg-slate-50'
+                  "
                 >
-                  <span class="hidden sm:block">To'lov turi qo'shish</span>
-                  <i class="block text-lg sm:hidden bx bxs-user-plus"></i>
+                  Bekor qilish
+                </button>
+                <button
+                  type="submit"
+                  class="px-5 py-2.5 text-sm font-medium text-white rounded-xl bg-gradient-to-r from-blue-700 to-indigo-600 focus:ring-2 focus:ring-blue-300"
+                >
+                  Qo'shish
                 </button>
               </div>
-            </div>
-            <div
-              class="relative overflow-hidden border rounded-xl"
-              :class="
-                navbar.userNav
-                  ? 'bg-slate-900 border-gray-700 text-white'
-                  : 'bg-white'
-              "
-            >
-              <div class="overflow-x-auto">
-                <table class="w-full text-sm text-left">
-                  <thead class="text-xs rounded-xl uppercase bg-[#4141eb]">
-                    <tr>
-                      <th
-                        scope="col"
-                        class="py-3 text-center text-white whitespace-nowrap"
-                      >
-                        Nomi
-                      </th>
-                      <th scope="col" class="py-3 text-center text-white">
-                        O'chirish
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr
-                      v-for="i in store.payment_method"
-                      :key="i.id"
-                      class=""
-                      :class="
-                        navbar.userNav
-                          ? 'hover:bg-gray-700'
-                          : 'hover:bg-gray-50'
-                      "
-                    >
-                      <th
-                        scope="row"
-                        class="px-8 py-3 font-medium text-center whitespace-nowrap"
-                      >
-                        <span>{{ i.name }}</span>
-                      </th>
-                      <td class="font-medium text-center whitespace-nowrap">
-                        <i
-                          @click="deleteFuncPay(i.id)"
-                          class="px-5 py-2 text-red-600 bg-red-300 cursor-pointer rounded-xl bx bxs-trash focus:ring-2"
-                        >
-                        </i>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-                <div
-                  v-show="store.payment_method == ''"
-                  class="w-full p-20 text-2xl font-medium text-center max-w-screen"
-                >
-                  <h1>To'lov turi ro'yhati bo'sh</h1>
-                </div>
-              </div>
-            </div>
+            </form>
           </div>
+        </div>
+      </div>
 
-          <!-------------------------------------------- Payment Method --------------------------------------------------------->
-
+      <!-- Payment delete modal -->
+      <div
+        v-show="remove.payment"
+        class="fixed inset-0 z-50 flex items-center justify-center w-full h-full bg-black/50"
+      >
+        <div class="relative w-full h-auto max-w-md p-4">
           <div
+            class="p-5 rounded-2xl"
             :class="
-              room.modal
-                ? 'absolute overflow-y-auto flex bg-[rgba(0,0,0,0.5)] overflow-x-hidden z-50 justify-center items-center w-full inset-0 h-full'
-                : 'hidden'
+              navbar.userNav
+                ? 'bg-slate-900 border border-slate-800'
+                : 'bg-white border border-slate-100 shadow-lg'
             "
           >
-            <div class="relative w-full h-auto max-w-lg p-4">
-              <div
-                class="relative p-4 shadow rounded-xl sm:p-5"
-                :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
-              >
-                <div
-                  class="flex items-center justify-between pb-4 mb-4 border-b rounded-t sm:mb-5"
-                >
-                  <h3
-                    class="text-lg"
-                    :class="navbar.userNav ? 'text-white' : 'text-black'"
-                  >
-                    Yangi xona qo'shish
-                  </h3>
-                  <button
-                    @click="roomModal"
-                    type="button"
-                    class="bg-transparent hover:bg-gray-200 hover rounded-xl text-sm p-1.5 ml-auto inline-flex items-center"
-                    :class="{ 'text-white': navbar.userNav }"
-                  >
-                    <svg
-                      aria-hidden="true"
-                      class="w-5 h-5"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                        clip-rule="evenodd"
-                      ></path>
-                    </svg>
-                  </button>
-                </div>
-
-                <form
-                  @submit.prevent="addRoom"
-                  :class="{ darkForm: navbar.userNav }"
-                >
-                  <div class="grid grid-cols-1 gap-4 mb-4 font-medium">
-                    <div>
-                      <label for="method_name" class="block mb-2 text-sm"
-                        >Nomi</label
-                      >
-                      <input
-                        v-model="room.name"
-                        type="text"
-                        name="method_name"
-                        id="method_name"
-                        class="bg-gray-50 border border-gray-300 text-sm rounded-xl focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
-                        placeholder="Nomini kiriting"
-                      />
-                    </div>
-                  </div>
-                  <div
-                    class="flex items-center justify-between w-full pt-5 mt-5 border-t"
-                  >
-                    <button
-                      @click="roomModal"
-                      type="button"
-                      class="border inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
-                    >
-                      Bekor qilish
-                    </button>
-                    <button
-                      type="submit"
-                      class="btnAdd text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
-                    >
-                      Qo'shish
-                    </button>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
-
-          <!-- ----------------------------------------- Delete modal ---------------------------------------------------- -->
-          <div
-            :class="
-              remove.room
-                ? 'absolute overflow-y-auto flex bg-[rgba(0,0,0,0.5)] overflow-x-hidden z-50 justify-center items-center w-full inset-0 h-full'
-                : 'hidden'
-            "
-          >
-            <div class="relative p-4 max-w-5xl min-w-[30%] h-auto">
-              <div
-                class="relative p-4 shadow rounded-xl sm:p-5"
-                :class="navbar.userNav ? 'bg-slate-900' : 'bg-white'"
-              >
-                <div
-                  class="flex items-center justify-between pb-4 mb-4 border-b rounded-t sm:mb-5"
-                >
-                  <h3
-                    class="text-lg"
-                    :class="navbar.userNav ? 'text-white' : 'text-black'"
-                  >
-                    Xonani o'chirib tashlash
-                  </h3>
-                  <button
-                    @click="remove.room = false"
-                    type="button"
-                    class="bg-transparent hover:bg-gray-200 hover rounded-xl text-sm p-1.5 ml-auto inline-flex items-center"
-                    :class="navbar.userNav ? 'text-white' : 'text-black'"
-                  >
-                    <svg
-                      aria-hidden="true"
-                      class="w-5 h-5"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                        clip-rule="evenodd"
-                      ></path>
-                    </svg>
-                  </button>
-                </div>
-
-                <div :class="{ darkForm: navbar.userNav }">
-                  <div class="grid grid-cols-1 gap-4 mb-4 font-medium">
-                    <div>
-                      <div></div>
-                      <h1
-                        class="text-2xl"
-                        :class="navbar.userNav ? 'text-white' : 'text-black'"
-                      >
-                        Siz xonani o'chirishni xohlaysizmi?
-                      </h1>
-                    </div>
-                    <div
-                      class="flex items-center justify-between w-full pt-5 mt-5 border-t"
-                    >
-                      <button
-                        @click="remove.room = false"
-                        type="button"
-                        class="border cursor-pointer inline-flex items-center bg-white hover:bg-red-700 hover:border-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
-                      >
-                        Bekor qilish
-                      </button>
-                      <button
-                        @click="deleteRoom"
-                        class="btnAdd cursor-pointer text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
-                      >
-                        O'chirish
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- ----------------------------------------- delete modal end ---------------------------------------------------- -->
-
-          <div :class="roomChange ? 'p-4 sm:p-5' : 'hidden'">
             <div
-              class="flex items-center justify-between pb-4 mb-4 border-b rounded-t sm:mb-5"
+              class="flex items-center justify-between pb-4 mb-4 border-b"
+              :class="navbar.userNav ? 'border-slate-800' : 'border-slate-100'"
             >
               <h3
                 class="text-lg font-bold"
-                :class="navbar.userNav ? 'text-white' : 'text-black'"
+                :class="navbar.userNav ? 'text-white' : 'text-slate-800'"
               >
-                Xonalar
+                To'lov turini o'chirib tashlash
               </h3>
+              <button
+                @click="remove.payment = false"
+                type="button"
+                class="p-1.5 rounded-xl"
+                :class="
+                  navbar.userNav
+                    ? 'text-slate-400 hover:bg-slate-800'
+                    : 'text-slate-500 hover:bg-slate-100'
+                "
+              >
+                <svg
+                  aria-hidden="true"
+                  class="w-5 h-5"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                    clip-rule="evenodd"
+                  ></path>
+                </svg>
+              </button>
+            </div>
+            <p
+              class="mb-5 text-sm font-medium"
+              :class="navbar.userNav ? 'text-slate-300' : 'text-slate-600'"
+            >
+              Siz to'lov turini o'chirishni xohlaysizmi?
+            </p>
+            <div
+              class="flex items-center justify-between w-full pt-5 border-t"
+              :class="navbar.userNav ? 'border-slate-800' : 'border-slate-100'"
+            >
+              <button
+                @click="remove.payment = false"
+                type="button"
+                class="px-5 py-2.5 text-sm font-medium rounded-xl border"
+                :class="
+                  navbar.userNav
+                    ? 'border-slate-700 text-slate-300 hover:bg-slate-800'
+                    : 'border-slate-200 text-slate-600 hover:bg-slate-50'
+                "
+              >
+                Bekor qilish
+              </button>
+              <button
+                @click="deletePaymentMethod"
+                class="px-5 py-2.5 text-sm font-medium text-white rounded-xl bg-gradient-to-r from-blue-700 to-indigo-600 focus:ring-2 focus:ring-blue-300"
+              >
+                O'chirish
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div v-show="paymentMethod">
+        <div
+          class="p-6 rounded-2xl"
+          :class="
+            navbar.userNav
+              ? 'bg-slate-900 border border-slate-800'
+              : 'bg-white border border-slate-100 shadow-sm'
+          "
+        >
+          <div
+            class="flex items-center justify-between pb-4 mb-4 border-b"
+            :class="navbar.userNav ? 'border-slate-800' : 'border-slate-100'"
+          >
+            <h3
+              class="text-lg font-bold"
+              :class="navbar.userNav ? 'text-white' : 'text-slate-800'"
+            >
+              To'lov turlari
+            </h3>
+            <button
+              @click="payModal"
+              type="button"
+              class="flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-white rounded-xl bg-gradient-to-r from-blue-700 to-indigo-600 focus:ring-2 focus:ring-blue-300"
+            >
+              <span class="hidden sm:block">To'lov turi qo'shish</span>
+              <i class="block text-lg sm:hidden bx bxs-user-plus"></i>
+            </button>
+          </div>
+          <div
+            class="overflow-hidden border rounded-2xl"
+            :class="navbar.userNav ? 'border-slate-800' : 'border-slate-100'"
+          >
+            <div class="overflow-x-auto">
+              <table class="w-full text-sm !border-none">
+                <thead
+                  class="text-xs text-white uppercase rounded-xl bg-gradient-to-r from-blue-700 to-indigo-600"
+                >
+                  <tr>
+                    <th scope="col" class="py-3 text-center">Nomi</th>
+                    <th scope="col" class="py-3 text-center">O'chirish</th>
+                  </tr>
+                </thead>
+                <tbody
+                  :class="navbar.userNav ? 'text-white' : 'text-slate-800'"
+                >
+                  <tr
+                    v-for="i in store.payment_method"
+                    :key="i.id"
+                    class="border-b last:border-b-0"
+                    :class="
+                      navbar.userNav
+                        ? 'border-slate-800 hover:bg-slate-800/50'
+                        : 'border-slate-100 hover:bg-gray-50'
+                    "
+                  >
+                    <th
+                      scope="row"
+                      class="px-8 py-3 font-medium text-center whitespace-nowrap"
+                    >
+                      {{ i.name }}
+                    </th>
+                    <td class="font-medium text-center whitespace-nowrap">
+                      <button
+                        @click="deleteFuncPay(i.id)"
+                        class="px-4 py-2 text-red-600 bg-red-100 cursor-pointer rounded-xl focus:ring-2"
+                      >
+                        <i class="bx bxs-trash"></i>
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
               <div
-                class="flex flex-col items-stretch justify-end space-y-2 lg:w-auto md:flex-row md:space-y-0 md:items-center md:space-x-3"
+                v-show="store.payment_method == ''"
+                class="p-20 text-center text-slate-400"
+              >
+                To'lov turi ro'yxati bo'sh
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-------------------------------------------- Room modal -------------------------------------------------->
+      <div
+        v-show="room.modal"
+        class="fixed inset-0 z-50 flex items-center justify-center w-full h-full bg-black/50"
+      >
+        <div class="relative w-full h-auto max-w-lg p-4">
+          <div
+            class="p-5 rounded-2xl"
+            :class="
+              navbar.userNav
+                ? 'bg-slate-900 border border-slate-800'
+                : 'bg-white border border-slate-100 shadow-lg'
+            "
+          >
+            <div
+              class="flex items-center justify-between pb-4 mb-4 border-b"
+              :class="navbar.userNav ? 'border-slate-800' : 'border-slate-100'"
+            >
+              <h3
+                class="text-lg font-bold"
+                :class="navbar.userNav ? 'text-white' : 'text-slate-800'"
+              >
+                Yangi xona qo'shish
+              </h3>
+              <button
+                @click="roomModal"
+                type="button"
+                class="p-1.5 rounded-xl"
+                :class="
+                  navbar.userNav
+                    ? 'text-slate-400 hover:bg-slate-800'
+                    : 'text-slate-500 hover:bg-slate-100'
+                "
+              >
+                <svg
+                  aria-hidden="true"
+                  class="w-5 h-5"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                    clip-rule="evenodd"
+                  ></path>
+                </svg>
+              </button>
+            </div>
+            <form @submit.prevent="addRoom">
+              <div class="mb-5">
+                <label
+                  for="room_name"
+                  class="block mb-2 text-xs"
+                  :class="navbar.userNav ? 'text-slate-500' : 'text-slate-400'"
+                  >Nomi</label
+                >
+                <input
+                  v-model="room.name"
+                  type="text"
+                  name="room_name"
+                  id="room_name"
+                  class="text-sm rounded-xl block w-full p-2.5 border focus:ring-2 focus:ring-blue-300 focus:outline-none"
+                  :class="
+                    navbar.userNav
+                      ? 'bg-slate-800 border-slate-700 text-white placeholder:text-slate-500'
+                      : 'bg-white border-slate-200 text-slate-800'
+                  "
+                  placeholder="Nomini kiriting"
+                />
+              </div>
+              <div
+                class="flex items-center justify-between w-full pt-5 border-t"
+                :class="
+                  navbar.userNav ? 'border-slate-800' : 'border-slate-100'
+                "
               >
                 <button
                   @click="roomModal"
-                  id=""
                   type="button"
-                  class="flex items-center justify-center px-4 text-sm font-medium text-white bg-blue-600 rounded-xl btnAdd max-w-fit whitespace-nowrap hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 sm:py-2"
+                  class="px-5 py-2.5 text-sm font-medium rounded-xl border"
+                  :class="
+                    navbar.userNav
+                      ? 'border-slate-700 text-slate-300 hover:bg-slate-800'
+                      : 'border-slate-200 text-slate-600 hover:bg-slate-50'
+                  "
                 >
-                  <span class="hidden sm:block">Xona qo'shish</span>
-                  <i class="block text-lg sm:hidden bx bxs-user-plus"></i>
+                  Bekor qilish
+                </button>
+                <button
+                  type="submit"
+                  class="px-5 py-2.5 text-sm font-medium text-white rounded-xl bg-gradient-to-r from-blue-700 to-indigo-600 focus:ring-2 focus:ring-blue-300"
+                >
+                  Qo'shish
                 </button>
               </div>
-            </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Room delete modal -->
+      <div
+        v-show="remove.room"
+        class="fixed inset-0 z-50 flex items-center justify-center w-full h-full bg-black/50"
+      >
+        <div class="relative w-full h-auto max-w-md p-4">
+          <div
+            class="p-5 rounded-2xl"
+            :class="
+              navbar.userNav
+                ? 'bg-slate-900 border border-slate-800'
+                : 'bg-white border border-slate-100 shadow-lg'
+            "
+          >
             <div
-              class="relative overflow-hidden border rounded-xl"
-              :class="
-                navbar.userNav
-                  ? 'bg-slate-900 border-gray-700 text-white'
-                  : 'bg-white'
-              "
+              class="flex items-center justify-between pb-4 mb-4 border-b"
+              :class="navbar.userNav ? 'border-slate-800' : 'border-slate-100'"
             >
-              <div class="overflow-x-auto">
-                <table class="w-full text-sm text-left">
-                  <thead class="text-xs rounded-xl uppercase bg-[#4141eb]">
-                    <tr>
-                      <th
-                        scope="col"
-                        class="py-3 text-center text-white whitespace-nowrap"
-                      >
-                        Nomi
-                      </th>
-                      <th scope="col" class="py-3 text-center text-white">
-                        O'chirish
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr
-                      v-for="i in store.room"
-                      :key="i.id"
-                      class=""
-                      :class="
-                        navbar.userNav
-                          ? 'hover:bg-gray-700'
-                          : 'hover:bg-gray-50'
-                      "
-                    >
-                      <th
-                        scope="row"
-                        class="px-8 py-3 font-medium text-center whitespace-nowrap"
-                      >
-                        <span>{{ i.name }}</span>
-                      </th>
-                      <td class="font-medium text-center whitespace-nowrap">
-                        <i
-                          @click="deleteFuncRoom(i.id)"
-                          class="px-5 py-2 text-red-600 bg-red-300 cursor-pointer rounded-xl bx bxs-trash focus:ring-2"
-                        >
-                        </i>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-                <div
-                  v-show="store.room == ''"
-                  class="w-full p-20 text-2xl font-medium text-center max-w-screen"
+              <h3
+                class="text-lg font-bold"
+                :class="navbar.userNav ? 'text-white' : 'text-slate-800'"
+              >
+                Xonani o'chirib tashlash
+              </h3>
+              <button
+                @click="remove.room = false"
+                type="button"
+                class="p-1.5 rounded-xl"
+                :class="
+                  navbar.userNav
+                    ? 'text-slate-400 hover:bg-slate-800'
+                    : 'text-slate-500 hover:bg-slate-100'
+                "
+              >
+                <svg
+                  aria-hidden="true"
+                  class="w-5 h-5"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
                 >
-                  <h1>Xona ro'yhati bo'sh</h1>
-                </div>
+                  <path
+                    fill-rule="evenodd"
+                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                    clip-rule="evenodd"
+                  ></path>
+                </svg>
+              </button>
+            </div>
+            <p
+              class="mb-5 text-sm font-medium"
+              :class="navbar.userNav ? 'text-slate-300' : 'text-slate-600'"
+            >
+              Siz xonani o'chirishni xohlaysizmi?
+            </p>
+            <div
+              class="flex items-center justify-between w-full pt-5 border-t"
+              :class="navbar.userNav ? 'border-slate-800' : 'border-slate-100'"
+            >
+              <button
+                @click="remove.room = false"
+                type="button"
+                class="px-5 py-2.5 text-sm font-medium rounded-xl border"
+                :class="
+                  navbar.userNav
+                    ? 'border-slate-700 text-slate-300 hover:bg-slate-800'
+                    : 'border-slate-200 text-slate-600 hover:bg-slate-50'
+                "
+              >
+                Bekor qilish
+              </button>
+              <button
+                @click="deleteRoom"
+                class="px-5 py-2.5 text-sm font-medium text-white rounded-xl bg-gradient-to-r from-blue-700 to-indigo-600 focus:ring-2 focus:ring-blue-300"
+              >
+                O'chirish
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div v-show="roomChange">
+        <div
+          class="p-6 rounded-2xl"
+          :class="
+            navbar.userNav
+              ? 'bg-slate-900 border border-slate-800'
+              : 'bg-white border border-slate-100 shadow-sm'
+          "
+        >
+          <div
+            class="flex items-center justify-between pb-4 mb-4 border-b"
+            :class="navbar.userNav ? 'border-slate-800' : 'border-slate-100'"
+          >
+            <h3
+              class="text-lg font-bold"
+              :class="navbar.userNav ? 'text-white' : 'text-slate-800'"
+            >
+              Xonalar
+            </h3>
+            <button
+              @click="roomModal"
+              type="button"
+              class="flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-white rounded-xl bg-gradient-to-r from-blue-700 to-indigo-600 focus:ring-2 focus:ring-blue-300"
+            >
+              <span class="hidden sm:block">Xona qo'shish</span>
+              <i class="block text-lg sm:hidden bx bxs-user-plus"></i>
+            </button>
+          </div>
+          <div
+            class="overflow-hidden border rounded-2xl"
+            :class="navbar.userNav ? 'border-slate-800' : 'border-slate-100'"
+          >
+            <div class="overflow-x-auto">
+              <table class="w-full text-sm !border-none">
+                <thead
+                  class="text-xs text-white uppercase rounded-xl bg-gradient-to-r from-blue-700 to-indigo-600"
+                >
+                  <tr>
+                    <th scope="col" class="py-3 text-center">Nomi</th>
+                    <th scope="col" class="py-3 text-center">O'chirish</th>
+                  </tr>
+                </thead>
+                <tbody
+                  :class="navbar.userNav ? 'text-white' : 'text-slate-800'"
+                >
+                  <tr
+                    v-for="i in store.room"
+                    :key="i.id"
+                    class="border-b last:border-b-0"
+                    :class="
+                      navbar.userNav
+                        ? 'border-slate-800 hover:bg-slate-800/50'
+                        : 'border-slate-100 hover:bg-gray-50'
+                    "
+                  >
+                    <th
+                      scope="row"
+                      class="px-8 py-3 font-medium text-center whitespace-nowrap"
+                    >
+                      {{ i.name }}
+                    </th>
+                    <td class="font-medium text-center whitespace-nowrap">
+                      <button
+                        @click="deleteFuncRoom(i.id)"
+                        class="px-4 py-2 text-red-600 bg-red-100 cursor-pointer rounded-xl focus:ring-2"
+                      >
+                        <i class="bx bxs-trash"></i>
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <div
+                v-show="store.room == ''"
+                class="p-20 text-center text-slate-400"
+              >
+                Xona ro'yxati bo'sh
               </div>
             </div>
           </div>
@@ -1178,7 +1282,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref, reactive } from "vue";
+import { onMounted, ref, reactive, computed } from "vue";
 import { useNavStore } from "../../stores/toggle";
 import { useNotificationStore } from "../../stores/notification";
 import axios from "@/services/axios";
@@ -1187,6 +1291,10 @@ import { Placeholder2 } from "../../components";
 const notification = useNotificationStore();
 const navbar = useNavStore();
 const userRole = localStorage.getItem("role");
+
+const tabCount = computed(() =>
+  userRole == "_ad_sch_" || userRole == "_ow_sch_" ? 5 : 2,
+);
 
 const showOldPassword = ref(false);
 const showNewPassword = ref(false);
@@ -1576,7 +1684,7 @@ const addRoom = () => {
   const data = {
     school_id: Number(localStorage.getItem("school_id")),
     name: room.name,
-    status: 'success',
+    status: "success",
   };
   axios
     .post(`/v1/room`, data, {
@@ -1598,14 +1706,11 @@ const addRoom = () => {
 
 const deleteRoom = () => {
   axios
-    .delete(
-      `/v1/room/${remove.id}`,
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
+    .delete(`/v1/room/${remove.id}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
-    )
+    })
     .then((res) => {
       notification.success("Xona o'chirildi!");
       remove.room = false;
@@ -1625,18 +1730,3 @@ onMounted(() => {
   getRoom();
 });
 </script>
-
-<style lang="scss" scoped>
-.btnAdd {
-  background-image: linear-gradient(to right, white -450%, #4141eb);
-  color: white;
-}
-
-.darkForm {
-  label {
-    color: white;
-  }
-}
-
-// #056674
-</style>
