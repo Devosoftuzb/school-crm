@@ -1224,8 +1224,11 @@ const searchName = (name) => {
         : `/v1/student/search-teacher/${schoolId.value}/${userId.value}/${name}`;
 
       store.studentData = await fetchData(endpoint);
-      console.log(store.studentData);
+      store.error = false;
+      store.loaderTime = false;
     } catch {
+      store.error = true;
+      store.loaderTime = false;// <-- bu yerda ham kerak
       store.searchLamp = false;
       getPageStudent(store.pagination);
     }
