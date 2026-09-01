@@ -87,7 +87,28 @@
                   required
                 />
               </div>
-              <div class="w-[206%]">
+              <div>
+                <label
+                  for="subject"
+                  class="block mb-2 text-sm"
+                  :class="navbar.userNav ? 'text-white' : 'text-black'"
+                  >Darajani tanlang</label
+                >
+                <select
+                  v-model="form.level"
+                  id="subject"
+                  class="z-10 block w-full p-2 border border-gray-300 rounded-lg bg-gray-50 text-md focus:ring-blue-500 focus:border-blue-500"
+                  required
+                >
+                  <option value="" disabled selected>Darajani tanlang</option>
+                  <option value="BEGINNER">BEGINNER</option>
+                  <option value="ELEMENTARY">ELEMENTARY</option>
+                  <option value="PRE INTERMEDIATE">PRE INTERMEDIATE</option>
+                  <option value="INTERMEDIATE">INTERMEDIATE</option>
+                  <option value="IELTS">IELTS</option>
+                </select>
+              </div>
+              <div>
                 <label
                   for="date"
                   class="block mb-2 text-sm"
@@ -103,7 +124,6 @@
                   required
                 />
               </div>
-              <div></div>
               <div>
                 <label
                   for="start_time"
@@ -140,7 +160,26 @@
                   required
                 />
               </div>
-              <div class="w-[206%]">
+              <div>
+                <label
+                  for="subject"
+                  class="block mb-2 text-sm"
+                  :class="navbar.userNav ? 'text-white' : 'text-black'"
+                  >Xona tanlang</label
+                >
+                <select
+                  v-model="form.room_id"
+                  id="subject"
+                  class="z-10 block w-full p-2 border border-gray-300 rounded-xl bg-gray-50 text-md focus:ring-blue-500 focus:border-blue-500"
+                  required
+                >
+                  <option value="" disabled selected>Xona tanlang</option>
+                  <option v-for="i in store.room" :key="i.id" :value="i.id">
+                    {{ i.name }}
+                  </option>
+                </select>
+              </div>
+              <div>
                 <label
                   for="subject"
                   class="block mb-2 text-sm"
@@ -159,7 +198,6 @@
                   </option>
                 </select>
               </div>
-              <div></div>
               <div class="w-[206%]">
                 <label
                   for="teacher"
@@ -260,7 +298,7 @@
             :class="{ darkForm: navbar.userNav }"
           >
             <div class="grid grid-cols-2 gap-4 mb-4 font-medium">
-              <div>
+              <div class="w-[205%]">
                 <label
                   for="name"
                   class="block mb-2 text-sm"
@@ -277,6 +315,7 @@
                   required
                 />
               </div>
+              <div></div>
               <div>
                 <label
                   for="price"
@@ -294,7 +333,7 @@
                   required
                 />
               </div>
-              <div class="w-[206%]">
+              <div>
                 <label
                   for="date"
                   class="block mb-2 text-sm"
@@ -310,7 +349,6 @@
                   required
                 />
               </div>
-              <div></div>
               <div>
                 <label
                   for="start_time"
@@ -346,6 +384,46 @@
                   placeholder="Tugash vaqti"
                   required
                 />
+              </div>
+              <div>
+                <label
+                  for="subject"
+                  class="block mb-2 text-sm"
+                  :class="navbar.userNav ? 'text-white' : 'text-black'"
+                  >Darajani tanlang</label
+                >
+                <select
+                  v-model="edit.level"
+                  id="subject"
+                  class="z-10 block w-full p-2 border border-gray-300 rounded-lg bg-gray-50 text-md focus:ring-blue-500 focus:border-blue-500"
+                  required
+                >
+                  <option value="" disabled selected>Darajani tanlang</option>
+                  <option value="BEGINNER">BEGINNER</option>
+                  <option value="ELEMENTARY">ELEMENTARY</option>
+                  <option value="PRE INTERMEDIATE">PRE INTERMEDIATE</option>
+                  <option value="INTERMEDIATE">INTERMEDIATE</option>
+                  <option value="IELTS">IELTS</option>
+                </select>
+              </div>
+              <div>
+                <label
+                  for="subject"
+                  class="block mb-2 text-sm"
+                  :class="navbar.userNav ? 'text-white' : 'text-black'"
+                  >Xona tanlang</label
+                >
+                <select
+                  v-model="edit.room_id"
+                  id="subject"
+                  class="z-10 block w-full p-2 border border-gray-300 rounded-xl bg-gray-50 text-md focus:ring-blue-500 focus:border-blue-500"
+                  required
+                >
+                  <option value="" disabled selected>Xona tanlang</option>
+                  <option v-for="i in store.room" :key="i.id" :value="i.id">
+                    {{ i.name }}
+                  </option>
+                </select>
               </div>
               <div
                 class="w-[206%] flex items-center justify-between border-t pt-5 mt-5"
@@ -799,6 +877,7 @@
 
     <section class="pt-4" :class="{ 'text-white': navbar.userNav }">
       <!------------------------------------------- Placeholder ------------------------------------------->
+
       <div v-if="store.loaderTime">
         <Placeholder2 />
       </div>
@@ -876,6 +955,7 @@
                   <th scope="col" class="py-3 text-center">Fani</th>
                   <th scope="col" class="py-3 text-center">O'qituvchilari</th>
                   <th scope="col" class="py-3 text-center">Narxi</th>
+                  <th scope="col" class="py-3 text-center">Darajasi</th>
                   <th scope="col" class="py-3 text-center">
                     Boshlanish sanasi
                   </th>
@@ -939,6 +1019,13 @@
                   >
                     <p class="bg-red-100 rounded-[5px] p-1">
                       {{ Number(i.price).toLocaleString("uz-UZ") }} so'm
+                    </p>
+                  </td>
+                  <td
+                    class="px-8 py-4 font-medium text-center text-green-800 whitespace-nowrap"
+                  >
+                    <p class="bg-green-100 rounded-[5px] p-1">
+                      {{ i.level || "No'malum" }}
                     </p>
                   </td>
                   <td
@@ -1080,6 +1167,7 @@ const store = reactive({
   pagination: 1,
   subject: [{ name: "Fan yaratilmagan" }],
   employee: [{ name: "O'qituvchi yaratilmagan" }],
+  room: [{ name: "Xona yaratilmagan" }],
   error: false,
   filter: "",
   guard: userRole == "_ow_sch_" || userRole == "_ad_sch_",
@@ -1100,6 +1188,8 @@ const form = reactive({
   end_time: "",
   subject: "",
   employee: "",
+  level: "",
+  room_id: "",
 });
 
 const edit = reactive({
@@ -1112,6 +1202,7 @@ const edit = reactive({
   room_id: "",
   subject: "",
   employee: "",
+  level: "",
   toggle: false,
 });
 
@@ -1135,7 +1226,7 @@ const remove = reactive({
 });
 
 const handleError = (
-  message = "Xatolik! Nimadir noto'g'ri. Internetni tekshirib qaytadan urinib ko'ring!"
+  message = "Xatolik! Nimadir noto'g'ri. Internetni tekshirib qaytadan urinib ko'ring!",
 ) => {
   notification.warning(message);
 };
@@ -1157,6 +1248,7 @@ function enterSlug(id, name) {
 const toggleModal = () => {
   getSubject();
   getEmployee();
+  getRoom();
   modal.value = !modal.value;
   Object.assign(form, resetFormData());
 };
@@ -1169,6 +1261,7 @@ const cancelFunc = () => {
 const cancelFunc1 = () => {
   Object.assign(edit, {
     ...resetFormData(),
+
     toggle: false,
   });
 };
@@ -1186,7 +1279,7 @@ const createSearchFilter = (searchObj, data, key) => {
 
   const filterLower = searchObj.filter.toLowerCase();
   searchObj.searchList = data.filter((i) =>
-    i[key].toLowerCase().includes(filterLower)
+    i[key].toLowerCase().includes(filterLower),
   );
 };
 
@@ -1228,7 +1321,7 @@ const searchName = (name) => {
     try {
       const data = await axios.get(
         `/v1/group/search/${schoolId.value}/${name}`,
-        { headers: authHeaders.value }
+        { headers: authHeaders.value },
       );
       store.groupData = data.data;
     } catch {
@@ -1266,6 +1359,7 @@ const getOneGroup = async (id) => {
 
     Object.assign(edit, {
       name: res.data.name,
+      level: res.data.level,
       start_date: res.data.start_date,
       price: res.data.price,
       start_time: res.data.start_time,
@@ -1274,6 +1368,7 @@ const getOneGroup = async (id) => {
       room_id: res.data.room_id,
       toggle: true,
     });
+    getRoom();
   } catch (error) {
     console.log(error);
     handleError();
@@ -1284,9 +1379,10 @@ const createGroup = async () => {
   const data = {
     school_id: Number(schoolId.value),
     name: form.name,
+    level: form.level,
     start_date: form.start_date,
     price: String(form.price),
-    room_id: 1,
+    room_id: form.room_id,
     start_time: form.start_time,
     end_time: form.end_time,
     subject_id: form.subject,
@@ -1308,6 +1404,7 @@ const editGroup = async () => {
   const data = {
     school_id: Number(schoolId.value),
     name: edit.name,
+    level: edit.level,
     start_date: edit.start_date,
     price: String(edit.price),
     start_time: edit.start_time,
@@ -1337,6 +1434,19 @@ const deleteGroup = async () => {
     remove.toggle = false;
   } catch (error) {
     handleError();
+  }
+};
+
+const getRoom = async () => {
+  try {
+    const res = await axios.get(`/v1/room/all/${schoolId.value}`, {
+      headers: authHeaders.value,
+    });
+    store.room = res.data || [{ name: "Xona yaratilmagan" }];
+  } catch (error) {
+    store.room = error.response?.data?.message || [
+      { name: "Xona yaratilmagan" },
+    ];
   }
 };
 

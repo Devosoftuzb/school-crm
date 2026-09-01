@@ -25,6 +25,7 @@
             required
           />
         </div>
+
         <div class="relative text-white">
           <label for="password" class="block mb-2 font-semibold">Parol</label>
           <input

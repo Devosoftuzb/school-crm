@@ -89,7 +89,7 @@
           : 'hidden'
       "
     >
-      <div class="relative p-4 max-w-xl min-w-[30%] h-auto">
+      <div class="relative w-full h-auto max-w-lg p-4">
         <!-- Modal content -->
         <div
           class="relative p-4 shadow rounded-xl sm:p-5"
@@ -304,7 +304,7 @@
                     class="px-8 py-4 font-medium text-center text-blue-800 whitespace-nowrap"
                   >
                     <p class="bg-blue-100 rounded-[5px] p-1">
-                      {{ i.result }}
+                      {{ i.overall_result }}
                     </p>
                   </td>
                   <td

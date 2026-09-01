@@ -23,6 +23,7 @@ import StudentsArchive from "./Students/Archive.vue";
 import Finance from "./Finance/Finance.vue";
 import School from "./School/School.vue";
 import Owner from "./Owner/Owner.vue";
+import Bot from "./Bot/Bot.vue";
 
 export {
   HomeView,
@@ -50,4 +51,5 @@ export {
   Finance,
   School,
   Owner,
+  Bot,
 };

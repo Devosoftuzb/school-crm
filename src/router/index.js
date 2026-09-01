@@ -25,6 +25,7 @@ import {
   Finance,
   School,
   Owner,
+  Bot
 } from "../views";
 
 const routes = [
@@ -34,14 +35,6 @@ const routes = [
     component: HomeView,
     meta: {
       roles: ["_sp_am_", "_ow_sch_", "_ad_sch_", "_tch_sch_"],
-      schools: [
-        "dev_school",
-        "it_park",
-        "business_club",
-        "gulistan_academy",
-        "hikorean",
-        "academic",
-      ],
       title: "Home",
     },
     children: [
@@ -64,14 +57,6 @@ const routes = [
         component: Dashboard,
         meta: {
           roles: ["_ow_sch_", "_ad_sch_", "_tch_sch_"],
-          schools: [
-            "dev_school",
-            "it_park",
-            "business_club",
-            "gulistan_academy",
-            "hikorean",
-            "academic",
-          ],
           title: "Asosiy",
         },
       },
@@ -81,14 +66,6 @@ const routes = [
         component: Teachers,
         meta: {
           roles: ["_ow_sch_", "_ad_sch_"],
-          schools: [
-            "dev_school",
-            "it_park",
-            "business_club",
-            "gulistan_academy",
-            "hikorean",
-            "academic",
-          ],
           title: "Xodimlar",
         },
       },
@@ -98,14 +75,6 @@ const routes = [
         component: SlugTeachers,
         meta: {
           roles: ["_ow_sch_", "_ad_sch_"],
-          schools: [
-            "dev_school",
-            "it_park",
-            "business_club",
-            "gulistan_academy",
-            "hikorean",
-            "academic",
-          ],
           title: "Xodim Sahifasi",
         },
       },
@@ -115,14 +84,6 @@ const routes = [
         component: Students,
         meta: {
           roles: ["_ad_sch_", "_tch_sch_"],
-          schools: [
-            "dev_school",
-            "it_park",
-            "business_club",
-            "gulistan_academy",
-            "hikorean",
-            "academic",
-          ],
           title: "O'quvchilar",
         },
       },
@@ -132,14 +93,6 @@ const routes = [
         component: StudentsArchive,
         meta: {
           roles: ["_ad_sch_", "_tch_sch_"],
-          schools: [
-            "dev_school",
-            "it_park",
-            "business_club",
-            "gulistan_academy",
-            "hikorean",
-            "academic",
-          ],
           title: "Arxiv o'quvchilar",
         },
       },
@@ -149,14 +102,6 @@ const routes = [
         component: SlugStudent,
         meta: {
           roles: ["_ad_sch_", "_tch_sch_"],
-          schools: [
-            "dev_school",
-            "it_park",
-            "business_club",
-            "gulistan_academy",
-            "hikorean",
-            "academic",
-          ],
           title: "O'quvchi Sahifasi",
         },
       },
@@ -166,14 +111,6 @@ const routes = [
         component: Customer,
         meta: {
           roles: ["_ad_sch_"],
-          schools: [
-            "dev_school",
-            "it_park",
-            "business_club",
-            "gulistan_academy",
-            "hikorean",
-            "academic",
-          ],
           title: "Mijozlar",
         },
       },
@@ -183,14 +120,6 @@ const routes = [
         component: Tests,
         meta: {
           roles: ["_ad_sch_"],
-          schools: [
-            "dev_school",
-            "it_park",
-            "business_club",
-            "gulistan_academy",
-            "hikorean",
-            "academic",
-          ],
           title: "Testlar",
         },
       },
@@ -200,14 +129,6 @@ const routes = [
         component: Subjects,
         meta: {
           roles: ["_ad_sch_"],
-          schools: [
-            "dev_school",
-            "it_park",
-            "business_club",
-            "gulistan_academy",
-            "hikorean",
-            "academic",
-          ],
           title: "Fanlar",
         },
       },
@@ -217,14 +138,6 @@ const routes = [
         component: Payment,
         meta: {
           roles: ["_ad_sch_"],
-          schools: [
-            "dev_school",
-            "it_park",
-            "business_club",
-            "gulistan_academy",
-            "hikorean",
-            "academic",
-          ],
           title: "To'lovlar",
         },
       },
@@ -234,14 +147,6 @@ const routes = [
         component: Attendance,
         meta: {
           roles: ["_ad_sch_", "_tch_sch_"],
-          schools: [
-            "dev_school",
-            "it_park",
-            "business_club",
-            "gulistan_academy",
-            "hikorean",
-            "academic",
-          ],
           title: "Davomat",
         },
       },
@@ -251,14 +156,6 @@ const routes = [
         component: Sms,
         meta: {
           roles: ["_ad_sch_"],
-          schools: [
-            "dev_school",
-            "it_park",
-            "business_club",
-            "gulistan_academy",
-            "hikorean",
-            "academic",
-          ],
           title: "SMS",
         },
       },
@@ -268,14 +165,6 @@ const routes = [
         component: Finance,
         meta: {
           roles: ["_ad_sch_", "_ow_sch_", "_tch_sch_"],
-          schools: [
-            "dev_school",
-            "it_park",
-            "business_club",
-            "gulistan_academy",
-            "hikorean",
-            "academic",
-          ],
           title: "Moliya",
         },
       },
@@ -285,14 +174,6 @@ const routes = [
         component: Results,
         meta: {
           roles: ["_ad_sch_"],
-          schools: [
-            "dev_school",
-            "it_park",
-            "business_club",
-            "gulistan_academy",
-            "hikorean",
-            "academic",
-          ],
           title: "Natijalar",
         },
       },
@@ -302,14 +183,6 @@ const routes = [
         component: SlugResults,
         meta: {
           roles: ["_ad_sch_"],
-          schools: [
-            "dev_school",
-            "it_park",
-            "business_club",
-            "gulistan_academy",
-            "hikorean",
-            "academic",
-          ],
           title: "Natijalar Sahifasi",
         },
       },
@@ -319,14 +192,6 @@ const routes = [
         component: Groups,
         meta: {
           roles: ["_ad_sch_", "_tch_sch_"],
-          schools: [
-            "dev_school",
-            "it_park",
-            "business_club",
-            "gulistan_academy",
-            "hikorean",
-            "academic",
-          ],
           title: "Guruhlar",
         },
       },
@@ -336,14 +201,6 @@ const routes = [
         component: SlugGroups,
         meta: {
           roles: ["_ad_sch_", "_tch_sch_"],
-          schools: [
-            "dev_school",
-            "it_park",
-            "business_club",
-            "gulistan_academy",
-            "hikorean",
-            "academic",
-          ],
           title: "Guruh Sahifasi",
         },
       },
@@ -353,14 +210,6 @@ const routes = [
         component: SlugTests,
         meta: {
           roles: ["_ad_sch_"],
-          schools: [
-            "dev_school",
-            "it_park",
-            "business_club",
-            "gulistan_academy",
-            "hikorean",
-            "academic",
-          ],
           title: "Savollar Sahifasi",
         },
       },
@@ -383,19 +232,20 @@ const routes = [
         },
       },
       {
+        path: "/bot",
+        name: "Telegram bot",
+        component: Bot,
+        meta: {
+          roles: ["_sp_am_", "_ow_sch_", "_ad_sch_", "_tch_sch_"],
+          title: "Telegram bot",
+        },
+      },
+      {
         path: "/settings",
         name: "settings",
         component: Settings,
         meta: {
           roles: ["_sp_am_", "_ow_sch_", "_ad_sch_", "_tch_sch_"],
-          schools: [
-            "dev_school",
-            "it_park",
-            "business_club",
-            "gulistan_academy",
-            "hikorean",
-            "academic",
-          ],
           title: "Sozlamalar",
         },
       },
@@ -420,6 +270,7 @@ const router = createRouter({
   routes,
 });
 
+// Title update
 router.afterEach((to) => {
   const defaultTitle = "Devosfot";
   document.title = to.meta.title
@@ -427,6 +278,7 @@ router.afterEach((to) => {
     : defaultTitle;
 });
 
+// Role based navigation
 router.beforeEach((to, from, next) => {
   const token = localStorage.getItem("token");
   const role = localStorage.getItem("role");
@@ -442,8 +294,9 @@ router.beforeEach((to, from, next) => {
     return next({ name: "dashboard" });
   }
 
-  if (to.meta.roles && !to.meta.roles.includes(role))
+  if (to.meta.roles && !to.meta.roles.includes(role)) {
     return next({ name: "error" });
+  }
 
   next();
 });

@@ -453,6 +453,26 @@
                       </textarea>
                     </div>
                   </div>
+                  <div class="mt-10">
+                    <p
+                      class="flex flex-wrap items-center gap-1 text-sm font-semibold"
+                      :class="
+                        navbar.userNav ? 'text-slate-300' : 'text-slate-700'
+                      "
+                    >
+                      Qo'shilgan sanasi:
+                      <span
+                        class="px-3 py-1 ml-2 text-sm rounded-lg"
+                        :class="
+                          navbar.userNav
+                            ? 'bg-slate-800 text-blue-400'
+                            : 'bg-blue-100 text-blue-700'
+                        "
+                      >
+                        {{ store.start_date || "Noma'lum" }}
+                      </span>
+                    </p>
+                  </div>
                   <div
                     class="flex items-center justify-between w-full pt-5 mt-5 border-t"
                   >
@@ -805,6 +825,26 @@
                       >
                       </textarea>
                     </div>
+                  </div>
+                  <div class="mt-10">
+                    <p
+                      class="flex flex-wrap items-center gap-1 text-sm font-semibold"
+                      :class="
+                        navbar.userNav ? 'text-slate-300' : 'text-slate-700'
+                      "
+                    >
+                      Qo'shilgan sanasi:
+                      <span
+                        class="px-3 py-1 ml-2 text-sm rounded-lg"
+                        :class="
+                          navbar.userNav
+                            ? 'bg-slate-800 text-blue-400'
+                            : 'bg-blue-100 text-blue-700'
+                        "
+                      >
+                        {{ store.start_date || "Noma'lum" }}
+                      </span>
+                    </p>
                   </div>
                   <div
                     class="flex items-center justify-between w-full pt-5 mt-5 border-t"
@@ -2049,6 +2089,7 @@
                           i.group_price,
                           i.group_name,
                           i.group_start_date,
+                          i.start_date,
                           i.debt,
                         )
                       "
@@ -2336,6 +2377,7 @@
                           i.debt,
                           i.teacher_name,
                           i.group_name,
+                          i.start_date,
                           i.group_start_date,
                         )
                       "
@@ -2563,6 +2605,7 @@ const store = reactive({
   isSubmitting: false,
   pay_price: 0,
   checkOldPay: "",
+  start_date: "",
 });
 
 const statusCount = reactive({
@@ -2790,6 +2833,7 @@ function toggleModalStudent(
   groupPrice,
   groupName,
   groupStartData,
+  start_date,
   debt,
 ) {
   modal.value = !modal.value;
@@ -2806,6 +2850,7 @@ function toggleModalStudent(
     price: groupPrice,
     teacher_name: teacherName,
     group_name: groupName,
+    start_date: start_date,
     date: groupStartData,
     checkOldPay: debt === "To'langan",
   });
@@ -2821,6 +2866,7 @@ function paymentDebtor(
   debtorPay,
   teacher_name,
   group_name,
+  start_date,
   groupStartDate,
 ) {
   getSchool();
@@ -2837,6 +2883,7 @@ function paymentDebtor(
     teacher_name: teacher_name,
     group_name: group_name,
     student_name: name,
+    start_date: start_date,
     date: groupStartDate,
   });
   formatDateToNumeric(new Date());
@@ -3033,6 +3080,7 @@ const getStatisticGroup = async (group_id, date) => {
 
 const getGroupStudents = async (group_id) => {
   debtor.isTable = false;
+
   try {
     const res = await axios.get(
       `/v1/payment/group/${schoolId.value}/${group_id}`,
@@ -3051,6 +3099,7 @@ const getStudentGroups = async (student_id) => {
       `/v1/payment/student/${schoolId.value}/${student_id}`,
       { headers: authHeaders.value },
     );
+
     store.payData = res.data;
   } catch (error) {
     handleError();
@@ -3268,6 +3317,7 @@ const getOnePayment = async (id) => {
 
     store.pay_price = res.data.price;
     formatDateToNumeric(new Date(res.data.createdAt));
+    store.start_date = res.data.student.start_date;
     store.student_name = res.data.student.full_name;
     store.group_name = res.data.group.name;
     store.price = res.data.group.price;

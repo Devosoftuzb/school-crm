@@ -20,8 +20,8 @@
               isActive(i.link)
                 ? 'bg-gradient-to-r from-blue-700 to-indigo-600 text-white'
                 : navbar.userNav
-                ? 'text-white hover:bg-slate-700'
-                : 'text-slate-900 hover:bg-gray-300',
+                  ? 'text-white hover:bg-slate-700'
+                  : 'text-slate-900 hover:bg-gray-300',
             ]"
           >
             <i :class="i.icon"></i>
@@ -53,18 +53,19 @@ const store = reactive({
     role === "_ow_sch_"
       ? "Owner"
       : role === "_ad_sch_"
-      ? "Administrator"
-      : role === "_sp_am_"
-      ? "Superadmin"
-      : role === "_tch_sch_"
-      ? "Teacher"
-      : "Admin",
+        ? "Administrator"
+        : role === "_sp_am_"
+          ? "Superadmin"
+          : role === "_tch_sch_"
+            ? "Teacher"
+            : "Admin",
 });
 
 const showMenu = (item) => {
   if (!item || !item.role) return false;
 
   const roleArray = item.role.split(",").map((r) => r.trim());
+
   if (!roleArray.includes(store.guard)) return false;
 
   if (!item.school || !store.school) return true;

@@ -5,8 +5,6 @@ export const header = [
     link: "/",
     icon: "bx bxs-dashboard",
     role: "_ow_sch_, _ad_sch_, _tch_sch_",
-    school:
-      "dev_school, it_park, business_club, gulistan_academy, hikorean, academic",
   },
   {
     id: 2,
@@ -14,8 +12,6 @@ export const header = [
     link: "/customer",
     icon: "bx bx-body",
     role: "_ad_sch_",
-    school:
-      "dev_school, it_park, business_club, gulistan_academy, hikorean, academic",
   },
   {
     id: 3,
@@ -23,8 +19,6 @@ export const header = [
     link: "/employees",
     icon: "bx bxs-user-rectangle",
     role: "_ow_sch_, _ad_sch_",
-    school:
-      "dev_school, it_park, business_club, gulistan_academy, hikorean, academic",
   },
   {
     id: 4,
@@ -32,8 +26,6 @@ export const header = [
     link: "/students",
     icon: "bx bxs-user",
     role: "_ad_sch_, _tch_sch_",
-    school:
-      "dev_school, it_park, business_club, gulistan_academy, hikorean, academic",
   },
   {
     id: 5,
@@ -41,8 +33,6 @@ export const header = [
     link: "/groups",
     icon: "bx bxs-group",
     role: "_ad_sch_, _tch_sch_",
-    school:
-      "dev_school, it_park, business_club, gulistan_academy, hikorean, academic",
   },
   {
     id: 6,
@@ -50,8 +40,6 @@ export const header = [
     link: "/subjects",
     icon: "bx bxs-book-bookmark",
     role: "_ad_sch_",
-    school:
-      "dev_school, it_park, business_club, gulistan_academy, hikorean, academic",
   },
   {
     id: 7,
@@ -59,8 +47,6 @@ export const header = [
     link: "/attendance",
     icon: "bx bx-user-check",
     role: "_ad_sch_, _tch_sch_",
-    school:
-      "dev_school, it_park, business_club, gulistan_academy, hikorean, academic",
   },
   {
     id: 8,
@@ -68,8 +54,6 @@ export const header = [
     link: "/payment",
     icon: "bx bxs-credit-card",
     role: "_ad_sch_",
-    school:
-      "dev_school, it_park, business_club, gulistan_academy, hikorean, academic",
   },
   {
     id: 9,
@@ -77,38 +61,37 @@ export const header = [
     link: "/sms",
     icon: "bx bxs-message-rounded-dots",
     role: "_ad_sch_",
-    school:
-      "dev_school, it_park, business_club, gulistan_academy, hikorean, academic",
   },
   {
     id: 10,
+    title: "Telegram bot",
+    link: "/bot",
+    icon: "bx bxs-bot",
+    role: "_sp_am_, _ow_sch_, _ad_sch_, _tch_sch_",
+  },
+  {
+    id: 11,
     title: "Moliya",
     link: "/finance",
     icon: "bx  bx-dollar-circle",
     role: "_ad_sch_, _ow_sch_, _tch_sch_",
-    school:
-      "dev_school, it_park, business_club, gulistan_academy, hikorean, academic",
   },
   {
-    id: 11,
+    id: 12,
     title: "Testlar",
     link: "/tests",
     icon: "bx bx-credit-card-front",
     role: "_ad_sch_",
-    school:
-      "dev_school, business_club, gulistan_academy, hikorean, academic",
   },
   {
-    id: 12,
+    id: 13,
     title: "Natijalar",
     link: "/results",
     icon: "bx bxs-pie-chart-alt-2",
     role: "_ad_sch_",
-    school:
-      "dev_school, business_club, gulistan_academy, hikorean, academic",
   },
-      {
-    id: 13,
+  {
+    id: 14,
     title: "Mijozlar",
     link: "/owner",
     icon: "bx bx-body",
@@ -116,7 +99,7 @@ export const header = [
     school: "",
   },
   {
-    id: 14,
+    id: 15,
     title: "O'quv markazlar",
     link: "/school",
     icon: "bx  bxs-school",
@@ -124,12 +107,10 @@ export const header = [
     school: "",
   },
   {
-    id: 15,
+    id: 16,
     title: "Sozlamalar",
     link: "/settings",
     icon: "bx bxs-cog",
     role: "_sp_am_, _ow_sch_, _ad_sch_, _tch_sch_",
-    school:
-      "dev_school, it_park, business_club, gulistan_academy, hikorean, academic",
   },
 ];
